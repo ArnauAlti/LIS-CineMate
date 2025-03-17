@@ -1,0 +1,22 @@
+Fecha: 16/03/2025
+
+Componentes presentes: 
+→ Marc Checa García
+→ Alvaro Javier Diaz Laureano
+→ José Ortín López
+→ Miquel Sánchez Bosch
+→ Adrian Stoiciu
+→ Joan Corral Sanchez
+
+- Debatir sobre los cuestionarios: generación de preguntas y respuesta con IA? O mejor por parte de los admins?
+- Asignar diferentes requisitos al contrato para las partes del 5, 7 y 10 (funcionales y no funcionales)
+- Debatir sobre ¿Cuántas preguntas por pantalla poner en la fase de búsqueda?
+- Escoger representantes de presentación del miércoles --> Pep, Adrian i Marc
+- Discutir sobre implementación de registro de comentarios de usuario para cada película (social)
+- Planificación modificada en Jira, ahora está todo bien organizado
+
+Preguntas para hacer el lunes al profesor:
+- Si tenemos un sistema de recomendacion base para el 5, se puede aplicar una mejora para el 7?
+- Preguntar tema de cuestionarios. Automaticamente con ayuda de revision del admin
+- En los no funcionales, hay que poner cosas asi? "El modelo responderá con un tiempo óptimo de 2 segundos"
+- En los requisitos tecnicos, el 3 y el 4 van de la mano. Juntar en uno o dejarlos separados para diferenciar donde iran en el contrato
