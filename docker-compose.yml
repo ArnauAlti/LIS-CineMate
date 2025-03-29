@@ -16,12 +16,12 @@ services:
       - internal-network
 
   database:
-    image: postgres:latest
+    image: postgres:17
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: secret
-      POSTGRES_DB: mydatabase
+      POSTGRES_DB: Cinemate
     volumes:
       - ./database:/var/lib/postgresql/data
     # ports:
