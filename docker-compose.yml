@@ -16,30 +16,31 @@ services:
       - internal-network
 
   database:
-    image: postgres:latest
+    image: postgres:17
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: secret
-      POSTGRES_DB: mydatabase
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: cinemate
     volumes:
       - ./database:/var/lib/postgresql/data
-    # ports:
-    #   - "5432:5432"
+      - ./database-init:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
     networks:
       - internal-network
 
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-    ports:
-      - "5050:80"
-    networks:
-      - internal-network
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   container_name: pgadmin
+  #   restart: always
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: admin@example.com
+  #     PGADMIN_DEFAULT_PASSWORD: admin
+  #   ports:
+  #     - "5050:80"
+  #   networks:
+  #     - internal-network
 
 networks:
   internal-network:
