@@ -3,6 +3,12 @@ from pydantic import BaseModel
 import numpy as np
 import pandas as pd
 
+class PredictionRequest(BaseModel):
+    user_id: int
+    users_df: dict
+    movies_df: dict
+    top_n: int = 3
+    
 app = FastAPI(root_path="/api")
 
 @app.get("/")
@@ -25,9 +31,4 @@ def predict(data: PredictionRequest):
     
     return recomendaciones[['title', 'score']].to_dict(orient="records")
 
-class PredictionRequest(BaseModel):
-    user_id: int
-    users_df: dict
-    movies_df: dict
-    top_n: int = 3
     

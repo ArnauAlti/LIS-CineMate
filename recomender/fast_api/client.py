@@ -8,12 +8,12 @@ import json
 import requests
 
 def read_data():
-    movies_df = pd.read_csv(r'C:\Users\janpl\OneDrive\Documentos\4t curs\2n semestre\LIS\Projecte\GitHub\LIS-CineMate\recomender\data\output_data\movies_genres.csv', header=0, sep=',')
-    users_df = pd.read_csv(r'C:\Users\janpl\OneDrive\Documentos\4t curs\2n semestre\LIS\Projecte\GitHub\LIS-CineMate\recomender\data\output_data\users.csv', header=0, sep=',')
+    movies_df = pd.read_csv(r'recomender\data\output_data\movies_genres.csv', header=0, sep=',')
+    users_df = pd.read_csv(r'recomender\data\output_data\users.csv', header=0, sep=',')
     return movies_df, users_df
 
 def make_predictions(user_id, users_df, movies_df):
-    url = 'http://localhost:8000/api/predict/'
+    url = 'http://localhost:8000/predict/'
     payload = {  
         "user_id": user_id,  
         "users_df": users_df.to_dict(),
@@ -25,6 +25,11 @@ def make_predictions(user_id, users_df, movies_df):
 
 if __name__ == '__main__':
     movies_df, users_df = read_data()
-    user_id = 1
+
+    # Por el momento, solo nos quedaremos con 8 columnas en generos
+    genres_to_keep = ['title', 'Drama', 'Comedy', 'Horror', 'Romance', 'Adventure', 'Action', 'War', 'Children']
+    movies_df = movies_df[genres_to_keep]
+    
+    user_id = 5
     response = make_predictions(user_id, users_df, movies_df)
     print(response.json())
