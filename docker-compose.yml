@@ -1,46 +1,46 @@
 version: '3.8'
 
 services:
-  backend:
-    build: ./backend
-    ports:
-      - "3000:3000"
-    networks:
-      - internal-network
+  # backend:
+  #   build: ./backend
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - internal-network
 
   fastapi:
-    build: ./fastapi
-    # ports:
-    #   - "8000:8000"
-    networks:
-      - internal-network
-
-  database:
-    image: postgres:latest
-    restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: secret
-      POSTGRES_DB: mydatabase
-    volumes:
-      - ./database:/var/lib/postgresql/data
-    # ports:
-    #   - "5432:5432"
-    networks:
-      - internal-network
-
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+    build: ./recomender/fast_api
     ports:
-      - "5050:80"
-    networks:
-      - internal-network
+      - "8000:8000"
+    # networks:
+    #   - internal-network
 
-networks:
-  internal-network:
-    driver: bridge
+#   database:
+#     image: postgres:latest
+#     restart: always
+#     environment:
+#       POSTGRES_USER: postgres
+#       POSTGRES_PASSWORD: secret
+#       POSTGRES_DB: mydatabase
+#     volumes:
+#       - ./database:/var/lib/postgresql/data
+#     # ports:
+#     #   - "5432:5432"
+#     networks:
+#       - internal-network
+
+#   pgadmin:
+#     image: dpage/pgadmin4
+#     container_name: pgadmin
+#     restart: always
+#     environment:
+#       PGADMIN_DEFAULT_EMAIL: admin@example.com
+#       PGADMIN_DEFAULT_PASSWORD: admin
+#     ports:
+#       - "5050:80"
+#     networks:
+#       - internal-network
+
+# networks:
+#   internal-network:
+#     driver: bridge
