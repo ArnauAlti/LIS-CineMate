@@ -23,7 +23,7 @@ services:
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: cinemate
     volumes:
-      - ./database:/var/lib/postgresql/data
+      # - ./database:/var/lib/postgresql/data - Desactivado para hacer pruebas sin persistencia
       - ./database-init:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
