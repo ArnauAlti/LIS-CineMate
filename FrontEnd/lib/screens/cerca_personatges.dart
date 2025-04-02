@@ -1,0 +1,39 @@
+import 'package:flutter/material.dart';
+
+class CercaPersonatgesScreen extends StatelessWidget {
+  const CercaPersonatgesScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.blue[50],
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+        title: const Text("Busqueda de personajes", textAlign: TextAlign.center),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context); // Volver a la pantalla anterior
+          },
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: TextField(
+          decoration: InputDecoration(
+            hintText: "Introdueix el títol de la pel·lícula o sèrie...",
+            prefixIcon: Icon(Icons.search),
+            fillColor: Color(0xFFEAE6f3),
+            filled: true,
+            contentPadding: EdgeInsets.symmetric(vertical: 14.0),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(30.0)),
+              borderSide: BorderSide.none,
+            )
+          ),
+        ),
+      ),
+    );
+  }
+}
