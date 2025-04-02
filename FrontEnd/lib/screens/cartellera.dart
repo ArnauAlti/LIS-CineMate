@@ -1,9 +1,12 @@
-import 'package:cine_mate/screens/manual_us.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'cerca_questionaris.dart';
 import 'registre.dart';
 import 'inici_sessio.dart';
 import 'manual_us.dart';
+=======
+import 'app_drawer.dart';
+>>>>>>> 20dfabba47315b2f3bef19e638112e4dce8ef9cd
 
 class CartelleraScreen extends StatefulWidget {
   const CartelleraScreen({super.key});
@@ -31,7 +34,6 @@ class _CartelleraScreenState extends State<CartelleraScreen> {
                 _userRole = value;
               });
             },
-            // A eliminar en un futur quan tinguem tota la lògica de registre/inici de sessió
             itemBuilder: (BuildContext context) => [
               const PopupMenuItem(value: 'Usuario No Registrado', child: Text('Usuario No Registrado')),
               const PopupMenuItem(value: 'Usuario Registrado', child: Text('Usuario Registrado')),
@@ -41,7 +43,14 @@ class _CartelleraScreenState extends State<CartelleraScreen> {
           ),
         ],
       ),
-      drawer: _buildDrawer(),
+      drawer: AppDrawer(
+        userRole: _userRole,
+        onRoleChange: (String newRole) {
+          setState(() {
+            _userRole = newRole;
+          });
+        },
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
