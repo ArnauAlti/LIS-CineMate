@@ -1,6 +1,8 @@
+import 'package:cine_mate/screens/manual_us.dart';
 import 'package:flutter/material.dart';
 import 'registre.dart';
 import 'inici_sessio.dart';
+import 'manual_us.dart';
 
 class CartelleraScreen extends StatefulWidget {
   const CartelleraScreen({super.key});
@@ -28,6 +30,7 @@ class _CartelleraScreenState extends State<CartelleraScreen> {
                 _userRole = value;
               });
             },
+            // A eliminar en un futur quan tinguem tota la lògica de registre/inici de sessió
             itemBuilder: (BuildContext context) => [
               const PopupMenuItem(value: 'Usuario No Registrado', child: Text('Usuario No Registrado')),
               const PopupMenuItem(value: 'Usuario Registrado', child: Text('Usuario Registrado')),
@@ -139,7 +142,10 @@ class _CartelleraScreenState extends State<CartelleraScreen> {
         ListTile(
           title: const Text("Manual de Uso"),
           onTap: () {
-            // TODO: Navegar a la pantalla de Manual d'Ús
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ManualUsScreen()),
+            );
           },
         ),
         ListTile(
