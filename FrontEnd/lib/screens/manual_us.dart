@@ -11,6 +11,7 @@ class ManualUsScreen extends StatefulWidget {
 }
 
 class _ManualUsScreen extends State<ManualUsScreen> {
+  String _userRole = 'Usuario Registrado';
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +88,7 @@ class _ManualUsScreen extends State<ManualUsScreen> {
   Widget _buildDrawer() {
     List<Widget> menuOptions = [];
 
-    /*if (_userRole == "Usuario No Registrado") {
+    if (_userRole == "Usuario No Registrado") {
       menuOptions.addAll([
         ListTile(
           title: const Text("Registro"),
@@ -113,6 +114,10 @@ class _ManualUsScreen extends State<ManualUsScreen> {
         ListTile(
           title: const Text("Cartelera"),
           onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CartelleraScreen()),
+            );
           },
         ),
         ListTile(
@@ -239,7 +244,7 @@ class _ManualUsScreen extends State<ManualUsScreen> {
           },
         ),
       ]);
-    }*/
+    }
 
     return Drawer(
       child: ListView(
