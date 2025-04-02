@@ -1,5 +1,6 @@
 import 'package:cine_mate/screens/manual_us.dart';
 import 'package:flutter/material.dart';
+import 'cerca_questionaris.dart';
 import 'registre.dart';
 import 'inici_sessio.dart';
 import 'manual_us.dart';
@@ -114,7 +115,10 @@ class _CartelleraScreenState extends State<CartelleraScreen> {
         ListTile(
           title: const Text("Cuestionarios"),
           onTap: () {
-            // TODO: Navegar a la pantalla de Qüestionaris
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CercaQuestionarisScreen()),
+            );
           },
         ),
         ListTile(

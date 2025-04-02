@@ -10,7 +10,7 @@ class LoginScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Personajes disponibles", textAlign: TextAlign.center),
+        title: const Text("Editar Información personaje", textAlign: TextAlign.center),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -24,37 +24,46 @@ class LoginScreen extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(height: 30),
                 TextField(
                   decoration: InputDecoration(
-                    labelText: "Email",
+                    labelText: "Nombre",
                     border: OutlineInputBorder(),
                   ),
-                  keyboardType: TextInputType.emailAddress,
+                ),
+                const SizedBox(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildPhotoCharacterBox("Foto Personaje"),
+                  ],
                 ),
                 const SizedBox(height: 30),
                 TextField(
                   decoration: InputDecoration(
-                    labelText: "Contraseña",
+                    labelText: "Descripción",
                     border: OutlineInputBorder(),
                   ),
                   obscureText: true,
                 ),
-                const SizedBox(height: 40),
-                ElevatedButton(
-                  onPressed: () {
-                    // TODO: Acció per iniciar sessió
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                  ),
-                  child: const Text("Registrarse"),
-                ),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+  Widget _buildPhotoCharacterBox(String title) {
+    return Container(
+      width: 135,
+      height: 200,
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black, width: 2),
+      ),
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(title),
         ),
       ),
     );

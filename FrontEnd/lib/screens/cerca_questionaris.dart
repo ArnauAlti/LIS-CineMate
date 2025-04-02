@@ -19,7 +19,8 @@ class CercaQuestionarisScreen extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(100.0),
+
         child: TextField(
           decoration: InputDecoration(
             hintText: "Introdueix el títol de la pel·lícula o sèrie...",
