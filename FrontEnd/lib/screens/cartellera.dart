@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'cerca_questionaris.dart';
 import 'registre.dart';
 import 'inici_sessio.dart';
 import 'manual_us.dart';
-=======
 import 'app_drawer.dart';
->>>>>>> 20dfabba47315b2f3bef19e638112e4dce8ef9cd
 
 class CartelleraScreen extends StatefulWidget {
   const CartelleraScreen({super.key});
