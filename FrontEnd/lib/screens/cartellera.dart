@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'cerca_questionaris.dart';
-import 'registre.dart';
-import 'inici_sessio.dart';
-import 'manual_us.dart';
 import 'app_drawer.dart';
 
 class CartelleraScreen extends StatefulWidget {
@@ -55,16 +51,16 @@ class _CartelleraScreenState extends State<CartelleraScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildMovieBox("Pelicula 1"),
-                _buildMovieBox("Pelicula 2"),
+                _buildMovieBox(context, "Pelicula 1"),
+                _buildMovieBox(context, "Pelicula 2"),
               ],
             ),
             const SizedBox(height: 50),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildMovieBox("Pelicula 3"),
-                _buildMovieBox("Pelicula 4"),
+                _buildMovieBox(context, "Pelicula 3"),
+                _buildMovieBox(context, "Pelicula 4"),
               ],
             ),
             const SizedBox(height: 20),
@@ -74,201 +70,27 @@ class _CartelleraScreenState extends State<CartelleraScreen> {
     );
   }
 
-  // Menú dinàmic amb diferents camps segons l'usuari actual
-  Widget _buildDrawer() {
-    List<Widget> menuOptions = [];
-
-    if (_userRole == "Usuario No Registrado") {
-      menuOptions.addAll([
-        ListTile(
-          title: const Text("Registro"),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const RegistreScreen()),
-            );
-          },
+  Widget _buildMovieBox(BuildContext context, String title) {
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          '/detalls_peli_serie',
+          arguments: {'title': title},
+        );
+      },
+      child: Container(
+        width: 135,
+        height: 200,
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black, width: 2),
         ),
-        ListTile(
-          title: const Text("Inicio de sesión"),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const LoginScreen()),
-            );
-          },
-        ),
-      ]);
-    } else if (_userRole == "Usuario Registrado") {
-      menuOptions.addAll([
-        ListTile(
-        title: const Text("Cartelera"),
-        onTap: () {
-        },
-        ),
-        ListTile(
-          title: const Text("Biblioteca"),
-          onTap: () {
-            // TODO: Navegar a la pantalla de Biblioteca
-          },
-        ),
-        ListTile(
-          title: const Text("Recomendaciones"),
-          onTap: () {
-            // TODO: Navegar a la pantalla de Recomanacions
-          },
-        ),
-        ListTile(
-          title: const Text("Cuestionarios"),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const CercaQuestionarisScreen()),
-            );
-          },
-        ),
-        ListTile(
-          title: const Text("Chats con personajes"),
-          onTap: () {
-            // TODO: Navegar a la pantalla de Xats
-          },
-        ),
-        ListTile(
-          title: const Text("Otros usuarios"),
-          onTap: () {
-            // TODO: Navegar a la pantalla d'altres usuaris
-          },
-        ),
-        ListTile(
-          title: const Text(" "),
-          onTap: () {
-          },
-        ),
-        ListTile(
-          title: const Text(" "),
-          onTap: () {
-          },
-        ),
-        ListTile(
-          title: const Text("Manual de Uso"),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ManualUsScreen()),
-            );
-          },
-        ),
-        ListTile(
-          title: const Text("Cerrar sesión"),
-          onTap: () {
-            setState(() {
-              _userRole = "Usuario No Registrado";
-            });
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const CartelleraScreen()),
-            );
-          },
-        ),
-      ]);
-    } else if (_userRole == "Administrador") {
-      menuOptions.addAll([
-        ListTile(
-          title: const Text("Gestionar películas y series"),
-          onTap: () {
-            // TODO: Navegar a la pantalla de Biblioteca
-          },
-        ),
-        ListTile(
-          title: const Text("Gestionar Cuestionarios"),
-          onTap: () {
-            // TODO: Navegar a la pantalla de Recomanacions
-          },
-        ),
-        ListTile(
-          title: const Text("Gestionar Personajes de Chats"),
-          onTap: () {
-            // TODO: Navegar a la pantalla de Qüestionaris
-          },
-        ),
-        ListTile(
-          title: const Text("Gestionar Cuestionarios"),
-          onTap: () {
-            // TODO: Navegar a la pantalla de Xats
-          },
-        ),
-        ListTile(
-          title: const Text(" "),
-          onTap: () {
-            // TODO: Navegar a la pantalla d'altres usuaris
-          },
-        ),
-        ListTile(
-          title: const Text(" "),
-          onTap: () {
-          },
-        ),
-        ListTile(
-          title: const Text(" "),
-          onTap: () {
-          },
-        ),
-        ListTile(
-          title: const Text(" "),
-          onTap: () {
-          },
-        ),
-        ListTile(
-          title: const Text(" "),
-          onTap: () {
-          },
-        ),
-        ListTile(
-          title: const Text("Cerrar sesión"),
-          onTap: () {
-            setState(() {
-              _userRole = "Usuario No Registrado";
-            });
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const CartelleraScreen()),
-            );
-          },
-        ),
-      ]);
-    }
-
-    return Drawer(
-      child: ListView(
-        children: [
-          DrawerHeader(
-            decoration: const BoxDecoration(color: Colors.black),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.movie, size: 50, color: Colors.white),
-                const SizedBox(height: 10),
-              ],
-            ),
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(title),
           ),
-          ...menuOptions,
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMovieBox(String title) {
-    return Container(
-      width: 135,
-      height: 200,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black, width: 2),
-      ),
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(title),
         ),
       ),
     );
