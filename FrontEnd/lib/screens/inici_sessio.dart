@@ -1,3 +1,4 @@
+import 'package:cine_mate/screens/cartellera.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -11,6 +12,7 @@ class LoginScreen extends StatelessWidget {
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         title: const Text("Inicio de sesión", textAlign: TextAlign.center),
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -43,14 +45,17 @@ class LoginScreen extends StatelessWidget {
                 const SizedBox(height: 40),
                 ElevatedButton(
                   onPressed: () {
-                    // TODO: Acció per iniciar sessió
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const CartelleraScreen()),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                   ),
-                  child: const Text("Registrarse"),
+                  child: const Text("Iniciar sesión"),
                 ),
               ],
             ),
