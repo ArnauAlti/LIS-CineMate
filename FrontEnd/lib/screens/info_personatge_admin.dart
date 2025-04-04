@@ -1,69 +1,97 @@
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class InfoPersonatgeAdmin extends StatelessWidget {
+  const InfoPersonatgeAdmin({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[50],
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Editar Información personaje", textAlign: TextAlign.center),
+        title: const Text("Eleven: Stranger Things"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); // Volver a la pantalla anterior
+            Navigator.pop(context);
           },
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Center(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.network(
+                  'https://upload.wikimedia.org/wikipedia/en/f/f7/Eleven_%28Stranger_Things%29.png',
+                  width: 180,
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Eleven',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 50),
+
+            const Center(
+              child: Text(
+                '• Té habilitats psíquiques\n• Desconfia de la gent\n• Parla molt bé dels seus amics',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+
+            const Spacer(),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: "Nombre",
-                    border: OutlineInputBorder(),
+                ElevatedButton(
+                  onPressed: () {
+                    // Acción de editar
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
+                    foregroundColor: MaterialStatePropertyAll<Color>(Colors.white),
+                    shape: MaterialStatePropertyAll<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    padding: MaterialStatePropertyAll<EdgeInsets>(
+                      EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    ),
                   ),
+                  child: const Text("Editar informació"),
                 ),
-                const SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildPhotoCharacterBox("Foto Personaje"),
-                  ],
-                ),
-                const SizedBox(height: 30),
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: "Descripción",
-                    border: OutlineInputBorder(),
+                ElevatedButton(
+                  onPressed: () {
+                    // Acción de eliminar
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
+                    foregroundColor: MaterialStatePropertyAll<Color>(Colors.white),
+                    shape: MaterialStatePropertyAll<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    padding: MaterialStatePropertyAll<EdgeInsets>(
+                      EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    ),
                   ),
-                  obscureText: true,
+                  child: const Text("Eliminar"),
                 ),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-  Widget _buildPhotoCharacterBox(String title) {
-    return Container(
-      width: 135,
-      height: 200,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black, width: 2),
-      ),
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(title),
+            const SizedBox(height: 32),
+          ],
         ),
       ),
     );

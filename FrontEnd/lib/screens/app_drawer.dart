@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'cerca_pelicules.dart';
+import 'cerca_personatges.dart';
+import 'cerca_questionaris.dart';
+import 'info_personatge_admin.dart';
 import 'registre.dart';
 import 'inici_sessio.dart';
 import 'cartellera.dart';
@@ -83,15 +87,21 @@ class AppDrawer extends StatelessWidget {
       menuOptions.addAll([
         ListTile(
           title: const Text("Gestionar películas y series"),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const CercaPelicules()));
+          },
         ),
         ListTile(
           title: const Text("Gestionar Cuestionarios"),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const CercaQuestionarisScreen()));
+          },
         ),
         ListTile(
           title: const Text("Gestionar Personajes de Chats"),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const CercaPersonatgesScreen()));
+          },
         ),
         ListTile(
           title: const Text(" "),

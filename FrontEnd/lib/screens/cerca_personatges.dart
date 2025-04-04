@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'info_personatge_admin.dart';
+import 'personatges_disponibles_admin.dart';
+
 class CercaPersonatgesScreen extends StatelessWidget {
   const CercaPersonatgesScreen({super.key});
 
@@ -19,11 +22,19 @@ class CercaPersonatgesScreen extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(100.0),
         child: TextField(
           decoration: InputDecoration(
             hintText: "Introdueix el títol de la pel·lícula o sèrie...",
-            prefixIcon: Icon(Icons.search),
+            prefixIcon: IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const PersonatgesDisponiblesAdminScreen()),
+                );
+              },
+            ),
             fillColor: Color(0xFFEAE6f3),
             filled: true,
             contentPadding: EdgeInsets.symmetric(vertical: 14.0),

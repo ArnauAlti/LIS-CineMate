@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class CercaPersonatges extends StatefulWidget {
-  const CercaPersonatges({super.key});
+class CercaPelicules extends StatefulWidget {
+  const CercaPelicules({super.key});
 
   @override
-  State<CercaPersonatges> createState() => _CercaPersonatgesState();
+  State<CercaPelicules> createState() => _CercaPeliculesState();
 }
 
-class _CercaPersonatgesState extends State<CercaPersonatges> {
+class _CercaPeliculesState extends State<CercaPelicules> {
   @override
   Widget build(BuildContext context) {
     bool _mostrarFiltres = false;
@@ -25,7 +25,7 @@ class _CercaPersonatgesState extends State<CercaPersonatges> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(100.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
