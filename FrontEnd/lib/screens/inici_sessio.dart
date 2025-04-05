@@ -1,11 +1,15 @@
 import 'package:cine_mate/screens/cartellera.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../user_role_provider.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final userRoleProvider = Provider.of<UserRoleProvider>(context, listen: false);
+
     return Scaffold(
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
@@ -16,7 +20,7 @@ class LoginScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); // Volver a la pantalla anterior
+            Navigator.pop(context); // Tornar a la pantalla anterior
           },
         ),
       ),
@@ -45,6 +49,8 @@ class LoginScreen extends StatelessWidget {
                 const SizedBox(height: 40),
                 ElevatedButton(
                   onPressed: () {
+                    //TODO: Enviar dades al Backend per comprovar-les
+                    userRoleProvider.setUserRole("Usuario Registrado");
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const CartelleraScreen()),

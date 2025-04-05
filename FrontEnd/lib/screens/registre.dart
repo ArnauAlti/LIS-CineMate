@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../user_role_provider.dart';
+import 'cartellera.dart';
 
 class RegistreScreen extends StatelessWidget {
   const RegistreScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final userRoleProvider = Provider.of<UserRoleProvider>(context, listen: false);
+
     return Scaffold(
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
@@ -64,7 +69,12 @@ class RegistreScreen extends StatelessWidget {
                 const SizedBox(height: 40),
                 ElevatedButton(
                   onPressed: () {
-                    // TODO: Acción para registrarse
+                    // TODO: Enviar dades de registre al Backend per comprovar-les
+                    userRoleProvider.setUserRole("Usuario Registrado");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const CartelleraScreen()),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
