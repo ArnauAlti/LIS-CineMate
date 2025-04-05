@@ -1,3 +1,4 @@
+import 'package:cine_mate/screens/cerca_pelicules.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
@@ -8,6 +9,7 @@ class CartelleraScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //Agafar el rol actual per mostrar diferents drawers depenent del rol
     final userRoleProvider = Provider.of<UserRoleProvider>(context);
     final userRole = userRoleProvider.userRole;
 
@@ -19,18 +21,17 @@ class CartelleraScreen extends StatelessWidget {
         title: const Text("Cartellera", textAlign: TextAlign.center),
         centerTitle: true,
         actions: [
-          PopupMenuButton<String>(
-            onSelected: (String value) {
-              userRoleProvider.setUserRole(value);
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CercaPelicules()),
+              );
             },
-            itemBuilder: (BuildContext context) => [
-              const PopupMenuItem(value: 'Usuario No Registrado', child: Text('Usuario No Registrado')),
-              const PopupMenuItem(value: 'Usuario Registrado', child: Text('Usuario Registrado')),
-              const PopupMenuItem(value: 'Administrador', child: Text('Administrador')),
-            ],
-            icon: const Icon(Icons.person),
           ),
         ],
+
       ),
       drawer: AppDrawer(
         userRole: userRole,
@@ -39,6 +40,7 @@ class CartelleraScreen extends StatelessWidget {
         },
       ),
       body: Center(
+        //TODO: Comunicació amb BackEnd per agafar pel·lícules i sèries de la BD
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

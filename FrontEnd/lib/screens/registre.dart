@@ -100,6 +100,7 @@ class _RegistreScreenState extends State<RegistreScreen> {
                 const SizedBox(height: 40),
                 ElevatedButton(
                   onPressed: () {
+                    //TODO: Passar variables a BackEnd per fer comprovació amb la BD
                     userRoleProvider.setUserRole(_selectedRole); // assigna el rol escollit
                     Navigator.push(
                       context,

@@ -80,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 40),
                 ElevatedButton(
                   onPressed: () {
-                    // Enviar el rol seleccionado al Provider
+                    //TODO: Passar variables a BackEnd per fer comprovació amb la BD
                     userRoleProvider.setUserRole(_selectedRole);
                     Navigator.push(
                       context,
