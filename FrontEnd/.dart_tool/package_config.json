@@ -104,10 +104,22 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "nested",
+      "rootUri": "file:///C:/Users/pepor/AppData/Local/Pub/Cache/hosted/pub.dev/nested-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "path",
       "rootUri": "file:///C:/Users/pepor/AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
+    },
+    {
+      "name": "provider",
+      "rootUri": "file:///C:/Users/pepor/AppData/Local/Pub/Cache/hosted/pub.dev/provider-6.1.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "sky_engine",
@@ -170,7 +182,7 @@
       "languageVersion": "3.5"
     }
   ],
-  "generated": "2025-04-04T14:42:17.803256Z",
+  "generated": "2025-04-05T14:24:49.651420Z",
   "generator": "pub",
   "generatorVersion": "3.6.0",
   "flutterRoot": "file:///C:/Users/pepor/Downloads/flutter_windows_3.27.1-stable/flutter",

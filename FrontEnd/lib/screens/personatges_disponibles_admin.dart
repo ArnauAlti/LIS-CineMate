@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'afegir_personatge.dart';
 import 'info_personatge_admin.dart';
 
 class PersonatgesDisponiblesAdminScreen extends StatelessWidget {
@@ -54,7 +55,9 @@ class PersonatgesDisponiblesAdminScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const AfegirPersonatgeScreen()));
+        },
         backgroundColor: Colors.black,
         child: const Icon(Icons.add, color: Colors.white),
       ),

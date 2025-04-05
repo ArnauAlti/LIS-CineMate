@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'editar_personatge.dart';
+
 class InfoPersonatgeAdmin extends StatelessWidget {
   const InfoPersonatgeAdmin({super.key});
 
@@ -54,7 +56,7 @@ class InfoPersonatgeAdmin extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    // Acción de editar
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const EditarPersonatgeScreen()));
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
