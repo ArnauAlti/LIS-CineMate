@@ -3,8 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  String _selectedRole = "Usuario Registrado"; // Valor per defect
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +27,7 @@ class LoginScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); // Tornar a la pantalla anterior
+            Navigator.pop(context);
           },
         ),
       ),
@@ -32,7 +39,7 @@ class LoginScreen extends StatelessWidget {
               children: [
                 const SizedBox(height: 30),
                 TextField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Email",
                     border: OutlineInputBorder(),
                   ),
@@ -40,17 +47,41 @@ class LoginScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 30),
                 TextField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Contraseña",
                     border: OutlineInputBorder(),
                   ),
                   obscureText: true,
                 ),
+                const SizedBox(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Rol: "),
+                    DropdownButton<String>(
+                      value: _selectedRole,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedRole = newValue!;
+                        });
+                      },
+                      items: <String>[
+                        "Usuario Registrado",
+                        "Administrador",
+                      ].map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 40),
                 ElevatedButton(
                   onPressed: () {
-                    //TODO: Enviar dades al Backend per comprovar-les
-                    userRoleProvider.setUserRole("Usuario Registrado");
+                    // Enviar el rol seleccionado al Provider
+                    userRoleProvider.setUserRole(_selectedRole);
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const CartelleraScreen()),

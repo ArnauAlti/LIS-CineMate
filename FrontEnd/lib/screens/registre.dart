@@ -3,8 +3,15 @@ import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
 import 'cartellera.dart';
 
-class RegistreScreen extends StatelessWidget {
+class RegistreScreen extends StatefulWidget {
   const RegistreScreen({super.key});
+
+  @override
+  State<RegistreScreen> createState() => _RegistreScreenState();
+}
+
+class _RegistreScreenState extends State<RegistreScreen> {
+  String _selectedRole = "Usuario Registrado"; // Valor per defecte
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +26,7 @@ class RegistreScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); // Volver a la pantalla anterior
+            Navigator.pop(context);
           },
         ),
       ),
@@ -30,14 +37,14 @@ class RegistreScreen extends StatelessWidget {
             child: Column(
               children: [
                 TextField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Nombre",
                     border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 30),
                 TextField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Email",
                     border: OutlineInputBorder(),
                   ),
@@ -45,14 +52,14 @@ class RegistreScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 30),
                 TextField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Nombre de usuario",
                     border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 30),
                 TextField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Año de nacimiento",
                     border: OutlineInputBorder(),
                   ),
@@ -60,17 +67,40 @@ class RegistreScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 30),
                 TextField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Contraseña",
                     border: OutlineInputBorder(),
                   ),
                   obscureText: true,
                 ),
+                const SizedBox(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Rol: "),
+                    DropdownButton<String>(
+                      value: _selectedRole,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedRole = newValue!;
+                        });
+                      },
+                      items: <String>[
+                        "Usuario Registrado",
+                        "Administrador",
+                      ].map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 40),
                 ElevatedButton(
                   onPressed: () {
-                    // TODO: Enviar dades de registre al Backend per comprovar-les
-                    userRoleProvider.setUserRole("Usuario Registrado");
+                    userRoleProvider.setUserRole(_selectedRole); // assigna el rol escollit
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const CartelleraScreen()),
