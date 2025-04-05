@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../user_role_provider.dart';
 import 'app_drawer.dart';
 
-class CartelleraScreen extends StatefulWidget {
+class CartelleraScreen extends StatelessWidget {
   const CartelleraScreen({super.key});
 
   @override
-  State<CartelleraScreen> createState() => _CartelleraScreenState();
-}
-
-class _CartelleraScreenState extends State<CartelleraScreen> {
-  String _userRole = 'Usuario No Registrado';
-
-  @override
   Widget build(BuildContext context) {
+    final userRoleProvider = Provider.of<UserRoleProvider>(context);
+    final userRole = userRoleProvider.userRole;
+
     return Scaffold(
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
@@ -23,9 +21,7 @@ class _CartelleraScreenState extends State<CartelleraScreen> {
         actions: [
           PopupMenuButton<String>(
             onSelected: (String value) {
-              setState(() {
-                _userRole = value;
-              });
+              userRoleProvider.setUserRole(value);
             },
             itemBuilder: (BuildContext context) => [
               const PopupMenuItem(value: 'Usuario No Registrado', child: Text('Usuario No Registrado')),
@@ -37,11 +33,9 @@ class _CartelleraScreenState extends State<CartelleraScreen> {
         ],
       ),
       drawer: AppDrawer(
-        userRole: _userRole,
+        userRole: userRole,
         onRoleChange: (String newRole) {
-          setState(() {
-            _userRole = newRole;
-          });
+          userRoleProvider.setUserRole(newRole);
         },
       ),
       body: Center(

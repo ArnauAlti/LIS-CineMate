@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'screens/welcome_screen.dart';
 import 'screens/cartellera.dart';
 import 'screens/detalls_peli_serie.dart';
+import 'user_role_provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    //Utilitzat per poder gestionar el rol de l'usuari de forma global per a totes les pantalles
+    ChangeNotifierProvider(
+      create: (_) => UserRoleProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -29,7 +38,7 @@ class MyApp extends StatelessWidget {
           final args = settings.arguments as Map<String, dynamic>;
           return MaterialPageRoute(
             builder: (context) => DetallsPeliSerieScreen(
-              title: args['title'], // Passa el títol de la película per buscar-lo a la BD
+              title: args['title'],
             ),
           );
         }
