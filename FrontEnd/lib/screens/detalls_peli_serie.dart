@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../user_role_provider.dart';
+import 'package:provider/provider.dart';
 
 class DetallsPeliSerieScreen extends StatelessWidget {
   final String title;
@@ -7,85 +9,111 @@ class DetallsPeliSerieScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userRoleProvider = Provider.of<UserRoleProvider>(context);
+    final userRole = userRoleProvider.userRole;
+
     return Scaffold(
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
-        title: const Text("Details"),
+        title: const Text("Detalles"),
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          //TODO: Fer plantilla per posar cada pel·lícula de la BD
           children: [
             Center(
               child: Text(
                 title,
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
                 textAlign: TextAlign.center,
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // TODO: Posar imatge de la pel·lícula o sèrie
-                // Informació de la película
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12.0),
+                  child: Image.network(
+                    'https://th.bing.com/th/id/OIP.TDVZL0VokIrAyO-t9RFLJQAAAA?rs=1&pid=ImgDetMain',
+                    width: 130,
+                    height: 200,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                const SizedBox(width: 20),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    //TODO: Posar informació a partir de la BD
                     children: const [
-                      Text("Any: 2025"),
-                      Text("Duració: 119 minuts"),
-                      Text("Plataformes: Disney+"),
-                      Text("Repart: Anthony Mackie, Harrison Ford, Danny..."),
+                      Text("📅 Año de estreno: 2025", style: TextStyle(fontSize: 16)),
+                      SizedBox(height: 8),
+                      Text("⏱ Duración: 119 minutos", style: TextStyle(fontSize: 16)),
+                      SizedBox(height: 8),
+                      Text("📺 Plataformas: Disney+", style: TextStyle(fontSize: 16)),
+                      SizedBox(height: 8),
+                      Text("🎭 Reparto: Anthony Mackie, Harrison Ford...", style: TextStyle(fontSize: 16)),
                     ],
-                  ),
-                ),
-                const SizedBox(width: 16),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: Image.network(
-                    'https://th.bing.com/th/id/OIP.TDVZL0VokIrAyO-t9RFLJQAAAA?rs=1&pid=ImgDetMain',
-                    width: 120,
-                    height: 180,
-                    fit: BoxFit.cover,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            // TODO: Calcular nota mitjana gràcies a la BD
-            const Text("Nota mitjana"),
+            const SizedBox(height: 30),
+            const Text(
+              "⭐ Valoración",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(5, (index) {
-                return IconButton(
-                  icon: const Icon(Icons.star_border),
-                  onPressed: () {},
-                );
+                return const Icon(Icons.star_border, size: 30, color: Colors.black);
               }),
             ),
-            const SizedBox(height: 16),
-            // Sinopsis
+            const SizedBox(height: 30),
+            const Text(
+              "Sinopsis",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+            const SizedBox(height: 10),
             const Text(
               "Tras reunirse con el recién elegido presidente de EE.UU. Thaddeus Ross (Harrison Ford), Sam se encuentra en medio de un incidente internacional...",
               textAlign: TextAlign.justify,
+              style: TextStyle(fontSize: 16),
             ),
-            const SizedBox(height: 20),
-            // TODO: Botó per afegir a la biblioteca
-            Center(
-              child: ElevatedButton(
-                onPressed: () {},
+            const SizedBox(height: 40),
+
+            //Si l'usuari està registrat, es mostra un botó per afegir la pel·lícula a la biblioteca
+            userRole == "Usuario Registrado"
+                ? Center(
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  // Acción para añadir a biblioteca
+                },
                 style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
                 ),
-                child: const Text("AFEGIR A BIBLIOTECA"),
+                icon: const Icon(Icons.add),
+                label: const Text(
+                  "AÑADIR A BIBLIOTECA",
+                  style: TextStyle(fontSize: 16),
+                ),
               ),
-            ),
+            )
+                : const SizedBox.shrink(), // Si no es usuario registrado, no muestra nada
           ],
         ),
       ),

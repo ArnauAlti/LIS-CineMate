@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'biblioteca.dart';
 import 'cerca_pelicules.dart';
 import 'cerca_personatges.dart';
 import 'cerca_questionaris.dart';
-import 'info_personatge_admin.dart';
 import 'registre.dart';
 import 'inici_sessio.dart';
 import 'cartellera.dart';
@@ -43,7 +43,9 @@ class AppDrawer extends StatelessWidget {
         ),
         ListTile(
           title: const Text("Biblioteca"),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const BibliotecaScreen()));
+          },
         ),
         ListTile(
           title: const Text("Recomendaciones"),
