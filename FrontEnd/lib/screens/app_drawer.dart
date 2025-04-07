@@ -1,3 +1,4 @@
+import 'package:cine_mate/screens/recomanacions.dart';
 import 'package:flutter/material.dart';
 import 'biblioteca.dart';
 import 'cerca_pelicules.dart';
@@ -49,7 +50,9 @@ class AppDrawer extends StatelessWidget {
         ),
         ListTile(
           title: const Text("Recomendaciones"),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const RecomanacionsScreen()));
+          },
         ),
         ListTile(
           title: const Text("Cuestionarios"),
