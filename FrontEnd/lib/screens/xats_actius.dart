@@ -1,3 +1,5 @@
+import 'package:cine_mate/screens/cerca_personatges.dart';
+import 'package:cine_mate/screens/gestionar_xats.dart';
 import 'package:flutter/material.dart';
 import 'app_drawer.dart';
 import 'package:provider/provider.dart';
@@ -41,12 +43,12 @@ class _XatsActiusScreen extends State<XatsActiusScreen> {
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               children: [
+                //TODO: Afegir xats actius a partir de la BD
                 _buildChatItem(
                   context,
                   name: "Sherlock Holmes",
-                  message: "El vaig descobrir perquè...",
+                  message: "Lo descubrí porque...",
                   onTap: () {
-                    // TODO: Navegar a pantalla de chat de Sherlock
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const XatPersonatge(nomPersonatge: "Sherlock Holmes")),
@@ -63,7 +65,10 @@ class _XatsActiusScreen extends State<XatsActiusScreen> {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    // TODO: Anar a la cerca de personatges
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const CercaPersonatgesScreen()),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
@@ -78,7 +83,10 @@ class _XatsActiusScreen extends State<XatsActiusScreen> {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    // TODO: Anar a pantalla de modificació
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const GestioXats()),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
