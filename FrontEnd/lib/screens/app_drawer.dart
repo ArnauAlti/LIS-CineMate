@@ -1,3 +1,4 @@
+import 'package:cine_mate/screens/perfil_usuari.dart';
 import 'package:cine_mate/screens/recomanacions.dart';
 import 'package:cine_mate/screens/xats_actius.dart';
 import 'package:flutter/material.dart';
@@ -152,9 +153,30 @@ class AppDrawer extends StatelessWidget {
             decoration: const BoxDecoration(color: Colors.black),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Icon(Icons.movie, size: 50, color: Colors.white),
-                SizedBox(height: 10),
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 3),
+                  ),
+                  child: IconButton(
+                    icon: const Icon(Icons.person, size: 50, color: Colors.white),
+                    onPressed: () {
+                      if (userRole == "Usuario Registrado" || userRole == "Administrador") {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const PerfilUsuari()),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Debes estar registrado para acceder al perfil.')),
+                        );
+                      }
+                    },
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text("PERFIL",  style: TextStyle(color: Colors.white, fontSize: 18))
               ],
             ),
           ),
