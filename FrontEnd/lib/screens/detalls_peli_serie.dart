@@ -80,7 +80,7 @@ class DetallsPeliSerieScreen extends StatelessWidget {
             ),
             const SizedBox(height: 30),
             const Text(
-              "Sinopsis",
+              "Sinópsis",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
             const SizedBox(height: 10),
