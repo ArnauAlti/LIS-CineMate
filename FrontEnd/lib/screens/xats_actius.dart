@@ -1,9 +1,8 @@
-import 'package:cine_mate/screens/detalls_peli_serie.dart';
 import 'package:flutter/material.dart';
 import 'app_drawer.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
-
+import 'xat_personatge.dart';
 
 class XatsActiusScreen extends StatefulWidget {
 
@@ -48,15 +47,10 @@ class _XatsActiusScreen extends State<XatsActiusScreen> {
                   message: "El vaig descobrir perquè...",
                   onTap: () {
                     // TODO: Navegar a pantalla de chat de Sherlock
-                  },
-                ),
-                const Divider(),
-                _buildChatItem(
-                  context,
-                  name: "Tony Stark",
-                  message: "No hauria d’haver utilitzat el guantelet.",
-                  onTap: () {
-                    // TODO: Navegar a pantalla de chat de Tony
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const XatPersonatge(nomPersonatge: "Sherlock Holmes")),
+                    );
                   },
                 ),
               ],
