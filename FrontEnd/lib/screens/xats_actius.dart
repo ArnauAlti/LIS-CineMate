@@ -96,7 +96,7 @@ class _XatsActiusScreen extends State<XatsActiusScreen> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  child: const Text("Eliminar chat"),
+                  child: const Text("Eliminar chats"),
                 ),
               ],
             ),

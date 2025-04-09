@@ -82,6 +82,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: () {
                     //TODO: Passar variables a BackEnd per fer comprovació amb la BD
                     userRoleProvider.setUserRole(_selectedRole);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Has iniciado sesión correctamente.')),
+                    );
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const CartelleraScreen()),

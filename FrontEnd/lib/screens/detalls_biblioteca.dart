@@ -129,6 +129,9 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
             ElevatedButton(
               onPressed: () {
                 // TODO: Guardar canvis a la BD
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Se han guardado los cambios.')),
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,
@@ -144,6 +147,9 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
             ElevatedButton(
               onPressed: () {
                 // TODO: Eliminar de biblioteca de la BD
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Se ha eliminado de la biblioteca.')),
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,

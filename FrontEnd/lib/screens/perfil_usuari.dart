@@ -66,8 +66,9 @@ class _PerfilUsuari extends State<PerfilUsuari> {
                 ElevatedButton(
                   onPressed: () {
                     //TODO: Passar variables modificades a BackEnd per fer comprovació amb la BD
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const CartelleraScreen()));
-                  },
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Cambios guardados correctamente.')),
+                    );                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
                     foregroundColor: Colors.white,

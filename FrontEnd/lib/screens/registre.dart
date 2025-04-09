@@ -101,7 +101,10 @@ class _RegistreScreenState extends State<RegistreScreen> {
                 ElevatedButton(
                   onPressed: () {
                     //TODO: Passar variables a BackEnd per fer comprovació amb la BD
-                    userRoleProvider.setUserRole(_selectedRole); // assigna el rol escollit
+                    userRoleProvider.setUserRole(_selectedRole);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Te has registrado correctamente.')),
+                    );
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const CartelleraScreen()),

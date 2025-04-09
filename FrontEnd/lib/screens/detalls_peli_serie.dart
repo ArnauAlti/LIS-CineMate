@@ -96,7 +96,10 @@ class DetallsPeliSerieScreen extends StatelessWidget {
                 ? Center(
               child: ElevatedButton.icon(
                 onPressed: () {
-                  // Acción para añadir a biblioteca
+                  //TODO: Afegir a la biblioteca de l'usuari, crear instància a la BD i canviar text botó
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Película añadida a la biblioteca.')),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
