@@ -1,3 +1,4 @@
+import 'package:cine_mate/screens/editar_pelicula.dart';
 import 'package:flutter/material.dart';
 import '../user_role_provider.dart';
 import 'package:provider/provider.dart';
@@ -115,6 +116,50 @@ class DetallsPeliSerieScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 16),
                 ),
               ),
+            ): userRole == "Administrador"
+                ? Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const EditarPeliCartelleraScreen()));
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
+                    foregroundColor: MaterialStatePropertyAll<Color>(Colors.white),
+                    shape: MaterialStatePropertyAll<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    padding: MaterialStatePropertyAll<EdgeInsets>(
+                      EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    ),
+                  ),
+                  child: const Text("EDITAR INFORMACIÓN"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    //TODO: Eliminar película de la cartellera i de la BD
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Obra eliminada de la cartelera.')),
+                    );
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
+                    foregroundColor: MaterialStatePropertyAll<Color>(Colors.white),
+                    shape: MaterialStatePropertyAll<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    padding: MaterialStatePropertyAll<EdgeInsets>(
+                      EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    ),
+                  ),
+                  child: const Text("ELIMINAR"),
+                ),
+              ],
             )
                 : const SizedBox.shrink(), // Si no es usuario registrado, no muestra nada
           ],
