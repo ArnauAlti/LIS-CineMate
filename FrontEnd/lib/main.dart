@@ -5,6 +5,7 @@ import 'screens/welcome_screen.dart';
 import 'screens/cartellera.dart';
 import 'screens/detalls_peli_serie.dart';
 import 'user_role_provider.dart';
+import 'screens/pregunta_questionari.dart';
 
 void main() {
   runApp(
@@ -32,6 +33,10 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const WelcomeScreen(),
         '/cartellera': (context) => const CartelleraScreen(),
+        '/pregunta_questionari': (context) {
+          final args = ModalRoute.of(context)!.settings.arguments as Map;
+          return PreguntaQuestionari(title: args['title']);
+        },
       },
       onGenerateRoute: (settings) {
         if (settings.name == '/detalls_peli_serie') {

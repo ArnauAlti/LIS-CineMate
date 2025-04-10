@@ -8,10 +8,8 @@ class QuestionarisDisponibles extends StatelessWidget {
   const QuestionarisDisponibles({super.key, required this.busqueda});
   final String busqueda;
 
-
   @override
   Widget build(BuildContext context) {
-    //Agafar el rol actual per mostrar diferents drawers depenent del rol
     final userRoleProvider = Provider.of<UserRoleProvider>(context);
     final userRole = userRoleProvider.userRole;
 
@@ -20,20 +18,14 @@ class QuestionarisDisponibles extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Cuestionarios", textAlign: TextAlign.center),
+        title: const Text("Cuestionarios"),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const CercaPelicules()),
-              );
-            },
-          ),
-        ],
-
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       drawer: AppDrawer(
         userRole: userRole,
@@ -41,59 +33,80 @@ class QuestionarisDisponibles extends StatelessWidget {
           userRoleProvider.setUserRole(newRole);
         },
       ),
-      body: Center(
-        //TODO: Comunicació amb BackEnd per agafar qüestionatis relacionats amb la cerca de la BD
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView(
           children: [
             Text(
-              'Cuestionarios disponibles sobre: \n "$busqueda"',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-              textAlign: TextAlign.center,
+              'Qüestionaris sobre:\n$busqueda',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
             ),
-            const SizedBox(height: 50),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildQuestBox(context, "Stranger Things 1"),
-              ],
+            //TODO: Afegir qüestionaris a partir de la BD
+            const SizedBox(height: 20),
+            _buildQuestionariItem(
+              context,
+              imageUrl:
+              'https://1.bp.blogspot.com/-a0Ehz4tIUkA/Xla-XGLxrLI/AAAAAAAAfsM/5jCeN2T3UOMgiFSLb_U6nw0d5gXfceIbgCLcBGAsYHQ/s1600/stranger-things-saison-1.jpg',
+              title: 'Stranger Things: Season 1',
             ),
-            const SizedBox(height: 40),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildQuestBox(context, "Stranger Things 2"),
-              ],
+            const SizedBox(height: 30),
+            _buildQuestionariItem(
+              context,
+              imageUrl:
+              'https://es.web.img3.acsta.net/pictures/17/10/23/14/24/5968627.jpg',
+              title: 'Stranger Things: Season 2',
             ),
-            ],
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildQuestBox(BuildContext context, String title) {
-    return InkWell(
-      onTap: () {
-        Navigator.pushNamed(
-          context,
-          '/detalls_peli_serie',
-          arguments: {'title': title},
-        );
-      },
-      child: Container(
-        width: 135,
-        height: 200,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black, width: 2),
+  Widget _buildQuestionariItem(BuildContext context,
+      {required String imageUrl, required String title}) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Image.network(
+          imageUrl,
+          height: 180,
+          width: 120,
+          fit: BoxFit.cover,
         ),
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(title),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style:
+                const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    '/pregunta_questionari',
+                    arguments: {'title': title},
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                ),
+                child: const Text("COMENZAR"),
+              ),
+            ],
           ),
         ),
-      ),
+      ],
     );
   }
 }
