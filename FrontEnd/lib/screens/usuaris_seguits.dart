@@ -59,30 +59,24 @@ class UsuarisSeguits extends StatelessWidget {
                 _buildUserBox(context, "User 4"),
               ],
             ),
-            const SizedBox(height: 20),
-          ],
-        ),
-        const SizedBox(height: 100),
-        ElevatedButton(
-          onPressed: () {
-            //TODO: Posar link usuari escollit
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => CercaQuestionarisScreen(),
+            const SizedBox(height: 100),
+            ElevatedButton(
+              onPressed: () {
+                //TODO: Posar link usuari escollit
+
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                padding:
+                const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               ),
-            );
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.black,
-            foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
+              child: const Text("BUSCAR USUARIOS"),
             ),
-            padding:
-            const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          ),
-          child: const Text("ABANDONAR CUESTIONARIO"),
+          ],
         ),
       ),
     );
@@ -108,10 +102,22 @@ class UsuarisSeguits extends StatelessWidget {
           alignment: Alignment.bottomCenter,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(user),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const CircleAvatar(
+                  radius: 24,
+                  backgroundColor: Colors.black87,
+                  child: Icon(Icons.person, color: Colors.white),
+                ),
+                const SizedBox(height: 8),
+                Text(user),
+              ],
+            ),
           ),
         ),
       ),
+
     );
   }
 }

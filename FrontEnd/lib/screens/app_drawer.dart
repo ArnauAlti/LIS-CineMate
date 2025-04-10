@@ -1,5 +1,6 @@
 import 'package:cine_mate/screens/perfil_usuari.dart';
 import 'package:cine_mate/screens/recomanacions.dart';
+import 'package:cine_mate/screens/usuaris_seguits.dart';
 import 'package:cine_mate/screens/xats_actius.dart';
 import 'package:flutter/material.dart';
 import 'biblioteca.dart';
@@ -70,7 +71,9 @@ class AppDrawer extends StatelessWidget {
         ),
         ListTile(
           title: const Text("Otros usuarios"),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const UsuarisSeguits()));
+          },
         ),
         ListTile(
           title: const Text(" "),
