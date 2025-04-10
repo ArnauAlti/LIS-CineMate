@@ -5,7 +5,9 @@ import '../user_role_provider.dart';
 import 'app_drawer.dart';
 
 class QuestionarisDisponibles extends StatelessWidget {
-  const QuestionarisDisponibles({super.key});
+  const QuestionarisDisponibles({super.key, required this.busqueda});
+  final String busqueda;
+
 
   @override
   Widget build(BuildContext context) {
@@ -40,33 +42,36 @@ class QuestionarisDisponibles extends StatelessWidget {
         },
       ),
       body: Center(
-        //TODO: Comunicació amb BackEnd per agafar pel·lícules i sèries de la BD
+        //TODO: Comunicació amb BackEnd per agafar qüestionatis relacionats amb la cerca de la BD
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildMovieBox(context, "Pelicula 1"),
-                _buildMovieBox(context, "Pelicula 2"),
-              ],
+            Text(
+              'Cuestionarios disponibles sobre: \n "$busqueda"',
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 50),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildMovieBox(context, "Pelicula 3"),
-                _buildMovieBox(context, "Pelicula 4"),
+                _buildQuestBox(context, "Stranger Things 1"),
               ],
             ),
-            const SizedBox(height: 20),
-          ],
+            const SizedBox(height: 40),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildQuestBox(context, "Stranger Things 2"),
+              ],
+            ),
+            ],
         ),
       ),
     );
   }
 
-  Widget _buildMovieBox(BuildContext context, String title) {
+  Widget _buildQuestBox(BuildContext context, String title) {
     return InkWell(
       onTap: () {
         Navigator.pushNamed(

@@ -105,7 +105,7 @@ class AppDrawer extends StatelessWidget {
         ListTile(
           title: const Text("Gestionar Cuestionarios"),
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const CercaQuestionarisScreen()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => CercaQuestionarisScreen()));
           },
         ),
         ListTile(

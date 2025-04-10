@@ -67,7 +67,7 @@ class _CercaPeliculesState extends State<CercaPelicules> {
                     controller: _controller,
                     onSubmitted: (_) => _realitzarBusqueda(),
                     decoration: const InputDecoration(
-                      hintText: "Introdueix el títol de la pel·lícula o sèrie...",
+                      hintText: "Introduce el título de la película o serie.",
                       prefixIcon: Icon(Icons.search),
                       fillColor: Color(0xFFEAE6f3),
                       filled: true,
