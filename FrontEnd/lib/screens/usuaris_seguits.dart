@@ -1,3 +1,4 @@
+import 'package:cine_mate/screens/biblioteca_usuaris_seguits.dart';
 import 'package:cine_mate/screens/cerca_pelicules.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +32,6 @@ class UsuarisSeguits extends StatelessWidget {
             },
           ),
         ],
-
       ),
       drawer: AppDrawer(
         userRole: userRole,
@@ -85,13 +85,14 @@ class UsuarisSeguits extends StatelessWidget {
   Widget _buildUserBox(BuildContext context, String user) {
     return InkWell(
       onTap: () {
-        /*
-        Navigator.pushNamed(
+        Navigator.push(
           context,
-          '/detalls_peli_serie',
-          arguments: {'user': user},
-        );*/
+          MaterialPageRoute(
+            builder: (context) => BibliotecaSeguitsScreen(userName: user),
+          ),
+        );
       },
+
       child: Container(
         width: 130,
         height: 130,
