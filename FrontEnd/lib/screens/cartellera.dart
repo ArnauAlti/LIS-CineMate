@@ -39,30 +39,41 @@ class CartelleraScreen extends StatelessWidget {
           userRoleProvider.setUserRole(newRole);
         },
       ),
-      body: Center(
-        //TODO: Comunicació amb BackEnd per agafar pel·lícules i sèries de la BD
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildMovieBox(context, "Pelicula 1"),
-                _buildMovieBox(context, "Pelicula 2"),
-              ],
-            ),
-            const SizedBox(height: 50),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildMovieBox(context, "Pelicula 3"),
-                _buildMovieBox(context, "Pelicula 4"),
-              ],
-            ),
-            const SizedBox(height: 20),
-          ],
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Center(
+          //TODO: Comunicació amb BackEnd per agafar pel·lícules i sèries de la BD
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildMovieBox(context, "Pelicula 1"),
+                  _buildMovieBox(context, "Pelicula 2"),
+                ],
+              ),
+              const SizedBox(height: 50),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildMovieBox(context, "Pelicula 3"),
+                  _buildMovieBox(context, "Pelicula 4"),
+                ],
+              ),
+              const SizedBox(height: 50),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildMovieBox(context, "Pelicula 5"),
+                  _buildMovieBox(context, "Pelicula 6"),
+                ],
+              ),
+              const SizedBox(height: 50),
+            ],
+          ),
         ),
-      ),
+      )
     );
   }
 

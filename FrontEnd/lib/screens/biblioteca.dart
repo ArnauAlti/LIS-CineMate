@@ -45,28 +45,29 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
           userRoleProvider.setUserRole(newRole);
         },
       ),
-      body: Column(
-        children: [
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildSectionButton("Películas", isPeliculasSelected, () {
-                setState(() {
-                  isPeliculasSelected = true;
-                });
-              }),
-              const SizedBox(width: 20),
-              _buildSectionButton("Series", !isPeliculasSelected, () {
-                setState(() {
-                  isPeliculasSelected = false;
-                });
-              }),
-            ],
-          ),
-          const SizedBox(height: 30),
-          Expanded(
-            child: Column(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildSectionButton("Películas", isPeliculasSelected, () {
+                  setState(() {
+                    isPeliculasSelected = true;
+                  });
+                }),
+                const SizedBox(width: 20),
+                _buildSectionButton("Series", !isPeliculasSelected, () {
+                  setState(() {
+                    isPeliculasSelected = false;
+                  });
+                }),
+              ],
+            ),
+            const SizedBox(height: 30),
+            Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -83,11 +84,19 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
                     _buildMovieBox(context, isPeliculasSelected ? "Película 4" : "Serie 4"),
                   ],
                 ),
+                const SizedBox(height: 50),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildMovieBox(context, isPeliculasSelected ? "Película 3" : "Serie 3"),
+                    _buildMovieBox(context, isPeliculasSelected ? "Película 4" : "Serie 4"),
+                  ],
+                ),
               ],
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
+      )
     );
   }
 
