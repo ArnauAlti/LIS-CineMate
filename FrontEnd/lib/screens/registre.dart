@@ -97,29 +97,31 @@ class _RegistreScreenState extends State<RegistreScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 40),
-                ElevatedButton(
-                  onPressed: () {
-                    //TODO: Passar variables a BackEnd per fer comprovació amb la BD
-                    userRoleProvider.setUserRole(_selectedRole);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Te has registrado correctamente.')),
-                    );
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const CartelleraScreen()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                  ),
-                  child: const Text("Registrarse"),
-                ),
               ],
             ),
           ),
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ElevatedButton(
+          onPressed: () {
+            //TODO: Passar variables a BackEnd per fer comprovació amb la BD
+            userRoleProvider.setUserRole(_selectedRole);
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Te has registrado correctamente.')),
+            );
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CartelleraScreen()),
+            );
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+          ),
+          child: const Text("Registrarse"),
         ),
       ),
     );

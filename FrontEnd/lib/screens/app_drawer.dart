@@ -94,6 +94,9 @@ class AppDrawer extends StatelessWidget {
           onTap: () {
             onRoleChange("Usuario No Registrado"); // Actualiza el estado en la pantalla
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const CartelleraScreen()));
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Se ha cerrado sesión correctamente.')),
+            );
           },
         ),
       ]);
@@ -146,6 +149,9 @@ class AppDrawer extends StatelessWidget {
           onTap: () {
             onRoleChange("Usuario No Registrado");
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const CartelleraScreen()));
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Se ha cerrado sesión correctamente.')),
+            );
           },
         ),
       ]);

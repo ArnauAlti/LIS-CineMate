@@ -40,8 +40,6 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 30),
-
           // Mostrar el género seleccionado en una línea
           if (widget.selectedGenre != null)
             Padding(

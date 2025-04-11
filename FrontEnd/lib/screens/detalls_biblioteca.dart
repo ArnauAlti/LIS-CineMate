@@ -22,6 +22,7 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         title: const Text("Detalles"),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -143,25 +144,27 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
               ),
               child: const Text("Guardar cambios"),
             ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                // TODO: Eliminar de biblioteca de la BD
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Se ha eliminado de la biblioteca.')),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
-              child: const Text("Eliminar de biblioteca"),
-            ),
           ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ElevatedButton(
+          onPressed: () {
+            // TODO: Eliminar de biblioteca de la BD
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Se ha eliminado de la biblioteca.')),
+            );
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+          ),
+          child: const Text("Eliminar de biblioteca"),
         ),
       ),
     );

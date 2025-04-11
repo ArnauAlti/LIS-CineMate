@@ -47,6 +47,7 @@ class PreguntaQuestionari extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
+                  //TODO: Afegir acció per fer després de donar a una resposta
                   onPressed: () {
 
                   },
@@ -113,28 +114,30 @@ class PreguntaQuestionari extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 100),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CercaQuestionarisScreen(),
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                padding:
-                const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              ),
-              child: const Text("ABANDONAR CUESTIONARIO"),
-            ),
           ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CercaQuestionarisScreen(),
+              ),
+            );
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            padding:
+            const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          ),
+          child: const Text("ABANDONAR CUESTIONARIO"),
         ),
       ),
     );
