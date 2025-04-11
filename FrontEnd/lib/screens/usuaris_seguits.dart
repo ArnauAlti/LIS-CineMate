@@ -1,5 +1,6 @@
 import 'package:cine_mate/screens/biblioteca_usuaris_seguits.dart';
 import 'package:cine_mate/screens/cerca_pelicules.dart';
+import 'package:cine_mate/screens/cerca_usuaris.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
@@ -19,7 +20,7 @@ class UsuarisSeguits extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Otros usuarios", textAlign: TextAlign.center),
+        title: const Text("Usuarios seguidos", textAlign: TextAlign.center),
         centerTitle: true,
         actions: [
           IconButton(
@@ -63,7 +64,12 @@ class UsuarisSeguits extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 //TODO: Posar link usuari escollit
-
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CercaUsuarisScreen(),
+                  ),
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,
