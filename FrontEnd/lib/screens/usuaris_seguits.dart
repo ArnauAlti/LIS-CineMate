@@ -1,4 +1,4 @@
-import 'package:cine_mate/screens/biblioteca_usuaris_seguits.dart';
+import 'package:cine_mate/screens/biblioteca_altres_usuaris.dart';
 import 'package:cine_mate/screens/cerca_pelicules.dart';
 import 'package:cine_mate/screens/cerca_usuaris.dart';
 import 'package:flutter/material.dart';
@@ -94,7 +94,7 @@ class UsuarisSeguits extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => BibliotecaSeguitsScreen(userName: user),
+            builder: (context) => BibliotecaAltresUsuarisScreen(userName: user, followed: true),
           ),
         );
       },
