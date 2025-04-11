@@ -20,8 +20,8 @@ class PersonatgesDisponiblesAdminScreen extends StatelessWidget {
           },
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -30,27 +30,26 @@ class PersonatgesDisponiblesAdminScreen extends StatelessWidget {
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 16),
-            Expanded(
-              child: GridView.count(
+              GridView.count(
                 crossAxisCount: 2,
                 mainAxisSpacing: 16,
                 crossAxisSpacing: 16,
+                shrinkWrap: true,
                 children: [
                   buildCharacterCard(
                     context,
                     name: "Eleven",
                     imageUrl:
-                    "https://upload.wikimedia.org/wikipedia/en/f/f7/Eleven_%28Stranger_Things%29.png",
+                    "https://images.hdqwalls.com/download/stranger-things-eleven-art-nw-1280x2120.jpg",
                   ),
                   buildCharacterCard(
                     context,
                     name: "Will",
                     imageUrl:
-                    "https://i.pinimg.com/originals/4c/13/38/4c13381ad89ce5cfbaf4d223c21be7c5.jpg",
+                    "https://i.pinimg.com/originals/ec/6d/59/ec6d59f48c5e8ba9b5021b68c8c401dd.jpg",
                   ),
                 ],
               ),
-            ),
           ],
         ),
       ),

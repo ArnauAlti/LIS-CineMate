@@ -27,42 +27,78 @@ class ResultatsPelicules extends StatelessWidget {
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // Centrar el texto de la búsqueda
-            Text(
-              'Búsqueda realizada para: "$busqueda"',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 12),
+      ),body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Centrar el texto de la búsqueda
+              Text(
+                'Búsqueda realizada para: "$busqueda"',
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 12),
 
-            // Mostrar filtros solo si se han especificado
-            if (genereSeleccionat != null && genereSeleccionat != "No especificat") ...[
-              Text('Gènere seleccionat: $genereSeleccionat'),
-              const SizedBox(height: 8),
+              // Mostrar filtros solo si se han especificado
+              if (genereSeleccionat != null && genereSeleccionat != "No especificat") ...[
+                Text('Gènere seleccionat: $genereSeleccionat'),
+                const SizedBox(height: 8),
+              ],
+              if (paraula.isNotEmpty) ...[
+                Text('Paraula clau: $paraula'),
+                const SizedBox(height: 8),
+              ],
+              if (actor.isNotEmpty) ...[
+                Text('Actor/Actriu: $actor'),
+                const SizedBox(height: 8),
+              ],
+              if (director.isNotEmpty) ...[
+                Text('Director/a: $director'),
+                const SizedBox(height: 8),
+              ],
+              if (duracio.isNotEmpty) ...[
+                Text('Duració: $duracio'),
+                const SizedBox(height: 8),
+              ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildMovieBox(context, "Pelicula 1"),
+                  _buildMovieBox(context, "Pelicula 2"),
+                ],
+              ),
+              const SizedBox(height: 50),
             ],
-            if (paraula.isNotEmpty) ...[
-              Text('Paraula clau: $paraula'),
-              const SizedBox(height: 8),
-            ],
-            if (actor.isNotEmpty) ...[
-              Text('Actor/Actriu: $actor'),
-              const SizedBox(height: 8),
-            ],
-            if (director.isNotEmpty) ...[
-              Text('Director/a: $director'),
-              const SizedBox(height: 8),
-            ],
-            if (duracio.isNotEmpty) ...[
-              Text('Duració: $duracio'),
-              const SizedBox(height: 8),
-            ],
-          ],
+          ),
+        ),
+      )
+    );
+  }
+
+  Widget _buildMovieBox(BuildContext context, String title) {
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          '/detalls_peli_serie',
+          arguments: {'title': title},
+        );
+      },
+      child: Container(
+        width: 135,
+        height: 200,
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black, width: 2),
+        ),
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(title),
+          ),
         ),
       ),
     );

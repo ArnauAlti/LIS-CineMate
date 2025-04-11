@@ -33,32 +33,42 @@ class QuestionarisDisponibles extends StatelessWidget {
           userRoleProvider.setUserRole(newRole);
         },
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: [
-            Text(
-              'Qüestionaris sobre:\n$busqueda',
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-            ),
-            //TODO: Afegir qüestionaris a partir de la BD
-            const SizedBox(height: 20),
-            _buildQuestionariItem(
-              context,
-              imageUrl:
-              'https://1.bp.blogspot.com/-a0Ehz4tIUkA/Xla-XGLxrLI/AAAAAAAAfsM/5jCeN2T3UOMgiFSLb_U6nw0d5gXfceIbgCLcBGAsYHQ/s1600/stranger-things-saison-1.jpg',
-              title: 'Stranger Things: Season 1',
-            ),
-            const SizedBox(height: 30),
-            _buildQuestionariItem(
-              context,
-              imageUrl:
-              'https://es.web.img3.acsta.net/pictures/17/10/23/14/24/5968627.jpg',
-              title: 'Stranger Things: Season 2',
-            ),
-          ],
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Qüestionaris sobre:\n$busqueda',
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(height: 20),
+              _buildQuestionariItem(
+                context,
+                imageUrl:
+                'https://1.bp.blogspot.com/-a0Ehz4tIUkA/Xla-XGLxrLI/AAAAAAAAfsM/5jCeN2T3UOMgiFSLb_U6nw0d5gXfceIbgCLcBGAsYHQ/s1600/stranger-things-saison-1.jpg',
+                title: 'Stranger Things: Season 1',
+              ),
+              const SizedBox(height: 30),
+              _buildQuestionariItem(
+                context,
+                imageUrl:
+                'https://es.web.img3.acsta.net/pictures/17/10/23/14/24/5968627.jpg',
+                title: 'Stranger Things: Season 2',
+              ),
+              const SizedBox(height: 30),
+              _buildQuestionariItem(
+                context,
+                imageUrl:
+                'https://es.web.img3.acsta.net/pictures/17/10/23/14/24/5968627.jpg',
+                title: 'Stranger Things: Season 2',
+              ),
+            ],
+          ),
         ),
-      ),
+      )
     );
   }
 

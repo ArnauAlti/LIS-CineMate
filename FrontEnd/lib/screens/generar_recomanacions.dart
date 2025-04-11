@@ -29,36 +29,37 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
           },
         ),
       ),
-      body: Column(
-        children: [
-          const SizedBox(height: 15),
-          const Text("Pensamos que estas películas y/o series te pueden gustar",
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            const SizedBox(height: 15),
+            const Text("Pensamos que estas películas y/o series te pueden gustar",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
-          // Mostrar el género seleccionado en una línea
-          if (widget.selectedGenre != null)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Text(
-                "Género con mayor peso: ${widget.selectedGenre}",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
+            // Mostrar el género seleccionado en una línea
+            if (widget.selectedGenre != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Text(
+                  "Género con mayor peso: ${widget.selectedGenre}",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
               ),
-            ),
 
-          const SizedBox(height: 50),
-          Expanded(
-            child: Column(
+            const SizedBox(height: 50),
+            Column(
               children: [
-                //TODO: Agafar pel·lícules i sèries a partir de la IA
+                //TODO: Agafar pel·lícules i sèries a partir de la BD de la IA
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -76,9 +77,9 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
                 ),
               ],
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
+      )
     );
   }
 

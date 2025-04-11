@@ -17,44 +17,47 @@ class UsuarisCercats extends StatelessWidget {
         title: const Text("Otros usuarios", textAlign: TextAlign.center),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // Centrar el texto de la búsqueda
-            Text(
-              'Búsqueda realizada para: "$busqueda"',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 12),
-            Center(
-              //TODO: Comunicació amb BackEnd per agafar usuaris amb el resultat de l'String posat
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Centrar el texto de la búsqueda
+                Text(
+                  'Búsqueda realizada para: "$busqueda"',
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 12),
+                Center(
+                  //TODO: Comunicació amb BackEnd per agafar usuaris amb el resultat de l'String posat
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildUserBox(context, "User 1"),
-                      _buildUserBox(context, "User 2"),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildUserBox(context, "User 1"),
+                          _buildUserBox(context, "User 2"),
+                        ],
+                      ),
+                      const SizedBox(height: 50),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildUserBox(context, "User 3"),
+                          _buildUserBox(context, "User 4"),
+                        ],
+                      ),
                     ],
                   ),
-                  const SizedBox(height: 50),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _buildUserBox(context, "User 3"),
-                      _buildUserBox(context, "User 4"),
-                    ],
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        )
     );
   }
 

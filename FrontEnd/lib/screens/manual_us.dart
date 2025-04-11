@@ -29,7 +29,8 @@ class _ManualUsScreen extends State<ManualUsScreen> {
           });
         },
       ),
-      body: Center(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

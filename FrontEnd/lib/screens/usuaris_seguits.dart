@@ -40,49 +40,54 @@ class UsuarisSeguits extends StatelessWidget {
           userRoleProvider.setUserRole(newRole);
         },
       ),
-      body: Center(
-        //TODO: Comunicació amb BackEnd per agafar usuaris que segueix l'actual
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildUserBox(context, "User 1"),
-                _buildUserBox(context, "User 2"),
-              ],
-            ),
-            const SizedBox(height: 50),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildUserBox(context, "User 3"),
-                _buildUserBox(context, "User 4"),
-              ],
-            ),
-            const SizedBox(height: 100),
-            ElevatedButton(
-              onPressed: () {
-                //TODO: Posar link usuari escollit
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CercaUsuarisScreen(),
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                padding:
-                const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Center(
+          //TODO: Comunicació amb BackEnd per agafar usuaris que segueix l'actual
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildUserBox(context, "User 1"),
+                  _buildUserBox(context, "User 2"),
+                ],
               ),
-              child: const Text("BUSCAR USUARIOS"),
+              const SizedBox(height: 50),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildUserBox(context, "User 3"),
+                  _buildUserBox(context, "User 4"),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ElevatedButton(
+          onPressed: () {
+            //TODO: Posar link usuari escollit
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CercaUsuarisScreen(),
+              ),
+            );
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
             ),
-          ],
+            padding:
+            const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          ),
+          child: const Text("BUSCAR USUARIOS"),
         ),
       ),
     );
@@ -124,7 +129,6 @@ class UsuarisSeguits extends StatelessWidget {
           ),
         ),
       ),
-
     );
   }
 }

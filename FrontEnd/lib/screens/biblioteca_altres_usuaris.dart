@@ -32,48 +32,45 @@ class _BibliotecaAltresUsuarisScreen extends State<BibliotecaAltresUsuarisScreen
         title: Text(widget.userName),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildSectionButton("Películas", isPeliculasSelected, () {
-                setState(() {
-                  isPeliculasSelected = true;
-                });
-              }),
-              const SizedBox(width: 20),
-              _buildSectionButton("Series", !isPeliculasSelected, () {
-                setState(() {
-                  isPeliculasSelected = false;
-                });
-              }),
-            ],
-          ),
-          const SizedBox(height: 30),
-          Expanded(
-            child: Column(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildMovieBox(context, isPeliculasSelected ? "Película 1" : "Serie 1"),
-                    _buildMovieBox(context, isPeliculasSelected ? "Película 2" : "Serie 2"),
-                  ],
-                ),
-                const SizedBox(height: 50),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildMovieBox(context, isPeliculasSelected ? "Película 3" : "Serie 3"),
-                    _buildMovieBox(context, isPeliculasSelected ? "Película 4" : "Serie 4"),
-                  ],
-                ),
+                _buildSectionButton("Películas", isPeliculasSelected, () {
+                  setState(() {
+                    isPeliculasSelected = true;
+                  });
+                }),
+                const SizedBox(width: 20),
+                _buildSectionButton("Series", !isPeliculasSelected, () {
+                  setState(() {
+                    isPeliculasSelected = false;
+                  });
+                }),
               ],
             ),
-          ),
-        ],
+            const SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildMovieBox(context, isPeliculasSelected ? "Película 1" : "Serie 1"),
+                _buildMovieBox(context, isPeliculasSelected ? "Película 2" : "Serie 2"),
+              ],
+            ),
+            const SizedBox(height: 50),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildMovieBox(context, isPeliculasSelected ? "Película 3" : "Serie 3"),
+                _buildMovieBox(context, isPeliculasSelected ? "Película 4" : "Serie 4"),
+              ],
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -84,7 +81,7 @@ class _BibliotecaAltresUsuarisScreen extends State<BibliotecaAltresUsuarisScreen
             });
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: follows ? Colors.red : Colors.green,
+            backgroundColor: Colors.black,
             foregroundColor: Colors.white,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             padding: const EdgeInsets.symmetric(vertical: 16),
