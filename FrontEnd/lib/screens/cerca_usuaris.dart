@@ -1,3 +1,4 @@
+import 'package:cine_mate/screens/usuaris_cercats.dart';
 import 'package:flutter/material.dart';
 
 class CercaUsuarisScreen extends StatefulWidget {
@@ -16,13 +17,13 @@ class _CercaUsuarisScreenState extends State<CercaUsuarisScreen> {
       _busqueda = _controller.text.trim();
     });
 
-    /*
+
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => UsuarisDisponibles(busqueda: _busqueda),
+        builder: (context) => UsuarisCercats(busqueda: _busqueda),
       ),
-    );*/
+    );
   }
 
   @override
