@@ -1,3 +1,4 @@
+import 'package:cine_mate/screens/detalls_peli_follower.dart';
 import 'package:flutter/material.dart';
 
 class BibliotecaSeguitsScreen extends StatefulWidget {
@@ -86,6 +87,10 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
     return InkWell(
       onTap: () {
         //TODO: Anar als detalls de biblioteca de l'usuari seleccionat
+        Navigator.push(
+          context,
+          MaterialPageRoute( builder: (context) => DetallsPeliFollowerScreen(title: title),
+        ));
       },
       child: Container(
         width: 135,
