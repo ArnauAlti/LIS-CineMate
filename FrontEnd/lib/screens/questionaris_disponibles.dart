@@ -47,6 +47,7 @@ class QuestionarisDisponibles extends StatelessWidget {
               const SizedBox(height: 20),
               _buildQuestionariItem(
                 context,
+                userRole,
                 imageUrl:
                 'https://1.bp.blogspot.com/-a0Ehz4tIUkA/Xla-XGLxrLI/AAAAAAAAfsM/5jCeN2T3UOMgiFSLb_U6nw0d5gXfceIbgCLcBGAsYHQ/s1600/stranger-things-saison-1.jpg',
                 title: 'Stranger Things: Season 1',
@@ -54,6 +55,7 @@ class QuestionarisDisponibles extends StatelessWidget {
               const SizedBox(height: 30),
               _buildQuestionariItem(
                 context,
+                userRole,
                 imageUrl:
                 'https://es.web.img3.acsta.net/pictures/17/10/23/14/24/5968627.jpg',
                 title: 'Stranger Things: Season 2',
@@ -61,6 +63,7 @@ class QuestionarisDisponibles extends StatelessWidget {
               const SizedBox(height: 30),
               _buildQuestionariItem(
                 context,
+                userRole,
                 imageUrl:
                 'https://es.web.img3.acsta.net/pictures/17/10/23/14/24/5968627.jpg',
                 title: 'Stranger Things: Season 2',
@@ -72,8 +75,9 @@ class QuestionarisDisponibles extends StatelessWidget {
     );
   }
 
-  Widget _buildQuestionariItem(BuildContext context,
+  Widget _buildQuestionariItem(BuildContext context, String userRole,
       {required String imageUrl, required String title}) {
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -94,25 +98,61 @@ class QuestionarisDisponibles extends StatelessWidget {
                 const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/pregunta_questionari',
-                    arguments: {'title': title},
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+
+              if (userRole == "Administrador") ... [
+                ElevatedButton(
+                  onPressed: () {
+                    // TODO: Navegar a la pantalla d’edició del qüestionari
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   ),
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  child: const Text("Editar"),
                 ),
-                child: const Text("COMENZAR"),
-              ),
+                const SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    // TODO: Eliminar qüestionari
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Qüestionari eliminat.')),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  ),
+                  child: const Text("Eliminar"),
+                ),
+              ] else ... [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/pregunta_questionari',
+                      arguments: {'title': title},
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  ),
+                  child: const Text("COMENZAR"),
+                ),
+              ]
             ],
           ),
         ),
