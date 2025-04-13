@@ -73,7 +73,20 @@ class CartelleraScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
+      floatingActionButton: userRole == "Administrador"
+          ? FloatingActionButton(
+        onPressed: () {
+          /*
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AfegirPeliculaScreen()),
+          );*/
+        },
+        backgroundColor: Colors.black,
+        child: const Icon(Icons.add, color: Colors.white),
       )
+          : null, // No mostris cap botó si no és administrador
     );
   }
 

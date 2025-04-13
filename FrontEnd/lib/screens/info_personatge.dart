@@ -4,10 +4,9 @@ import '../user_role_provider.dart';
 
 import 'editar_personatge.dart';
 
-class InfoPersonatgeAdmin extends StatelessWidget {
-  const InfoPersonatgeAdmin({super.key});
+class InfoPersonatge extends StatelessWidget {
+  const InfoPersonatge({super.key});
 
-  //TODO: Modificar per a crear una pantalla conjunta, utilitzar el rol_provider per a afegir botons per admin
   @override
   Widget build(BuildContext context) {
     final userRoleProvider = Provider.of<UserRoleProvider>(context);

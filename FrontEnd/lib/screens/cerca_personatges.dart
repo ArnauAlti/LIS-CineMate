@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'personatges_disponibles_admin.dart';
+import 'personatges_disponibles.dart';
 
 class CercaPersonatgesScreen extends StatelessWidget {
   const CercaPersonatgesScreen({super.key});
@@ -31,7 +31,7 @@ class CercaPersonatgesScreen extends StatelessWidget {
                 //TODO: Modificar per a passar el paràmetre de cerca en la ruta desitjada
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const PersonatgesDisponiblesAdminScreen()),
+                  MaterialPageRoute(builder: (context) => const PersonatgesDisponiblesScreen()),
                 );
               },
             ),
