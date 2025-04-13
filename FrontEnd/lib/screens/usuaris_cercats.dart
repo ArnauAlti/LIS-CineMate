@@ -1,5 +1,4 @@
 import 'package:cine_mate/screens/biblioteca_altres_usuaris.dart';
-import 'package:cine_mate/screens/cerca_usuaris.dart';
 import 'package:flutter/material.dart';
 
 class UsuarisCercats extends StatelessWidget {
@@ -61,6 +60,7 @@ class UsuarisCercats extends StatelessWidget {
     );
   }
 
+  //Funció per construir la caixa tàctil de cada usuari cercat
   Widget _buildUserBox(BuildContext context, String user) {
     return InkWell(
       onTap: () {

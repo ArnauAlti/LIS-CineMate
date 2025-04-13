@@ -23,6 +23,8 @@ class _CercaQuestionarisScreenState extends State<CercaQuestionarisScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
+
+        //TODO: Fer cerca a la BD per trobar les pel·lícules o sèries amb el nom introduit
         builder: (context) => QuestionarisDisponibles(busqueda: _busqueda),
       ),
     );

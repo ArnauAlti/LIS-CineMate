@@ -32,6 +32,7 @@ class PreguntaQuestionari extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
+            //TODO: Modificar número de pregunta
             const Text(
               'Pregunta 1/5',
               style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
@@ -39,7 +40,7 @@ class PreguntaQuestionari extends StatelessWidget {
             const SizedBox(height: 10),
             const Text(
               '¿Cuál es el personaje que desaparece en la primera temporada?',
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 30),
             //TODO: Afegir preguntes a partir de la BD

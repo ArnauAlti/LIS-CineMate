@@ -11,8 +11,6 @@ class DetallsPeliFollowerScreen extends StatefulWidget {
 
 class _DetallsPeliFollowerScreen extends State<DetallsPeliFollowerScreen> {
   double selectedRating = 0;
-  final TextEditingController momentController = TextEditingController();
-  final TextEditingController comentariController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +53,7 @@ class _DetallsPeliFollowerScreen extends State<DetallsPeliFollowerScreen> {
               ),
             ),
             const SizedBox(height: 24),
+            //Comentari i valoració només de lectura (readonly)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(5, (index) {
@@ -88,7 +87,6 @@ class _DetallsPeliFollowerScreen extends State<DetallsPeliFollowerScreen> {
             ),
             const SizedBox(height: 8),
             TextField(
-              controller: comentariController,
               cursorColor: Colors.black,
               maxLines: 3,
               readOnly: true,

@@ -77,6 +77,7 @@ class CartelleraScreen extends StatelessWidget {
     );
   }
 
+  //Funció per construir un requadre amb cada pel·lícula o sèrie que surt per pantalla
   Widget _buildMovieBox(BuildContext context, String title) {
     return InkWell(
       onTap: () {

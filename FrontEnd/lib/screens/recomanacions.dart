@@ -87,6 +87,7 @@ class _RecomanacionsScreenState extends State<RecomanacionsScreen> {
             ),
             const SizedBox(height: 50),
             const Text(
+              //TODO: Afegir per escollir diferents gèneres
               "Dar más peso al siguiente género:",
               style: TextStyle(
                 fontSize: 18,

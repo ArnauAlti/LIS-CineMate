@@ -43,6 +43,7 @@ class DetallsPeliSerieScreen extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12.0),
+                  //TODO: Agafar imatge a partir de la BD
                   child: Image.network(
                     'https://th.bing.com/th/id/OIP.TDVZL0VokIrAyO-t9RFLJQAAAA?rs=1&pid=ImgDetMain',
                     width: 130,
@@ -51,10 +52,11 @@ class DetallsPeliSerieScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 20),
-                Expanded(
+                //TODO:Agafar dades a partir de la BD
+                const Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text("📅 Año de estreno: 2025", style: TextStyle(fontSize: 16)),
                       SizedBox(height: 8),
                       Text("⏱ Duración: 119 minutos", style: TextStyle(fontSize: 16)),
@@ -125,14 +127,14 @@ class DetallsPeliSerieScreen extends StatelessWidget {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const EditarPeliCartelleraScreen()));
                   },
                   style: ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
-                    foregroundColor: MaterialStatePropertyAll<Color>(Colors.white),
-                    shape: MaterialStatePropertyAll<RoundedRectangleBorder>(
+                    backgroundColor: const WidgetStatePropertyAll<Color>(Colors.black),
+                    foregroundColor: const WidgetStatePropertyAll<Color>(Colors.white),
+                    shape: WidgetStatePropertyAll<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    padding: MaterialStatePropertyAll<EdgeInsets>(
+                    padding: const WidgetStatePropertyAll<EdgeInsets>(
                       EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                     ),
                   ),
@@ -146,14 +148,14 @@ class DetallsPeliSerieScreen extends StatelessWidget {
                     );
                   },
                   style: ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
-                    foregroundColor: MaterialStatePropertyAll<Color>(Colors.white),
-                    shape: MaterialStatePropertyAll<RoundedRectangleBorder>(
+                    backgroundColor: const WidgetStatePropertyAll<Color>(Colors.red),
+                    foregroundColor: const WidgetStatePropertyAll<Color>(Colors.white),
+                    shape: WidgetStatePropertyAll<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    padding: MaterialStatePropertyAll<EdgeInsets>(
+                    padding: const WidgetStatePropertyAll<EdgeInsets>(
                       EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                     ),
                   ),

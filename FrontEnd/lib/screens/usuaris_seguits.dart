@@ -1,5 +1,4 @@
 import 'package:cine_mate/screens/biblioteca_altres_usuaris.dart';
-import 'package:cine_mate/screens/cerca_pelicules.dart';
 import 'package:cine_mate/screens/cerca_usuaris.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,17 +21,6 @@ class UsuarisSeguits extends StatelessWidget {
         foregroundColor: Colors.white,
         title: const Text("Usuarios seguidos", textAlign: TextAlign.center),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const CercaPelicules()),
-              );
-            },
-          ),
-        ],
       ),
       drawer: AppDrawer(
         userRole: userRole,

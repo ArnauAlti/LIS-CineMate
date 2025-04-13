@@ -47,8 +47,9 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
+                  //TODO: Modificar per incloure diversos pesos
                   "Género con mayor peso: ${widget.selectedGenre}",
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,

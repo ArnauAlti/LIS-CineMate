@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'cartellera.dart';
 
 class PerfilUsuari extends StatefulWidget {
   const PerfilUsuari({super.key});
@@ -33,14 +32,14 @@ class _PerfilUsuari extends State<PerfilUsuari> {
             child: Column(
               children: [
                 //TODO: Agafar dades de l'usuari per posar-les de manera predefinida als camps
-                TextField(
+                const TextField(
                   decoration: const InputDecoration(
                     labelText: "Nombre",
                     border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 30),
-                TextField(
+                const TextField(
                   decoration: const InputDecoration(
                     labelText: "Email",
                     border: OutlineInputBorder(),
@@ -48,14 +47,14 @@ class _PerfilUsuari extends State<PerfilUsuari> {
                   keyboardType: TextInputType.emailAddress,
                 ),
                 const SizedBox(height: 30),
-                TextField(
+                const TextField(
                   decoration: const InputDecoration(
                     labelText: "Nombre de usuario",
                     border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 30),
-                TextField(
+                const TextField(
                   decoration: const InputDecoration(
                     labelText: "Año de nacimiento",
                     border: OutlineInputBorder(),

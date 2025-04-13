@@ -29,8 +29,8 @@ class _ManualUsScreen extends State<ManualUsScreen> {
           });
         },
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+      body: const SingleChildScrollView(
+        padding: EdgeInsets.all(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -38,7 +38,7 @@ class _ManualUsScreen extends State<ManualUsScreen> {
               title: Text("¿Como funciona la biblioteca?"),
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   //TODO: Posar funcionament biblioteca
                   child: Text("Funcionamiento biblioteca"),
                 ),
@@ -48,7 +48,7 @@ class _ManualUsScreen extends State<ManualUsScreen> {
               title: Text("¿Como funcionan las recomendaciones?"),
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   //TODO: Posar funcionament recomanacions
                   child: Text("Funcionamiento recomendaciones"),
                 ),
@@ -58,7 +58,7 @@ class _ManualUsScreen extends State<ManualUsScreen> {
               title: Text("¿Como funcionan los cuestionarios?"),
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   //TODO: Posar funcionament qüestionaris
                   child: Text("Funcionamiento cuestionarios"),
                 ),
@@ -68,7 +68,7 @@ class _ManualUsScreen extends State<ManualUsScreen> {
               title: Text("¿Como funcionan los chats inteligentes?"),
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   //TODO: Posar funcionament xats
                   child: Text("Funcionamiento chats"),
                 ),
@@ -78,7 +78,7 @@ class _ManualUsScreen extends State<ManualUsScreen> {
               title: Text("¿Como funciona la parte social?"),
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   //TODO: Posar funcionament altres usuaris
                   child: Text("Funcionamiento otros usuarios"),
                 ),

@@ -11,6 +11,7 @@ class DetallsBibliotecaScreen extends StatefulWidget {
 
 class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
   double selectedRating = 0;
+  //Controladors per a poder veure si es modifiquen tant el comentari com el moment en que es va quedar
   final TextEditingController momentController = TextEditingController();
   final TextEditingController comentariController = TextEditingController();
 
@@ -31,7 +32,7 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
           children: [
             const SizedBox(height: 10),
             GestureDetector(
-              onTap: () {}, // podrías abrir detalles más largos si quieres
+              onTap: () {},
               child: Text(
                 widget.title,
                 style: const TextStyle(
@@ -59,6 +60,7 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
+                //TODO: Canviar per a poder establir-lo amb números (el temps, i un desplegable per episodis en sèries)
                 "Momento en el que me quedé",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),

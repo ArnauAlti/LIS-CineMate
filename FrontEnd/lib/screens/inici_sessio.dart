@@ -38,15 +38,15 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               children: [
                 const SizedBox(height: 30),
-                TextField(
-                  decoration: const InputDecoration(
+                const TextField(
+                  decoration: InputDecoration(
                     labelText: "Email",
                     border: OutlineInputBorder(),
                   ),
                   keyboardType: TextInputType.emailAddress,
                 ),
                 const SizedBox(height: 30),
-                TextField(
+                const TextField(
                   decoration: const InputDecoration(
                     labelText: "Contraseña",
                     border: OutlineInputBorder(),
@@ -57,6 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    //TODO: Eliminar selector
                     const Text("Rol: "),
                     DropdownButton<String>(
                       value: _selectedRole,

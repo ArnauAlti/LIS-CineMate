@@ -45,6 +45,7 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
           userRoleProvider.setUserRole(newRole);
         },
       ),
+      //Permet fer scroll down en cas que el número de películes i/o sèries sigui major al de l'espai a la pantalla
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -52,6 +53,7 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
             const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
+              //Menú per seleccionar entre secció de pel·lícules i sèries
               children: [
                 _buildSectionButton("Películas", isPeliculasSelected, () {
                   setState(() {
@@ -68,6 +70,8 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
             ),
             const SizedBox(height: 30),
             Column(
+              //TODO: Posar totes les pel·lícules i/o sèries de l'usuari, agafar-les de la BD
+              //TODO: En forma de llista, posar cada dues en una Row, separades per un SizedBox(height:50)
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,

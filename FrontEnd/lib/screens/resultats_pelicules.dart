@@ -34,7 +34,6 @@ class ResultatsPelicules extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Centrar el texto de la búsqueda
               Text(
                 'Búsqueda realizada para: "$busqueda"',
                 style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
@@ -42,7 +41,7 @@ class ResultatsPelicules extends StatelessWidget {
               ),
               const SizedBox(height: 12),
 
-              // Mostrar filtros solo si se han especificado
+              // Mostrar filtres només si s'han especificat
               if (genereSeleccionat != null && genereSeleccionat != "No especificat") ...[
                 Text('Gènere seleccionat: $genereSeleccionat'),
                 const SizedBox(height: 8),
@@ -64,6 +63,7 @@ class ResultatsPelicules extends StatelessWidget {
                 const SizedBox(height: 8),
               ],
               Row(
+                //TODO: Afegir obres resultants de la cerca
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   _buildMovieBox(context, "Pelicula 1"),

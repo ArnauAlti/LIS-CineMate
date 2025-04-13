@@ -5,6 +5,7 @@ import 'editar_personatge.dart';
 class InfoPersonatgeAdmin extends StatelessWidget {
   const InfoPersonatgeAdmin({super.key});
 
+  //TODO: Modificar per a crear una pantalla conjunta, utilitzar el rol_provides per a afegir botons per admin
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,14 +60,14 @@ class InfoPersonatgeAdmin extends StatelessWidget {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const EditarPersonatgeScreen()));
                   },
                   style: ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
-                    foregroundColor: MaterialStatePropertyAll<Color>(Colors.white),
-                    shape: MaterialStatePropertyAll<RoundedRectangleBorder>(
+                    backgroundColor: const WidgetStatePropertyAll<Color>(Colors.black),
+                    foregroundColor: const WidgetStatePropertyAll<Color>(Colors.white),
+                    shape: WidgetStatePropertyAll<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    padding: MaterialStatePropertyAll<EdgeInsets>(
+                    padding: const WidgetStatePropertyAll<EdgeInsets>(
                       EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                     ),
                   ),
@@ -77,14 +78,14 @@ class InfoPersonatgeAdmin extends StatelessWidget {
                     // Acción de eliminar
                   },
                   style: ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
-                    foregroundColor: MaterialStatePropertyAll<Color>(Colors.white),
-                    shape: MaterialStatePropertyAll<RoundedRectangleBorder>(
+                    backgroundColor: const WidgetStatePropertyAll<Color>(Colors.red),
+                    foregroundColor: const WidgetStatePropertyAll<Color>(Colors.white),
+                    shape: WidgetStatePropertyAll<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    padding: MaterialStatePropertyAll<EdgeInsets>(
+                    padding: const WidgetStatePropertyAll<EdgeInsets>(
                       EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                     ),
                   ),

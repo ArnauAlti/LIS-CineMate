@@ -36,14 +36,14 @@ class _RegistreScreenState extends State<RegistreScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                TextField(
+                const TextField(
                   decoration: const InputDecoration(
                     labelText: "Nombre",
                     border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 30),
-                TextField(
+                const TextField(
                   decoration: const InputDecoration(
                     labelText: "Email",
                     border: OutlineInputBorder(),
@@ -51,14 +51,14 @@ class _RegistreScreenState extends State<RegistreScreen> {
                   keyboardType: TextInputType.emailAddress,
                 ),
                 const SizedBox(height: 30),
-                TextField(
+                const TextField(
                   decoration: const InputDecoration(
                     labelText: "Nombre de usuario",
                     border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 30),
-                TextField(
+                const TextField(
                   decoration: const InputDecoration(
                     labelText: "Año de nacimiento",
                     border: OutlineInputBorder(),
@@ -66,7 +66,7 @@ class _RegistreScreenState extends State<RegistreScreen> {
                   keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 30),
-                TextField(
+                const TextField(
                   decoration: const InputDecoration(
                     labelText: "Contraseña",
                     border: OutlineInputBorder(),

@@ -25,6 +25,7 @@ class PersonatgesDisponiblesAdminScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            //TODO: Modificar per posar els personatges segons la cerca
             const Text(
               "Personatges disponibles de: Stranger Things",
               style: TextStyle(fontSize: 16),
@@ -35,6 +36,7 @@ class PersonatgesDisponiblesAdminScreen extends StatelessWidget {
                 mainAxisSpacing: 16,
                 crossAxisSpacing: 16,
                 shrinkWrap: true,
+                //TODO: Personatges segons cerca
                 children: [
                   buildCharacterCard(
                     context,
@@ -70,7 +72,7 @@ class PersonatgesDisponiblesAdminScreen extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => InfoPersonatgeAdmin(),
+            builder: (context) => const InfoPersonatgeAdmin(),
           ),
         );
       },

@@ -13,6 +13,8 @@ class BibliotecaAltresUsuarisScreen extends StatefulWidget {
 
 class _BibliotecaAltresUsuarisScreen extends State<BibliotecaAltresUsuarisScreen> {
   bool isPeliculasSelected = true;
+
+  //Variable per saber si un usuari segueix a un altre
   late bool follows;
 
   @override
@@ -54,6 +56,7 @@ class _BibliotecaAltresUsuarisScreen extends State<BibliotecaAltresUsuarisScreen
               ],
             ),
             const SizedBox(height: 30),
+            //TODO: Posar totes les altres pel·lícules o sèries de l'usuari visitat a partir de la BD
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

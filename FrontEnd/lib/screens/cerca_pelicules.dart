@@ -116,12 +116,14 @@ class _CercaPeliculesState extends State<CercaPelicules> {
                   color: const Color(0xFFEAE6F3),
                   borderRadius: BorderRadius.circular(12.0),
                 ),
+                //Lògica per fer sortir els filtres
                 child: Column(
                   children: [
-                    // Gènere Dropdown
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        //Menú desplegable per mostrar tots els gèneres
+                        //TODO: Aplicar tots els gèneres disponibles de la biblioteca
                         const Text("Gènere:"),
                         DropdownButton<String>(
                           value: _genereSeleccionat,

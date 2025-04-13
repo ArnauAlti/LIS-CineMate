@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-import 'info_personatge_admin.dart';
 import 'personatges_disponibles_admin.dart';
 
 class CercaPersonatgesScreen extends StatelessWidget {
@@ -29,6 +27,8 @@ class CercaPersonatgesScreen extends StatelessWidget {
             prefixIcon: IconButton(
               icon: const Icon(Icons.search),
               onPressed: () {
+                //TODO: Fer cerca a partir de les paraules posades per trobar els personatges a la BD
+                //TODO: Modificar per a passar el paràmetre de cerca en la ruta desitjada
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const PersonatgesDisponiblesAdminScreen()),
