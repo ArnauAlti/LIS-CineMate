@@ -14,10 +14,12 @@ import 'manual_us.dart';
 
 class AppDrawer extends StatelessWidget {
   final String userRole;
-  final Function(String) onRoleChange; // Para actualizar el rol desde el Drawer
+  final Function(String) onRoleChange; // Per actualitzar el rol des del Drawer (menú desplegable)
 
   const AppDrawer({super.key, required this.userRole, required this.onRoleChange});
 
+  //Construir un menú desplegable segons el rol de l'usuari, amb diferents seccions segons si l'usuari
+  //està no està registrat, està registrat o és un administrador
   @override
   Widget build(BuildContext context) {
     List<Widget> menuOptions = [];
@@ -170,6 +172,7 @@ class AppDrawer extends StatelessWidget {
                     shape: BoxShape.circle,
                     border: Border.all(color: Colors.white, width: 3),
                   ),
+                  //Botó per anar al perfil de l'usuari en cas d'haver iniciat sessió
                   child: IconButton(
                     icon: const Icon(Icons.person, size: 50, color: Colors.white),
                     onPressed: () {
