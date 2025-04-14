@@ -3,11 +3,6 @@ import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 
-import pandas as pd
-import numpy as np
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import linear_kernel
-
 class MovieRecommenderBase:
     def __init__(self, data_path='data/movie.csv'):
         """
@@ -61,30 +56,34 @@ class MovieRecommenderBase:
         return self.movies.groupby('title').apply(lambda x: list(x.index)).to_dict()
     
     def _process_user_preferences(self, user_preferences):
-        """Process user preferences"""
-        combined_sim_scores = np.zeros(self.sim_matrix.shape[0])
-        total_rated = 0
+        """
+        Process user preferences (to be overridden by child classes)
+        """
+        raise NotImplementedError("This method should be implemented by child classes")
+        # """Process user preferences"""
+        # combined_sim_scores = np.zeros(self.sim_matrix.shape[0])
+        # total_rated = 0
         
-        # Process liked movies
-        liked_movies = user_preferences.get('liked_movies', [])
-        for movie in liked_movies:
-            if movie in self.title_to_indices:
-                for idx in self.title_to_indices[movie]:
-                    combined_sim_scores += self.sim_matrix[idx]
-                    total_rated += 1
+        # # Process liked movies
+        # liked_movies = user_preferences.get('liked_movies', [])
+        # for movie in liked_movies:
+        #     if movie in self.title_to_indices:
+        #         for idx in self.title_to_indices[movie]:
+        #             combined_sim_scores += self.sim_matrix[idx]
+        #             total_rated += 1
         
-        # Process disliked movies
-        disliked_movies = user_preferences.get('disliked_movies', [])
-        for movie in disliked_movies:
-            if movie in self.title_to_indices:
-                for idx in self.title_to_indices[movie]:
-                    combined_sim_scores -= self.sim_matrix[idx]
-                    total_rated += 1
+        # # Process disliked movies
+        # disliked_movies = user_preferences.get('disliked_movies', [])
+        # for movie in disliked_movies:
+        #     if movie in self.title_to_indices:
+        #         for idx in self.title_to_indices[movie]:
+        #             combined_sim_scores -= self.sim_matrix[idx]
+        #             total_rated += 1
         
-        if total_rated > 0:
-            combined_sim_scores /= total_rated
+        # if total_rated > 0:
+        #     combined_sim_scores /= total_rated
             
-        return combined_sim_scores, total_rated
+        # return combined_sim_scores, total_rated
     
     def _get_all_rated_movies(self, user_preferences):
         """Get all rated movies"""
