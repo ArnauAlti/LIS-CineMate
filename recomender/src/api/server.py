@@ -1,13 +1,7 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
 import numpy as np
 import pandas as pd
-
-class PredictionRequest(BaseModel):
-    user_id: int
-    users_df: dict
-    movies_df: dict
-    top_n: int = 3
+from models import PredictionRequest
     
 app = FastAPI(root_path="/api")
 
@@ -30,5 +24,3 @@ def predict(data: PredictionRequest):
     recomendaciones = movies_with_scores.sort_values(by='score', ascending=False).head(data.top_n)
     
     return recomendaciones[['title', 'score']].to_dict(orient="records")
-
-    
