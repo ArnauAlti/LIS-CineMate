@@ -124,7 +124,21 @@ class DetallsPeliSerieScreen extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const EditarPeliCartelleraScreen()));
+                    //TODO: Passar info en forma de document per a no haver d'accedir altre cop a la BD
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const EditarPeliCartelleraScreen(
+                      mode:"Modify",
+                      peliData: {
+                      "titol": "Matrix",
+                      "repart": "Keanu Reeves, Carrie-Anne Moss",
+                      "descripcio": "Película de ciencia ficción",
+                      "anyEstreno": "1999",
+                      "duracio": "136",
+                      "plataformes": "HBO Max",
+                      "urlFoto": "https://...",
+                      "edatMinima": "16",
+                      "tipus": "Película",
+                      "genere": "Ciencia Ficción",
+                    },)));
                   },
                   style: ButtonStyle(
                     backgroundColor: const WidgetStatePropertyAll<Color>(Colors.black),
