@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'afegir_personatge.dart';
 import 'info_personatge.dart';
+import 'info_personatge_admin.dart';
 
 class PersonatgesDisponiblesAdminScreen extends StatelessWidget {
   const PersonatgesDisponiblesAdminScreen({super.key});

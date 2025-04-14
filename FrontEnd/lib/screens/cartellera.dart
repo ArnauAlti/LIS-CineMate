@@ -2,7 +2,9 @@ import 'package:cine_mate/screens/cerca_pelicules.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
+import 'afegir_peli_admin.dart';
 import 'app_drawer.dart';
+
 
 class CartelleraScreen extends StatelessWidget {
   const CartelleraScreen({super.key});
@@ -77,10 +79,9 @@ class CartelleraScreen extends StatelessWidget {
       floatingActionButton: userRole == "Administrador"
           ? FloatingActionButton(
         onPressed: () {
-          /*
-          Navigator.push(
+          /*Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const AfegirPeliculaScreen()),
+            MaterialPageRoute(builder: (context) => const AfegirPeliScreen()),
           );*/
         },
         backgroundColor: Colors.black,

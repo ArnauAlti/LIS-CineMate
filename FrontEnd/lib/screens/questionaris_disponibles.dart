@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
 import 'app_drawer.dart';
+import 'editar_questionari.dart';
 
 class QuestionarisDisponibles extends StatelessWidget {
   const QuestionarisDisponibles({super.key, required this.busqueda});
@@ -101,7 +102,10 @@ class QuestionarisDisponibles extends StatelessWidget {
               if (userRole == "Administrador") ... [
                 ElevatedButton(
                   onPressed: () {
-                    // TODO: Navegar a la pantalla d’edició del qüestionari
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const QuestionariAdminScreen()),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
