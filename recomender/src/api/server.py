@@ -1,26 +1,79 @@
-from fastapi import FastAPI
-import numpy as np
+from fastapi import FastAPI, HTTPException
+from ..models import (
+    BasicRecommender,
+    GenreFilteredRecommender,
+    StarRatingRecommender,
+    StarRatingGenreFilteredRecommender
+)
+from .schemas import RecommendationRequest, MovieRecommendation
+from typing import List
 import pandas as pd
-from models import PredictionRequest
-    
+import os
+
 app = FastAPI(root_path="/api")
+
+# Initialize recommenders
+DATA_PATH = os.path.join(os.path.dirname(__file__), '../data/movie.csv')
+basic_recommender = BasicRecommender(DATA_PATH)
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"message": "Movie Recommendation API"}
 
-@app.post("/predict")
-def predict(data: PredictionRequest):
-    users_df = pd.DataFrame(data.users_df)
-    movies_df = pd.DataFrame(data.movies_df)
+@app.post("/recommend/basic", response_model=List[MovieRecommendation])
+def recommend_basic(request: RecommendationRequest):
+    try:
+        recommendations = basic_recommender.get_personalized_recommendations(
+            user_preferences=request.user_preferences.dict(),
+            top_n=request.top_n,
+            genre_diversity=request.genre_diversity
+        )
+        return recommendations.to_dict('records')
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.post("/recommend/genre-filtered", response_model=List[MovieRecommendation])
+def recommend_genre_filtered(request: RecommendationRequest):
+    if not request.genre_filter:
+        raise HTTPException(status_code=400, detail="Genre filter required")
     
-    user_prefs = users_df[users_df['userId'] == data.user_id].iloc[:, 1:].values.flatten()
-    movie_genres = movies_df.iloc[:, 1:].values  
-    scores = np.dot(movie_genres, user_prefs)
+    recommender = GenreFilteredRecommender(
+        data_path=DATA_PATH,
+        genre_filter=request.genre_filter
+    )
     
-    movies_with_scores = movies_df.copy()
-    movies_with_scores['score'] = scores
+    recommendations = recommender.get_personalized_recommendations(
+        user_preferences=request.user_preferences.dict(),
+        top_n=request.top_n,
+        genre_diversity=request.genre_diversity
+    )
+    return recommendations.to_dict('records')
+
+@app.post("/recommend/star-rating", response_model=List[MovieRecommendation])
+def recommend_star_rating(request: RecommendationRequest):
+    if not request.user_preferences.ratings:
+        raise HTTPException(status_code=400, detail="Star ratings required")
     
-    recomendaciones = movies_with_scores.sort_values(by='score', ascending=False).head(data.top_n)
+    recommender = StarRatingRecommender(DATA_PATH)
+    recommendations = recommender.get_personalized_recommendations(
+        user_preferences=request.user_preferences.dict(),
+        top_n=request.top_n,
+        genre_diversity=request.genre_diversity
+    )
+    return recommendations.to_dict('records')
+
+@app.post("/recommend/star-rating-genre", response_model=List[MovieRecommendation])
+def recommend_star_rating_genre(request: RecommendationRequest):
+    if not request.user_preferences.ratings or not request.genre_filter:
+        raise HTTPException(status_code=400, detail="Both ratings and genre filter required")
     
-    return recomendaciones[['title', 'score']].to_dict(orient="records")
+    recommender = StarRatingGenreFilteredRecommender(
+        data_path=DATA_PATH,
+        genre_filter=request.genre_filter
+    )
+    recommendations = recommender.get_personalized_recommendations(
+        user_preferences=request.user_preferences.dict(),
+        top_n=request.top_n,
+        genre_diversity=request.genre_diversity
+    )
+    return recommendations.to_dict('records')
