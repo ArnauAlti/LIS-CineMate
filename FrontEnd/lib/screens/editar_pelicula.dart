@@ -15,8 +15,7 @@ class EditarPeliCartelleraScreen extends StatefulWidget {
       _EditarPeliCartelleraScreenState();
 }
 
-class _EditarPeliCartelleraScreenState
-    extends State<EditarPeliCartelleraScreen> {
+class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen> {
   late final TextEditingController titolController;
   late final TextEditingController repartController;
   late final TextEditingController descripcioController;
