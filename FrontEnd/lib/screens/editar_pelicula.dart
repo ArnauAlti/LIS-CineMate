@@ -116,6 +116,7 @@ class _EditarPeliCartelleraScreenState
               Center(
                 child: ElevatedButton(
                   onPressed: () {
+                    //TODO: Passar noves variables a backend per actualitzar BD
                     print("Títol: ${titolController.text}");
                     print("Tipus: $tipusSeleccionat");
                     print("Gènere: $genereSeleccionat");

@@ -76,7 +76,7 @@ class AfegirPersonatgeScreen extends StatelessWidget {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  //Acció afegir
+                  //TODO: Passar informació a backend per actualitzar la BD
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,

@@ -24,7 +24,6 @@ class DetallsPeliSerieScreen extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          //TODO: Fer plantilla per posar cada pel·lícula de la BD
           children: [
             Center(
               child: Text(
