@@ -4,15 +4,19 @@ class EditarPeliCartelleraScreen extends StatefulWidget {
   final String mode;
   final Map<String, dynamic>? peliData;
 
-  const EditarPeliCartelleraScreen({super.key, required this.mode, this.peliData});
+  const EditarPeliCartelleraScreen({
+    super.key,
+    required this.mode,
+    this.peliData,
+  });
 
   @override
-  State<EditarPeliCartelleraScreen> createState() => _EditarPeliCartelleraScreenState();
+  State<EditarPeliCartelleraScreen> createState() =>
+      _EditarPeliCartelleraScreenState();
 }
 
-class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen> {
-<<<<<<< HEAD
-<<<<<<< HEAD
+class _EditarPeliCartelleraScreenState
+    extends State<EditarPeliCartelleraScreen> {
   late final TextEditingController titolController;
   late final TextEditingController repartController;
   late final TextEditingController descripcioController;
@@ -24,8 +28,8 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
   late final TextEditingController temporadaController;
   late final TextEditingController numCapitolsController;
 
-  String? tipusSeleccionat = "Pel·lícula";
-  String? genereSeleccionat = "Acció";
+  String? tipusSeleccionat;
+  String? genereSeleccionat;
 
   final List<String> tipusOpcions = ["Pel·lícula", "Sèrie"];
   final List<String> generesOpcions = [
@@ -41,64 +45,30 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
   @override
   void initState() {
     super.initState();
-
     final data = widget.peliData;
 
     titolController = TextEditingController(text: data?["titol"] ?? "");
     repartController = TextEditingController(text: data?["repart"] ?? "");
-    descripcioController = TextEditingController(text: data?["descripcio"] ?? "");
-    anyEstrenoController = TextEditingController(text: data?["anyEstreno"] ?? "");
+    descripcioController =
+        TextEditingController(text: data?["descripcio"] ?? "");
+    anyEstrenoController =
+        TextEditingController(text: data?["anyEstreno"] ?? "");
     duracioController = TextEditingController(text: data?["duracio"] ?? "");
-    plataformesController = TextEditingController(text: data?["plataformes"] ?? "");
+    plataformesController =
+        TextEditingController(text: data?["plataformes"] ?? "");
     urlFotoController = TextEditingController(text: data?["urlFoto"] ?? "");
-    edatMinimaController = TextEditingController(text: data?["edatMinima"] ?? "");
+    edatMinimaController =
+        TextEditingController(text: data?["edatMinima"] ?? "");
     temporadaController = TextEditingController(text: data?["temporada"] ?? "");
-    numCapitolsController = TextEditingController(text: data?["numCapitols"] ?? "");
+    numCapitolsController =
+        TextEditingController(text: data?["numCapitols"] ?? "");
 
-    tipusSeleccionat = data?["tipus"] ?? "Película";
-    genereSeleccionat = data?["genere"] ?? "Acción";
-  }
+    // Corregim els valors per assegurar que coincideixen amb les opcions disponibles
+    final tipus = data?["tipus"];
+    final genere = data?["genere"];
 
-  @override
-  void dispose() {
-    titolController.dispose();
-    repartController.dispose();
-    descripcioController.dispose();
-    anyEstrenoController.dispose();
-    duracioController.dispose();
-    plataformesController.dispose();
-    urlFotoController.dispose();
-    edatMinimaController.dispose();
-    temporadaController.dispose();
-    numCapitolsController.dispose();
-    super.dispose();
-  }
-
-  void _guardar() {
-    final peli = {
-      "titol": titolController.text.trim(),
-      "repart": repartController.text.trim(),
-      "descripcio": descripcioController.text.trim(),
-      "anyEstreno": anyEstrenoController.text.trim(),
-      "duracio": duracioController.text.trim(),
-      "plataformes": plataformesController.text.trim(),
-      "urlFoto": urlFotoController.text.trim(),
-      "edatMinima": edatMinimaController.text.trim(),
-      "temporada": temporadaController.text.trim(),
-      "numCapitols": numCapitolsController.text.trim(),
-      "tipus": tipusSeleccionat,
-      "genere": genereSeleccionat,
-    };
-
-    if (widget.mode == "New") {
-      // Guardar nueva peli
-      print("Guardando nueva película:");
-    } else {
-      // Actualizar película existente
-      print("Actualizando película:");
-    }
-    print(peli);
-    Navigator.pop(context, peli); // Devolver datos
+    tipusSeleccionat = tipusOpcions.contains(tipus) ? tipus : tipusOpcions.first;
+    genereSeleccionat = generesOpcions.contains(genere) ? genere : generesOpcions.first;
   }
 
   @override
@@ -108,7 +78,7 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: Text(widget.mode == "New" ? "Afegir Película" : "Editar Película"),
+        title: Text(widget.mode == "New" ? "Afegir Pel·lícula" : "Editar Pel·lícula"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -120,147 +90,37 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildTextField("Título", titolController),
-              _buildTextField("Reparto", repartController),
-              _buildTextField("Año de estreno", anyEstrenoController),
-              _buildTextField("Duración", duracioController),
-              _buildTextField("Plataformas donde se encuentra", plataformesController),
-              _buildTextField("Descripción", descripcioController, maxLines: 4),
-              _buildTextField("URL de la foto", urlFotoController, maxLines: 2),
-              _buildTextField("Edad mínima para su visualización", edatMinimaController),
-              _buildDropdown("Tipos", tipusSeleccionat, tipusOpcions, (val) {
+              _buildTextField("Títol", titolController),
+              _buildTextField("Repartiment", repartController),
+              _buildTextField("Any d’estrena", anyEstrenoController),
+              _buildTextField("Duració (minuts)", duracioController),
+              _buildTextField("Plataformes", plataformesController),
+              _buildTextField("Descripció", descripcioController),
+              _buildTextField("URL de la foto", urlFotoController),
+              _buildTextField("Edat mínima", edatMinimaController),
+              _buildDropdown("Tipus", tipusSeleccionat, tipusOpcions, (val) {
                 setState(() {
                   tipusSeleccionat = val;
                 });
               }),
-              _buildDropdown("Género", genereSeleccionat, generesOpcions, (val) {
+              _buildDropdown("Gènere", genereSeleccionat, generesOpcions, (val) {
                 setState(() {
                   genereSeleccionat = val;
                 });
               }),
-              if (tipusSeleccionat == "Serie") ...[
+              if (tipusSeleccionat == "Sèrie") ...[
                 _buildTextField("Temporada", temporadaController),
-                _buildTextField("Número de capítulos", numCapitolsController),
+                _buildTextField("Número de capítols", numCapitolsController),
               ],
               const SizedBox(height: 32),
               Center(
                 child: ElevatedButton(
-                  onPressed: _guardar,
-              const Text("Título"),
-              const SizedBox(height: 8),
-              TextField(
-                controller: titolController,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.grey[100],
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 24),
-              const Text("Tipos"),
-              const SizedBox(height: 8),
-              DropdownButtonFormField<String>(
-                value: tipusSeleccionat,
-                items: tipusOpcions
-                    .map((t) => DropdownMenuItem(
-                  value: t,
-                  child: Text(t),
-                ))
-                    .toList(),
-                onChanged: (nouValor) {
-                  setState(() {
-                    tipusSeleccionat = nouValor;
-                  });
-                },
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.grey[100],
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 24),
-              const Text("Genero"),
-              const SizedBox(height: 8),
-              DropdownButtonFormField<String>(
-                value: genereSeleccionat,
-                items: generesOpcions
-                    .map((g) => DropdownMenuItem(
-                  value: g,
-                  child: Text(g),
-                ))
-                    .toList(),
-                onChanged: (nouValor) {
-                  setState(() {
-                    genereSeleccionat = nouValor;
-                  });
-                },
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.grey[100],
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 24),
-
-              // Imagen de la película
-              Center(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
-                    "https://www.lavanguardia.com/files/content_image_mobile_filter/uploads/2023/07/27/64c29ce7e0a52.jpeg",
-                    width: 180,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 24),
-              const Text("Reparto"),
-              const SizedBox(height: 8),
-              TextField(
-                controller: repartController,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.grey[100],
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 24),
-              const Text("Descripción"),
-              const SizedBox(height: 8),
-              TextField(
-                controller: descripcioController,
-                maxLines: 4,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.grey[100],
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 32),
-              Center(
-                child: ElevatedButton(
                   onPressed: () {
-                    // Acción de editar
-                    print("Título: ${titolController.text}");
-                    print("Tipos: $tipusSeleccionat");
-                    print("Genero: $genereSeleccionat");
-                    print("Reparto: ${repartController.text}");
-                    print("Descripción: ${descripcioController.text}");
+                    print("Títol: ${titolController.text}");
+                    print("Tipus: $tipusSeleccionat");
+                    print("Gènere: $genereSeleccionat");
+                    print("Repartiment: ${repartController.text}");
+                    print("Descripció: ${descripcioController.text}");
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
@@ -281,7 +141,8 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
     );
   }
 
-  Widget _buildTextField(String label, TextEditingController controller, {int maxLines = 1}) {
+  Widget _buildTextField(String label, TextEditingController controller,
+      {int maxLines = 1}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

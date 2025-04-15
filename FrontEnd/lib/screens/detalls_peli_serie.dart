@@ -139,7 +139,6 @@ class DetallsPeliSerieScreen extends StatelessWidget {
                       "tipus": "Película",
                       "genere": "Ciencia Ficción",
                     },)));
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const EditarPeliCartelleraScreen(mode: "Modify")));
                   },
 
                   style: ButtonStyle(
