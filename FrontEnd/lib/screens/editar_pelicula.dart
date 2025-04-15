@@ -11,6 +11,7 @@ class EditarPeliCartelleraScreen extends StatefulWidget {
 }
 
 class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen> {
+<<<<<<< HEAD
   late final TextEditingController titolController;
   late final TextEditingController repartController;
   late final TextEditingController descripcioController;
@@ -101,6 +102,21 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
 
   @override
   Widget build(BuildContext context) {
+
+    if(widget.mode == "Modify") {
+      //TODO: Cridar a funció per agafar les dades de la BD
+      titolController.text = "Matrix";
+      repartController.text = "Keanu Reeves, Laurence Fishburne";
+      descripcioController.text = "Una pel·lícula de ciència-ficció...";
+      anyEstrenoController.text = "1999";
+      duracioController.text = "136'";
+      plataformesController.text = "Netflix, HBO";
+      urlFotoController.text = "https://imatge.matrix.jpg";
+      edatMinimaController.text = "16";
+      temporadaController.text = "1";
+      numCapitolsController.text = "10";
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -144,6 +160,213 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
               Center(
                 child: ElevatedButton(
                   onPressed: _guardar,
+              const Text("Título"),
+              const SizedBox(height: 8),
+              TextField(
+                controller: titolController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              const Text("Reparto"),
+              const SizedBox(height: 8),
+              TextField(
+                controller: repartController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              const Text("Año de estreno"),
+              const SizedBox(height: 8),
+              TextField(
+                controller: anyEstrenoController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              const Text("Duración"),
+              const SizedBox(height: 8),
+              TextField(
+                controller: duracioController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              const Text("Plataformas donde se encuentra"),
+              const SizedBox(height: 8),
+              TextField(
+                controller: plataformesController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 24),
+              const Text("Descripción"),
+              const SizedBox(height: 8),
+              TextField(
+                controller: descripcioController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 24),
+              const Text("URL de la foto"),
+              const SizedBox(height: 8),
+              TextField(
+                controller: urlFotoController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 24),
+              const Text("Edad mínima para su visualización"),
+              const SizedBox(height: 8),
+              TextField(
+                controller: edatMinimaController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              const Text("Tipos"),
+              const SizedBox(height: 8),
+              DropdownButtonFormField<String>(
+                value: tipusSeleccionat,
+                items: tipusOpcions
+                    .map((t) => DropdownMenuItem(
+                  value: t,
+                  child: Text(t),
+                ))
+                    .toList(),
+                onChanged: (nouValor) {
+                  setState(() {
+                    tipusSeleccionat = nouValor;
+                  });
+                },
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 24),
+              const Text("Genero"),
+              const SizedBox(height: 8),
+              DropdownButtonFormField<String>(
+                value: genereSeleccionat,
+                items: generesOpcions
+                    .map((g) => DropdownMenuItem(
+                  value: g,
+                  child: Text(g),
+                ))
+                    .toList(),
+                onChanged: (nouValor) {
+                  setState(() {
+                    genereSeleccionat = nouValor;
+                  });
+                },
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+
+              if (tipusSeleccionat == "Serie") ...[
+                const SizedBox(height: 24),
+                const Text("Temporada"),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: temporadaController,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.grey[100],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                const Text("Número de capítulos"),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: numCapitolsController,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.grey[100],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+              ],
+
+
+
+              const SizedBox(height: 32),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    print("Título: ${titolController.text}");
+                    print("Tipos: $tipusSeleccionat");
+                    print("Genero: $genereSeleccionat");
+                    print("Reparto: ${repartController.text}");
+                    print("Descripción: ${descripcioController.text}");
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
                     foregroundColor: Colors.white,

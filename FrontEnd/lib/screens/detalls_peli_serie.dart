@@ -1,3 +1,4 @@
+import 'package:cine_mate/screens/afegir_peli_admin.dart';
 import 'package:cine_mate/screens/editar_pelicula.dart';
 import 'package:flutter/material.dart';
 import '../user_role_provider.dart';
@@ -124,6 +125,7 @@ class DetallsPeliSerieScreen extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
+<<<<<<< HEAD
                     //TODO: Passar info en forma de document per a no haver d'accedir altre cop a la BD
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const EditarPeliCartelleraScreen(
                       mode:"Modify",
@@ -139,6 +141,9 @@ class DetallsPeliSerieScreen extends StatelessWidget {
                       "tipus": "Película",
                       "genere": "Ciencia Ficción",
                     },)));
+=======
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const EditarPeliCartelleraScreen(mode: "Modify")));
+>>>>>>> 9070cbf (Modificar pelicula i afegir fet)
                   },
                   style: ButtonStyle(
                     backgroundColor: const WidgetStatePropertyAll<Color>(Colors.black),

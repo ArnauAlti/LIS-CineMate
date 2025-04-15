@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
 import 'app_drawer.dart';
+import 'editar_pelicula.dart';
 
 
 class CartelleraScreen extends StatelessWidget {
