@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 
 class EditarPeliCartelleraScreen extends StatefulWidget {
+<<<<<<< HEAD
   final String mode;
   final Map<String, dynamic>? peliData;
 
   const EditarPeliCartelleraScreen({super.key, required this.mode, this.peliData});
+=======
+  const EditarPeliCartelleraScreen({super.key});
+>>>>>>> aee6ad3 (Unificar afegir i editar pelicula)
 
   @override
   State<EditarPeliCartelleraScreen> createState() => _EditarPeliCartelleraScreenState();
 }
 
 class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen> {
+<<<<<<< HEAD
 <<<<<<< HEAD
   late final TextEditingController titolController;
   late final TextEditingController repartController;
@@ -22,19 +27,27 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
   late final TextEditingController edatMinimaController;
   late final TextEditingController temporadaController;
   late final TextEditingController numCapitolsController;
+=======
+  final titolController =
+  TextEditingController(text: "Captain America: Brave New World");
+  final repartController =
+  TextEditingController(text: "Anthony Mackie, Harrison Ford, ...");
+  final descripcioController = TextEditingController(
+      text: "Tras reunirse con el recién elegido presidente de...");
+>>>>>>> aee6ad3 (Unificar afegir i editar pelicula)
 
-  String? tipusSeleccionat = "Película";
-  String? genereSeleccionat = "Acción";
+  String? tipusSeleccionat = "Pel·lícula";
+  String? genereSeleccionat = "Acció";
 
-  final List<String> tipusOpcions = ["Película", "Serie"];
+  final List<String> tipusOpcions = ["Pel·lícula", "Sèrie"];
   final List<String> generesOpcions = [
     "Terror",
-    "Comedia",
-    "Romántica",
-    "Acción",
+    "Comèdia",
+    "Romàntica",
+    "Acció",
     "Drama",
-    "Fantasía",
-    "Ciencia Ficción"
+    "Fantasia",
+    "Ciència-ficció"
   ];
 
   @override
@@ -102,21 +115,6 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
 
   @override
   Widget build(BuildContext context) {
-
-    if(widget.mode == "Modify") {
-      //TODO: Cridar a funció per agafar les dades de la BD
-      titolController.text = "Matrix";
-      repartController.text = "Keanu Reeves, Laurence Fishburne";
-      descripcioController.text = "Una pel·lícula de ciència-ficció...";
-      anyEstrenoController.text = "1999";
-      duracioController.text = "136'";
-      plataformesController.text = "Netflix, HBO";
-      urlFotoController.text = "https://imatge.matrix.jpg";
-      edatMinimaController.text = "16";
-      temporadaController.text = "1";
-      numCapitolsController.text = "10";
-    }
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -174,109 +172,6 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
               ),
 
               const SizedBox(height: 24),
-
-              const Text("Reparto"),
-              const SizedBox(height: 8),
-              TextField(
-                controller: repartController,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.grey[100],
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 24),
-
-              const Text("Año de estreno"),
-              const SizedBox(height: 8),
-              TextField(
-                controller: anyEstrenoController,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.grey[100],
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 24),
-
-              const Text("Duración"),
-              const SizedBox(height: 8),
-              TextField(
-                controller: duracioController,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.grey[100],
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 24),
-
-              const Text("Plataformas donde se encuentra"),
-              const SizedBox(height: 8),
-              TextField(
-                controller: plataformesController,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.grey[100],
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 24),
-              const Text("Descripción"),
-              const SizedBox(height: 8),
-              TextField(
-                controller: descripcioController,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.grey[100],
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 24),
-              const Text("URL de la foto"),
-              const SizedBox(height: 8),
-              TextField(
-                controller: urlFotoController,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.grey[100],
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 24),
-              const Text("Edad mínima para su visualización"),
-              const SizedBox(height: 8),
-              TextField(
-                controller: edatMinimaController,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.grey[100],
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 24),
-
               const Text("Tipos"),
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
@@ -326,41 +221,53 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
                 ),
               ),
 
-              if (tipusSeleccionat == "Serie") ...[
-                const SizedBox(height: 24),
-                const Text("Temporada"),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: temporadaController,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.grey[100],
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+              const SizedBox(height: 24),
+
+              // Imagen de la película
+              Center(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    "https://www.lavanguardia.com/files/content_image_mobile_filter/uploads/2023/07/27/64c29ce7e0a52.jpeg",
+                    width: 180,
                   ),
                 ),
-                const SizedBox(height: 24),
-                const Text("Número de capítulos"),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: numCapitolsController,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.grey[100],
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+              ),
+
+              const SizedBox(height: 24),
+              const Text("Reparto"),
+              const SizedBox(height: 8),
+              TextField(
+                controller: repartController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-              ],
+              ),
 
-
+              const SizedBox(height: 24),
+              const Text("Descripción"),
+              const SizedBox(height: 8),
+              TextField(
+                controller: descripcioController,
+                maxLines: 4,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
 
               const SizedBox(height: 32),
               Center(
                 child: ElevatedButton(
                   onPressed: () {
+                    // Acción de editar
                     print("Título: ${titolController.text}");
                     print("Tipos: $tipusSeleccionat");
                     print("Genero: $genereSeleccionat");

@@ -1,10 +1,11 @@
+import 'package:cine_mate/screens/afegir_peli_admin.dart';
 import 'package:cine_mate/screens/cerca_pelicules.dart';
 import 'package:cine_mate/screens/editar_pelicula.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
+import 'afegir_peli_admin.dart';
 import 'app_drawer.dart';
-import 'editar_pelicula.dart';
 
 
 class CartelleraScreen extends StatelessWidget {
@@ -82,7 +83,7 @@ class CartelleraScreen extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const EditarPeliCartelleraScreen(mode: "New")),
+            MaterialPageRoute(builder: (context) => const AfegirPeliScreen()),
           );
         },
         backgroundColor: Colors.black,
