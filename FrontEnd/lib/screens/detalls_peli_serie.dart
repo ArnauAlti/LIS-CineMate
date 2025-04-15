@@ -124,8 +124,6 @@ class DetallsPeliSerieScreen extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-<<<<<<< HEAD
-<<<<<<< HEAD
                     //TODO: Passar info en forma de document per a no haver d'accedir altre cop a la BD
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const EditarPeliCartelleraScreen(
                       mode:"Modify",
@@ -141,13 +139,9 @@ class DetallsPeliSerieScreen extends StatelessWidget {
                       "tipus": "Película",
                       "genere": "Ciencia Ficción",
                     },)));
-=======
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const EditarPeliCartelleraScreen(mode: "Modify")));
->>>>>>> 9070cbf (Modificar pelicula i afegir fet)
-=======
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const EditarPeliCartelleraScreen()));
->>>>>>> aee6ad3 (Unificar afegir i editar pelicula)
                   },
+
                   style: ButtonStyle(
                     backgroundColor: const WidgetStatePropertyAll<Color>(Colors.black),
                     foregroundColor: const WidgetStatePropertyAll<Color>(Colors.white),

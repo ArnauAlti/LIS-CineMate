@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 
 class EditarPeliCartelleraScreen extends StatefulWidget {
-<<<<<<< HEAD
   final String mode;
   final Map<String, dynamic>? peliData;
 
   const EditarPeliCartelleraScreen({super.key, required this.mode, this.peliData});
-=======
-  const EditarPeliCartelleraScreen({super.key});
->>>>>>> aee6ad3 (Unificar afegir i editar pelicula)
 
   @override
   State<EditarPeliCartelleraScreen> createState() => _EditarPeliCartelleraScreenState();
@@ -27,14 +23,6 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
   late final TextEditingController edatMinimaController;
   late final TextEditingController temporadaController;
   late final TextEditingController numCapitolsController;
-=======
-  final titolController =
-  TextEditingController(text: "Captain America: Brave New World");
-  final repartController =
-  TextEditingController(text: "Anthony Mackie, Harrison Ford, ...");
-  final descripcioController = TextEditingController(
-      text: "Tras reunirse con el recién elegido presidente de...");
->>>>>>> aee6ad3 (Unificar afegir i editar pelicula)
 
   String? tipusSeleccionat = "Pel·lícula";
   String? genereSeleccionat = "Acció";
