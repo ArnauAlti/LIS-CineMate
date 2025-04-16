@@ -8,6 +8,7 @@ class WelcomeScreen extends StatefulWidget {
   State<WelcomeScreen> createState() => _WelcomeScreenState();
 }
 
+//Classe per a crear la pantalla inicial amb el logo de la app
 class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   void initState() {
