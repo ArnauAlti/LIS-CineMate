@@ -31,7 +31,7 @@ class _RegistreScreenState extends State<RegistreScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Registro"),
+        title: const Text("Registro", textAlign: TextAlign.center),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

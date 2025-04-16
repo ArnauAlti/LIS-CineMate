@@ -2,6 +2,7 @@ import 'package:cine_mate/screens/cartellera.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
+import '../requests.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -11,7 +12,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  String _selectedRole = "Usuario Registrado"; // Valor per defect
+  final _formKey = GlobalKey<FormState>();
+  String _selectedRole = "Usuario Registrado";
+  late final TextEditingController mailController = TextEditingController();
+  late final TextEditingController passController = TextEditingController();
+
+  bool _obscurePassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -35,74 +41,121 @@ class _LoginScreenState extends State<LoginScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Center(
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(height: 30),
-                const TextField(
-                  decoration: InputDecoration(
-                    labelText: "Email",
-                    border: OutlineInputBorder(),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  _buildTextFormField("Email", mailController),
+                  _buildTextFormField("Contraseña", passController, isPassword: true),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("Rol: "),
+                      DropdownButton<String>(
+                        value: _selectedRole,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectedRole = newValue!;
+                          });
+                        },
+                        items: <String>[
+                          "Usuario Registrado",
+                          "Administrador",
+                        ].map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ],
                   ),
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                const SizedBox(height: 30),
-                const TextField(
-                  decoration: const InputDecoration(
-                    labelText: "Contraseña",
-                    border: OutlineInputBorder(),
-                  ),
-                  obscureText: true,
-                ),
-                const SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    //TODO: Eliminar selector
-                    const Text("Rol: "),
-                    DropdownButton<String>(
-                      value: _selectedRole,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          _selectedRole = newValue!;
-                        });
-                      },
-                      items: <String>[
-                        "Usuario Registrado",
-                        "Administrador",
-                      ].map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 40),
-                ElevatedButton(
-                  onPressed: () {
-                    //TODO: Passar variables a BackEnd per fer comprovació amb la BD
-                    userRoleProvider.setUserRole(_selectedRole);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Has iniciado sesión correctamente.')),
-                    );
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const CartelleraScreen()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                  ),
-                  child: const Text("Iniciar sesión"),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
       ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ElevatedButton(
+          onPressed: () async {
+            if (_formKey.currentState!.validate()) {
+              //TODO: Modificar per assignar usuari registrat o administrador, segons la variable de l'usuari
+              final validation = await validateLogin(mailController.text, passController.text);
+
+              if (validation) {
+                userRoleProvider.setUserRole(_selectedRole);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Te has registrado correctamente.')),
+                );
+                Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => const CartelleraScreen()),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Error al iniciar sesión.')),
+                );
+              }
+            }
+          },
+
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+          ),
+          child: const Text("Iniciar sesión"),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextFormField(String label, TextEditingController controller, {bool isPassword = false}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label),
+        const SizedBox(height: 8),
+        TextFormField(
+          controller: controller,
+          obscureText: isPassword ? _obscurePassword : false,
+          keyboardType: label == "Email"
+              ? TextInputType.emailAddress
+              : label == "Año de nacimiento"
+              ? TextInputType.number
+              : TextInputType.text,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Este campo es obligatorio';
+            }
+            if (label == "Email" && !value.contains('@')) {
+              return 'Email inválido';
+            }
+            return null;
+          },
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.grey[100],
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            suffixIcon: isPassword
+                ? IconButton(
+              icon: Icon(
+                _obscurePassword ? Icons.visibility : Icons.visibility_off,
+              ),
+              onPressed: () {
+                setState(() {
+                  _obscurePassword = !_obscurePassword;
+                });
+              },
+            )
+                : null,
+          ),
+        ),
+        const SizedBox(height: 24),
+      ],
     );
   }
 }
