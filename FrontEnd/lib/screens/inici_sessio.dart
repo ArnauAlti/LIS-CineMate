@@ -87,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
               if (validation) {
                 userRoleProvider.setUserRole(_selectedRole);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Te has registrado correctamente.')),
+                  const SnackBar(content: Text('Has iniciado sesión correctamente.')),
                 );
                 Navigator.push(
                   context, MaterialPageRoute(builder: (context) => const CartelleraScreen()),

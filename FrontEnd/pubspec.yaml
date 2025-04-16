@@ -63,6 +63,15 @@ flutter:
 
   assets:
     - assets/cinemate_logo.png
+    - assets/perfil1.jpg
+    - assets/perfil2.jpg
+    - assets/perfil3.jpg
+    - assets/perfil4.jpg
+    - assets/perfil5.jpg
+    - assets/perfil6.jpg
+    - assets/perfil7.jpg
+    - assets/perfil8.jpg
+    - assets/perfil9.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:
