@@ -38,17 +38,6 @@ class MyApp extends StatelessWidget {
           return PreguntaQuestionari(title: args['title']);
         },
       },
-      onGenerateRoute: (settings) {
-        if (settings.name == '/detalls_peli_serie') {
-          final args = settings.arguments as Map<String, dynamic>;
-          return MaterialPageRoute(
-            builder: (context) => DetallsPeliSerieScreen(
-              title: args['title'],
-            ),
-          );
-        }
-        return null;
-      },
     );
   }
 }

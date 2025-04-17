@@ -4,6 +4,7 @@ import '../user_role_provider.dart';
 import 'cerca_pelicules.dart';
 import 'detalls_biblioteca.dart';
 import 'app_drawer.dart';
+import '../requests.dart';
 
 class BibliotecaScreen extends StatefulWidget {
   const BibliotecaScreen({super.key});
@@ -14,6 +15,13 @@ class BibliotecaScreen extends StatefulWidget {
 
 class _BibliotecaScreenState extends State<BibliotecaScreen> {
   bool isPeliculasSelected = true;
+  late Future<List<Map<String, dynamic>>> _filmsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _filmsFuture = getFilms();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,62 +53,65 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
           userRoleProvider.setUserRole(newRole);
         },
       ),
-      //Permet fer scroll down en cas que el número de películes i/o sèries sigui major al de l'espai a la pantalla
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              //Menú per seleccionar entre secció de pel·lícules i sèries
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: _filmsFuture,
+        //Comprovacions per saber si s'han agafat bé les películes de la BD
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+
+          final films = snapshot.data ?? [];
+
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Column(
               children: [
-                _buildSectionButton("Películas", isPeliculasSelected, () {
-                  setState(() {
-                    isPeliculasSelected = true;
-                  });
-                }),
-                const SizedBox(width: 20),
-                _buildSectionButton("Series", !isPeliculasSelected, () {
-                  setState(() {
-                    isPeliculasSelected = false;
-                  });
-                }),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildSectionButton("Películas", isPeliculasSelected, () {
+                      setState(() {
+                        isPeliculasSelected = true;
+                        _filmsFuture = getFilms(); // Puedes alternar a getSeries()
+                      });
+                    }),
+                    const SizedBox(width: 20),
+                    _buildSectionButton("Series", !isPeliculasSelected, () {
+                      setState(() {
+                        isPeliculasSelected = false;
+                        _filmsFuture = getFilms(); // Cambia aquí si tienes `getSeries()`
+                      });
+                    }),
+                  ],
+                ),
+                const SizedBox(height: 30),
+
+                // Generar las filas dinámicamente
+                for (int i = 0; i < films.length; i += 2)
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildMovieBox(context, films[i]),
+                          if (i + 1 < films.length)
+                            _buildMovieBox(context, films[i + 1]),
+                        ],
+                      ),
+                      const SizedBox(height: 50),
+                    ],
+                  ),
               ],
             ),
-            const SizedBox(height: 30),
-            Column(
-              //TODO: Posar totes les pel·lícules i/o sèries de l'usuari, agafar-les de la BD
-              //TODO: En forma de llista, posar cada dues en una Row, separades per un SizedBox(height:50)
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildMovieBox(context, isPeliculasSelected ? "Película 1" : "Serie 1"),
-                    _buildMovieBox(context, isPeliculasSelected ? "Película 2" : "Serie 2"),
-                  ],
-                ),
-                const SizedBox(height: 50),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildMovieBox(context, isPeliculasSelected ? "Película 3" : "Serie 3"),
-                    _buildMovieBox(context, isPeliculasSelected ? "Película 4" : "Serie 4"),
-                  ],
-                ),
-                const SizedBox(height: 50),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildMovieBox(context, isPeliculasSelected ? "Película 3" : "Serie 3"),
-                    _buildMovieBox(context, isPeliculasSelected ? "Película 4" : "Serie 4"),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
-      )
+          );
+        },
+      ),
     );
   }
 
@@ -117,16 +128,15 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
     );
   }
 
-  Widget _buildMovieBox(BuildContext context, String title) {
+  Widget _buildMovieBox(BuildContext context, Map<String, dynamic> film) {
     return InkWell(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DetallsBibliotecaScreen(title: title),
+            builder: (context) => DetallsBibliotecaScreen(film: film),
           ),
         );
-
       },
       child: Container(
         width: 135,
@@ -134,12 +144,26 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 2),
           borderRadius: BorderRadius.circular(8),
+          image: film['imagePath'] != null
+              ? DecorationImage(
+            image: NetworkImage(film['imagePath']),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.3),
+              BlendMode.darken,
+            ),
+          )
+              : null,
         ),
         child: Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(title, textAlign: TextAlign.center),
+            child: Text(
+              film['title'] ?? '',
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
           ),
         ),
       ),

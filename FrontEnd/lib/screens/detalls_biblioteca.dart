@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class DetallsBibliotecaScreen extends StatefulWidget {
-  final String title;
+  final Map<String, dynamic> film;
 
-  const DetallsBibliotecaScreen({super.key, required this.title});
+  const DetallsBibliotecaScreen({super.key, required this.film});
 
   @override
   State<DetallsBibliotecaScreen> createState() => _DetallsBibliotecaScreenState();
@@ -11,12 +11,13 @@ class DetallsBibliotecaScreen extends StatefulWidget {
 
 class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
   double selectedRating = 0;
-  //Controladors per a poder veure si es modifiquen tant el comentari com el moment en que es va quedar
   final TextEditingController momentController = TextEditingController();
   final TextEditingController comentariController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final film = widget.film;
+
     return Scaffold(
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
@@ -34,7 +35,7 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
             GestureDetector(
               onTap: () {},
               child: Text(
-                widget.title,
+                film["titol"] ?? "Sin título",
                 style: const TextStyle(
                   fontSize: 18,
                   color: Colors.black,
@@ -48,8 +49,8 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
                 child: Image.network(
-                  //TODO: Establecer repositorio o sitio donde guardar imágenes de películas/series
-                  'https://th.bing.com/th/id/OIP.TDVZL0VokIrAyO-t9RFLJQAAAA?rs=1&pid=ImgDetMain',
+                  film["urlFoto"] ??
+                      'https://th.bing.com/th/id/OIP.TDVZL0VokIrAyO-t9RFLJQAAAA?rs=1&pid=ImgDetMain',
                   width: 180,
                   height: 260,
                   fit: BoxFit.cover,
@@ -60,7 +61,6 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                //TODO: Canviar per a poder establir-lo amb números (el temps, i un desplegable per episodis en sèries)
                 "Momento en el que me quedé",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
@@ -96,10 +96,8 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
                       onPressed: () {
                         setState(() {
                           if (selectedRating == starValue.toDouble()) {
-                            // Si ya tiene estrella completa → pasar a media
                             selectedRating = starValue - 0.5;
                           } else {
-                            // Si no, poner estrella completa
                             selectedRating = starValue.toDouble();
                           }
                         });
