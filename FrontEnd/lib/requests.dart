@@ -46,3 +46,13 @@ Future<bool> validateLogin(String mail, String pass) async {
 
   return true;
 }
+
+//TODO: Modificar tipus funció i crear funció
+Future<Map<String, dynamic>?> getUser(String userId) async {
+  // Exemple de dades que podria retornar (pots substituir-ho amb dades de la BD/API)
+  return {
+    'username': 'johndoe',
+    'email': 'johndoe@example.com',
+    'edat': 30,
+  };
+}
