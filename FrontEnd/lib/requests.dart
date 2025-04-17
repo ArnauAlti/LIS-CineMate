@@ -93,3 +93,51 @@ Future<List<Map<String, dynamic>>> getFilms() async {
     },
   ];
 }
+
+Future<List<Map<String, dynamic>>> getLibraryFilms(int userId) async {
+  //TODO: Modificar per agafar películes i sèries de la biblioteca de l'usuari de la BD
+  return [
+    {
+      'title': 'Captain America: Brave New World',
+      'imagePath': 'https://th.bing.com/th/id/OIP.TDVZL0VokIrAyO-t9RFLJQAAAA?rs=1&pid=ImgDetMain',
+      'episode': 0,
+      'timeLastSeen': 34,
+      'personalRating': 4.1,
+      'comment': "Really good film",
+      'type': 1
+    },
+    {
+      'title': 'Deadpool & Wolverine',
+      'imagePath': 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/7229d393-c3b8-4703-a41e-e876546d2612/dgukxa3-35713cc0-ca62-46d1-be6e-bf653f78c58e.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzcyMjlkMzkzLWMzYjgtNDcwMy1hNDFlLWU4NzY1NDZkMjYxMlwvZGd1a3hhMy0zNTcxM2NjMC1jYTYyLTQ2ZDEtYmU2ZS1iZjY1M2Y3OGM1OGUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.6unGo3zIe5tU3wjb7_JU0IX-rMOmpFVZFJrPe7onm44',
+      'episode': 0,
+      'timeLastSeen': 117,
+      'personalRating': 5,
+      'comment': 'Obra de arte espectacular',
+      'type': 0
+    },
+    {
+      'title': 'Dune: Parte Dos',
+      'imagePath': 'https://th.bing.com/th/id/OIP.iyQy2GNDScQrF5UEiFFoTwHaKz?rs=1&pid=ImgDetMain',
+      'episode': 0,
+      'timeLastSeen': 40,
+      'personalRating': 2,
+      'comment': 'Better the first part.',
+      'type': 1
+    },
+  ];
+}
+
+//TODO: Afegir a la biblioteca de l'usuari la película a la BD
+Future<bool> addToLibrary(String title, int userId) async {
+  return true;
+}
+
+//TODO: Modificar canvis a la biblioteca de l'usuari a la BD
+Future<bool> modifyFromLibrary(String title, String comment, int capitol, int minut, double rating, int userId) async {
+  return true;
+}
+
+//TODO: Eliminar de la biblioteca de l'usuari la película a la BD
+Future<bool> deleteFromLibrary(String title, int userId) async {
+  return true;
+}

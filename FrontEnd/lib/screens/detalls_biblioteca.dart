@@ -1,3 +1,4 @@
+import 'package:cine_mate/requests.dart';
 import 'package:flutter/material.dart';
 
 class DetallsBibliotecaScreen extends StatefulWidget {
@@ -11,8 +12,21 @@ class DetallsBibliotecaScreen extends StatefulWidget {
 
 class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
   double selectedRating = 0;
-  final TextEditingController momentController = TextEditingController();
+  final TextEditingController capitolController = TextEditingController();
   final TextEditingController comentariController = TextEditingController();
+  final TextEditingController minutController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    final film = widget.film;
+    selectedRating = (film['personalRating'] ?? 0.0).toDouble();
+    capitolController.text = film['episodi']?.toString() ?? '';
+    comentariController.text = film['comment'] ?? '';
+    minutController.text = widget.film['timeLastSeen']?.toString() ?? '';
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +49,7 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
             GestureDetector(
               onTap: () {},
               child: Text(
-                film["titol"] ?? "Sin título",
+                film["title"] ?? "Sin título",
                 style: const TextStyle(
                   fontSize: 18,
                   color: Colors.black,
@@ -49,7 +63,7 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
                 child: Image.network(
-                  film["urlFoto"] ??
+                  film["imagePath"] ??
                       'https://th.bing.com/th/id/OIP.TDVZL0VokIrAyO-t9RFLJQAAAA?rs=1&pid=ImgDetMain',
                   width: 180,
                   height: 260,
@@ -61,19 +75,41 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                "Momento en el que me quedé",
+                "Minuto en el que me quedé la última vez",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
             const SizedBox(height: 8),
             TextField(
+              controller: minutController,
+              keyboardType: TextInputType.number,
               cursorColor: Colors.black,
-              controller: momentController,
               decoration: InputDecoration(
-                hintText: "Capítulo, hora, escena...",
+                hintText: "Ej. 45",
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
               ),
             ),
+            const SizedBox(height: 16),
+            if (film['type'] == 0) ...[
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Capítulo en el que me quedé",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                cursorColor: Colors.black,
+                controller: capitolController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  hintText: "Capítulo...",
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                ),
+              ),
+              const SizedBox(height: 24),
+            ],
             const SizedBox(height: 24),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -129,7 +165,15 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
             const SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
-                // TODO: Guardar canvis a la BD
+                final String title = film["title"];
+                final String comment = comentariController.text;
+                final int capitol = int.tryParse(capitolController.text) ?? 0;
+                final int minut = int.tryParse(minutController.text) ?? 0;
+                final double rating = selectedRating;
+                const int userId = 1;
+
+                modifyFromLibrary(title, comment, capitol, minut, rating, userId);
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Se han guardado los cambios.')),
                 );
@@ -151,7 +195,9 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
           onPressed: () {
-            // TODO: Eliminar de biblioteca de la BD
+            const int userId = 1;
+
+            deleteFromLibrary(film["title"], userId);
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Se ha eliminado de la biblioteca.')),
             );

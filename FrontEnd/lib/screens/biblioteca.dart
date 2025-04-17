@@ -20,7 +20,7 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
   @override
   void initState() {
     super.initState();
-    _filmsFuture = getFilms();
+    _filmsFuture = getLibraryFilms(1);
   }
 
   @override

@@ -2,6 +2,7 @@ import 'package:cine_mate/screens/editar_pelicula.dart';
 import 'package:flutter/material.dart';
 import '../user_role_provider.dart';
 import 'package:provider/provider.dart';
+import '../requests.dart';
 
 class DetallsPeliSerieScreen extends StatelessWidget {
   final Map<String, dynamic>? film;
@@ -22,6 +23,7 @@ class DetallsPeliSerieScreen extends StatelessWidget {
         ? (film?['cast'] as List).join(', ')
         : (film?['cast'] ?? 'Desconocido');
     final String description = film?['description'] ?? 'Sin descripción.';
+    final double rating = (film?['rating'] ?? 2.5).toDouble();
 
     return Scaffold(
       backgroundColor: Colors.blue[50],
@@ -85,7 +87,6 @@ class DetallsPeliSerieScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 30),
-            //TODO: Agafar valoració a partir de la BD
             const Text(
               "⭐ Valoración",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
@@ -93,9 +94,24 @@ class DetallsPeliSerieScreen extends StatelessWidget {
             const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(5, (index) {
-                return const Icon(Icons.star_border, size: 30, color: Colors.black);
-              }),
+              children: [
+                Row(
+                  children: List.generate(5, (index) {
+                    if (index < rating.floor()) {
+                      return const Icon(Icons.star, size: 30, color: Colors.amber);
+                    } else if (index < rating && rating - index >= 0.5) {
+                      return const Icon(Icons.star_half, size: 30, color: Colors.amber);
+                    } else {
+                      return const Icon(Icons.star_border, size: 30, color: Colors.black);
+                    }
+                  }),
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  rating.toStringAsFixed(1),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
             const SizedBox(height: 30),
             const Text(
@@ -114,7 +130,7 @@ class DetallsPeliSerieScreen extends StatelessWidget {
               Center(
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    // TODO: Afegir a la biblioteca de l'usuari
+                    addToLibrary(title, 1);
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Película añadida a la biblioteca.')),
                     );
