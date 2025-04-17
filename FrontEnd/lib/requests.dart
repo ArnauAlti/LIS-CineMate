@@ -58,7 +58,7 @@ Future<Map<String, dynamic>?> getUser(String userId) async {
 }
 
 Future<List<Map<String, dynamic>>> getFilms() async {
-  //TODO: Modificar per agafar películes de la biblioteca de l'usuari de la BD
+  //TODO: Modificar per agafar películes i sèries de la biblioteca de l'usuari de la BD
   return [
     {
       'title': 'Captain America: Brave New World',

@@ -86,7 +86,6 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              //TODO: Agafar pel·lícules i sèries a partir de la BD de la IA
                               _buildMovieBox(context, films[i]),
                               if (i + 1 < films.length)
                                 _buildMovieBox(context, films[i + 1]),
@@ -118,24 +117,27 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
         height: 200,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 2),
+          image: film['imagePath'] != null
+              ? DecorationImage(
+            image: NetworkImage(film['imagePath']),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.3),
+              BlendMode.darken,
+            ),
+          )
+              : null,
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.network(
-              film['urlFoto'] ?? '',
-              width: 100,
-              height: 120,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) => const Icon(Icons.image_not_supported),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              film['titol'] ?? "Sense títol",
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              film['title'] ?? '',
               textAlign: TextAlign.center,
-              style: const TextStyle(fontWeight: FontWeight.bold),
+              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
-          ],
+          ),
         ),
       ),
     );
