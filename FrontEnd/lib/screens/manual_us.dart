@@ -29,60 +29,63 @@ class _ManualUsScreen extends State<ManualUsScreen> {
           });
         },
       ),
-      body: const SingleChildScrollView(
-        padding: EdgeInsets.all(20),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ExpansionTile(
-              title: Text("¿Como funciona la biblioteca?"),
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  //TODO: Posar funcionament biblioteca
-                  child: Text("Funcionamiento biblioteca"),
-                ),
-              ],
+            _buildExpansionTile(
+              icon: Icons.library_books,
+              title: "¿Cómo funciona la biblioteca?",
+              content:
+              "La biblioteca es la sección donde podrás guardar todas las series y películas que hayas visto o quieras ver, divididas en las dos secciones correspondientes. "
+                  "Podrás valorar y comentar aquellas obras que tengas guardadas en la biblioteca, pero solo podrás verlo tú. Además, podrás guardar el momento exacto en el que te quedaste, "
+                  "por si la quieres retomar. Con las series podrás indicar también el capítulo.\n\n"
+                  "¿Cómo guardar una película o serie en la biblioteca?\n"
+                  "→ Para ello tendrás que ir a la sección de la cartelera, entrar en la obra que quieras y hacer click en 'Añadir a biblioteca'.\n\n"
+                  "¿Se pueden eliminar las series o películas de la biblioteca?\n"
+                  "→ Sí, solo hace falta entrar a la película/serie en tu biblioteca, y clicar el botón de eliminar.\n\n"
+                  "¿Puedo modificar el comentario o la valoración?\n"
+                  "→ Sí, entra en la serie o película correspondiente, cambia la valoración, el comentario o el instante en el que te quedaste, y haz click en 'Guardar cambios'.",
             ),
-            ExpansionTile(
-              title: Text("¿Como funcionan las recomendaciones?"),
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  //TODO: Posar funcionament recomanacions
-                  child: Text("Funcionamiento recomendaciones"),
-                ),
-              ],
+            _buildExpansionTile(
+              icon: Icons.recommend,
+              title: "¿Cómo funcionan las recomendaciones?",
+              content:
+              "Las recomendaciones inteligentes te mostrarán aquellas películas o series que más se adecuen a tus gustos. "
+                  "También podrás generar recomendaciones a partir de los gustos de otros usuarios a los que sigas.\n\n"
+                  "¿Puedo dar más peso a algún género de película/serie?\n"
+                  "→ Así es, podrás elegir a qué géneros quieres dar más relevancia a la hora de generar las recomendaciones.",
             ),
-            ExpansionTile(
-              title: Text("¿Como funcionan los cuestionarios?"),
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  //TODO: Posar funcionament qüestionaris
-                  child: Text("Funcionamiento cuestionarios"),
-                ),
-              ],
+            _buildExpansionTile(
+              icon: Icons.quiz,
+              title: "¿Cómo funcionan los cuestionarios?",
+              content:
+              "Con los cuestionarios podrás poner a prueba tus conocimientos sobre la película o serie que desees. "
+                  "Busca la serie o película que quieras y haz click en comenzar. Se generarán 10 preguntas aleatorias, pero aparecerán solo 5.\n\n"
+                  "¿Puedo salir del cuestionario si no quiero seguir respondiendo más preguntas?\n"
+                  "→ Sí, puedes abandonar el cuestionario en cualquier momento usando el botón correspondiente, o salir tras las primeras 5 preguntas.",
             ),
-            ExpansionTile(
-              title: Text("¿Como funcionan los chats inteligentes?"),
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  //TODO: Posar funcionament xats
-                  child: Text("Funcionamiento chats"),
-                ),
-              ],
+            _buildExpansionTile(
+              icon: Icons.chat_bubble,
+              title: "¿Cómo funcionan los chats inteligentes?",
+              content:
+              "Los chats te permitirán conversar con personajes de tu película o serie favorita. Aunque son inteligentes, no recuerdan conversaciones pasadas tras varias horas. "
+                  "Generan respuestas basadas en la personalidad del personaje.\n\n"
+                  "¿Cómo añado un nuevo chat?\n"
+                  "→ Clica en 'Añadir nuevo chat', busca el personaje o película/serie, y se añadirá automáticamente a la lista de chats activos.\n\n"
+                  "¿Qué pasa si tengo 3 chats activos y quiero empezar uno nuevo?\n"
+                  "→ Deberás eliminar un chat desde la opción 'Eliminar chats' y seleccionar el que desees quitar.",
             ),
-            ExpansionTile(
-              title: Text("¿Como funciona la parte social?"),
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  //TODO: Posar funcionament altres usuaris
-                  child: Text("Funcionamiento otros usuarios"),
-                ),
-              ],
+            _buildExpansionTile(
+              icon: Icons.people,
+              title: "¿Cómo funciona la parte social?",
+              content:
+              "En la sección de otros usuarios podrás ver a las personas que sigues y sus respectivas bibliotecas, incluyendo comentarios y valoraciones. "
+                  "Estos usuarios también influyen en las recomendaciones personalizadas.\n\n"
+                  "¿Cómo puedo seguir a otros usuarios?\n"
+                  "→ Pulsa en 'Buscar usuarios', introduce su nombre, accede a su perfil y haz click en 'Seguir usuario'.\n\n"
+                  "¿Y cómo dejo de seguir a alguien?\n"
+                  "→ Entra a su perfil y haz click en 'Dejar de seguir'.",
             ),
           ],
         ),
@@ -90,18 +93,34 @@ class _ManualUsScreen extends State<ManualUsScreen> {
     );
   }
 
-  Widget _buildMovieBox(String title) {
-    return Container(
-      width: 135,
-      height: 200,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black, width: 2),
-      ),
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(title),
+  Widget _buildExpansionTile({
+    required IconData icon,
+    required String title,
+    required String content,
+  }) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 4,
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      child: Theme(
+        data: Theme.of(context).copyWith(
+          dividerColor: Colors.transparent,
+        ),
+        child: ExpansionTile(
+          leading: Icon(icon, color: Colors.black87),
+          title: Text(
+            title,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          ),
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Text(
+                content,
+                style: const TextStyle(fontSize: 16, height: 1.5),
+              ),
+            ),
+          ],
         ),
       ),
     );

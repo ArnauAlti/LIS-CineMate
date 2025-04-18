@@ -47,16 +47,6 @@ Future<bool> validateLogin(String mail, String pass) async {
   return true;
 }
 
-//TODO: Modificar funció
-Future<Map<String, dynamic>?> getUser(String userId) async {
-  // Exemple de dades que podria retornar (pots substituir-ho amb dades de la BD/API)
-  return {
-    'username': 'johndoe',
-    'email': 'johndoe@example.com',
-    'edat': 30,
-  };
-}
-
 Future<List<Map<String, dynamic>>> getFilms() async {
   //TODO: Modificar per agafar películes i sèries de la biblioteca de l'usuari de la BD
   return [
@@ -65,7 +55,7 @@ Future<List<Map<String, dynamic>>> getFilms() async {
       'imagePath': 'https://th.bing.com/th/id/OIP.TDVZL0VokIrAyO-t9RFLJQAAAA?rs=1&pid=ImgDetMain',
       'releaseDate': 2025,
       'duration': 119,
-      'director': 'Steven Spielberg',
+      'platforms': 'Disney+',
       'cast': ['Anthony Mackie', 'Harrison Ford'],
       'rating': 3.5,
       'description': 'Tras reunirse con el recién elegido presidente de EE.UU. Thaddeus Ross (Harrison Ford), '
@@ -76,7 +66,7 @@ Future<List<Map<String, dynamic>>> getFilms() async {
       'imagePath': 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/7229d393-c3b8-4703-a41e-e876546d2612/dgukxa3-35713cc0-ca62-46d1-be6e-bf653f78c58e.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzcyMjlkMzkzLWMzYjgtNDcwMy1hNDFlLWU4NzY1NDZkMjYxMlwvZGd1a3hhMy0zNTcxM2NjMC1jYTYyLTQ2ZDEtYmU2ZS1iZjY1M2Y3OGM1OGUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.6unGo3zIe5tU3wjb7_JU0IX-rMOmpFVZFJrPe7onm44',
       'releaseDate': 2024,
       'duration': 130,
-      'director': 'Shawn Levy',
+      'platforms': 'Disney+',
       'cast': ['Ryan Reynolds', 'Hugh Jackman'],
       'rating': 4.7,
       'description': 'Wade Wilson se une a Wolverine en una aventura multiversal que redefine la locura.',
@@ -86,7 +76,7 @@ Future<List<Map<String, dynamic>>> getFilms() async {
       'imagePath': 'https://th.bing.com/th/id/OIP.iyQy2GNDScQrF5UEiFFoTwHaKz?rs=1&pid=ImgDetMain',
       'releaseDate': 2024,
       'duration': 165,
-      'director': 'Denis Villeneuve',
+      'platforms': 'Netflix',
       'cast': ['Timothée Chalamet', 'Zendaya'],
       'rating': 4.8,
       'description': 'Paul Atreides une fuerzas con los Fremen para vengar a su familia y salvar el universo conocido.',
@@ -140,4 +130,14 @@ Future<bool> modifyFromLibrary(String title, String comment, int capitol, int mi
 //TODO: Eliminar de la biblioteca de l'usuari la película a la BD
 Future<bool> deleteFromLibrary(String title, int userId) async {
   return true;
+}
+
+//TODO: Modificar funció
+Future<Map<String, dynamic>?> getUser(String userId) async {
+  // Exemple de dades que podria retornar (pots substituir-ho amb dades de la BD/API)
+  return {
+    'username': 'johndoe',
+    'email': 'johndoe@example.com',
+    'edat': 30,
+  };
 }

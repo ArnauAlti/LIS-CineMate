@@ -16,9 +16,9 @@ class DetallsPeliSerieScreen extends StatelessWidget {
 
     final String title = film?['title'] ?? 'Título desconocido';
     final String urlFoto = film?['imagePath'] ?? 'https://th.bing.com/th/id/OIP.TDVZL0VokIrAyO-t9RFLJQAAAA?rs=1&pid=ImgDetMain';
-    final String release_date = film?['releaseDate']?.toString() ?? 'Desconocido';
+    final String releaseDate = film?['releaseDate']?.toString() ?? 'Desconocido';
     final String duration = film?['duration']?.toString() ?? 'Desconocida';
-    final String director = film?['director'] ?? 'Desconocido';
+    final String platforms = film?['platforms'] ?? 'Desconocido';
     final String cast = (film?['cast'] is List)
         ? (film?['cast'] as List).join(', ')
         : (film?['cast'] ?? 'Desconocido');
@@ -74,11 +74,11 @@ class DetallsPeliSerieScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("📅 Año de estreno: $release_date", style: const TextStyle(fontSize: 16)),
+                      Text("📅 Año de estreno: $releaseDate", style: const TextStyle(fontSize: 16)),
                       const SizedBox(height: 8),
                       Text("⏱ Duración: $duration minutos", style: const TextStyle(fontSize: 16)),
                       const SizedBox(height: 8),
-                      Text("📺 Director: $director", style: const TextStyle(fontSize: 16)),
+                      Text("📺 Plataformas donde encontrarla: $platforms", style: const TextStyle(fontSize: 16)),
                       const SizedBox(height: 8),
                       Text("🎭 Reparto: $cast", style: const TextStyle(fontSize: 16)),
                     ],

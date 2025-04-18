@@ -16,16 +16,16 @@ class EditarPeliCartelleraScreen extends StatefulWidget {
 }
 
 class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen> {
-  late final TextEditingController titolController;
-  late final TextEditingController repartController;
-  late final TextEditingController descripcioController;
-  late final TextEditingController anyEstrenoController;
-  late final TextEditingController duracioController;
-  late final TextEditingController plataformesController;
-  late final TextEditingController urlFotoController;
-  late final TextEditingController edatMinimaController;
-  late final TextEditingController temporadaController;
-  late final TextEditingController numCapitolsController;
+  late final TextEditingController titleController;
+  late final TextEditingController castController;
+  late final TextEditingController descriptionController;
+  late final TextEditingController releaseDateController;
+  late final TextEditingController durationController;
+  late final TextEditingController plataformsController;
+  late final TextEditingController imagePathController;
+  late final TextEditingController PegiController;
+  late final TextEditingController seasonController;
+  late final TextEditingController numChaptersController;
 
   String? tipusSeleccionat;
   String? genereSeleccionat;
@@ -46,20 +46,20 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
     super.initState();
     final data = widget.peliData;
 
-    titolController = TextEditingController(text: data?["titol"] ?? "");
-    repartController = TextEditingController(text: data?["repart"] ?? "");
-    descripcioController =
+    titleController = TextEditingController(text: data?["titol"] ?? "");
+    castController = TextEditingController(text: data?["repart"] ?? "");
+    descriptionController =
         TextEditingController(text: data?["descripcio"] ?? "");
-    anyEstrenoController =
+    releaseDateController =
         TextEditingController(text: data?["anyEstreno"] ?? "");
-    duracioController = TextEditingController(text: data?["duracio"] ?? "");
-    plataformesController =
+    durationController = TextEditingController(text: data?["duracio"] ?? "");
+    plataformsController =
         TextEditingController(text: data?["plataformes"] ?? "");
-    urlFotoController = TextEditingController(text: data?["urlFoto"] ?? "");
-    edatMinimaController =
+    imagePathController = TextEditingController(text: data?["urlFoto"] ?? "");
+    PegiController =
         TextEditingController(text: data?["edatMinima"] ?? "");
-    temporadaController = TextEditingController(text: data?["temporada"] ?? "");
-    numCapitolsController =
+    seasonController = TextEditingController(text: data?["temporada"] ?? "");
+    numChaptersController =
         TextEditingController(text: data?["numCapitols"] ?? "");
 
     // Corregim els valors per assegurar que coincideixen amb les opcions disponibles
@@ -89,14 +89,14 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildTextField("Títol", titolController),
-              _buildTextField("Repartiment", repartController),
-              _buildTextField("Any d’estrena", anyEstrenoController),
-              _buildTextField("Duració (minuts)", duracioController),
-              _buildTextField("Plataformes", plataformesController),
-              _buildTextField("Descripció", descripcioController),
-              _buildTextField("URL de la foto", urlFotoController),
-              _buildTextField("Edat mínima", edatMinimaController),
+              _buildTextField("Título", titleController),
+              _buildTextField("Reparto", castController),
+              _buildTextField("Año de estreno", releaseDateController),
+              _buildTextField("Duración (minutos)", durationController),
+              _buildTextField("Plataformas", plataformsController),
+              _buildTextField("Descripción", descriptionController),
+              _buildTextField("URL de la foto", imagePathController),
+              _buildTextField("Edad mínima de visualización", PegiController),
               _buildDropdown("Tipus", tipusSeleccionat, tipusOpcions, (val) {
                 setState(() {
                   tipusSeleccionat = val;
@@ -108,19 +108,19 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
                 });
               }),
               if (tipusSeleccionat == "Sèrie") ...[
-                _buildTextField("Temporada", temporadaController),
-                _buildTextField("Número de capítols", numCapitolsController),
+                _buildTextField("Temporada", seasonController),
+                _buildTextField("Número de capítols", numChaptersController),
               ],
               const SizedBox(height: 32),
               Center(
                 child: ElevatedButton(
                   onPressed: () {
                     //TODO: Passar noves variables a backend per actualitzar BD
-                    print("Títol: ${titolController.text}");
+                    print("Títol: ${titleController.text}");
                     print("Tipus: $tipusSeleccionat");
                     print("Gènere: $genereSeleccionat");
-                    print("Repartiment: ${repartController.text}");
-                    print("Descripció: ${descripcioController.text}");
+                    print("Repartiment: ${castController.text}");
+                    print("Descripció: ${descriptionController.text}");
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
