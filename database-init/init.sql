@@ -44,6 +44,9 @@ CREATE TABLE library (
     library_rating DECIMAL(3,1) DEFAULT 0.0,
     library_comment VARCHAR(255)
 );
+ALTER TABLE library
+ADD CONSTRAINT unique_user_repo_season
+UNIQUE (user_id, repo_id, library_season_id);
 
 -- Taula: characters
 CREATE TABLE characters (
