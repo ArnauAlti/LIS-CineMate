@@ -1,0 +1,54 @@
+const userDB = require("./db.js");
+
+async function signInUser(req, res) {
+    try {
+        // checking for a mail
+        let userMail = req.body['user_mail'];
+        if (!userMail) {
+            throw "No mail provided";
+        }
+
+        // checking for a nick
+        let userNick = req.body['user_nick'];
+        if (!userNick) {
+            throw "No nick provided";
+        }
+
+        // checking for a name
+        let userName = req.body['user_name'];
+        if (!userName) {
+            throw "No name provided";
+        }
+
+        // checking for a pass
+        let userPass = req.body['user_pass'];
+        if (!userPass) {
+            throw "No password provided";
+        }
+
+        let userAdmin = false;
+
+        // checking for a birth date
+        let userBirth = req.body['user_birth'];
+        if (!userBirth) {
+            throw "No birth date provided";
+        }
+        
+        var dt = new Date();
+        let userCreated = dt.getFullYear() + "/" + (dt.getMonth() + 1) + "/" + dt.getDate();
+
+        console.log(userCreated);
+
+        const quer = await userDB.query(
+            'INSERT INTO users("user_mail", "user_nick", "user_name", "user_pass", "user_admin", "user_birth") VALUES ($1, $2, $3, $4, $5, $6)',
+            [userMail, userNick, userName, userPass, userAdmin, userBirth]
+        );
+        console.log(quer.rows[0]);
+        res.status(200).json({message: "User Created Succesfully"});
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: error, message: "An error ocurred trying to create a user"});
+    }
+}
+
+module.exports = signInUser;
