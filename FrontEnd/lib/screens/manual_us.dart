@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'app_drawer.dart';
+import '../user_role_provider.dart';
+import 'package:provider/provider.dart';
 
 class ManualUsScreen extends StatefulWidget {
   const ManualUsScreen({super.key});
@@ -9,10 +11,11 @@ class ManualUsScreen extends StatefulWidget {
 }
 
 class _ManualUsScreen extends State<ManualUsScreen> {
-  String _userRole = 'Usuario Registrado';
-
   @override
   Widget build(BuildContext context) {
+    final userRoleProvider = Provider.of<UserRoleProvider>(context);
+    var userRole = userRoleProvider.userRole;
+
     return Scaffold(
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
@@ -22,11 +25,9 @@ class _ManualUsScreen extends State<ManualUsScreen> {
         centerTitle: true,
       ),
       drawer: AppDrawer(
-        userRole: _userRole,
+        userRole: userRole,
         onRoleChange: (String newRole) {
-          setState(() {
-            _userRole = newRole;
-          });
+          userRoleProvider.setUserRole(newRole);
         },
       ),
       body: SingleChildScrollView(
