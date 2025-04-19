@@ -14,7 +14,7 @@ CREATE TABLE users (
 -- Taula: preferences
 CREATE TABLE preferences (
     user_id VARCHAR(12) PRIMARY KEY REFERENCES users(user_id) ON DELETE CASCADE,
-    preferences_weights JSON  -- TO_DO
+    preferences_weights JSON
 );
 
 -- Taula: repositories
@@ -26,14 +26,14 @@ CREATE TABLE repositories (
     repo_director VARCHAR(255),
     repo_cast TEXT,
     repo_description TEXT,
-    repo_type VARCHAR(50), -- si es peli o serie? llavors faria BOOLEAN
+    repo_is_series BOOLEAN NOT NULL
     repo_image_path VARCHAR(255),
     repo_rating DECIMAL(3,1),
     repo_PEGI INT,
     repo_duration INT,
     repo_season_number INT,
     repo_episode_count INT,
-    repo_genre VARCHAR(100) -- es pot eliminar si fem mes d'un genre (fem servir les altres taules)
+    repo_genre JSON
 );
 
 -- Taula: library (relació user-repository amb dades)
@@ -50,8 +50,8 @@ CREATE TABLE library (
 CREATE TABLE characters (
     character_id SERIAL PRIMARY KEY,
     repo_id INT REFERENCES repositories(repo_id) ON DELETE CASCADE,
-    characters_name VARCHAR(100) NOT NULL,
-    characters_context TEXT,
+    character_name VARCHAR(100) NOT NULL,
+    character_context TEXT,
     characters_image_path VARCHAR(255)
 );
 
@@ -64,23 +64,3 @@ CREATE TABLE questionnaires (
     questionnaires_comment VARCHAR(255),
     questionnaires_validated BOOLEAN DEFAULT FALSE
 );
-
--- Taula: genres
-CREATE TABLE genres (
-    genre_id SERIAL PRIMARY KEY,    -- cada repo te 1 o mes genres? si te mes de un fer una altre taula
-    genre_season_id INT,
-    repo_id INT REFERENCES repositories(repo_id) ON DELETE CASCADE,
-    genre_weights JSON -- TO_DO
-);
-
--- CREATE TABLE genres (
---     genre_id SERIAL PRIMARY KEY,
---     genre_name VARCHAR(100) UNIQUE NOT NULL
--- );
-
--- CREATE TABLE repo_genres (
---     repo_id INT REFERENCES repositories(repo_id) ON DELETE CASCADE,
---     genre_id INT REFERENCES genres(genre_id) ON DELETE CASCADE,
---     weight DECIMAL(3,2), -- o JSON si vols info extra
---     PRIMARY KEY (repo_id, genre_id)
--- );
