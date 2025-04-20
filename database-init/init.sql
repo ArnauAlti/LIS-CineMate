@@ -41,7 +41,7 @@ CREATE TABLE library (
     user_id VARCHAR(12) REFERENCES users(user_id) ON DELETE CASCADE,
     repo_id INT REFERENCES repositories(repo_id) ON DELETE CASCADE,
     library_season_id INT,
-    library_rating DECIMAL(3,1) DEFAULT 0.0,
+    library_rating DECIMAL(3,1),
     library_comment VARCHAR(255)
 );
 ALTER TABLE library
@@ -80,3 +80,40 @@ CREATE TABLE repo_genres (
     genre_id INT REFERENCES genres(genre_id) ON DELETE CASCADE,
     PRIMARY KEY (repo_id, repo_season_id, genre_id)
 );
+
+-- Funció per actualitzar el camp repo_rating a la taula repositories
+CREATE OR REPLACE FUNCTION update_repo_rating()
+RETURNS TRIGGER AS $$
+BEGIN
+  -- Calcula la mitjana de valoracions d'una temporada concreta (si és una sèrie)
+    UPDATE repositories
+    SET repo_rating = (
+    SELECT ROUND(AVG(l.library_rating)::numeric, 1)
+    FROM library l
+    JOIN repositories r ON l.repo_id = r.repo_id
+    WHERE l.repo_id = NEW.repo_id
+        AND r.repo_season_id = NEW.repo_season_id
+        AND l.library_rating IS NOT NULL
+    )
+    WHERE repo_id = NEW.repo_id
+        AND repo_season_id = NEW.repo_season_id;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+  -- Cas per calcular la mitjana de valoracions per a tota la Sèrie (no per temporada)
+  --    UPDATE repositories
+  --    SET repo_rating = (
+  --      SELECT ROUND(AVG(l.library_rating)::numeric, 1)
+  --      FROM library l
+  --      WHERE l.repo_id = NEW.repo_id AND l.library_rating IS NOT NULL
+  --    )
+  --    WHERE repo_id = NEW.repo_id;
+
+-- Trigger que s'activa després d'un INSERT, UPDATE o DELETE a la taula library
+-- Actualitza automàticament el repo_rating
+CREATE TRIGGER trigger_update_repo_rating
+AFTER INSERT OR UPDATE OR DELETE ON library
+FOR EACH ROW
+EXECUTE FUNCTION update_repo_rating();
