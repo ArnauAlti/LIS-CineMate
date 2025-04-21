@@ -17,7 +17,8 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
   @override
   void initState() {
     super.initState();
-    _filmsFuture = getFilms();
+    //TODO: Canviar id de l'usuari
+    _filmsFuture = getRecomendationFilms(1);
   }
 
   @override

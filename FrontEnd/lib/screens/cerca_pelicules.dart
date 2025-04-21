@@ -10,7 +10,6 @@ class CercaPelicules extends StatefulWidget {
 
 class _CercaPeliculesState extends State<CercaPelicules> {
   final TextEditingController _controller = TextEditingController();
-  final TextEditingController _paraulaController = TextEditingController();
   final TextEditingController _actorController = TextEditingController();
   final TextEditingController _directorController = TextEditingController();
   final TextEditingController _duracioController = TextEditingController();
@@ -30,12 +29,11 @@ class _CercaPeliculesState extends State<CercaPelicules> {
       context,
       MaterialPageRoute(
         builder: (context) => ResultatsPelicules(
-          busqueda: _busqueda,
-          genereSeleccionat: _genereSeleccionat ?? "No especificat",
-          paraula: _paraulaController.text,
+          search: _busqueda,
+          genre: _genereSeleccionat ?? "No especificat",
           actor: _actorController.text,
           director: _directorController.text,
-          duracio: _duracioController.text,
+          duration: _duracioController.text,
         ),
       ),
     );

@@ -3,21 +3,19 @@ import '../requests.dart';
 import 'detalls_peli_serie.dart';
 
 class ResultatsPelicules extends StatefulWidget {
-  final String busqueda;
-  final String? genereSeleccionat;
-  final String paraula;
+  final String search;
+  final String genre;
   final String actor;
   final String director;
-  final String duracio;
+  final String duration;
 
   const ResultatsPelicules({
     super.key,
-    required this.busqueda,
-    required this.genereSeleccionat,
-    required this.paraula,
+    required this.search,
+    required this.genre,
     required this.actor,
     required this.director,
-    required this.duracio,
+    required this.duration,
   });
 
   @override
@@ -30,7 +28,8 @@ class _ResultatsPeliculesState extends State<ResultatsPelicules> {
   @override
   void initState() {
     super.initState();
-    _filmsFuture = getFilms(); // Aquí podrías reemplazar con una función filtrada si la tienes
+    _filmsFuture = getFilmsBySearch(widget.search, widget.genre, widget.director,
+        widget.actor, widget.duration as int);
   }
 
   @override
@@ -89,18 +88,13 @@ class _ResultatsPeliculesState extends State<ResultatsPelicules> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          'Búsqueda realizada para: "${widget.busqueda}"',
+          'Búsqueda realizada para: "${widget.search}"',
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 12),
-        if (widget.genereSeleccionat != null &&
-            widget.genereSeleccionat != "No especificat") ...[
-          Text('Gènere seleccionat: ${widget.genereSeleccionat}'),
-          const SizedBox(height: 8),
-        ],
-        if (widget.paraula.isNotEmpty) ...[
-          Text('Paraula clau: ${widget.paraula}'),
+        if (widget.genre != "No especificat") ...[
+          Text('Gènere seleccionat: ${widget.genre}'),
           const SizedBox(height: 8),
         ],
         if (widget.actor.isNotEmpty) ...[
@@ -111,8 +105,8 @@ class _ResultatsPeliculesState extends State<ResultatsPelicules> {
           Text('Director/a: ${widget.director}'),
           const SizedBox(height: 8),
         ],
-        if (widget.duracio.isNotEmpty) ...[
-          Text('Duració: ${widget.duracio}'),
+        if (widget.duration.isNotEmpty) ...[
+          Text('Duració: ${widget.duration}'),
           const SizedBox(height: 8),
         ],
       ],

@@ -20,7 +20,7 @@ class _CartelleraScreenState extends State<CartelleraScreen> {
   @override
   void initState() {
     super.initState();
-    _filmsFuture = getFilms();
+    _filmsFuture = getLatestFilms();
   }
 
   @override
@@ -102,6 +102,8 @@ class _CartelleraScreenState extends State<CartelleraScreen> {
           );
         },
       ),
+      //Opció d'administrador per afegir una nova pel·lícula o sèrie a la cartellera disponible per a tots els
+      //usuaris.
       floatingActionButton: userRole == "Administrador"
           ? FloatingActionButton(
         onPressed: () {
@@ -121,7 +123,8 @@ class _CartelleraScreenState extends State<CartelleraScreen> {
   }
 
 
-  // Funció per construir una caixa de pel·lícula o sèrie
+  // Funció per construir una caixa de pel·lícula o sèrie, es passa a la següent pantalla tota la informació necessària
+  //de la pel·lícula o sèrie per mostrar a pantalla
   Widget _buildMovieBox(BuildContext context, Map<String, dynamic> film) {
     return InkWell(
       onTap: () {
