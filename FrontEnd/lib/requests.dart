@@ -200,3 +200,17 @@ Future<List<Map<String, dynamic>>> getRecomendationFilms(int userId) async {
     },
   ];
 }
+
+//TODO: Funció per modificar informació peli/serie de cartellera
+//Funció que permet passar informació modificada o nova d'una pel·lícula o sèrie
+//per introduir-la a la base de dades
+Future<bool> modifyFilm(String title, List<String> cast, int releaseDate, int duration, List<String> platforms,
+  String imagePath, int pegi, int season, int numChapters) async {
+  return true;
+}
+
+//TODO: Funció per eliminar una peli/serie de cartellera
+//Funció que permet eliminar una pel·lícula o sèrie de la cartellera (BD) a partir del seu títol
+Future<bool> deleteFilm(String title) async {
+  return true;
+}

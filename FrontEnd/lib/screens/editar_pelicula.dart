@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../requests.dart';
+
 class EditarPeliCartelleraScreen extends StatefulWidget {
   final String mode;
   final Map<String, dynamic>? peliData;
@@ -21,9 +23,9 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
   late final TextEditingController descriptionController;
   late final TextEditingController releaseDateController;
   late final TextEditingController durationController;
-  late final TextEditingController plataformsController;
+  late final TextEditingController platformsController;
   late final TextEditingController imagePathController;
-  late final TextEditingController PegiController;
+  late final TextEditingController pegiController;
   late final TextEditingController seasonController;
   late final TextEditingController numChaptersController;
 
@@ -53,10 +55,10 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
     releaseDateController =
         TextEditingController(text: data?["anyEstreno"] ?? "");
     durationController = TextEditingController(text: data?["duracio"] ?? "");
-    plataformsController =
+    platformsController =
         TextEditingController(text: data?["plataformes"] ?? "");
     imagePathController = TextEditingController(text: data?["urlFoto"] ?? "");
-    PegiController =
+    pegiController =
         TextEditingController(text: data?["edatMinima"] ?? "");
     seasonController = TextEditingController(text: data?["temporada"] ?? "");
     numChaptersController =
@@ -90,13 +92,13 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildTextField("Título", titleController),
-              _buildTextField("Reparto", castController),
+              _buildTextField("Reparto (Separados por comas)", castController),
               _buildTextField("Año de estreno", releaseDateController),
               _buildTextField("Duración (minutos)", durationController),
-              _buildTextField("Plataformas", plataformsController),
+              _buildTextField("Plataformas (Separadas por comas)", platformsController),
               _buildTextField("Descripción", descriptionController),
               _buildTextField("URL de la foto", imagePathController),
-              _buildTextField("Edad mínima de visualización", PegiController),
+              _buildTextField("Edad mínima de visualización", pegiController),
               _buildDropdown("Tipus", tipusSeleccionat, tipusOpcions, (val) {
                 setState(() {
                   tipusSeleccionat = val;
@@ -114,14 +116,37 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
               const SizedBox(height: 32),
               Center(
                 child: ElevatedButton(
-                  onPressed: () {
-                    //TODO: Passar noves variables a backend per actualitzar BD
-                    print("Títol: ${titleController.text}");
-                    print("Tipus: $tipusSeleccionat");
-                    print("Gènere: $genereSeleccionat");
-                    print("Repartiment: ${castController.text}");
-                    print("Descripció: ${descriptionController.text}");
+                  onPressed: () async {
+                    try {
+                      final castList = castController.text.split(',').map((e) => e.trim())
+                          .where((e) => e.isNotEmpty).toList();
+
+                      final platformsList = platformsController.text.split(',').map((e) => e.trim())
+                          .where((e) => e.isNotEmpty).toList();
+
+                      final releaseDate = int.tryParse(releaseDateController.text) ?? 0;
+                      final duration = int.tryParse(durationController.text) ?? 0;
+                      final pegi = int.tryParse(pegiController.text) ?? 0;
+                      final season = int.tryParse(seasonController.text) ?? 0;
+                      final numChapters = int.tryParse(numChaptersController.text) ?? 0;
+
+                      await modifyFilm(
+                        titleController.text,
+                        castList,
+                        releaseDate,
+                        duration,
+                        platformsList,
+                        imagePathController.text,
+                        pegi,
+                        season,
+                        numChapters,
+                      );
+                    } catch (e) {
+                      // Aquí podrías mostrar un error si algo falla al convertir datos
+                      print('Error al modificar la peli: $e');
+                    }
                   },
+
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
                     foregroundColor: Colors.white,

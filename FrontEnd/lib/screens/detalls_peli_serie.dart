@@ -1,3 +1,4 @@
+import 'package:cine_mate/screens/cartellera.dart';
 import 'package:cine_mate/screens/editar_pelicula.dart';
 import 'package:flutter/material.dart';
 import '../user_role_provider.dart';
@@ -174,8 +175,14 @@ class DetallsPeliSerieScreen extends StatelessWidget {
                     child: const Text("EDITAR INFORMACIÓN"),
                   ),
                   ElevatedButton(
-                    onPressed: () {
-                      // TODO: Eliminar película de la cartellera i de la BD
+                    onPressed: () async {
+                      await deleteFilm(title);
+
+                      Navigator.push(
+                        context, MaterialPageRoute(builder: (context) => const CartelleraScreen(),
+                        ),
+                      );
+
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Obra eliminada de la cartelera.')),
                       );
