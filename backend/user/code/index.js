@@ -13,6 +13,7 @@ app.use(express.urlencoded({extended: true }));
 
 app.use(async (req, res, next) => {
     console.log("New Request");
+    console.log(req.headers);
     console.log(req.body);
     console.log(req.url);
     next();

@@ -28,29 +28,29 @@ FOR EACH ROW
 EXECUTE FUNCTION user_id_function();
 
 CREATE TABLE genres (
-    genre_id SERIAL PRIMARY KEY,
+    genre_id INTEGER PRIMARY KEY,
     genre_name VARCHAR(50) UNIQUE NOT NULL
 );
 
-INSERT INTO genres(genre_name) VALUES ('action');
-INSERT INTO genres(genre_name) VALUES ('adventure');
-INSERT INTO genres(genre_name) VALUES ('animation');
-INSERT INTO genres(genre_name) VALUES ('children');
-INSERT INTO genres(genre_name) VALUES ('comedy');
-INSERT INTO genres(genre_name) VALUES ('crime');
-INSERT INTO genres(genre_name) VALUES ('documentary');
-INSERT INTO genres(genre_name) VALUES ('drama');
-INSERT INTO genres(genre_name) VALUES ('fantasy');
-INSERT INTO genres(genre_name) VALUES ('horror');
-INSERT INTO genres(genre_name) VALUES ('imax');
-INSERT INTO genres(genre_name) VALUES ('musical');
-INSERT INTO genres(genre_name) VALUES ('mistery');
-INSERT INTO genres(genre_name) VALUES ('noir');
-INSERT INTO genres(genre_name) VALUES ('romance');
-INSERT INTO genres(genre_name) VALUES ('scifi');
-INSERT INTO genres(genre_name) VALUES ('thriller');
-INSERT INTO genres(genre_name) VALUES ('war');
-INSERT INTO genres(genre_name) VALUES ('western');
+INSERT INTO genres(genre_id, genre_name) VALUES (0, 'action');
+INSERT INTO genres(genre_id, genre_name) VALUES (1, 'adventure');
+INSERT INTO genres(genre_id, genre_name) VALUES (2, 'animation');
+INSERT INTO genres(genre_id, genre_name) VALUES (3, 'children');
+INSERT INTO genres(genre_id, genre_name) VALUES (4, 'comedy');
+INSERT INTO genres(genre_id, genre_name) VALUES (5, 'crime');
+INSERT INTO genres(genre_id, genre_name) VALUES (6, 'documentary');
+INSERT INTO genres(genre_id, genre_name) VALUES (7, 'drama');
+INSERT INTO genres(genre_id, genre_name) VALUES (8, 'fantasy');
+INSERT INTO genres(genre_id, genre_name) VALUES (9, 'horror');
+INSERT INTO genres(genre_id, genre_name) VALUES (10, 'imax');
+INSERT INTO genres(genre_id, genre_name) VALUES (11, 'musical');
+INSERT INTO genres(genre_id, genre_name) VALUES (12, 'mistery');
+INSERT INTO genres(genre_id, genre_name) VALUES (13, 'noir');
+INSERT INTO genres(genre_id, genre_name) VALUES (14, 'romance');
+INSERT INTO genres(genre_id, genre_name) VALUES (15, 'scifi');
+INSERT INTO genres(genre_id, genre_name) VALUES (16, 'thriller');
+INSERT INTO genres(genre_id, genre_name) VALUES (17, 'war');
+INSERT INTO genres(genre_id, genre_name) VALUES (18, 'western');
 
 
 CREATE TABLE preferences (
@@ -72,26 +72,25 @@ INSERT INTO media_types(type_name) VALUES ('Show');
 
 
 CREATE TABLE media (
-    sec INT UNIQUE NOT NULL,
-    id VARCHAR(100) PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    rating FLOAT,
-    genres JSONB NOT NULL,
-    director VARCHAR(100),
-    "cast" TEXT,
-    pegi INT,
-    release DATE,
-    png VARCHAR(255)
+    media_sec INT UNIQUE NOT NULL,
+    media_id VARCHAR(100) PRIMARY KEY,
+    media_name VARCHAR(255) NOT NULL,
+    media_genres JSONB NOT NULL,
+    media_type VARCHAR(10) NOT NULL,
+    media_png VARCHAR(255),
+    FOREIGN KEY(media_type)
+        REFERENCES media_types(type_name)
+        ON DELETE CASCADE
 );
 CREATE OR REPLACE FUNCTION media_id_function() RETURNS TRIGGER AS $$
 DECLARE
     next_id INTEGER;
     patata text;
 BEGIN 
-    SELECT COALESCE(MAX(sec), 0) + 1 INTO next_id FROM media;
+    SELECT COALESCE(MAX(media_sec), 0) + 1 INTO next_id FROM media;
     SELECT CAST(to_hex(next_id) as text) INTO patata;
-    NEW.sec := next_id;
-    NEW.id := 'media-' || left('000000000000', 12 - length(patata)) || CAST(to_hex(next_id) as text);
+    NEW.media_sec := next_id;
+    NEW.media_id := 'media-' || left('000000000000', 12 - length(patata)) || CAST(to_hex(next_id) as text);
     RETURN NEW;
 END;
 $$ LANGUAGE PLPGSQL;
@@ -104,30 +103,35 @@ EXECUTE FUNCTION media_id_function();
 
 CREATE TABLE media_info (
     media_id VARCHAR(100) NOT NULL,
-    id VARCHAR(100) PRIMARY KEY,
-    type VARCHAR(10) NOT NULL,
-    description TEXT NOT NULL,
-    synopsis TEXT NOT NULL,
-    season INT,
-    FOREIGN KEY(type)
-        REFERENCES media_types(type_name)
-        ON DELETE CASCADE,
+    media_info_id VARCHAR(100) PRIMARY KEY,
+    media_info_description TEXT NOT NULL,
+    media_info_synopsis TEXT NOT NULL,
+    media_info_season INT,
+    media_info_rating FLOAT,
+    media_info_director VARCHAR(100),
+    "media_info_cast" TEXT,
+    media_info_pegi INT,
+    "media_info_release" DATE,
     FOREIGN KEY(media_id)
-        REFERENCES media(id)
+        REFERENCES media(media_id)
         ON DELETE CASCADE
 );
 CREATE OR REPLACE FUNCTION media_info_function() RETURNS TRIGGER as $$
+DECLARE
+    patata VARCHAR(10);
 BEGIN
-    IF (NEW.type = 'Show') THEN
-        IF NEW.season IS NULL THEN
+    SELECT m.media_type INTO patata FROM media m WHERE m.media_id = NEW.media_id;
+    RAISE NOTICE 'Value: %', patata;
+    IF (patata = 'Show') THEN
+        IF NEW.media_info_season IS NULL THEN
             RAISE EXCEPTION 'Season can not be null for a show';
         END IF;
-        NEW.id := NEW.media_id ||'-' || NEW.season;
-    ELSEIF (NEW.type = 'Movie') THEN
-        IF NEW.season IS NOT NULL THEN
+        NEW.media_info_id := NEW.media_id ||'-' || NEW.media_info_season;
+    ELSEIF (patata = 'Movie') THEN
+        IF NEW.media_info_season IS NOT NULL THEN
             RAISE EXCEPTION 'Season has to be null for a movie';
         END IF;
-        NEW.id := NEW.media_id;
+        NEW.media_info_id := NEW.media_id;
     ELSE
         RAISE EXCEPTION 'No valid type of media provided';
     END IF;
@@ -139,94 +143,43 @@ BEFORE INSERT ON media_info
 FOR EACH ROW
 EXECUTE FUNCTION media_info_function();
 
-INSERT INTO media(name, genres) VALUES ('The Blacklist', '[1,2,3]');
-INSERT INTO media(name, genres) VALUES ('Avengers: Endgame', '[1,2,3]');
+CREATE VIEW media_genres AS SELECT media_id, media_name, media_genres FROM media;
 
-INSERT INTO media_info(media_id, type, description, synopsis, season) values ('media-000000000001','Show','template','template',1);
-INSERT INTO media_info(media_id, type, description, synopsis, season) values ('media-000000000001','Show','template','template',2);
-INSERT INTO media_info(media_id, type, description, synopsis) values ('media-000000000001','Show','template','template');
-INSERT INTO media_info(media_id, type, description, synopsis) values ('media-000000000002','Movie','template','template');
+CREATE TABLE "characters" (
+    character_id SERIAL PRIMARY KEY,
+    media_id VARCHAR(100) NOT NULL,
+    character_name VARCHAR(100) NOT NULL,
+    character_context TEXT NOT NULL,
+    character_image_path VARCHAR(255) NOT NULL,
+    FOREIGN KEY(media_id)
+        REFERENCES media(media_id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE "questionnaries" (
+    questionnary_id SERIAL PRIMARY KEY,
+    media_info_id VARCHAR(100) NOT NULL,
+    questionnary_question TEXT NOT NULL,
+    questionary_answers JSONB NOT NULL,
+    questionary_valid INT NOT NULL,
+    FOREIGN KEY(media_info_id)
+        REFERENCES media_info(media_info_id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE "library" (
+    library_id SERIAL PRIMARY KEY,
+    user_id VARCHAR(100) NOT NULL,
+    media_info_id VARCHAR(100) NOT NULL,
+    library_status VARCHAR(50) NOT NULL,
+    library_rating FLOAT,
+    library_comment VARCHAR(100),
+    FOREIGN KEY(user_id)
+        REFERENCES users(user_id)
+        ON DELETE CASCADE,
+    FOREIGN KEY(media_info_id)
+        REFERENCES media_info(media_info_id)
+        ON DELETE CASCADE
+);
+
     
-
--- CREATE TABLE media (
---     sec INT UNIQUE NOT NULL,
---     id VARCHAR(100) PRIMARY KEY,
---     general VARCHAR(100) NOT NULL,
---     name VARCHAR(255) NOT NULL,
---     type VARCHAR(10) NOT NULL,
---     rating INT,
---     genres JSONB NOT NULL,
---     director VARCHAR(100),
---     "cast" TEXT,
---     description TEXT NOT NULL,
---     synopsis TEXT NOT NULL,
---     pegi INT,
---     season INT,
---     release DATE,
---     png VARCHAR(255),
---     FOREIGN KEY(type)
---         REFERENCES media_types(type_name)
---         ON DELETE CASCADE
--- );
--- CREATE OR REPLACE FUNCTION media_id_function() RETURNS TRIGGER AS $$
--- DECLARE
---     next_id INTEGER;
---     patata text;
--- BEGIN
---     SELECT COALESCE(MAX(sec), 0) + 1 INTO next_id FROM media;
---     SELECT CAST(to_hex(next_id) as text) INTO patata;
---     IF (NEW.type = 'Show') THEN
---         IF NEW.season IS NULL THEN
---             RAISE EXCEPTION 'Season can not be null for a show';
---         END IF;
---         NEW.sec := next_id;
---         NEW.id :='media-' || left('000000000000', 12 - length(patata)) || CAST(to_hex(next_id) as text) || '-' || NEW.season;
---         NEW.general := 'media-' || left('000000000000', 12 - length(patata)) || CAST(to_hex(next_id) as text);
---     ELSEIF (NEW.type = 'Movie') THEN
---         IF NEW.season IS NOT NULL THEN
---             RAISE EXCEPTION 'Season has to be null for a movie';
---         END IF;
---         NEW.sec := next_id;
---         NEW.id :='media-' || left('000000000000', 12 - length(patata)) || CAST(to_hex(next_id) as text);
---         NEW.general :='media-' || left('000000000000', 12 - length(patata)) || CAST(to_hex(next_id) as text);
---     END IF;
---     RETURN NEW;
--- END;
--- $$ LANGUAGE PLPGSQL;
--- CREATE TRIGGER media_id_trigger
--- BEFORE INSERT ON media
--- FOR EACH ROW
--- EXECUTE FUNCTION media_id_function();
-
--- INSERT INTO media(name, type, genres, description, synopsis, season) VALUES ('The Blacklist', 'Show', '[1,2,3]', 'Patata', 'Patata', 1);
--- INSERT INTO media(name, type, genres, description, synopsis) VALUES ('The Blacklist', 'Show', '[1,2,3]', 'Patata', 'Patata');
--- INSERT INTO media(name, type, genres, description, synopsis, season) VALUES ('Avengers: Endgame', 'Movie', '[1,2,3]', 'Patata', 'Patata', 1);
--- INSERT INTO media(name, type, genres, description, synopsis) VALUES ('Avengers: Endgame', 'Movie', '[1,2,3]', 'Patata', 'Patata');
-
-
-
-
-
--- CREATE TABLE information (
---     media_id VARCHAR(100) NOT NULL,
---     id PRIMARY KEY,
---     duration INTEGER NOT NULL,
---     synopsis TEXT NULL,
---     season INT NOT NULL,
---     description TEXT NOT NULL,
---     FOREIGN KEY(media_id)
---         REFERENCES media(media_id)
---         ON DELETE CASCADE
-
--- );
--- CREATE OR replace FUNCTION information_function() RETURNS TRIGGER as $$
--- BEGIN
---     IF ()
---     -- NEW.show_id := NEW.media_id || '-' || NEW.show_season;
---     -- RETURN NEW;
--- END;
--- $$ LANGUAGE PLPGSQL;
--- CREATE TRIGGER information_trigger
--- BEFORE INSERT ON show
--- FOR EACH ROW
--- EXECUTE FUNCTION information_function();

@@ -1,10 +1,14 @@
+\c auth;
+
 CREATE TABLE auth(  
     id int NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    authItem VARCHAR(12) UNIQUE NOT NULL,
-    authKey VARCHAR(500) NOT NULL
+    auth_item VARCHAR(12) UNIQUE NOT NULL,
+    auth_key VARCHAR(500) NOT NULL,
+    "admin" BOOLEAN NOT NULL
 );
 
-\c auth;
+INSERT INTO auth(auth_item, auth_key, admin) VALUES ('auth_default', '123', 'false');
+INSERT INTO auth(auth_item, auth_key, admin) VALUES ('auth_admin', '456', 'true');
 
 -- Crear el usuario
 CREATE USER consult WITH PASSWORD 'consult';
