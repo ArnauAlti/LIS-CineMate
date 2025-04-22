@@ -23,7 +23,7 @@ class CercaPersonatgesScreen extends StatelessWidget {
         padding: const EdgeInsets.all(100.0),
         child: TextField(
           decoration: InputDecoration(
-            hintText: "Introdueix el títol de la pel·lícula o sèrie...",
+            hintText: "Introduce el título de la película o serie...",
             prefixIcon: IconButton(
               icon: const Icon(Icons.search),
               onPressed: () {
@@ -37,8 +37,8 @@ class CercaPersonatgesScreen extends StatelessWidget {
             ),
             fillColor: Color(0xFFEAE6f3),
             filled: true,
-            contentPadding: EdgeInsets.symmetric(vertical: 14.0),
-            border: OutlineInputBorder(
+            contentPadding: const EdgeInsets.symmetric(vertical: 14.0),
+            border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(30.0)),
               borderSide: BorderSide.none,
             )

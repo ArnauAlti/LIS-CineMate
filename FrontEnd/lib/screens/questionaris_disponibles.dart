@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../requests.dart';
 import '../user_role_provider.dart';
 import 'app_drawer.dart';
 import 'editar_questionari.dart';
 
-class QuestionarisDisponibles extends StatelessWidget {
+class QuestionarisDisponibles extends StatefulWidget {
   const QuestionarisDisponibles({super.key, required this.busqueda});
   final String busqueda;
+
+  @override
+  State<QuestionarisDisponibles> createState() => _QuestionarisDisponiblesState();
+}
+
+class _QuestionarisDisponiblesState extends State<QuestionarisDisponibles> {
+  late Future<List<Map<String, dynamic>>> _futureQuests;
+
+  @override
+  void initState() {
+    super.initState();
+    _futureQuests = getQuestsByFilm(widget.busqueda);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,13 +32,11 @@ class QuestionarisDisponibles extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Cuestionarios"),
+        title: const Text("Qüestionaris"),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       drawer: AppDrawer(
@@ -33,50 +45,45 @@ class QuestionarisDisponibles extends StatelessWidget {
           userRoleProvider.setUserRole(newRole);
         },
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Qüestionaris sobre:\n$busqueda',
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-              ),
-              const SizedBox(height: 20),
-              _buildQuestionariItem(
-                context,
-                userRole,
-                imageUrl:
-                'https://1.bp.blogspot.com/-a0Ehz4tIUkA/Xla-XGLxrLI/AAAAAAAAfsM/5jCeN2T3UOMgiFSLb_U6nw0d5gXfceIbgCLcBGAsYHQ/s1600/stranger-things-saison-1.jpg',
-                title: 'Stranger Things: Season 1',
-              ),
-              const SizedBox(height: 30),
-              _buildQuestionariItem(
-                context,
-                userRole,
-                imageUrl:
-                'https://es.web.img3.acsta.net/pictures/17/10/23/14/24/5968627.jpg',
-                title: 'Stranger Things: Season 2',
-              ),
-              const SizedBox(height: 30),
-              _buildQuestionariItem(
-                context,
-                userRole,
-                imageUrl:
-                'https://es.web.img3.acsta.net/pictures/17/10/23/14/24/5968627.jpg',
-                title: 'Stranger Things: Season 2',
-              ),
-            ],
-          ),
-        ),
-      )
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: _futureQuests,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No s\'han trobat qüestionaris.'));
+          }
+
+          final cuestionarios = snapshot.data!;
+
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Qüestionaris sobre:\n${widget.busqueda}',
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(height: 20),
+                for (final q in cuestionarios) ...[
+                  _buildQuestionariItem(context, userRole, q),
+                  const SizedBox(height: 30),
+                ],
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 
   Widget _buildQuestionariItem(BuildContext context, String userRole,
-      {required String imageUrl, required String title}) {
+      Map<String, dynamic> quest) {
+    final imageUrl = quest['imagePath']!;
+    final title = quest['title']!;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
