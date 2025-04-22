@@ -214,32 +214,3 @@ Future<bool> modifyFilm(String title, List<String> cast, int releaseDate, int du
 Future<bool> deleteFilm(String title) async {
   return true;
 }
-
-//TODO: Funció per agafar els personatges de una peli/serie de cartellera
-//Funció que permet agafar els personatges de la película o sèrie buscada
-Future<List<Map<String, dynamic>>> getPersonatges(String title) async {
-  return [
-    {
-      'name': 'Eleven',
-      'imagePath': 'https://th.bing.com/th/id/OIP.TDVZL0VokIrAyO-t9RFLJQAAAA?rs=1&pid=ImgDetMain',
-      'description': "·Té habilitats psíquiques \n ·Desconfia de la gent \n ·Parla molt bé dels seus amics"
-    },
-    {
-      'name': 'Will',
-      'imagePath': 'https://th.bing.com/th/id/OIP.TDVZL0VokIrAyO-t9RFLJQAAAA?rs=1&pid=ImgDetMain',
-      'description': "·Ha estat atrapat en una dimensió paral·lela \n ·Té una connexió psíquica amb el Món del Revés \n ·Lluita amb traumes però manté una gran lleialtat als seus amics"
-    }
-  ];
-}
-
-//TODO: Funció per modificar la informació dels personatges de una peli/serie de cartellera
-//Funció que permet modificar la informació dels personatges de la película o sèrie buscada
-Future<bool> ModifyPersonatges(String title) async {
-  return true;
-}
-
-//TODO: Funció per modificar la informació dels questionaris de una peli/serie de cartellera
-//Funció que permet modificar les preguntes del questionari de la película o sèrie buscada
-Future<bool> ModifyQuestionaris(String title) async {
-  return true;
-}

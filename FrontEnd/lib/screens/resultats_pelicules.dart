@@ -7,7 +7,7 @@ class ResultatsPelicules extends StatefulWidget {
   final String genre;
   final String actor;
   final String director;
-  final String duration;
+  final int duration;
 
   const ResultatsPelicules({
     super.key,
@@ -105,7 +105,7 @@ class _ResultatsPeliculesState extends State<ResultatsPelicules> {
           Text('Director/a: ${widget.director}'),
           const SizedBox(height: 8),
         ],
-        if (widget.duration.isNotEmpty) ...[
+        if (widget.duration > 0) ...[
           Text('Duració: ${widget.duration}'),
           const SizedBox(height: 8),
         ],

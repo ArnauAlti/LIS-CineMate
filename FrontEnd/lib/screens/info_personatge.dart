@@ -5,17 +5,7 @@ import '../user_role_provider.dart';
 import 'editar_personatge.dart';
 
 class InfoPersonatge extends StatelessWidget {
-  final String name;
-  final String imageUrl;
-  final String description;
-
-  InfoPersonatge({
-    super.key,
-    required this.name,
-    required this.imageUrl,
-    required this.description,
-  });
-
+  const InfoPersonatge({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +18,7 @@ class InfoPersonatge extends StatelessWidget {
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         //TODO: Afegir personatge segons la BD i el personatge clicat anteriorment
-        title: Text("$name"),
+        title: const Text("Eleven: Stranger Things"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -45,21 +35,21 @@ class InfoPersonatge extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image.network(
-                  imageUrl,
+                  'https://upload.wikimedia.org/wikipedia/en/f/f7/Eleven_%28Stranger_Things%29.png',
                   width: 180,
                 ),
               ),
             ),
             const SizedBox(height: 16),
-            Text(
-              name,
+            const Text(
+              'Eleven',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 50),
 
-            Center(
+            const Center(
               child: Text(
-                description,
+                '• Té habilitats psíquiques\n• Desconfia de la gent\n• Parla molt bé dels seus amics',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 16),
               ),

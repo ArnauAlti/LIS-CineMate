@@ -33,7 +33,7 @@ class _CercaPeliculesState extends State<CercaPelicules> {
           genre: _genereSeleccionat ?? "No especificat",
           actor: _actorController.text,
           director: _directorController.text,
-          duration: _duracioController.text,
+          duration: int.tryParse(_duracioController.text) ?? 0,
         ),
       ),
     );
@@ -91,20 +91,27 @@ class _CercaPeliculesState extends State<CercaPelicules> {
               ],
             ),
             const SizedBox(height: 24.0),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  _mostrarFiltres = !_mostrarFiltres;
-                });
-              },
-              child: const Text(
-                "Filtrar",
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w500,
-                  decoration: TextDecoration.underline,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Icon(Icons.filter_alt_outlined, size: 20),
+                const SizedBox(width: 6),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _mostrarFiltres = !_mostrarFiltres;
+                    });
+                  },
+                  child: const Text(
+                    "Filtrar",
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w500,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
             const SizedBox(height: 16.0),
             if (_mostrarFiltres)
