@@ -24,7 +24,7 @@ class DetallsPeliSerieScreen extends StatelessWidget {
         ? (film?['cast'] as List).join(', ')
         : (film?['cast'] ?? 'Desconocido');
     final String description = film?['description'] ?? 'Sin descripción.';
-    final double rating = (film?['rating'] ?? 2.5).toDouble();
+    final double rating = (film?['rating'] ?? 0).toDouble();
 
     return Scaffold(
       backgroundColor: Colors.blue[50],

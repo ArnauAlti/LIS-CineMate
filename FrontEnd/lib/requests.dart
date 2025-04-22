@@ -91,15 +91,17 @@ Future<List<Map<String, dynamic>>> getLatestFilms() async {
 Future<List<Map<String, dynamic>>> getFilmsBySearch(String search, String genre, String director,
     String actor, int duration) async {
   return [
-  {
-    'title': 'Captain America: Brave New World',
-    'imagePath': 'https://th.bing.com/th/id/OIP.TDVZL0VokIrAyO-t9RFLJQAAAA?rs=1&pid=ImgDetMain',
-    'episode': 0,
-    'timeLastSeen': 34,
-    'personalRating': 4.1,
-    'comment': "Really good film",
-    'type': 1
-  }];
+    {
+      'title': 'Captain America: Brave New World',
+      'imagePath': 'https://th.bing.com/th/id/OIP.TDVZL0VokIrAyO-t9RFLJQAAAA?rs=1&pid=ImgDetMain',
+      'releaseDate': 2025,
+      'duration': 119,
+      'platforms': 'Disney+',
+      'cast': ['Anthony Mackie', 'Harrison Ford'],
+      'rating': 3.5,
+      'description': 'Tras reunirse con el recién elegido presidente de EE.UU. Thaddeus Ross (Harrison Ford), '
+          'Sam se encuentra en medio de un incidente internacional...',
+    },];
 }
 
 //TODO: Afegir a la biblioteca de l'usuari la película a la BD
