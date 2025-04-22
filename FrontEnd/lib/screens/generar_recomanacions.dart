@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import '../requests.dart';
 
 class RecomanacionsGeneradesScreen extends StatefulWidget {
-  final String? selectedGenre;
+  final List<String>? selectedGenres;
 
-  const RecomanacionsGeneradesScreen({super.key, this.selectedGenre});
+  const RecomanacionsGeneradesScreen({super.key, this.selectedGenres});
 
   @override
   State<RecomanacionsGeneradesScreen> createState() => _RecomanacionsGenerades();
@@ -17,7 +17,7 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
   @override
   void initState() {
     super.initState();
-    //TODO: Canviar id de l'usuari
+    //TODO: Canviar id de l'usuari i passar els gèneres seleccionats
     _filmsFuture = getRecomendationFilms(1);
   }
 
@@ -67,17 +67,33 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
                       textAlign: TextAlign.center,
                     ),
                     // Mostrar el género seleccionado en una línea
-                    if (widget.selectedGenre != null)
+                    if (widget.selectedGenres != null && widget.selectedGenres!.isNotEmpty)
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Text(
-                          //TODO: Modificar per incloure diversos pesos
-                          "Género con mayor peso: ${widget.selectedGenre}",
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        child: Column(
+                          children: [
+                            const Text(
+                              "Géneros con mayor peso:",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 4,
+                              alignment: WrapAlignment.center,
+                              children: widget.selectedGenres!
+                                  .map((genre) => Chip(
+                                label: Text(genre),
+                                backgroundColor: Colors.black,
+                                labelStyle: const TextStyle(color: Colors.white),
+                              ))
+                                  .toList(),
+                            ),
+                          ],
                         ),
                       ),
                     const SizedBox(height: 50),

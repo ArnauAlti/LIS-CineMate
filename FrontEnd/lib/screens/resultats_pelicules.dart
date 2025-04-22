@@ -37,7 +37,7 @@ class _ResultatsPeliculesState extends State<ResultatsPelicules> {
     return Scaffold(
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
-        title: const Text("Resultats de la cerca"),
+        title: const Text("Resultados de la búsqueda"),
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         centerTitle: true,

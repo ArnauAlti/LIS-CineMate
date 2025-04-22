@@ -33,7 +33,7 @@ class _CartelleraScreenState extends State<CartelleraScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Cartellera", textAlign: TextAlign.center),
+        title: const Text("Cartelera", textAlign: TextAlign.center),
         centerTitle: true,
         actions: [
           IconButton(

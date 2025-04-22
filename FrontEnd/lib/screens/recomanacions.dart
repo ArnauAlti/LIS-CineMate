@@ -12,7 +12,18 @@ class RecomanacionsScreen extends StatefulWidget {
 }
 
 class _RecomanacionsScreenState extends State<RecomanacionsScreen> {
-  String? _selectedGenre;  // Variable para almacenar la opción seleccionada
+  final Map<String, bool> _genres = {
+    'Acción': false, 'Aventura': false, 'Animación': false, 'Infantil': false, 'Comedia': false, 'Crimen': false,
+    'Documental': false, 'Drama': false, 'Fantasía': false, 'Terror': false, 'IMAX': false, 'Musical': false, 'Misterio': false,
+    'Cine negro': false, 'Romance': false, 'Ciencia ficción': false, 'Suspense': false, 'Bélico': false, 'Western': false,
+  };
+
+  List<String> _getSelectedGenres() {
+    return _genres.entries
+        .where((entry) => entry.value)
+        .map((entry) => entry.key)
+        .toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,19 +51,17 @@ class _RecomanacionsScreenState extends State<RecomanacionsScreen> {
           children: [
             const Text(
               "Generar recomendaciones a partir de:",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () {
-                // TODO: Generar recomendaciones a partir del usuario mismo
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => RecomanacionsGeneradesScreen(selectedGenre: _selectedGenre),
+                    builder: (context) => RecomanacionsGeneradesScreen(
+                      selectedGenres: _getSelectedGenres(),
+                    ),
                   ),
                 );
               },
@@ -69,10 +78,13 @@ class _RecomanacionsScreenState extends State<RecomanacionsScreen> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                // TODO: Generar recomendaciones a partir de otros usuarios
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const RecomanacionsGeneradesScreen()),
+                  MaterialPageRoute(
+                    builder: (context) => RecomanacionsGeneradesScreen(
+                      selectedGenres: _getSelectedGenres(),
+                    ),
+                  ),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -87,44 +99,25 @@ class _RecomanacionsScreenState extends State<RecomanacionsScreen> {
             ),
             const SizedBox(height: 50),
             const Text(
-              //TODO: Afegir per escollir diferents gèneres
-              "Dar más peso al siguiente género:",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              "Dar más peso a los siguientes géneros:",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            DropdownButton<String>(
-              alignment: Alignment.center,
-              value: _selectedGenre, // Asignamos el valor seleccionado
-              items: const [
-                DropdownMenuItem<String>(
-                  value: 'Terror',
-                  child: Text('Terror'),
-                ),
-                DropdownMenuItem<String>(
-                  value: 'Comedia',
-                  child: Text('Comedia'),
-                ),
-                DropdownMenuItem<String>(
-                  value: 'Drama',
-                  child: Text('Drama'),
-                ),
-              ],
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedGenre = newValue; // Actualizamos el valor seleccionado
-                });
-              },
-              hint: const Text('Selecciona un género'),
-              isExpanded: true,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-              ),
-              iconEnabledColor: Colors.black,
-              underline: const SizedBox(),
+            ListView(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              children: _genres.keys.map((genre) {
+                return CheckboxListTile(
+                  title: Text(genre),
+                  value: _genres[genre],
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _genres[genre] = value ?? false;
+                    });
+                  },
+                  controlAffinity: ListTileControlAffinity.leading,
+                );
+              }).toList(),
             ),
             const SizedBox(height: 32),
           ],
