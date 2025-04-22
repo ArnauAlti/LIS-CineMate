@@ -43,8 +43,8 @@ async function signInUser(req, res) {
             'INSERT INTO users("user_mail", "user_nick", "user_name", "user_pass", "user_admin", "user_birth") VALUES ($1, $2, $3, $4, $5, $6)',
             [userMail, userNick, userName, userPass, userAdmin, userBirth]
         );
-        console.log(quer.rows[0]);
-        res.status(200).json({message: "User Created Succesfully"});
+        console.log(quer.rows);
+        res.status(200).json({message: "User Created Succesfully", data: quer.rows});
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: error, message: "An error ocurred trying to create a user"});

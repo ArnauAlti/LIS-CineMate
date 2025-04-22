@@ -13,15 +13,13 @@ setInterval(function() {
     sendGenres();
 }, 60000)
 
-app.all("/", async (req, res) => {
+app.use(async (req, res, next) => {
     console.log("New Request");
+    console.log(req.headers);
     console.log(req.body);
     console.log(req.url);
     next();
-})
-
-// app.post("/list", getRepository);
-// app.post("/library")
+});
 
 app.listen(port, () => {
     console.log(`API running on http://localhost:${port}`);

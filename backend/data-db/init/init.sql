@@ -76,6 +76,7 @@ CREATE TABLE media (
     media_id VARCHAR(100) PRIMARY KEY,
     media_name VARCHAR(255) NOT NULL,
     media_genres JSONB NOT NULL,
+    
     media_type VARCHAR(10) NOT NULL,
     media_png VARCHAR(255),
     FOREIGN KEY(media_type)
@@ -170,6 +171,7 @@ CREATE TABLE "questionnaries" (
 CREATE TABLE "library" (
     library_id SERIAL PRIMARY KEY,
     user_id VARCHAR(100) NOT NULL,
+    media_id VARCHAR(100) NOT NULL,
     media_info_id VARCHAR(100) NOT NULL,
     library_status VARCHAR(50) NOT NULL,
     library_rating FLOAT,
@@ -179,6 +181,9 @@ CREATE TABLE "library" (
         ON DELETE CASCADE,
     FOREIGN KEY(media_info_id)
         REFERENCES media_info(media_info_id)
+        ON DELETE CASCADE,
+    FOREIGN KEY(media_id)
+        REFERENCES media(media_id)
         ON DELETE CASCADE
 );
 
