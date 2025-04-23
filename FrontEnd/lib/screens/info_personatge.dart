@@ -62,7 +62,35 @@ class InfoPersonatge extends StatelessWidget {
 
             const Spacer(),
 
-            userRole == "Administrador"
+            userRole == "Usuario Registrado"
+                ? Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    addCharacterToChat(name);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const XatsActiusScreen()),
+                    );
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: const WidgetStatePropertyAll<Color>(Colors.black),
+                    foregroundColor: const WidgetStatePropertyAll<Color>(Colors.white),
+                    shape: WidgetStatePropertyAll<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    padding: const WidgetStatePropertyAll<EdgeInsets>(
+                      EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    ),
+                  ),
+                  child: Text("Crear chat con $name"),
+                ),
+              ],
+            )
+            : userRole == "Administrador"
                 ? Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -89,9 +117,8 @@ class InfoPersonatge extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    await addCharacterToChat(name);
+                    await deleteCharacter(name);
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const XatsActiusScreen()));
-
                   },
                   style: ButtonStyle(
                     backgroundColor: const WidgetStatePropertyAll<Color>(Colors.red),

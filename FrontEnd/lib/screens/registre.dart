@@ -120,6 +120,7 @@ class _RegistreScreenState extends State<RegistreScreen> {
   //Funció per a construir un camp de text customitzat segons el nom del camp
   //Es crea una validació primària per evitar camps null o introducció de variables de diferent tipus o
   //que no segueixen el format necessari
+
   Widget _buildTextFormField(String label, TextEditingController controller, {bool isPassword = false}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

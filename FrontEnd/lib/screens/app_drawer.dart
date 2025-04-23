@@ -4,7 +4,6 @@ import 'package:cine_mate/screens/usuaris_seguits.dart';
 import 'package:cine_mate/screens/xats_actius.dart';
 import 'package:flutter/material.dart';
 import 'biblioteca.dart';
-import 'cerca_pelicules.dart';
 import 'cerca_personatges.dart';
 import 'cerca_questionaris.dart';
 import 'registre.dart';

@@ -2,18 +2,39 @@ import 'package:cine_mate/screens/cerca_personatges.dart';
 import 'package:flutter/material.dart';
 import '../requests.dart';
 
+//TODO: Unificar pantalla d'afegir i modificar personatge
 class AfegirPersonatgeScreen extends StatefulWidget {
-  const AfegirPersonatgeScreen({super.key});
+  final String mode;
+  final Map<String, dynamic>? characterData;
+
+  const AfegirPersonatgeScreen({
+    super.key,
+    required this.mode,
+    this.characterData,
+  });
 
   @override
   State<AfegirPersonatgeScreen> createState() => _AfegirPersonatgeScreen();
 }
 
 class _AfegirPersonatgeScreen extends State<AfegirPersonatgeScreen> {
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController descriptionController = TextEditingController();
-  final TextEditingController imagePathController = TextEditingController();
-  final TextEditingController titleController = TextEditingController();
+  late final TextEditingController nameController;
+  late final TextEditingController descriptionController;
+  late final TextEditingController imagePathController;
+  late final TextEditingController titleController;
+
+  @override
+  void initState() {
+    super.initState();
+    final data = widget.characterData;
+
+    nameController = TextEditingController(text: data?["title"] ?? "");
+    descriptionController = TextEditingController(text: data?["description"] ?? "");
+    imagePathController =
+        TextEditingController(text: data?["imagePath"] ?? "");
+    titleController =
+        TextEditingController(text: data?["filmTitle"] ?? "");
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +132,7 @@ class _AfegirPersonatgeScreen extends State<AfegirPersonatgeScreen> {
             Center(
               child: ElevatedButton(
                 onPressed: () async {
-                  await addCharacter(nameController.text, imagePathController.text,
+                  await addOrModifyCharacter(nameController.text, imagePathController.text,
                   descriptionController.text, titleController.text);
                   Navigator.push(
                     context,

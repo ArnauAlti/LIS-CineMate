@@ -94,7 +94,7 @@ class _CercaPersonatgesScreen extends State<CercaPersonatgesScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const AfegirPersonatgeScreen(),
+              builder: (context) => const AfegirPersonatgeScreen(mode: "New"),
             ),
           );
         },

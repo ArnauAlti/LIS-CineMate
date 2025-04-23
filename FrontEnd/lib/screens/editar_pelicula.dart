@@ -34,6 +34,7 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
   String? genereSeleccionat;
 
   final List<String> tipusOpcions = ["Pel·lícula", "Sèrie"];
+  //TODO: Afegir tots els gèneres necessaris
   final List<String> generesOpcions = [
     "Terror",
     "Comèdia",
@@ -49,21 +50,22 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
     super.initState();
     final data = widget.peliData;
 
-    titleController = TextEditingController(text: data?["titol"] ?? "");
-    castController = TextEditingController(text: data?["repart"] ?? "");
+    //TODO: Modificar per mostrar info existent de peli o serie per a l'administrador
+    titleController = TextEditingController(text: data?["title"] ?? "");
+    castController = TextEditingController(text: data?["cast"] ?? "");
     descriptionController =
-        TextEditingController(text: data?["descripcio"] ?? "");
+        TextEditingController(text: data?["description"] ?? "");
     releaseDateController =
-        TextEditingController(text: data?["anyEstreno"] ?? "");
-    durationController = TextEditingController(text: data?["duracio"] ?? "");
+        TextEditingController(text: data?["releaseDate"] ?? "");
+    durationController = TextEditingController(text: data?["duration"] ?? "");
     platformsController =
-        TextEditingController(text: data?["plataformes"] ?? "");
-    imagePathController = TextEditingController(text: data?["urlFoto"] ?? "");
+        TextEditingController(text: data?["plataforms"] ?? "");
+    imagePathController = TextEditingController(text: data?["imagePath"] ?? "");
     pegiController =
-        TextEditingController(text: data?["edatMinima"] ?? "");
-    seasonController = TextEditingController(text: data?["temporada"] ?? "");
+        TextEditingController(text: data?["pegi"] ?? "");
+    seasonController = TextEditingController(text: data?["season"] ?? "");
     numChaptersController =
-        TextEditingController(text: data?["numCapitols"] ?? "");
+        TextEditingController(text: data?["numChapters"] ?? "");
 
     // Corregim els valors per assegurar que coincideixen amb les opcions disponibles
     final tipus = data?["tipus"];

@@ -1,27 +1,39 @@
 import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 const String baseUrl = "http://localhost:3000";
 
 //Funció per a enviar les dades a backend per a validar-les i procedir amb el registre o mostrar errors
 Future<bool> validateRegister(String name, String mail, String nick, int birth, String pass) async {
 
-  /*
-  Uri uri = Uri.parse("$baseUrl/validate_register?$name&$mail&$nick&$birth&$pass");
-  final response = await http.get(uri);
+  final Uri uri = Uri.parse("$baseUrl/user/create");
 
-  if (response.statusCode == 200) {
-  //TODO: Modificar codi de la resposta
-    print("statusCode=$response.statusCode");
-    print(response.body);
-    Map<String, dynamic> decoded = convert.jsonDecode(response.body);
-    return Tree(decoded);
-  } else {
-    // If the server did not return a 200 OK response, then throw an exception.
-    print("statusCode=$response.statusCode");
-    throw Exception('failed to get answer to request $uri');
+  final Map<String, dynamic> body = {
+    'name': name,
+    'email': mail,
+    'nickname': nick,
+    'birth': birth,
+    'password': pass,
+  };
+
+  try {
+    final response = await http.post(
+      uri,
+      headers: {"Content-Type": "application/json", "auth_item": "auth_default", "auth_key": "123"},
+      body: convert.jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      print("✅ Registro exitoso.");
+      return true;
+    } else {
+      print("❌ Error en el registro. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return false;
+    }
+  } catch (e) {
+    print("🚫 Excepción al registrar: $e");
+    throw Exception("No se pudo conectar al servidor.");
   }
-  */
-
-  return true;
 }
 
 //Funció per a enviar les dades a backend per a validar-les i procedir amb l'inici de sessió o mostrar errors
@@ -317,15 +329,21 @@ Future<bool> addCharacterToChat(String name) async {
   return true;
 }
 
-//TODO: Funció per afegir un personatge a xat
+//TODO: Funció per afegir un personatge a la BD
 //Funció que permet afegir un personatge a la base de dades de personatges disponibles per establir un xat amb ell/a
-Future<bool> addCharacter(String name, String imagePath, String description, String filmTitle) async {
+Future<bool> addOrModifyCharacter(String name, String imagePath, String description, String filmTitle) async {
   return true;
 }
 
+//TODO: Funció per eliminar un personatge de la BD
+//Funció que permet modificar la informació del personatge especificat a la base de dades de personatges disponibles
+Future<bool> deleteCharacter(String name) async {
+  return true;
+}
 
 //TODO: Funció per afegir un personatge a xat
 //Funció que permet afegir un personatge a la base de dades de personatges disponibles per establir un xat amb ell/a
 Future<bool> addQuestionnaire(String title, String imagePath) async {
   return true;
 }
+
