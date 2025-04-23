@@ -235,3 +235,61 @@ Future<List<Map<String, dynamic>>> getQuestsByFilm(String search) async {
     },
   ];
 }
+
+//Funció que permet agafar 10 preguntes corresponents al questionari seleccionat anteriorment
+// Simulació de dades que es poden obtenir des del backend
+Future<List<Map<String, dynamic>>> getQuestions(String title) async {
+  // TODO: Implementar crida real a la base de dades
+  return [
+    {
+      'question': '¿Cuál es el personaje que desaparece en la primera temporada?',
+      'possibleAnswers': ['VECNA', 'ELEVEN', 'DUSTIN', 'WILL'],
+      'correctAnswer': 'WILL',
+    },
+    {
+      'question': '¿Cómo se llama el monstruo con cara de flor?',
+      'possibleAnswers': ['DEMOGORGON', 'VENOM', 'PERRY', 'VECNA'],
+      'correctAnswer': 'DEMOGORGON',
+    },
+    {
+      'question': '¿Qué personaje tiene poderes telequinéticos?',
+      'possibleAnswers': ['WILL', 'HOPPER', 'ELEVEN', 'LUCAS'],
+      'correctAnswer': 'ELEVEN',
+    },
+    {
+      'question': '¿Cómo se llama la ciudad donde ocurre Stranger Things?',
+      'possibleAnswers': ['HAWKINS', 'SPRINGFIELD', 'RIVERDALE', 'GOTHAM'],
+      'correctAnswer': 'HAWKINS',
+    },
+    {
+      'question': '¿Qué criatura vive en el “Upside Down”?',
+      'possibleAnswers': ['DEMOGORGON', 'DRAGON', 'SLIMER', 'VECNA'],
+      'correctAnswer': 'DEMOGORGON',
+    },
+    {
+      'question': '¿Qué personaje trabaja en la policía?',
+      'possibleAnswers': ['MIKE', 'STEVE', 'HOPPER', 'DUSTIN'],
+      'correctAnswer': 'HOPPER',
+    },
+    {
+      'question': '¿Cómo se llama el hermano de Will?',
+      'possibleAnswers': ['MIKE', 'JONATHAN', 'DUSTIN', 'STEVE'],
+      'correctAnswer': 'JONATHAN',
+    },
+    {
+      'question': '¿Qué personaje se afeita la cabeza?',
+      'possibleAnswers': ['ELEVEN', 'WILL', 'MAX', 'JOYCE'],
+      'correctAnswer': 'ELEVEN',
+    },
+    {
+      'question': '¿Quién es el líder del grupo de niños?',
+      'possibleAnswers': ['MIKE', 'WILL', 'LUCAS', 'DUSTIN'],
+      'correctAnswer': 'MIKE',
+    },
+    {
+      'question': '¿Qué actriz interpreta a Joyce?',
+      'possibleAnswers': ['WINONA RYDER', 'MILLIE BOBBY BROWN', 'NATALIA DYER', 'MAYA HAWKE'],
+      'correctAnswer': 'WINONA RYDER',
+    },
+  ];
+}
