@@ -294,7 +294,9 @@ Future<List<Map<String, dynamic>>> getQuestions(String title) async {
   ];
 }
 
+//Funció per aconseguir els personatges de la pel·lícula o sèrie cercada
 Future<List<Map<String, dynamic>>> getCharactersBySearch(String search) async {
+  // TODO: Implementar crida real a la base de dades
   return [
     {
       'name': "Eleven",
@@ -303,8 +305,14 @@ Future<List<Map<String, dynamic>>> getCharactersBySearch(String search) async {
     },
     {
       'name': "Will",
-      'imagePath': "    https://i.pinimg.com/originals/ec/6d/59/ec6d59f48c5e8ba9b5021b68c8c401dd.jpg",
+      'imagePath': "https://i.pinimg.com/originals/ec/6d/59/ec6d59f48c5e8ba9b5021b68c8c401dd.jpg",
       'context': "• S'espanta molt sovint. \n• Desconfia de la gent degut a traumes del passat \n• El va raptar una altra dimensió",
     },
   ];
+}
+
+//TODO: Funció per afegir un personatge a xat
+//Funció que permet afegir un personatge escollit per establir un xat amb ell/a
+Future<bool> addCharacterToChat(String name) async {
+  return true;
 }

@@ -1,6 +1,6 @@
 import 'package:cine_mate/requests.dart';
 import 'package:flutter/material.dart';
-import 'afegir_personatge_admin.dart';
+import 'afegir_personatge.dart';
 import 'info_personatge.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';

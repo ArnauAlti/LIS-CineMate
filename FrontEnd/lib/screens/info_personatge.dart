@@ -1,8 +1,10 @@
+import 'xats_actius.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
 
 import 'editar_personatge.dart';
+import '../requests.dart';
 
 class InfoPersonatge extends StatelessWidget {
   final String name;
@@ -21,7 +23,6 @@ class InfoPersonatge extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        //TODO: Afegir personatge segons la BD i el personatge clicat anteriorment
         title: Text(name),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -87,8 +88,10 @@ class InfoPersonatge extends StatelessWidget {
                   child: const Text("Editar informació"),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    // Acción de eliminar
+                  onPressed: () async {
+                    await addCharacterToChat(name);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const XatsActiusScreen()));
+
                   },
                   style: ButtonStyle(
                     backgroundColor: const WidgetStatePropertyAll<Color>(Colors.red),
