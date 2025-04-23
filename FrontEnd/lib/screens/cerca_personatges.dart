@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'afegir_personatge.dart';
+import 'app_drawer.dart';
 import 'personatges_disponibles.dart';
+import 'package:provider/provider.dart';
+import '../user_role_provider.dart';
 
 class CercaPersonatgesScreen extends StatefulWidget {
   const CercaPersonatgesScreen({super.key});
@@ -27,6 +31,9 @@ class _CercaPersonatgesScreen extends State<CercaPersonatgesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userRoleProvider = Provider.of<UserRoleProvider>(context);
+    final userRole = Provider.of<UserRoleProvider>(context).userRole;
+
     return Scaffold(
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
@@ -34,7 +41,14 @@ class _CercaPersonatgesScreen extends State<CercaPersonatgesScreen> {
         foregroundColor: Colors.white,
         title: const Text("Personajes", textAlign: TextAlign.center),
       ),
-
+      drawer: userRole == "Administrador"
+          ? AppDrawer(
+        userRole: userRole,
+        onRoleChange: (String newRole) {
+          userRoleProvider.setUserRole(newRole);
+        },
+      )
+          : null,
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: ListView(
@@ -74,6 +88,20 @@ class _CercaPersonatgesScreen extends State<CercaPersonatgesScreen> {
           ],
         ),
       ),
+      floatingActionButton: userRole == "Administrador"
+          ? FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AfegirPersonatgeScreen(),
+            ),
+          );
+        },
+        backgroundColor: Colors.black,
+        child: const Icon(Icons.add, color: Colors.white),
+      )
+          : null,
     );
   }
 }

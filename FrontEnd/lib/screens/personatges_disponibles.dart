@@ -1,9 +1,6 @@
 import 'package:cine_mate/requests.dart';
 import 'package:flutter/material.dart';
-import 'afegir_personatge.dart';
 import 'info_personatge.dart';
-import 'package:provider/provider.dart';
-import '../user_role_provider.dart';
 
 class PersonatgesDisponiblesScreen extends StatefulWidget {
   const PersonatgesDisponiblesScreen({super.key, required this.busqueda});
@@ -25,7 +22,6 @@ class _PersonatgesDisponiblesScreen extends State<PersonatgesDisponiblesScreen> 
 
   @override
   Widget build(BuildContext context) {
-    final userRole = Provider.of<UserRoleProvider>(context).userRole;
 
     return Scaffold(
       backgroundColor: const Color(0xFFE0F2F1),
@@ -82,20 +78,6 @@ class _PersonatgesDisponiblesScreen extends State<PersonatgesDisponiblesScreen> 
           );
         },
       ),
-      floatingActionButton: userRole == "Administrador"
-          ? FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AfegirPersonatgeScreen(),
-            ),
-          );
-        },
-        backgroundColor: Colors.black,
-        child: const Icon(Icons.add, color: Colors.white),
-      )
-          : null,
     );
   }
 

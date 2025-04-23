@@ -1,7 +1,19 @@
+import 'package:cine_mate/screens/cerca_personatges.dart';
 import 'package:flutter/material.dart';
+import '../requests.dart';
 
-class AfegirPersonatgeScreen extends StatelessWidget {
+class AfegirPersonatgeScreen extends StatefulWidget {
   const AfegirPersonatgeScreen({super.key});
+
+  @override
+  State<AfegirPersonatgeScreen> createState() => _AfegirPersonatgeScreen();
+}
+
+class _AfegirPersonatgeScreen extends State<AfegirPersonatgeScreen> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController imagePathController = TextEditingController();
+  final TextEditingController titleController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +43,7 @@ class AfegirPersonatgeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             TextField(
+              controller: nameController,
               decoration: InputDecoration(
                 filled:  true,
                 fillColor: Colors.grey[100],
@@ -42,15 +55,19 @@ class AfegirPersonatgeScreen extends StatelessWidget {
 
             const SizedBox(height: 32),
 
-            Center(
-              child: Container(
-                width:100,
-                height: 100,
-                decoration: BoxDecoration(
-                  border:  Border.all(color: Colors.black54),
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text("URL de la imagen"),
+            ),
+            const SizedBox(height: 8),
+            TextField(
+              controller: imagePathController,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.grey[100],
+                border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(Icons.image, size: 48, color: Colors.black54),
               ),
             ),
 
@@ -62,6 +79,24 @@ class AfegirPersonatgeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             TextField(
+              controller: descriptionController,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.grey[100],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+            const SizedBox(height: 32),
+
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text("Película o serie del personaje"),
+            ),
+            const SizedBox(height: 8),
+            TextField(
+              controller: titleController,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.grey[100],
@@ -75,8 +110,18 @@ class AfegirPersonatgeScreen extends StatelessWidget {
 
             Center(
               child: ElevatedButton(
-                onPressed: () {
-                  //TODO: Passar informació a backend per actualitzar la BD
+                onPressed: () async {
+                  await addCharacter(nameController.text, imagePathController.text,
+                  descriptionController.text, titleController.text);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CercaPersonatgesScreen(),
+                    ),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('${nameController.text} ha sido añadido a la base de datos.')),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,

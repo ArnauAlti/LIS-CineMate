@@ -316,3 +316,9 @@ Future<List<Map<String, dynamic>>> getCharactersBySearch(String search) async {
 Future<bool> addCharacterToChat(String name) async {
   return true;
 }
+
+//TODO: Funció per afegir un personatge a xat
+//Funció que permet afegir un personatge a la base de dades de personatges disponibles per establir un xat amb ell/a
+Future<bool> addCharacter(String name, String imagePath, String description, String filmTitle) async {
+  return true;
+}
