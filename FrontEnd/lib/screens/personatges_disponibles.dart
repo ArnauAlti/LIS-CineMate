@@ -1,16 +1,31 @@
+import 'package:cine_mate/requests.dart';
 import 'package:flutter/material.dart';
 import 'afegir_personatge_admin.dart';
 import 'info_personatge.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
 
-class PersonatgesDisponiblesScreen extends StatelessWidget {
-  const PersonatgesDisponiblesScreen({super.key});
+class PersonatgesDisponiblesScreen extends StatefulWidget {
+  const PersonatgesDisponiblesScreen({super.key, required this.busqueda});
+  final String busqueda;
+
+  @override
+  State<PersonatgesDisponiblesScreen> createState() =>
+      _PersonatgesDisponiblesScreen();
+}
+
+class _PersonatgesDisponiblesScreen extends State<PersonatgesDisponiblesScreen> {
+  late Future<List<Map<String, dynamic>>> _futureCharacters;
+
+  @override
+  void initState() {
+    super.initState();
+    _futureCharacters = getCharactersBySearch(widget.busqueda);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final userRoleProvider = Provider.of<UserRoleProvider>(context);
-    final userRole = userRoleProvider.userRole;
+    final userRole = Provider.of<UserRoleProvider>(context).userRole;
 
     return Scaffold(
       backgroundColor: const Color(0xFFE0F2F1),
@@ -25,66 +40,80 @@ class PersonatgesDisponiblesScreen extends StatelessWidget {
           },
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            //TODO: Modificar per posar els personatges segons la cerca
-            const Text(
-              "Personatges disponibles de: Stranger Things",
-              style: TextStyle(fontSize: 16),
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: _futureCharacters,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No s\'han trobat personatges.'));
+          }
+
+          final characters = snapshot.data!;
+
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                Text(
+                  "Personatges disponibles de: ${widget.busqueda}",
+                  style: const TextStyle(fontSize: 16),
+                ),
+                const SizedBox(height: 20),
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    childAspectRatio: 0.7,
+                  ),
+                  itemCount: characters.length,
+                  itemBuilder: (context, index) {
+                    final char = characters[index];
+                    return buildCharacterCard(context, char);
+                  },
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-              GridView.count(
-                crossAxisCount: 2,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-                shrinkWrap: true,
-                //TODO: Personatges segons cerca
-                children: [
-                  buildCharacterCard(
-                    context,
-                    name: "Eleven",
-                    imageUrl:
-                    "https://images.hdqwalls.com/download/stranger-things-eleven-art-nw-1280x2120.jpg",
-                  ),
-                  buildCharacterCard(
-                    context,
-                    name: "Will",
-                    imageUrl:
-                    "https://i.pinimg.com/originals/ec/6d/59/ec6d59f48c5e8ba9b5021b68c8c401dd.jpg",
-                  ),
-                ],
-              ),
-          ],
-        ),
+          );
+        },
       ),
       floatingActionButton: userRole == "Administrador"
           ? FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const AfegirPersonatgeScreen()),
+            MaterialPageRoute(
+              builder: (context) => const AfegirPersonatgeScreen(),
+            ),
           );
         },
         backgroundColor: Colors.black,
         child: const Icon(Icons.add, color: Colors.white),
       )
-          : null, // No mostris cap botó si no és administrador
-
-
+          : null,
     );
   }
 
-  Widget buildCharacterCard(BuildContext context,
-      {required String name, required String imageUrl}) {
+  Widget buildCharacterCard(BuildContext context, Map<String, dynamic> char) {
+    final name = char['name'] ?? 'Nom no disponible';
+    final imagePath = char['imagePath'] ?? '';
+    final contextInfo = char['context'] ?? '';
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const InfoPersonatge(),
+            builder: (context) => InfoPersonatge(
+              name: name,
+              imagePath: imagePath,
+              contextInfo: contextInfo,
+            ),
           ),
         );
       },
@@ -93,11 +122,14 @@ class PersonatgesDisponiblesScreen extends StatelessWidget {
           Expanded(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.network(imageUrl, fit: BoxFit.cover),
+              child: Image.network(
+                imagePath,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           const SizedBox(height: 8),
-          Text(name),
+          Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
         ],
       ),
     );

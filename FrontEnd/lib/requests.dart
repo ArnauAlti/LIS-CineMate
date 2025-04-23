@@ -206,7 +206,7 @@ Future<List<Map<String, dynamic>>> getRecomendationFilms(int userId) async {
 //TODO: Funció per modificar informació peli/serie de cartellera
 //Funció que permet passar informació modificada o nova d'una pel·lícula o sèrie
 //per introduir-la a la base de dades
-Future<bool> modifyFilm(String title, List<String> cast, int releaseDate, int duration, List<String> platforms,
+Future<bool> addOrModifyFilm(String title, List<String> cast, int releaseDate, int duration, List<String> platforms,
   String imagePath, int pegi, int season, int numChapters) async {
   return true;
 }
@@ -290,6 +290,21 @@ Future<List<Map<String, dynamic>>> getQuestions(String title) async {
       'question': '¿Qué actriz interpreta a Joyce?',
       'possibleAnswers': ['WINONA RYDER', 'MILLIE BOBBY BROWN', 'NATALIA DYER', 'MAYA HAWKE'],
       'correctAnswer': 'WINONA RYDER',
+    },
+  ];
+}
+
+Future<List<Map<String, dynamic>>> getCharactersBySearch(String search) async {
+  return [
+    {
+      'name': "Eleven",
+      'imagePath': "https://images.hdqwalls.com/download/stranger-things-eleven-art-nw-1280x2120.jpg",
+      'context': "• Té habilitats psíquiques\n• Desconfia de la gent\n• Parla molt bé dels seus amics",
+    },
+    {
+      'name': "Will",
+      'imagePath': "    https://i.pinimg.com/originals/ec/6d/59/ec6d59f48c5e8ba9b5021b68c8c401dd.jpg",
+      'context': "• S'espanta molt sovint. \n• Desconfia de la gent degut a traumes del passat \n• El va raptar una altra dimensió",
     },
   ];
 }

@@ -130,7 +130,7 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
                       final season = int.tryParse(seasonController.text) ?? 0;
                       final numChapters = int.tryParse(numChaptersController.text) ?? 0;
 
-                      await modifyFilm(
+                      await addOrModifyFilm(
                         titleController.text,
                         castList,
                         releaseDate,
