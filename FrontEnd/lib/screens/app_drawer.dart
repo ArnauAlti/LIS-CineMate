@@ -105,7 +105,7 @@ class AppDrawer extends StatelessWidget {
     } else if (userRole == "Administrador") {
       menuOptions.addAll([
         ListTile(
-          title: const Text("Gestionar películas y series"),
+          title: const Text("Gestionar Películas y Series"),
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => const CartelleraScreen()));
           },

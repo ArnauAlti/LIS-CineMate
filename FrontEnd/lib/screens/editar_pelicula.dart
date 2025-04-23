@@ -1,3 +1,4 @@
+import 'package:cine_mate/screens/cartellera.dart';
 import 'package:flutter/material.dart';
 
 import '../requests.dart';
@@ -145,6 +146,15 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
                       // Aquí podrías mostrar un error si algo falla al convertir datos
                       print('Error al modificar la peli: $e');
                     }
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CartelleraScreen(),
+                      ),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('${titleController.text} ha sido añadida/modificada en la base de datos.')),
+                    );
                   },
 
                   style: ElevatedButton.styleFrom(

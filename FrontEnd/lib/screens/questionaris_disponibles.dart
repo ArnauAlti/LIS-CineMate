@@ -32,7 +32,7 @@ class _QuestionarisDisponiblesState extends State<QuestionarisDisponibles> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Qüestionaris"),
+        title: const Text("Cuestionarios"),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -53,7 +53,7 @@ class _QuestionarisDisponiblesState extends State<QuestionarisDisponibles> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No s\'han trobat qüestionaris.'));
+            return Center(child: Text('No se han encontrado cuestionarios de ${widget.busqueda}.'));
           }
 
           final cuestionarios = snapshot.data!;

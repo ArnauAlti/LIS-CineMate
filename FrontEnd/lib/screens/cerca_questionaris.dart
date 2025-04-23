@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
+import 'afegir_questionari.dart';
 import 'app_drawer.dart';
 import 'questionaris_disponibles.dart';
 
@@ -85,6 +86,20 @@ class _CercaQuestionarisScreenState extends State<CercaQuestionarisScreen> {
           ],
         ),
       ),
+      floatingActionButton: userRole == "Administrador"
+          ? FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AfegirQuestionariScreen(),
+            ),
+          );
+        },
+        backgroundColor: Colors.black,
+        child: const Icon(Icons.add, color: Colors.white),
+      )
+          : null,
     );
   }
 }
