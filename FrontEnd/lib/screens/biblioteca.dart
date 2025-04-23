@@ -78,7 +78,6 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
                     _buildSectionButton("Películas", isPeliculasSelected, () {
                       setState(() {
                         isPeliculasSelected = true;
-                        //TODO: Modificar id que es passa, segons la de l'usuari actual
                         _filmsFuture = getLibraryFilms(1, true); // Puedes alternar a getSeries()
                       });
                     }),

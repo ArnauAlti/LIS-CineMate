@@ -19,7 +19,6 @@ class _CercaPeliculesState extends State<CercaPelicules> {
   String? _genereSeleccionat;
 
   void _realitzarBusqueda() {
-    //TODO: Enviar dades a Backend per agafar pelis i sèries de la BD
     setState(() {
       _busqueda = _controller.text.trim();
     });
@@ -128,7 +127,6 @@ class _CercaPeliculesState extends State<CercaPelicules> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         //Menú desplegable per mostrar tots els gèneres
-                        //TODO: Aplicar tots els gèneres disponibles de la biblioteca
                         const Text("Gènere:"),
                         DropdownButton<String>(
                           value: _genereSeleccionat,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+
+//TODO: Fer request per editar les coses del questionari, canviar distribució
 class QuestionariAdminScreen extends StatefulWidget {
   const QuestionariAdminScreen({super.key});
 

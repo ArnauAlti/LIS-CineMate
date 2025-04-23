@@ -79,6 +79,7 @@ class EditarPersonatgeScreen extends StatelessWidget {
 
             ElevatedButton(
               onPressed: () {
+                //TODO: Enviar request per modificar dades
                 print("Nom: ${nomController.text}");
                 print("Descripció: ${descripcioController.text}");
               },
