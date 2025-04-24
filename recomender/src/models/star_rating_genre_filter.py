@@ -21,6 +21,24 @@ class StarRatingGenreFilteredRecommender(MovieRecommenderBase):
                 filtered_indices.append(idx)
         return filtered_indices
     
+    def _convert_id_to_title(self, user_preferences):
+        """
+        Convert movie IDs in user preferences to titles
+        
+        Parameters:
+        - user_preferences: dict with 'ratings' as a list of tuples (movie_title, rating)
+        
+        Returns:
+        - user_preferences_filtered: dict with movie titles instead of IDs
+        """
+        user_preferences_filtered = {}
+        user_preferences_filtered['ratings'] = []
+        
+        for id, rating in user_preferences.get('ratings', []):
+            user_preferences_filtered['ratings'].append((self.movies[self.movies['movieId'] == int(id)]['title'].values[0], rating))
+        
+        return user_preferences_filtered
+    
     def _process_user_preferences(self, user_preferences):
         """
         Process user preferences with 5-star ratings
@@ -48,11 +66,12 @@ class StarRatingGenreFilteredRecommender(MovieRecommenderBase):
     
     def get_personalized_recommendations(self, user_preferences, top_n=5, genre_diversity=True):
         """Get genre-filtered recommendations with star ratings"""
-        combined_sim_scores, _ = self._process_user_preferences(user_preferences)
+        user_preferences_filtered = self._convert_id_to_title(user_preferences)
+        combined_sim_scores, _ = self._process_user_preferences(user_preferences_filtered)
         
         # Get all rated movie titles to exclude
         all_rated_movies = set()
-        for movie_title, _ in user_preferences.get('ratings', []):
+        for movie_title, _ in user_preferences_filtered.get('ratings', []):
             if movie_title in self.title_to_indices:
                 all_rated_movies.add(movie_title)
         

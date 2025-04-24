@@ -7,14 +7,9 @@ class MovieRecommendation(BaseModel):
     year: Optional[int] = None
     score: Optional[float] = None
 
-class UserPreferences(BaseModel):
-    liked_movies: Optional[List[str]] = None
-    disliked_movies: Optional[List[str]] = None
-    ratings: Optional[List[tuple[str, int]]] = None
-
 class RecommendationRequest(BaseModel):
     user_id: Optional[int] = None
-    user_preferences: UserPreferences
+    ratings: Optional[List[tuple[str, int]]] = None
     top_n: int = 5
     genre_filter: Optional[List[str]] = None
     genre_diversity: bool = True

@@ -7,14 +7,32 @@ class StarRatingRecommender(MovieRecommenderBase):
         Recommender that uses 5-star rating system
         """
         super().__init__(data_path)
-    
+        
+    def _convert_id_to_title(self, user_preferences):
+        """
+        Convert movie IDs in user preferences to titles
+        
+        Parameters:
+        - user_preferences: dict with 'ratings' as a list of tuples (movie_title, rating)
+        
+        Returns:
+        - user_preferences_filtered: dict with movie titles instead of IDs
+        """
+        user_preferences_filtered = {}
+        user_preferences_filtered['ratings'] = []
+        
+        for id, rating in user_preferences.get('ratings', []):
+            user_preferences_filtered['ratings'].append((self.movies[self.movies['movieId'] == int(id)]['title'].values[0], rating))
+        
+        return user_preferences_filtered
+
     def _process_user_preferences(self, user_preferences):
         """
         Process user preferences with 5-star ratings
         
         Parameters:
         - user_preferences: dict with 'ratings' as a list of tuples (movie_title, rating)
-                           where rating is 1-5 stars
+                            where rating is 1-5 stars
         
         Returns:
         - combined_sim_scores: numpy array of combined similarity scores
@@ -42,7 +60,7 @@ class StarRatingRecommender(MovieRecommenderBase):
             combined_sim_scores /= total_weight
             
         return combined_sim_scores, total_weight
-    
+
     def get_personalized_recommendations(self, user_preferences, top_n=5, genre_diversity=True):
         """
         Get recommendations based on star ratings
@@ -55,11 +73,12 @@ class StarRatingRecommender(MovieRecommenderBase):
         Returns:
         - DataFrame with recommended movies
         """
-        combined_sim_scores, _ = self._process_user_preferences(user_preferences)
+        user_preferences_filtered = self._convert_id_to_title(user_preferences)
+        combined_sim_scores, _ = self._process_user_preferences(user_preferences_filtered)
         
         # Get all rated movie titles to exclude from recommendations
         all_rated_movies = set()
-        for movie_title, _ in user_preferences.get('ratings', []):
+        for movie_title, _ in user_preferences_filtered.get('ratings', []):
             if movie_title in self.title_to_indices:
                 all_rated_movies.add(movie_title)
         
@@ -92,6 +111,6 @@ class StarRatingRecommender(MovieRecommenderBase):
                 recommendations.append(i)
         
         # Format output
-        result = self.movies.iloc[recommendations][['title', 'genres', 'year']]
+        result = self.movies.iloc[recommendations][['movieId', 'title', 'genres', 'year']]
         result['genres'] = result['genres'].str.replace('|', ', ')
         return result.reset_index(drop=True)
