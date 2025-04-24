@@ -3,28 +3,6 @@ from pprint import pprint
 
 BASE_URL = "http://localhost:8000/api"
 
-def test_basic_recommender():
-    payload = {
-        "user_preferences": {
-            "liked_movies": ["Toy Story", "Jumanji"],
-            "disliked_movies": ["GoldenEye"]
-        },
-        "top_n": 5
-    }
-    response = requests.post(f"{BASE_URL}/recommend/basic", json=payload)
-    pprint(response.json())
-
-def test_genre_filtered():
-    payload = {
-        "user_preferences": {
-            "liked_movies": ["Toy Story", "Jumanji"]
-        },
-        "genre_filter": ["Animation", "Comedy"],
-        "top_n": 3
-    }
-    response = requests.post(f"{BASE_URL}/recommend/genre-filtered", json=payload)
-    pprint(response.json())
-
 def test_star_rating():
     payload = {
         "user_preferences": {

@@ -18,13 +18,13 @@ recomender/
 | └── main.py
 |── fast_api/ # Docker/client files
 | ├── client.py # Test client
-| ├── Dockerfile # Docker configuration
-| └── requirements.txt
+|── Dockerfile # Docker configuration
+|── requirements.txt
 └── proves # Proves of the src
 
 QUICK START:
-1. Build and run:
-docker build -f fast_api/Dockerfile -t movie-recommender .
+1. Build and run (Make sure to be in the recomender directory):
+docker build -f Dockerfile -t movie-recommender .
 docker run -p 8000:8000 movie-recommender
 
 TESTING OPTIONS:
