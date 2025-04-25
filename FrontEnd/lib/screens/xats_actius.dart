@@ -5,9 +5,9 @@ import 'app_drawer.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
 import 'xat_personatge.dart';
+import '../requests.dart'; // Asegúrate de que esta importación esté presente para la función getChatsByUserId
 
 class XatsActiusScreen extends StatefulWidget {
-
   const XatsActiusScreen({super.key});
 
   @override
@@ -15,6 +15,14 @@ class XatsActiusScreen extends StatefulWidget {
 }
 
 class _XatsActiusScreen extends State<XatsActiusScreen> {
+  late Future<List<Map<String, dynamic>>> _chatsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    //TODO: Modificar userID
+    _chatsFuture = getChatsByUserId(1);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +36,6 @@ class _XatsActiusScreen extends State<XatsActiusScreen> {
         foregroundColor: Colors.white,
         title: const Text("Chats activos"),
         centerTitle: true,
-
       ),
       drawer: AppDrawer(
         userRole: userRole,
@@ -36,81 +43,110 @@ class _XatsActiusScreen extends State<XatsActiusScreen> {
           userRoleProvider.setUserRole(newRole);
         },
       ),
-      body: Column(
-        children: [
-          const SizedBox(height: 15),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              children: [
-                //TODO: Afegir xats actius a partir de la BD
-                _buildChatItem(
-                  context,
-                  name: "Sherlock Holmes",
-                  message: "Lo descubrí porque...",
-                  onTap: () {
-                    Navigator.push(
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: _chatsFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+
+          final chats = snapshot.data ?? [];
+
+          return Column(
+            children: [
+              const SizedBox(height: 15),
+              Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  itemCount: chats.length,
+                  itemBuilder: (context, index) {
+                    final chat = chats[index];
+                    return _buildChatItem(
                       context,
-                      MaterialPageRoute(builder: (context) => const XatPersonatge(nomPersonatge: "Sherlock Holmes")),
+                      name: chat['name'],
+                      message: chat['lastMessage'],
+                      imagePath: chat['imagePath'],
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            //TODO: Modificar userId
+                            builder: (context) =>
+                                XatPersonatge(nomPersonatge: chat['name'], userId: 1),
+                          ),
+                        );
+                      },
                     );
                   },
                 ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const CercaPersonatgesScreen()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+              ),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CercaPersonatgesScreen(),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 40, vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: const Text("Añadir nuevo chat"),
                     ),
-                  ),
-                  child: const Text("Añadir nuevo chat"),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const GestioXats()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const GestioXats(),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 40, vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: const Text("Eliminar chats"),
                     ),
-                  ),
-                  child: const Text("Eliminar chats"),
+                  ],
                 ),
-              ],
-            ),
-          ),
-        ],
+              ),
+            ],
+          );
+        },
       ),
     );
   }
 
-  Widget _buildChatItem(BuildContext context, {
-    required String name,
-    required String message,
-    required VoidCallback onTap,
-  }) {
+  Widget _buildChatItem(
+      BuildContext context, {
+        required String name,
+        required String message,
+        required String imagePath,
+        required VoidCallback onTap,
+      }) {
     return InkWell(
       onTap: onTap,
       child: Padding(
@@ -118,10 +154,9 @@ class _XatsActiusScreen extends State<XatsActiusScreen> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               radius: 24,
-              backgroundColor: Colors.black87,
-              child: Icon(Icons.person, color: Colors.white),
+              backgroundImage: NetworkImage(imagePath),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -151,5 +186,4 @@ class _XatsActiusScreen extends State<XatsActiusScreen> {
       ),
     );
   }
-
 }

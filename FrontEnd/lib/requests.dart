@@ -425,3 +425,20 @@ Future<bool> deleteQuestionnaire(String title) async {
 Future<bool> editQuestionnaire(String title) async {
   return true;
 }
+
+//Funció per aconseguir els personatges de la pel·lícula o sèrie cercada
+Future<List<Map<String, dynamic>>> getChatsByUserId(int userId) async {
+  // TODO: Implementar crida real a la base de dades
+  return [
+    {
+      'name': "Sherlock Holmes",
+      'lastMessage': "Lo descubrí porque...",
+      'imagePath': "https://th.bing.com/th/id/OIP.9fKQD-5qa_01wxCsOzHGsgAAAA?w=288&h=288&rs=1&pid=ImgDetMain",
+    },
+    {
+      'name': "Eleven",
+      'lastMessage': "Estaba muy asustada.",
+      'imagePath': "https://images.hdqwalls.com/download/stranger-things-eleven-art-nw-1280x2120.jpg",
+    },
+  ];
+}

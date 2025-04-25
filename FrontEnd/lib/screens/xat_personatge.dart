@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class XatPersonatge extends StatelessWidget {
   final String nomPersonatge;
+  final int userId;
 
-  const XatPersonatge({super.key, required this.nomPersonatge});
+  const XatPersonatge({super.key, required this.nomPersonatge, required this.userId});
 
   @override
   Widget build(BuildContext context) {
