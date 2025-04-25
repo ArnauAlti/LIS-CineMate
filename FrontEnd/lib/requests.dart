@@ -8,18 +8,24 @@ Future<bool> validateRegister(String name, String mail, String nick, int birth, 
   final Uri uri = Uri.parse("$baseUrl/user/create");
 
   final Map<String, dynamic> body = {
-    'name': name,
-    'email': mail,
-    'nickname': nick,
-    'birth': birth,
-    'password': pass,
+    'name': "'$name'",
+    'email': "'$mail'",
+    'nickname': "'$nick'",
+    'birth': "'${birth.toString()}'",
+    'password': "'$pass'",
   };
 
+  final Map<String, String> requestHeaders = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'auth_item': 'auth_default',
+    'auth_key': '123'
+  };
   try {
     final response = await http.post(
       uri,
-      headers: {"Content-Type": "application/json", "auth_item": "auth_default", "auth_key": "123"},
       body: convert.jsonEncode(body),
+      headers: requestHeaders,
     );
 
     if (response.statusCode == 200) {
@@ -39,22 +45,41 @@ Future<bool> validateRegister(String name, String mail, String nick, int birth, 
 //Funció per a enviar les dades a backend per a validar-les i procedir amb l'inici de sessió o mostrar errors
 Future<bool> validateLogin(String mail, String pass) async {
 
+  //TODO: Comprovar funcionamiento
   /*
-  Uri uri = Uri.parse("$baseUrl/validate_register?$mail&$pass");
-  final response = await http.get(uri);
+  final Uri uri = Uri.parse("$baseUrl/user/create");
 
-  if (response.statusCode == 200) {
-  //TODO: Modificar codi de la resposta
-    print("statusCode=$response.statusCode");
-    print(response.body);
-    Map<String, dynamic> decoded = convert.jsonDecode(response.body);
-    return Tree(decoded);
-  } else {
-    // If the server did not return a 200 OK response, then throw an exception.
-    print("statusCode=$response.statusCode");
-    throw Exception('failed to get answer to request $uri');
-  }
-  */
+  final Map<String, dynamic> body = {
+    'email': "'$mail'",
+    'password': "'$pass'",
+  };
+
+  //TODO: Revisar si cal autenticació
+  final Map<String, String> requestHeaders = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'auth_item': 'auth_default',
+    'auth_key': '123'
+  };
+  try {
+    final response = await http.post(
+      uri,
+      body: convert.jsonEncode(body),
+      headers: requestHeaders,
+    );
+
+    if (response.statusCode == 200) {
+      print("✅ Inicio de sesión exitoso.");
+      return true;
+    } else {
+      print("❌ Error en el inicio de sesión. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return false;
+    }
+  } catch (e) {
+    print("🚫 Excepción al iniciar sesión: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }*/
 
   return true;
 }
