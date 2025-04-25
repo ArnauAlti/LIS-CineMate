@@ -339,11 +339,13 @@ Future<List<Map<String, dynamic>>> getCharactersBySearch(String search) async {
       'name': "Eleven",
       'imagePath': "https://images.hdqwalls.com/download/stranger-things-eleven-art-nw-1280x2120.jpg",
       'context': "• Té habilitats psíquiques\n• Desconfia de la gent\n• Parla molt bé dels seus amics",
+      'filmTitle': "Stranger Things",
     },
     {
       'name': "Will",
       'imagePath': "https://i.pinimg.com/originals/ec/6d/59/ec6d59f48c5e8ba9b5021b68c8c401dd.jpg",
       'context': "• S'espanta molt sovint. \n• Desconfia de la gent degut a traumes del passat \n• El va raptar una altra dimensió",
+      'filmTitle': "Stranger Things",
     },
   ];
 }

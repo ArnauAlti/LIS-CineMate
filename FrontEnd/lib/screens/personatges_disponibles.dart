@@ -84,7 +84,6 @@ class _PersonatgesDisponiblesScreen extends State<PersonatgesDisponiblesScreen> 
   Widget buildCharacterCard(BuildContext context, Map<String, dynamic> char) {
     final name = char['name'] ?? 'Nom no disponible';
     final imagePath = char['imagePath'] ?? '';
-    final contextInfo = char['context'] ?? '';
 
     return GestureDetector(
       onTap: () {
@@ -92,9 +91,7 @@ class _PersonatgesDisponiblesScreen extends State<PersonatgesDisponiblesScreen> 
           context,
           MaterialPageRoute(
             builder: (context) => InfoPersonatge(
-              name: name,
-              imagePath: imagePath,
-              contextInfo: contextInfo,
+              charData: char,
             ),
           ),
         );

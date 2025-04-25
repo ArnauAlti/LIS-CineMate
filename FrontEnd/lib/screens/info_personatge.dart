@@ -1,22 +1,25 @@
+import 'package:cine_mate/screens/afegir_personatge.dart';
+
 import 'xats_actius.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
 
-import 'editar_personatge.dart';
 import '../requests.dart';
 
 class InfoPersonatge extends StatelessWidget {
-  final String name;
-  final String imagePath;
-  final String contextInfo;
+  final Map<String, dynamic>? charData;
 
-  const InfoPersonatge({super.key, required this.name, required this.imagePath, required this.contextInfo});
+
+  const InfoPersonatge({super.key, required this.charData});
 
   @override
   Widget build(BuildContext context) {
     final userRoleProvider = Provider.of<UserRoleProvider>(context);
     final userRole = userRoleProvider.userRole;
+    final name = charData?['name'] ?? 'Nombre no disponible';
+    final imagePath = charData?['imagePath'] ?? '';
+    final contextInfo = charData?['context'] ?? '';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -98,7 +101,7 @@ class InfoPersonatge extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const EditarPersonatgeScreen()),
+                      MaterialPageRoute(builder: (context) => AfegirPersonatgeScreen(mode: "Modify", charData: charData,)),
                     );
                   },
                   style: ButtonStyle(

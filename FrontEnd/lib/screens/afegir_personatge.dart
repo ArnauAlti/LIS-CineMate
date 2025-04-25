@@ -2,15 +2,15 @@ import 'package:cine_mate/screens/cerca_personatges.dart';
 import 'package:flutter/material.dart';
 import '../requests.dart';
 
-//TODO: Unificar pantalla d'afegir i modificar personatge
 class AfegirPersonatgeScreen extends StatefulWidget {
   final String mode;
-  final Map<String, dynamic>? characterData;
+  final Map<String, dynamic>? charData;
+
 
   const AfegirPersonatgeScreen({
     super.key,
     required this.mode,
-    this.characterData,
+    this.charData,
   });
 
   @override
@@ -26,10 +26,10 @@ class _AfegirPersonatgeScreen extends State<AfegirPersonatgeScreen> {
   @override
   void initState() {
     super.initState();
-    final data = widget.characterData;
+    final data = widget.charData;
 
-    nameController = TextEditingController(text: data?["title"] ?? "");
-    descriptionController = TextEditingController(text: data?["description"] ?? "");
+    nameController = TextEditingController(text: data?['name'] ?? "");
+    descriptionController = TextEditingController(text: data?['context'] ?? "");
     imagePathController =
         TextEditingController(text: data?["imagePath"] ?? "");
     titleController =
@@ -43,7 +43,7 @@ class _AfegirPersonatgeScreen extends State<AfegirPersonatgeScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Añadir personaje"),
+        title: Text(widget.mode == "New" ? "Añadir personaje" : "Editar Personaje"),
         leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: (){
@@ -140,8 +140,10 @@ class _AfegirPersonatgeScreen extends State<AfegirPersonatgeScreen> {
                       builder: (context) => const CercaPersonatgesScreen(),
                     ),
                   );
+
+                  final String accion = widget.mode == "New" ? "Añadida" : "Guardada";
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('${nameController.text} ha sido añadido a la base de datos.')),
+                    SnackBar(content: Text('${nameController.text} ha sido $accion a la base de datos.')),
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -152,7 +154,7 @@ class _AfegirPersonatgeScreen extends State<AfegirPersonatgeScreen> {
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
                 ),
-                child: const Text("Añadir"),
+                child: Text(widget.mode == "New" ? "Añadir" : "Guardar"),
               ),
             ),
             const SizedBox(height: 16),

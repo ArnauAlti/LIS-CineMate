@@ -34,15 +34,10 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
   String? genereSeleccionat;
 
   final List<String> tipusOpcions = ["Pel·lícula", "Sèrie"];
-  //TODO: Afegir tots els gèneres necessaris
   final List<String> generesOpcions = [
-    "Terror",
-    "Comèdia",
-    "Romàntica",
-    "Acció",
-    "Drama",
-    "Fantasia",
-    "Ciència-ficció"
+    'Acción', 'Aventura', 'Animación', 'Infantil', 'Comedia', 'Crimen', 'Documental', 'Drama',
+    'Fantasía', 'Terror', 'IMAX', 'Musical', 'Misterio','Cine negro', 'Romance', 'Ciencia ficción',
+    'Suspense', 'Bélico', 'Western',
   ];
 
   @override
@@ -50,7 +45,6 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
     super.initState();
     final data = widget.peliData;
 
-    //TODO: Modificar per mostrar info existent de peli o serie per a l'administrador
     titleController = TextEditingController(text: data?["title"] ?? "");
     castController = TextEditingController(text: data?["cast"] ?? "");
     descriptionController =
@@ -82,7 +76,7 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: Text(widget.mode == "New" ? "Afegir Pel·lícula" : "Editar Pel·lícula"),
+        title: Text(widget.mode == "New" ? "Añadir Película" : "Editar Película"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -167,7 +161,7 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
                   ),
-                  child: Text(widget.mode == "New" ? "Afegir" : "Guardar"),
+                  child: Text(widget.mode == "New" ? "Añadir" : "Guardar"),
                 ),
               ),
               const SizedBox(height: 16),
