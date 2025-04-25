@@ -442,3 +442,30 @@ Future<List<Map<String, dynamic>>> getChatsByUserId(int userId) async {
     },
   ];
 }
+
+//Funció per aconseguir els missatges associats al xat amb el personatge
+Future<List<Map<String, dynamic>>> getMessagesByChat(int userId) async {
+  // TODO: Implementar crida real a la base de dades
+  return [
+    {
+      "author": "self",
+      "message": "Com vas descobrir l’últim assassí?"},
+    {
+      "autor": "character",
+      "message": "El vaig descobrir perquè portava un llibre estrany."
+    },
+    {
+      "autor": "character",
+      "message": "Li vaig treure, i era sobre verins."},
+    {
+      "autor": "character",
+      "message": "Hi havia sang a la part del verí que va matar a la víctima."
+    },
+  ];
+}
+
+//TODO: Funció per enviar missatges a la BD
+//Funció que permet editar un qüestionari associat a una pel·lícula o sèrie de la base de dades
+Future<bool> sendMessage(String title) async {
+  return true;
+}
