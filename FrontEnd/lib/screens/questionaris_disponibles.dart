@@ -111,7 +111,7 @@ class _QuestionarisDisponiblesState extends State<QuestionarisDisponibles> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const QuestionariAdminScreen()),
+                      MaterialPageRoute(builder: (context) => QuestionariAdminScreen(title: title)),
                     );
                   },
                   style: ElevatedButton.styleFrom(

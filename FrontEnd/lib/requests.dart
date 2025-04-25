@@ -390,13 +390,13 @@ Future<List<Map<String, dynamic>>> getCharactersBySearch(String search) async {
   ];
 }
 
-//TODO: Funció per afegir un personatge a xat
+//TODO: Funció per afegir un personatge com a xat
 //Funció que permet afegir un personatge escollit per establir un xat amb ell/a
 Future<bool> addCharacterToChat(String name) async {
   return true;
 }
 
-//TODO: Funció per afegir un personatge a la BD
+//TODO: Funció per afegir o modificar un personatge a la BD
 //Funció que permet afegir un personatge a la base de dades de personatges disponibles per establir un xat amb ell/a
 Future<bool> addOrModifyCharacter(String name, String imagePath, String description, String filmTitle) async {
   return true;
@@ -408,14 +408,20 @@ Future<bool> deleteCharacter(String name) async {
   return true;
 }
 
-//TODO: Funció per afegir un personatge a xat
-//Funció que permet afegir un personatge a la base de dades de personatges disponibles per establir un xat amb ell/a
+//TODO: Funció per afegir un qüestionari
+//Funció que permet afegir un qüestionari a la base de dades de personatges disponibles per poder realitzar-lo
 Future<bool> addQuestionnaire(String title, String imagePath) async {
   return true;
 }
 
-//TODO: Funció per afegir un personatge a xat
-//Funció que permet afegir un personatge a la base de dades de personatges disponibles per establir un xat amb ell/a
+//TODO: Funció per eliminar un qüestionari, canviar dades que es passen a la funció (crear un Map)
+//Funció que permet eliminar un qüestionari associat a una pel·lícula o sèrie de la base de dades
 Future<bool> deleteQuestionnaire(String title) async {
+  return true;
+}
+
+//TODO: Funció per eliminar un qüestionari
+//Funció que permet editar un qüestionari associat a una pel·lícula o sèrie de la base de dades
+Future<bool> editQuestionnaire(String title) async {
   return true;
 }
