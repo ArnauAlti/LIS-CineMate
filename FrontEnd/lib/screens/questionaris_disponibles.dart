@@ -122,12 +122,13 @@ class _QuestionarisDisponiblesState extends State<QuestionarisDisponibles> {
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   ),
-                  child: const Text("Editar"),
+                  child: const Text("EDITAR "),
                 ),
                 const SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed: () {
-                    // TODO: Eliminar qüestionari
+                  onPressed: () async {
+                    await deleteQuestionnaire(title);
+
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Qüestionari eliminat.')),
                     );
@@ -140,7 +141,7 @@ class _QuestionarisDisponiblesState extends State<QuestionarisDisponibles> {
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   ),
-                  child: const Text("Eliminar"),
+                  child: const Text("ELIMINAR"),
                 ),
               ] else ... [
                 ElevatedButton(

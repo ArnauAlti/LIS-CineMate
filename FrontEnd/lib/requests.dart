@@ -84,6 +84,46 @@ Future<bool> validateLogin(String mail, String pass) async {
   return true;
 }
 
+//Funció per a modificar les dades a backend de l'usuari concret
+Future<bool> modifyUserInfo(String name, String mail, String nick, int birth, String pass) async {
+
+  final Uri uri = Uri.parse("$baseUrl/user/create");
+
+  final Map<String, dynamic> body = {
+    'name': "'$name'",
+    'email': "'$mail'",
+    'nickname': "'$nick'",
+    'birth': "'${birth.toString()}'",
+    'password': "'$pass'",
+  };
+
+  final Map<String, String> requestHeaders = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'auth_item': 'auth_default',
+    'auth_key': '123'
+  };
+  try {
+    final response = await http.post(
+      uri,
+      body: convert.jsonEncode(body),
+      headers: requestHeaders,
+    );
+
+    if (response.statusCode == 200) {
+      print("✅ Registro exitoso.");
+      return true;
+    } else {
+      print("❌ Error en el registro. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return false;
+    }
+  } catch (e) {
+    print("🚫 Excepción al registrar: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
+}
+
 //Funció per agafar les últimes obres afegides a la cartellera de l'apliació (les primeres 12 que surtin)
 Future<List<Map<String, dynamic>>> getLatestFilms() async {
   //TODO: Modificar per agafar películes i sèries de la biblioteca de l'usuari de la BD
@@ -374,3 +414,8 @@ Future<bool> addQuestionnaire(String title, String imagePath) async {
   return true;
 }
 
+//TODO: Funció per afegir un personatge a xat
+//Funció que permet afegir un personatge a la base de dades de personatges disponibles per establir un xat amb ell/a
+Future<bool> deleteQuestionnaire(String title) async {
+  return true;
+}

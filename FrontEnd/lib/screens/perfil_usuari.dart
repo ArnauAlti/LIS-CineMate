@@ -138,7 +138,7 @@ class _PerfilUsuari extends State<PerfilUsuari> {
     );
   }
 
-  void _guardarDades() {
+  Future<void> _guardarDades() async {
     if (_formKey.currentState!.validate()) {
       // Aquí pots fer la crida a una funció per actualitzar l’usuari:
       final updatedUser = {
@@ -150,7 +150,11 @@ class _PerfilUsuari extends State<PerfilUsuari> {
         'profileImage': _selectedImage,
       };
 
-      // TODO: Enviar updatedUser al backend
+      //TODO: Modificar request
+      await modifyUserInfo(nameController.text, mailController.text,
+        nickController.text, int.parse(birthController.text), passController.text,
+      );
+
       print("Dades actualitzades: $updatedUser");
 
       ScaffoldMessenger.of(context).showSnackBar(
