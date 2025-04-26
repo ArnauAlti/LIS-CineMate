@@ -469,3 +469,25 @@ Future<List<Map<String, dynamic>>> getMessagesByChat(int userId) async {
 Future<bool> sendMessage(String title) async {
   return true;
 }
+
+//Funció per aconseguir els usuaris que segueix l'usuari que fa la request
+Future<List<Map<String, dynamic>>> getUsersByUserId(int userId) async {
+  // TODO: Implementar crida real a la base de dades
+  return [
+    {
+      "nick": "Pikachu Lover",
+      "imagePath": "assets/perfil1.jpg"
+    },
+    {
+      "nick": "Doctor Films",
+      "imagePath": "assets/perfil4.jpg"
+    },
+    {
+      "nick": "Star Master",
+      "imagePath": "assets/perfil8.jpg"},
+    {
+      "nick": "Obi",
+      "imagePath": "assets/perfil3.jpg"
+    },
+  ];
+}

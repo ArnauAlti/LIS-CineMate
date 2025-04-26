@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../requests.dart';
 
+//TODO: En el futur, actualitzar xat en viu
 class XatPersonatge extends StatefulWidget {
   final String nomPersonatge;
   final int userId;
@@ -8,7 +9,7 @@ class XatPersonatge extends StatefulWidget {
   const XatPersonatge({super.key, required this.nomPersonatge, required this.userId});
 
   @override
-  _XatPersonatgeState createState() => _XatPersonatgeState();
+  State<XatPersonatge> createState() => _XatPersonatgeState();
 }
 
 class _XatPersonatgeState extends State<XatPersonatge> {
