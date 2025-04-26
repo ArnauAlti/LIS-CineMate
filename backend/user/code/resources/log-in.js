@@ -18,7 +18,7 @@ async function logInUser(req, res) {
         let result = quer.rows;
         console.log(result);
         quer = await userDB.query(
-            'SELECT user_pass FROM users WHERE user_mail = ($1) OR user_nick = ($2)',
+            'SELECT * FROM users WHERE user_mail = ($1) OR user_nick = ($2)',
             [userMail, userNick]
         );
         result = quer.rows[0]['user_pass'];
@@ -27,7 +27,7 @@ async function logInUser(req, res) {
             throw "User Not Found";
         }
         if (result == userPass) {
-            res.status(200).json({ message: "User Logged In Succesfully"});
+            res.status(200).json({ message: "User Logged In Succesfully", data: quer.rows[0]});
         } else {
             res.status(401).json({ error: "Invalid Authentication"});
         }

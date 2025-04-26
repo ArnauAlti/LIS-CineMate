@@ -1,4 +1,5 @@
 const express = require('express');
+// const cors = require("cors");
 
 const signInUser = require("./resources/sign-in");
 const logInUser = require("./resources/log-in");
@@ -7,8 +8,10 @@ const modifyUser = require("./resources/modify");
 const app = express();
 const port = 3000;
 
+// app.use(cors());
+
 app.use(express.json());
-app.use(express.urlencoded({extended: true }));
+// app.use(express.urlencoded({extended: true }));
 
 
 app.use(async (req, res, next) => {

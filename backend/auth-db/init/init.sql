@@ -2,13 +2,12 @@
 
 CREATE TABLE auth(  
     id int NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    auth_item VARCHAR(12) UNIQUE NOT NULL,
-    auth_key VARCHAR(500) NOT NULL,
-    "admin" BOOLEAN NOT NULL
+    mode VARCHAR(12) UNIQUE NOT NULL,
+    key VARCHAR(500) NOT NULL
 );
 
-INSERT INTO auth(auth_item, auth_key, admin) VALUES ('auth_default', '123', 'false');
-INSERT INTO auth(auth_item, auth_key, admin) VALUES ('auth_admin', '456', 'true');
+INSERT INTO auth(mode, key) VALUES ('user', 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L');
+INSERT INTO auth(mode, key) VALUES ('admin', 'KgtblvdX5JWXMG6UQvB96owx1gm3fX73lYxbWctYDFTPRAEaNXHoocTc61blvFPvivV2T1CjpFnLY9OAdPwIpRXBLSvjWjW9');
 
 -- Crear el usuario
 CREATE USER consult WITH PASSWORD 'consult';

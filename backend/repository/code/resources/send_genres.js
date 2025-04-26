@@ -24,6 +24,7 @@ async function sendGenres() {
         let result = quer.rows;
         console.log(result);
         console.log(result.map( item => item.genres));
+        // TODO: Enviar los datos al modelo
     } else {
     }
 }
