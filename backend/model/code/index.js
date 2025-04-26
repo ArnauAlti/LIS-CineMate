@@ -14,14 +14,18 @@ app.use(express.urlencoded({extended: true }));
 //     sendGenres();
 // }, 60000)
 
-app.all("/", async (req, res) => {
+app.use(async (req, res, next) => {
     console.log("New Request");
     console.log(req.body);
     console.log(req.url);
     next();
-})
+});
 
 app.post("/recommender", recommender);
+
+app.post("/hello", (req, res) =>{
+    res.status(200).json({message: "hello"});
+});
 
 app.listen(port, () => {
     console.log(`API running on http://localhost:${port}`);
