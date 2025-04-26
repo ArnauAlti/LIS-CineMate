@@ -1,10 +1,13 @@
 import 'package:cine_mate/screens/detalls_peli_follower.dart';
+import 'package:cine_mate/screens/usuaris_seguits.dart';
 import 'package:flutter/material.dart';
+import '../requests.dart';
 
 class BibliotecaSeguitsScreen extends StatefulWidget {
   final String userName;
+  final bool follows;
 
-  const BibliotecaSeguitsScreen({super.key, required this.userName});
+  const BibliotecaSeguitsScreen({super.key, required this.userName, required this.follows});
 
   @override
   State<BibliotecaSeguitsScreen> createState() => _BibliotecaSeguitsScreenState();
@@ -12,6 +15,13 @@ class BibliotecaSeguitsScreen extends StatefulWidget {
 
 class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
   bool isPeliculasSelected = true;
+  late Future<List<Map<String, dynamic>>> _filmsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _filmsFuture = getLibraryFilms(1, true);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,48 +34,86 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
         title: Text(widget.userName),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildSectionButton("Películas", isPeliculasSelected, () {
-                setState(() {
-                  isPeliculasSelected = true;
-                });
-              }),
-              const SizedBox(width: 20),
-              _buildSectionButton("Series", !isPeliculasSelected, () {
-                setState(() {
-                  isPeliculasSelected = false;
-                });
-              }),
-            ],
-          ),
-          const SizedBox(height: 30),
-          Expanded(
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: _filmsFuture,
+        //Comprovacions per saber si s'han agafat bé les películes de la BD
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+
+          final films = snapshot.data ?? [];
+
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
             child: Column(
               children: [
+                const SizedBox(height: 10),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  //TODO: Canviar id usuari
                   children: [
-                    _buildMovieBox(context, isPeliculasSelected ? "Película 1" : "Serie 1"),
-                    _buildMovieBox(context, isPeliculasSelected ? "Película 2" : "Serie 2"),
+                    _buildSectionButton("Películas", isPeliculasSelected, () {
+                      setState(() {
+                        isPeliculasSelected = true;
+                        _filmsFuture = getLibraryFilms(1, true);
+                      });
+                    }),
+                    const SizedBox(width: 20),
+                    _buildSectionButton("Series", !isPeliculasSelected, () {
+                      setState(() {
+                        isPeliculasSelected = false;
+                        //TODO: Canviar id usuari
+                        _filmsFuture = getLibraryFilms(1, false);
+                      });
+                    }),
                   ],
                 ),
-                const SizedBox(height: 50),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildMovieBox(context, isPeliculasSelected ? "Película 3" : "Serie 3"),
-                    _buildMovieBox(context, isPeliculasSelected ? "Película 4" : "Serie 4"),
-                  ],
-                ),
+                const SizedBox(height: 30),
+
+                // Generar las filas dinámicamente
+                for (int i = 0; i < films.length; i += 2)
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildMovieBox(context, films[i]),
+                          if (i + 1 < films.length)
+                            _buildMovieBox(context, films[i + 1]),
+                        ],
+                      ),
+                      const SizedBox(height: 50),
+                    ],
+                  ),
               ],
             ),
+          );
+        },
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ElevatedButton(
+          onPressed: () async {
+            if (widget.follows == true) {
+              await unfollowUser(nick: widget.userName);
+            } else {
+              await followUser(nick: widget.userName);
+            }
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const UsuarisSeguits()));
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            padding: const EdgeInsets.symmetric(vertical: 16),
           ),
-        ],
+          child: Text(widget.follows == true ? "DEJAR DE SEGUIR A ${widget.userName}" : "SEGUIR A ${widget.userName}"),
+        ),
       ),
     );
   }
@@ -83,14 +131,15 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
     );
   }
 
-  Widget _buildMovieBox(BuildContext context, String title) {
+  Widget _buildMovieBox(BuildContext context, Map<String, dynamic> film) {
     return InkWell(
       onTap: () {
-        //TODO: Anar als detalls de biblioteca de l'usuari seleccionat
         Navigator.push(
           context,
-          MaterialPageRoute( builder: (context) => DetallsPeliFollowerScreen(title: title),
-        ));
+          MaterialPageRoute(
+            builder: (context) => DetallsPeliFollowerScreen(film: film),
+          ),
+        );
       },
       child: Container(
         width: 135,
@@ -98,12 +147,26 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 2),
           borderRadius: BorderRadius.circular(8),
+          image: film['imagePath'] != null
+              ? DecorationImage(
+            image: NetworkImage(film['imagePath']),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.3),
+              BlendMode.darken,
+            ),
+          )
+              : null,
         ),
         child: Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(title, textAlign: TextAlign.center),
+            child: Text(
+              film['title'] ?? '',
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
           ),
         ),
       ),

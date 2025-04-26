@@ -1,10 +1,10 @@
-import 'package:cine_mate/screens/biblioteca_altres_usuaris.dart';
 import 'package:cine_mate/screens/cerca_usuaris.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
 import 'app_drawer.dart';
 import '../requests.dart';
+import 'biblioteca_usuaris_seguits.dart';
 
 class UsuarisSeguits extends StatefulWidget {
   const UsuarisSeguits({super.key});
@@ -96,7 +96,6 @@ class _UsuarisSeguits extends State<UsuarisSeguits> {
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
           onPressed: () {
-            //TODO: Posar link usuari escollit
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -125,7 +124,7 @@ class _UsuarisSeguits extends State<UsuarisSeguits> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => BibliotecaAltresUsuarisScreen(userName: user['nick'], followed: true),
+            builder: (context) => BibliotecaSeguitsScreen(userName: user['nick'], follows: true),
           ),
         );
       },

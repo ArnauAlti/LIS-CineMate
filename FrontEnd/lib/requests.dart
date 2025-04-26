@@ -8,18 +8,16 @@ Future<bool> validateRegister(String name, String mail, String nick, int birth, 
   final Uri uri = Uri.parse("$baseUrl/user/create");
 
   final Map<String, dynamic> body = {
-    'name': "'$name'",
-    'email': "'$mail'",
-    'nickname': "'$nick'",
-    'birth': "'${birth.toString()}'",
-    'password': "'$pass'",
+    'name': name,
+    'email': mail,
+    'nickname': nick,
+    'birth': birth,
+    'pass': pass
   };
 
   final Map<String, String> requestHeaders = {
     'Content-Type': 'application/json',
-    'Accept': 'application/json',
-    'auth_item': 'auth_default',
-    'auth_key': '123'
+    "api-key": "v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L"
   };
   try {
     final response = await http.post(
@@ -472,6 +470,40 @@ Future<bool> sendMessage(String title) async {
 
 //Funció per aconseguir els usuaris que segueix l'usuari que fa la request
 Future<List<Map<String, dynamic>>> getUsersByUserId(int userId) async {
+  // TODO: Implementar crida real a la base de dades
+  return [
+    {
+      "nick": "Pikachu Lover",
+      "imagePath": "assets/perfil1.jpg"
+    },
+    {
+      "nick": "Doctor Films",
+      "imagePath": "assets/perfil4.jpg"
+    },
+    {
+      "nick": "Star Master",
+      "imagePath": "assets/perfil8.jpg"},
+    {
+      "nick": "Obi",
+      "imagePath": "assets/perfil3.jpg"
+    },
+  ];
+}
+
+//TODO: Funció per seguir a un usuari a la BD
+//Funció que permet seguir a un usuari dins l'aplicació
+Future<bool> followUser({required String nick}) async {
+  return true;
+}
+
+//TODO: Funció per eliminar seguidor a la BD
+//Funció que permet deixar de seguir a un usuari dins l'aplicació
+Future<bool> unfollowUser({required String nick}) async {
+  return true;
+}
+
+//Funció per aconseguir els usuaris a través de la paraula cercada
+Future<List<Map<String, dynamic>>> getUsersBySearch(String search) async {
   // TODO: Implementar crida real a la base de dades
   return [
     {
