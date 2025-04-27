@@ -3,27 +3,26 @@ import 'dart:convert' as convert;
 const String baseUrl = "http://localhost:3000";
 
 //Funció per a enviar les dades a backend per a validar-les i procedir amb el registre o mostrar errors
-Future<bool> validateRegister(String name, String mail, String nick, int birth, String pass) async {
+Future<bool> validateRegister(String name, String mail, String nick, String birth, String pass) async {
 
   final Uri uri = Uri.parse("$baseUrl/user/create");
 
   final Map<String, dynamic> body = {
     'name': name,
-    'email': mail,
-    'nickname': nick,
+    'mail': mail,
+    'nick': nick,
     'birth': birth,
     'pass': pass
   };
 
-  final Map<String, String> requestHeaders = {
-    'Content-Type': 'application/json',
-    "api-key": "v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L"
-  };
   try {
     final response = await http.post(
       uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
       body: convert.jsonEncode(body),
-      headers: requestHeaders,
     );
 
     if (response.statusCode == 200) {
@@ -42,44 +41,35 @@ Future<bool> validateRegister(String name, String mail, String nick, int birth, 
 
 //Funció per a enviar les dades a backend per a validar-les i procedir amb l'inici de sessió o mostrar errors
 Future<bool> validateLogin(String mail, String pass) async {
-
-  //TODO: Comprovar funcionamiento
-  /*
-  final Uri uri = Uri.parse("$baseUrl/user/create");
+  final Uri uri = Uri.parse("$baseUrl/user/login");
 
   final Map<String, dynamic> body = {
-    'email': "'$mail'",
-    'password': "'$pass'",
+    'mail': mail,
+    'pass': pass
   };
 
-  //TODO: Revisar si cal autenticació
-  final Map<String, String> requestHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-    'auth_item': 'auth_default',
-    'auth_key': '123'
-  };
   try {
     final response = await http.post(
       uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
       body: convert.jsonEncode(body),
-      headers: requestHeaders,
     );
 
     if (response.statusCode == 200) {
-      print("✅ Inicio de sesión exitoso.");
+      print("✅ Registro exitoso.");
       return true;
     } else {
-      print("❌ Error en el inicio de sesión. Código: ${response.statusCode}");
+      print("❌ Error en el registro. Código: ${response.statusCode}");
       print("Respuesta: ${response.body}");
       return false;
     }
   } catch (e) {
-    print("🚫 Excepción al iniciar sesión: $e");
+    print("🚫 Excepción al registrar: $e");
     throw Exception("No se pudo conectar al servidor.");
-  }*/
-
-  return true;
+  }
 }
 
 //Funció per a modificar les dades a backend de l'usuari concret

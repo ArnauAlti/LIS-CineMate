@@ -50,8 +50,9 @@ class _RegistreScreenState extends State<RegistreScreen> {
                   _buildTextFormField("Nombre", nameController),
                   _buildTextFormField("Email", mailController),
                   _buildTextFormField("Nombre de usuario", nickController),
-                  _buildTextFormField("Año de nacimiento", birthController),
+                  _buildTextFormField("Fecha de nacimiento", birthController),
                   _buildTextFormField("Contraseña", passController, isPassword: true),
+                  //TODO: Quitar los roles a escoger
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -87,7 +88,7 @@ class _RegistreScreenState extends State<RegistreScreen> {
           onPressed: () async {
             if (_formKey.currentState!.validate()) {
               final validation = await validateRegister(nameController.text, mailController.text,
-                nickController.text, int.parse(birthController.text), passController.text,
+                nickController.text, birthController.text, passController.text,
               );
 
               if (validation) {
@@ -132,8 +133,6 @@ class _RegistreScreenState extends State<RegistreScreen> {
           obscureText: isPassword ? _obscurePassword : false,
           keyboardType: label == "Email"
               ? TextInputType.emailAddress
-              : label == "Año de nacimiento"
-              ? TextInputType.number
               : TextInputType.text,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -141,9 +140,6 @@ class _RegistreScreenState extends State<RegistreScreen> {
             }
             if (label == "Email" && !value.contains('@')) {
               return 'Email inválido';
-            }
-            if (label == "Año de nacimiento" && int.tryParse(value) == null) {
-              return 'Debe ser un número';
             }
             return null;
           },

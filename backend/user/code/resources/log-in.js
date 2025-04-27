@@ -2,13 +2,13 @@ const userDB = require("./db.js");
 
 async function logInUser(req, res) {
     try {
-        let userMail = req.body['user_mail'];
-        let userNick = req.body['user_nick'];
+        let userMail = req.body['mail'];
+        let userNick = req.body['nick'];
         console.log(userMail, " / ", userNick);
         if (!userMail && !userNick) {
             throw "No User Provided";
         }
-        let userPass = req.body['user_pass'];
+        let userPass = req.body['pass'];
         if (!userPass) {
             throw "No pass Provided";
         }
@@ -18,10 +18,10 @@ async function logInUser(req, res) {
         let result = quer.rows;
         console.log(result);
         quer = await userDB.query(
-            'SELECT * FROM users WHERE user_mail = ($1) OR user_nick = ($2)',
+            'SELECT * FROM users WHERE mail = ($1) OR nick = ($2)',
             [userMail, userNick]
         );
-        result = quer.rows[0]['user_pass'];
+        result = quer.rows[0]['pass'];
         console.log(result);
         if (!result) {
             throw "User Not Found";
