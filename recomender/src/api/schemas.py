@@ -2,11 +2,11 @@ from typing import List, Optional
 from pydantic import BaseModel
 
 class MovieRecommendation(BaseModel):
+    movieId: int
     title: str
     genres: str
     year: Optional[int] = None
-    score: Optional[float] = None
-    
+
 class Rating(BaseModel):
     movie_id: str
     rating: int
