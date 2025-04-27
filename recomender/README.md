@@ -25,7 +25,7 @@ recomender/
 QUICK START:
 1. Build and run (Make sure to be in the recomender directory):
 docker build -f Dockerfile -t movie-recommender .
-docker run -p 8000:8000 movie-recommender
+docker run -it -p 8000:8000 movie-recommender
 
 TESTING OPTIONS:
 

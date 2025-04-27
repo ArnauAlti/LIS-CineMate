@@ -17,6 +17,7 @@ class MovieRecommenderBase:
         movies = pd.read_csv(data_path)
         movies = self._clean_movie_titles(movies)
         movies = self._clean_movie_genres(movies)
+        movies = movies.head(100).reset_index(drop=True)
         return movies
     
     def _clean_movie_titles(self, movies):

@@ -11,20 +11,21 @@ class StarRatingRecommender(MovieRecommenderBase):
     def _convert_id_to_title(self, user_preferences):
         """
         Convert movie IDs in user preferences to titles
-        
+
         Parameters:
-        - user_preferences: dict with 'ratings' as a list of tuples (movie_title, rating)
-        
+        - user_preferences: list of tuples (movie_id, rating)
+
         Returns:
-        - user_preferences_filtered: dict with movie titles instead of IDs
+        - user_preferences_filtered: list of tuples (movie_title, rating)
         """
-        user_preferences_filtered = {}
-        user_preferences_filtered['ratings'] = []
-        
-        for id, rating in user_preferences.get('ratings', []):
-            user_preferences_filtered['ratings'].append((self.movies[self.movies['movieId'] == int(id)]['title'].values[0], rating))
-        
+        user_preferences_filtered = []
+
+        for movie_id, rating in user_preferences:
+            title = self.movies[self.movies['movieId'] == int(movie_id)]['title'].values[0]
+            user_preferences_filtered.append((title, rating))
+
         return user_preferences_filtered
+
 
     def _process_user_preferences(self, user_preferences):
         """
@@ -41,10 +42,7 @@ class StarRatingRecommender(MovieRecommenderBase):
         combined_sim_scores = np.zeros(self.sim_matrix.shape[0])
         total_weight = 0
         
-        # Process rated movies
-        ratings = user_preferences.get('ratings', [])
-        
-        for movie_title, rating in ratings:
+        for movie_title, rating in user_preferences:
             if movie_title in self.title_to_indices:
                 # Convert rating to weight (1-5 stars to 0.2-1.0 scale)
                 weight = (rating - 1) / 4  # Normalize to 0-1 range
@@ -78,7 +76,7 @@ class StarRatingRecommender(MovieRecommenderBase):
         
         # Get all rated movie titles to exclude from recommendations
         all_rated_movies = set()
-        for movie_title, _ in user_preferences_filtered.get('ratings', []):
+        for movie_title, _ in user_preferences_filtered:
             if movie_title in self.title_to_indices:
                 all_rated_movies.add(movie_title)
         
