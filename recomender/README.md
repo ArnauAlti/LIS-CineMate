@@ -41,14 +41,35 @@ python fast_api/client.py
 Basic check:
 curl http://localhost:8000/
 
-Basic recommendations:
-curl -X POST http://localhost:8000/recommend/basic -H "Content-Type: application/json" -d '{"user_preferences":{"liked_movies":["Toy Story"],"disliked_movies":["GoldenEye"]},"top_n":3}'
-
-Genre-filtered:
-curl -X POST http://localhost:8000/recommend/genre-filtered -H "Content-Type: application/json" -d '{"user_preferences":{"liked_movies":["Toy Story"]},"genre_filter":["Animation"],"top_n":3}'
-
 Star ratings:
-curl -X POST http://localhost:8000/recommend/star-rating -H "Content-Type: application/json" -d '{"user_preferences":{"ratings":[["Toy Story",5],["GoldenEye",2]]},"top_n":3}'
+curl -X POST http://localhost:8000/recommend/star-rating -H "Content-Type: application/json" -d 
+'{
+  "user_id": 123,
+  "ratings": [
+    {"movie_id": "1", "rating": 1},
+    {"movie_id": "2", "rating": 2},
+    {"movie_id": "10", "rating": 4},
+    {"movie_id": "41", "rating": 5}
+  ],
+  "top_n": 5,
+  "genre_filter": ["Action"],
+  "genre_diversity": true
+}'
+
+Star ratings with genre filter:
+curl -X POST http://localhost:8000/recommend/star-rating-genre -H "Content-Type: application/json" -d 
+'{
+  "user_id": 123,
+  "ratings": [
+    {"movie_id": "1", "rating": 1},
+    {"movie_id": "2", "rating": 2},
+    {"movie_id": "10", "rating": 4},
+    {"movie_id": "41", "rating": 5}
+  ],
+  "top_n": 5,
+  "genre_filter": ["Action"],
+  "genre_diversity": true
+}'
 
 MANAGEMENT:
 View containers: docker ps
