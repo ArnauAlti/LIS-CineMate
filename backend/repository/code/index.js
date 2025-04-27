@@ -1,9 +1,14 @@
 const express = require('express');
 const axios = require('axios');
+const fs = require('fs');
+const lock_key = require('./resources/data/lock.json');
 
 // const sendGenres = require("./resources/send_genres");
 // const processGenres = require("./resources/new");
-const updateGenres = require("./resources/updateGenres");
+const setGenres = require("./resources/setGenres");
+const setMedia = require("./resources/setMedia");
+const getMedia = require('./resources/getMedia');
+const download = require('./resources/genBBDD');
 
 const app = express();
 const port = 3000;
@@ -22,19 +27,53 @@ app.use(async (req, res, next) => {
     console.log(req.headers);
     console.log("-----  BODY  -----");
     console.log(req.body);
-    next();
+    console.log("------------------");
+    let locked = lock_key['lock'];
+    console.log("Lock Status: ", locked);
+    let overwrite = false;
+    overwrite = (req.url == "/unlock");
+    overwrite = (req.url == "/lock");
+    overwrite = (req.url == "/status");
+    if (locked == true && !overwrite) {
+        console.log("Rejecting Request");
+        res.status(503).json({message: "Server is Currently Unable to Handle Requests Due to a Lock"});
+    } else {
+        console.log("Accepting Request");
+        next();
+    }
 });
 
 app.get("/download", async (req, res) => {
-    console.log("patata");
-    res.status(200);
+    download;
+    res.status(400).json({message: "Executing"});
 });
 
-app.post("/update-genres", updateGenres);
+app.get("/lock", async (req, res) => {
+    lock_key['lock'] = true;
+    res.status(200).json({message: "locked"});
+});
+
+app.get("/unlock", async (req, res) => {
+    lock_key['lock'] = false;
+    res.status(200).json({message: "unlocked"});
+});
+
+app.get("/status", async (req, res) => {
+    res.status(200).json({"message": "Status is " + lock_key['lock'], "status": lock_key['lock']})
+})
+
+app.get("/set-genres", setGenres);
+
+app.get("/set-media", setMedia);
+
+app.get("/get-media", getMedia)
+
+// app.get("/download", download);
 
 app.all("/*", (req, res) => {
+    console.log(req.url);
     res.status(404).json({message: "Resource Not Found"});
-})
+});
 
 app.listen(port, () => {
     console.log(`API running on http://localhost:${port}`);
