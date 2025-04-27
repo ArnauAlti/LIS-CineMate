@@ -523,3 +523,36 @@ Future<List<Map<String, dynamic>>> getUsersBySearch(String search) async {
     },
   ];
 }
+
+//Funció per aconseguir els usuaris a través de la paraula cercada
+Future<List<Map<String, dynamic>>> getRatingsByFilm(String title) async {
+  // TODO: Implementar crida real a la base de dades
+  return [
+    {
+      "nick": "Pikachu Lover",
+      "rating": 4.5,
+      "comment": "Buena película"
+    },
+    {
+      "nick": "Viper",
+      "rating": 1.5,
+      "comment": "No me gusta"
+    },
+    {
+      "nick": "Kayo",
+      "rating": 3,
+      "comment": "Para pasar el rato"
+    },
+    {
+      "nick": "Pikachu Lover",
+      "rating": 2,
+      "comment": "Pfffff no me acaba"
+    },
+    {
+      "nick": "Daredevil",
+      "rating": 5,
+      "comment": "Bestial!! La película me encanta, precede a una posible historia con"
+          "otros personajes perfecta para la evolución del MCU"
+    },
+  ];
+}

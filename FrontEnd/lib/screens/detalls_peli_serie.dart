@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../user_role_provider.dart';
 import 'package:provider/provider.dart';
 import '../requests.dart';
+import 'comentaris_valoracions.dart';
 
 class DetallsPeliSerieScreen extends StatelessWidget {
   final Map<String, dynamic>? film;
@@ -126,6 +127,26 @@ class DetallsPeliSerieScreen extends StatelessWidget {
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 40),
+            Center(
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Future.delayed(Duration.zero, () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CommentRatingScreen(title: title)),
+                    );
+                  });                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                label: const Text("VER COMENTARIOS DE OTROS USUARIOS", style: TextStyle(fontSize: 16)),
+              ),
+            ),
 
             if (userRole == "Usuario Registrado")
               Center(

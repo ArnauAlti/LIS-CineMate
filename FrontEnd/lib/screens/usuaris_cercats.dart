@@ -18,7 +18,6 @@ class _UsuarisCercats extends State<UsuarisCercats> {
   @override
   void initState() {
     super.initState();
-    //TODO: Canviar id que es passa a la request
     _usersFuture = getUsersBySearch(widget.busqueda);
   }
 
