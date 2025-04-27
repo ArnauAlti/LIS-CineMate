@@ -102,6 +102,6 @@ class StarRatingGenreFilteredRecommender(MovieRecommenderBase):
                 recommendations.append(i)
         
         # Format output
-        result = self.movies.iloc[recommendations][['title', 'genres', 'year']]
+        result = self.movies.iloc[recommendations][['movieId', 'title', 'genres', 'year']]
         result['genres'] = result['genres'].str.replace('|', ', ')
         return result.reset_index(drop=True)
