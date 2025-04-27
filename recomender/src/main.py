@@ -25,14 +25,12 @@ if __name__ == "__main__":
         ]
     }
 
-    user_ratings = {
-        'ratings': [
+    user_ratings = [
             ('1', 1),  # Loved it
             ('2', 2),    # Liked it
             ('10', 4),   # Didn't like it
             ('41', 5)  # Hated it
         ]
-    }
     
     print("\nTop 5 Recommended Movies (based on star ratings):")
     star_recommendations = star_rec.get_personalized_recommendations(user_ratings)
