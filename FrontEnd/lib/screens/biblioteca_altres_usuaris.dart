@@ -113,7 +113,7 @@ class _BibliotecaAltresUsuarisScreen extends State<BibliotecaAltresUsuarisScreen
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute( builder: (context) => DetallsPeliFollowerScreen(title: title),
+          MaterialPageRoute( builder: (context) => DetallsPeliFollowerScreen(film: title),
         ));
       },
       child: Container(

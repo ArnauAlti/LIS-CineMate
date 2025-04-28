@@ -114,6 +114,7 @@ Future<bool> modifyUserInfo(String name, String mail, String nick, int birth, St
 
 //Funció per agafar les últimes obres afegides a la cartellera de l'apliació (les primeres 12 que surtin)
 Future<List<Map<String, dynamic>>> getLatestFilms() async {
+  /*
   //TODO: Modificar per agafar películes i sèries de la biblioteca de l'usuari de la BD
   return [
     {
@@ -148,13 +149,41 @@ Future<List<Map<String, dynamic>>> getLatestFilms() async {
       'description': 'Paul Atreides une fuerzas con los Fremen para vengar a su familia y salvar el universo conocido.',
     },
   ];
+  */
+  final Uri uri = Uri.parse("$baseUrl"); // Modificar Uri
+
+  try {
+    final response = await http.post(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
+      body: convert.jsonEncode({}),
+    );
+
+    if (response.statusCode == 200) {
+      print("✅ Request exitosa.");
+      final decodedBody = convert.jsonDecode(response.body);
+      return List<Map<String, dynamic>>.from(decodedBody);
+
+    } else {
+      print("❌ Error en la request. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return [];
+    }
+  } catch (e) {
+    print("🚫 Excepción al realizar la request: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
 }
 
 //TODO: Funció per retornar obres segons una cerca
 //Funció exlusiva per fer cerques de sèries o pel·lícules segons paraules, gèneres, el director, un actor/actriu o
 //una duració indicada per l'usuari amb els filtres de cerca
-Future<List<Map<String, dynamic>>> getFilmsBySearch(String search, String genre, String director,
+Future<List<Map<String, dynamic>>> getFilmsBySearch(String search, String genere, String director,
     String actor, int duration) async {
+  /*
   return [
     {
       'title': 'Captain America: Brave New World',
@@ -166,7 +195,45 @@ Future<List<Map<String, dynamic>>> getFilmsBySearch(String search, String genre,
       'rating': 3.5,
       'description': 'Tras reunirse con el recién elegido presidente de EE.UU. Thaddeus Ross (Harrison Ford), '
           'Sam se encuentra en medio de un incidente internacional...',
-    },];
+    },
+  ];
+  */
+  final Uri uri = Uri.parse("$baseUrl/user/create");
+
+  final Map<String, dynamic> body = {
+    'search': "'$search'",
+    'genere': "'$genere'",
+    'director': "'$director'",
+    'actor': "'$actor'",
+    'duration': "'$duration'",
+  };
+
+  final Map<String, String> requestHeaders = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'auth_item': 'auth_default',
+    'auth_key': '123'
+  };
+  try {
+    final response = await http.post(
+      uri,
+      body: convert.jsonEncode(body),
+      headers: requestHeaders,
+    );
+    if (response.statusCode == 200) {
+      print("✅ Request exitosa.");
+      final decodedBody = convert.jsonDecode(response.body);
+      return List<Map<String, dynamic>>.from(decodedBody);
+
+    } else {
+      print("❌ Error en la request. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return [];
+    }
+  } catch (e) {
+    print("🚫 Excepción al realizar la request: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
 }
 
 //TODO: Afegir a la biblioteca de l'usuari la película a la BD
@@ -225,12 +292,43 @@ Future<List<Map<String, dynamic>>> getLibraryFilms(int userId, bool film) async 
 
 //TODO: Modificar funció
 Future<Map<String, dynamic>?> getUser(String userId) async {
+  /*
   // Exemple de dades que podria retornar (pots substituir-ho amb dades de la BD/API)
   return {
     'username': 'johndoe',
     'email': 'johndoe@example.com',
     'edat': 30,
   };
+  */
+  final Uri uri = Uri.parse("$baseUrl/user/create");
+
+  final Map<String, dynamic> body = {
+    'id': userId
+  };
+
+  try {
+    final response = await http.post(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
+      body: convert.jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      print("✅ Request exitosa.");
+      final Map<String, dynamic> data = convert.jsonDecode(response.body);
+      return data;
+    } else {
+      print("❌ Error en la request. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return null;
+    }
+  } catch (e) {
+    print("🚫 Excepción al realizar la request: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
 }
 
 //Funció que permet agafar les pel·lícules o sèries recomanades de manera intel·ligent segons els
