@@ -6,12 +6,13 @@ async function modifyUser(req, res) {
         let userNick = req.body['nick'];
         let userName = req.body['name'];
         let userPass = req.body['pass'];
+        
         if (!userMail && !userNick) {
             throw "No User Provided";
         }
         else {
             const quer = await userDB.query(
-                'UPDATE users SET user_name = $1, user_pass = $2 WHERE user_mail = $3 OR user_nick = $4',
+                'UPDATE users SET name = $1, pass = $2 WHERE mail = $3 OR _nick = $4',
                 [userName, userPass, userMail, userNick]
             );
             console.log(quer.rows[0]);

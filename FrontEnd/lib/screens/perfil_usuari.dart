@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../requests.dart';
 import '../user_role_provider.dart';
+import 'cartellera.dart';
 
 class PerfilUsuari extends StatefulWidget {
   const PerfilUsuari({super.key});
@@ -25,6 +26,8 @@ class _PerfilUsuari extends State<PerfilUsuari> {
   final birthController = TextEditingController();
   final passController = TextEditingController();
 
+  get userRoleProvider => null;
+
   @override
   void initState() {
     super.initState();
@@ -40,7 +43,7 @@ class _PerfilUsuari extends State<PerfilUsuari> {
       nameController.text = data?['name'] ?? '';
       mailController.text = data?['email'] ?? '';
       nickController.text = data?['username'] ?? '';
-      birthController.text = data?['birthYear']?.toString() ?? '';
+      birthController.text = data?['date']?.toString() ?? '';
       passController.text = data?['password'] ?? '';
       _selectedImage = data?['profileImage'] ?? 'assets/perfil1.jpg';
     });
@@ -144,29 +147,29 @@ class _PerfilUsuari extends State<PerfilUsuari> {
   Future<void> _guardarDades() async {
     if (_formKey.currentState!.validate()) {
       // Aquí pots fer la crida a una funció per actualitzar l’usuari:
-      final updatedUser = {
-        'name': nameController.text,
-        'email': mailController.text,
-        'username': nickController.text,
-        'birthYear': int.tryParse(birthController.text),
-        'password': passController.text,
-        'profileImage': _selectedImage,
-      };
-
-      await modifyUserInfo(nameController.text, mailController.text,
+      final validation = await modifyUserInfo(nameController.text, mailController.text,
         nickController.text, birthController.text, passController.text, _selectedImage
       );
 
-      print("Dades actualitzades: $updatedUser");
+      if (validation) {
+        userRoleProvider.setUserEmail(mailController.text);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Canvis guardats correctament.')),
-      );
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Canvis guardats correctament.')),
+        );
+        Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const CartelleraScreen()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Error al modificar tus datos.')),
+        );
+      }
     }
   }
 
   Widget _buildTextFormField(String label, TextEditingController controller, {bool isPassword = false}) {
-    final bool isEmailField = label == "Email";
+    final bool isDateField = label == "Año de nacimiento";
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,7 +179,7 @@ class _PerfilUsuari extends State<PerfilUsuari> {
         TextFormField(
           controller: controller,
           obscureText: isPassword ? _obscurePassword : false,
-          enabled: !isEmailField,
+          enabled: !isDateField,
           keyboardType: label == "Email"
               ? TextInputType.emailAddress
               : TextInputType.text,

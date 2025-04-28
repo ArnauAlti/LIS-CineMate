@@ -76,9 +76,10 @@ Future<bool> validateLogin(String mail, String pass) async {
 Future<Map<String, dynamic>?> getUser(String userMail) async {
   // Exemple de dades que podria retornar (pots substituir-ho amb dades de la BD/API)
   return {
-    'username': 'johndoe',
-    'email': 'johndoe@example.com',
-    'edat': 30,
+    'name': 'John',
+    'username': 'Torrente',
+    'email': 'j@gmail.com',
+    'date': '2000/01/01',
   };
 }
 
@@ -91,7 +92,6 @@ Future<bool> modifyUserInfo(String name, String mail, String nick, String birth,
     'name': name,
     'mail': mail,
     'nick': nick,
-    'birth': birth,
     'pass': pass,
     'pathImage': pathImage,
   };
