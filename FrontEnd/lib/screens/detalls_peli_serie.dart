@@ -13,6 +13,7 @@ class DetallsPeliSerieScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
     final userRoleProvider = Provider.of<UserRoleProvider>(context);
     final userRole = userRoleProvider.userRole;
 
@@ -152,7 +153,7 @@ class DetallsPeliSerieScreen extends StatelessWidget {
               Center(
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    addToLibrary(title, 1);
+                    addToLibrary(title, userEmail!);
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Película añadida a la biblioteca.')),
                     );

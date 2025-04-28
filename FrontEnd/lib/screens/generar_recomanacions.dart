@@ -1,6 +1,8 @@
 import 'package:cine_mate/screens/detalls_peli_serie.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../requests.dart';
+import '../user_role_provider.dart';
 
 class RecomanacionsGeneradesScreen extends StatefulWidget {
   final List<String>? selectedGenres;
@@ -16,9 +18,9 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
 
   @override
   void initState() {
+    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
     super.initState();
-    //TODO: Canviar id de l'usuari i passar els gèneres seleccionats
-    _filmsFuture = getRecomendationFilms(1);
+    _filmsFuture = getRecomendationFilms(userEmail!);
   }
 
   @override

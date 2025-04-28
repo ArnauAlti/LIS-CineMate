@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../requests.dart';
+import '../user_role_provider.dart';
 
 class PerfilUsuari extends StatefulWidget {
   const PerfilUsuari({super.key});
@@ -9,7 +11,6 @@ class PerfilUsuari extends StatefulWidget {
 }
 
 class _PerfilUsuari extends State<PerfilUsuari> {
-  String userId = "123"; // ID simulat
   Map<String, dynamic>? user;
 
   final _formKey = GlobalKey<FormState>();
@@ -31,7 +32,9 @@ class _PerfilUsuari extends State<PerfilUsuari> {
   }
 
   Future<void> _loadUserData() async {
-    final data = await getUser(userId);
+    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
+    final data = await getUser(userEmail!);
+
     setState(() {
       user = data;
       nameController.text = data?['name'] ?? '';
@@ -150,9 +153,8 @@ class _PerfilUsuari extends State<PerfilUsuari> {
         'profileImage': _selectedImage,
       };
 
-      //TODO: Modificar request
       await modifyUserInfo(nameController.text, mailController.text,
-        nickController.text, int.parse(birthController.text), passController.text,
+        nickController.text, birthController.text, passController.text, _selectedImage
       );
 
       print("Dades actualitzades: $updatedUser");
@@ -164,6 +166,8 @@ class _PerfilUsuari extends State<PerfilUsuari> {
   }
 
   Widget _buildTextFormField(String label, TextEditingController controller, {bool isPassword = false}) {
+    final bool isEmailField = label == "Email";
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -172,10 +176,9 @@ class _PerfilUsuari extends State<PerfilUsuari> {
         TextFormField(
           controller: controller,
           obscureText: isPassword ? _obscurePassword : false,
+          enabled: !isEmailField,
           keyboardType: label == "Email"
               ? TextInputType.emailAddress
-              : label == "Año de nacimiento"
-              ? TextInputType.number
               : TextInputType.text,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -183,9 +186,6 @@ class _PerfilUsuari extends State<PerfilUsuari> {
             }
             if (label == "Email" && !value.contains('@')) {
               return 'Email inválido';
-            }
-            if (label == "Año de nacimiento" && int.tryParse(value) == null) {
-              return 'Debe ser un número';
             }
             return null;
           },

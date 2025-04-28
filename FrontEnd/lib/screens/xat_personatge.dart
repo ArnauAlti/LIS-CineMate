@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../requests.dart';
+import '../user_role_provider.dart';
 
 //TODO: En el futur, actualitzar xat en viu
 class XatPersonatge extends StatefulWidget {
@@ -14,11 +16,12 @@ class XatPersonatge extends StatefulWidget {
 
 class _XatPersonatgeState extends State<XatPersonatge> {
   final TextEditingController _controller = TextEditingController();
-  bool _isTyping = false; // Para mostrar el marcador de escritura
   final List<Map<String, String>> _missatges = [];
 
   @override
   Widget build(BuildContext context) {
+    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
+
     return Scaffold(
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
@@ -34,7 +37,7 @@ class _XatPersonatgeState extends State<XatPersonatge> {
         ),
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: getMessagesByChat(widget.userId), // Carga los mensajes para el usuario
+        future: getMessagesByChat(userEmail!),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());

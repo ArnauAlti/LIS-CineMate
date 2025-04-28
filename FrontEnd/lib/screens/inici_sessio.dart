@@ -86,6 +86,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
               if (validation) {
                 userRoleProvider.setUserRole(_selectedRole);
+                userRoleProvider.setUserEmail(mailController.text);
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Has iniciado sesión correctamente.')),
                 );

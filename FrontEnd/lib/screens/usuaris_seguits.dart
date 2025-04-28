@@ -18,9 +18,9 @@ class _UsuarisSeguits extends State<UsuarisSeguits> {
 
   @override
   void initState() {
+    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
     super.initState();
-    //TODO: Canviar id que es passa a la request
-    _usersFuture = getUsersByUserId(1);
+    _usersFuture = getUsersByUserMail(userEmail!);
   }
 
   @override

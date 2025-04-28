@@ -1,7 +1,9 @@
 import 'package:cine_mate/screens/detalls_peli_follower.dart';
 import 'package:cine_mate/screens/usuaris_seguits.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../requests.dart';
+import '../user_role_provider.dart';
 
 class BibliotecaSeguitsScreen extends StatefulWidget {
   final String userName;
@@ -19,12 +21,14 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
 
   @override
   void initState() {
+    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
     super.initState();
-    _filmsFuture = getLibraryFilms(1, true);
+    _filmsFuture = getLibraryFilms(userEmail!, true);
   }
 
   @override
   Widget build(BuildContext context) {
+    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
 
     return Scaffold(
       backgroundColor: Colors.blue[50],
@@ -55,20 +59,18 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  //TODO: Canviar id usuari
                   children: [
                     _buildSectionButton("Películas", isPeliculasSelected, () {
                       setState(() {
                         isPeliculasSelected = true;
-                        _filmsFuture = getLibraryFilms(1, true);
+                        _filmsFuture = getLibraryFilms(userEmail!, true);
                       });
                     }),
                     const SizedBox(width: 20),
                     _buildSectionButton("Series", !isPeliculasSelected, () {
                       setState(() {
                         isPeliculasSelected = false;
-                        //TODO: Canviar id usuari
-                        _filmsFuture = getLibraryFilms(1, false);
+                        _filmsFuture = getLibraryFilms(userEmail!, false);
                       });
                     }),
                   ],

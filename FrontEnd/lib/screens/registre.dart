@@ -47,10 +47,10 @@ class _RegistreScreenState extends State<RegistreScreen> {
               key: _formKey,
               child: Column(
                 children: [
-                  _buildTextFormField("Nombre", nameController),
-                  _buildTextFormField("Email", mailController),
-                  _buildTextFormField("Nombre de usuario", nickController),
-                  _buildTextFormField("Fecha de nacimiento", birthController),
+                  _buildTextFormField("Nombre", nameController, hintText: "Introduce tu nombre"),
+                  _buildTextFormField("Email", mailController, hintText: "Introduce tu mail"),
+                  _buildTextFormField("Nombre de usuario", nickController, hintText: "Introduce tu nombre de usuario"),
+                  _buildTextFormField("Fecha de nacimiento", birthController, hintText: "YYYY/MM/DD"),
                   _buildTextFormField("Contraseña", passController, isPassword: true),
                   //TODO: Quitar los roles a escoger
                   Row(
@@ -93,6 +93,8 @@ class _RegistreScreenState extends State<RegistreScreen> {
 
               if (validation) {
                 userRoleProvider.setUserRole(_selectedRole);
+                userRoleProvider.setUserEmail(mailController.text);
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Te has registrado correctamente.')),
                 );
@@ -122,7 +124,7 @@ class _RegistreScreenState extends State<RegistreScreen> {
   //Es crea una validació primària per evitar camps null o introducció de variables de diferent tipus o
   //que no segueixen el format necessari
 
-  Widget _buildTextFormField(String label, TextEditingController controller, {bool isPassword = false}) {
+  Widget _buildTextFormField(String label, TextEditingController controller, {bool isPassword = false, String? hintText}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -144,6 +146,7 @@ class _RegistreScreenState extends State<RegistreScreen> {
             return null;
           },
           decoration: InputDecoration(
+            hintText: hintText,
             filled: true,
             fillColor: Colors.grey[100],
             border: OutlineInputBorder(

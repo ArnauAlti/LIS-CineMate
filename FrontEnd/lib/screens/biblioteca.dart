@@ -17,16 +17,19 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
   bool isPeliculasSelected = true;
   late Future<List<Map<String, dynamic>>> _filmsFuture;
 
+
   @override
   void initState() {
+    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
     super.initState();
-    _filmsFuture = getLibraryFilms(1, true);
+    _filmsFuture = getLibraryFilms(userEmail!, true);
   }
 
   @override
   Widget build(BuildContext context) {
     final userRoleProvider = Provider.of<UserRoleProvider>(context);
     final userRole = userRoleProvider.userRole;
+    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
 
     return Scaffold(
       backgroundColor: Colors.blue[50],
@@ -78,14 +81,14 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
                     _buildSectionButton("Películas", isPeliculasSelected, () {
                       setState(() {
                         isPeliculasSelected = true;
-                        _filmsFuture = getLibraryFilms(1, true); // Puedes alternar a getSeries()
+                        _filmsFuture = getLibraryFilms(userEmail!, true); // Puedes alternar a getSeries()
                       });
                     }),
                     const SizedBox(width: 20),
                     _buildSectionButton("Series", !isPeliculasSelected, () {
                       setState(() {
                         isPeliculasSelected = false;
-                        _filmsFuture = getLibraryFilms(1, false); // Cambia aquí si tienes `getSeries()`
+                        _filmsFuture = getLibraryFilms(userEmail!, false); // Cambia aquí si tienes `getSeries()`
                       });
                     }),
                   ],

@@ -20,8 +20,9 @@ class _XatsActiusScreen extends State<XatsActiusScreen> {
   @override
   void initState() {
     super.initState();
+    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
     //TODO: Modificar userID
-    _chatsFuture = getChatsByUserId(1);
+    _chatsFuture = getChatsByUserMail(userEmail!);
   }
 
   @override

@@ -2,10 +2,10 @@ const userDB = require("./db.js");
 
 async function modifyUser(req, res) {
     try {
-        let userMail = req.body['user_mail'];
-        let userNick = req.body['user_nick'];
-        let userName = req.body['user_name'];
-        let userPass = req.body['user_pass'];
+        let userMail = req.body['mail'];
+        let userNick = req.body['nick'];
+        let userName = req.body['name'];
+        let userPass = req.body['pass'];
         if (!userMail && !userNick) {
             throw "No User Provided";
         }

@@ -1,5 +1,8 @@
 import 'package:cine_mate/requests.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../user_role_provider.dart';
 
 class DetallsBibliotecaScreen extends StatefulWidget {
   final Map<String, dynamic> film;
@@ -25,12 +28,12 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
     capitolController.text = film['episodi']?.toString() ?? '';
     comentariController.text = film['comment'] ?? '';
     minutController.text = widget.film['timeLastSeen']?.toString() ?? '';
-
   }
 
   @override
   Widget build(BuildContext context) {
     final film = widget.film;
+    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
 
     return Scaffold(
       backgroundColor: Colors.blue[50],
@@ -170,9 +173,8 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
                 final int capitol = int.tryParse(capitolController.text) ?? 0;
                 final int minut = int.tryParse(minutController.text) ?? 0;
                 final double rating = selectedRating;
-                const int userId = 1;
 
-                modifyFromLibrary(title, comment, capitol, minut, rating, userId);
+                modifyFromLibrary(title, comment, capitol, minut, rating, userEmail!);
 
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Se han guardado los cambios.')),
@@ -195,9 +197,7 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
           onPressed: () {
-            const int userId = 1;
-
-            deleteFromLibrary(film["title"], userId);
+            deleteFromLibrary(film["title"], userEmail!);
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Se ha eliminado de la biblioteca.')),
             );
