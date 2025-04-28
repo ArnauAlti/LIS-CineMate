@@ -75,7 +75,7 @@ Future<bool> validateLogin(String mail, String pass) async {
 //Funció per a modificar les dades a backend de l'usuari concret
 Future<bool> modifyUserInfo(String name, String mail, String nick, int birth, String pass) async {
 
-  final Uri uri = Uri.parse("$baseUrl/user/create");
+  final Uri uri = Uri.parse("$baseUrl/user/modify");
 
   final Map<String, dynamic> body = {
     'name': "'$name'",
