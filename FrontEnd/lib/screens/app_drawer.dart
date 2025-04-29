@@ -185,11 +185,8 @@ class AppDrawer extends StatelessWidget {
                     }
                   },
                   child: CircleAvatar(
-                    radius: 35, // Imagen más grande
-                    backgroundImage: NetworkImage(user?['profileImage'] ?? 'assets/perfil1.jpg'),
-                    child: user?['profileImage'] == null
-                        ? const Icon(Icons.person, size: 40, color: Colors.white)
-                        : null,
+                    radius: 35,
+                    backgroundImage: AssetImage(user?['profileImage'] ?? 'assets/perfil1.jpg'),
                   ),
                 ),
                 const SizedBox(height: 10),

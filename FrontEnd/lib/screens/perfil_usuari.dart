@@ -5,6 +5,7 @@ import '../user_role_provider.dart';
 import 'cartellera.dart';
 import 'package:intl/intl.dart';
 
+//TODO: Mirar por qué no cambia el nombre
 class PerfilUsuari extends StatefulWidget {
   const PerfilUsuari({super.key});
 
@@ -82,7 +83,6 @@ class _PerfilUsuari extends State<PerfilUsuari> {
               key: _formKey,
               child: Column(
                 children: [
-                  // Imagen de perfil seleccionada
                   CircleAvatar(
                     radius: 60,
                     backgroundImage: AssetImage(_selectedImage),
@@ -168,6 +168,8 @@ class _PerfilUsuari extends State<PerfilUsuari> {
           // Puedes conservar también otros campos antiguos si no se actualizan, como 'admin', 'created', etc.
           ...Provider.of<UserRoleProvider>(context, listen: false).getUser ?? {},
         };
+
+        print(updatedUser);
 
         final userRoleProvider = Provider.of<UserRoleProvider>(context, listen: false);
         userRoleProvider.setUser(updatedUser);
