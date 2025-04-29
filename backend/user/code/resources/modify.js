@@ -12,7 +12,7 @@ async function modifyUser(req, res) {
         }
         else {
             const quer = await userDB.query(
-                'UPDATE users SET name = $1, pass = $2 WHERE mail = $3 OR _nick = $4',
+                'UPDATE users SET name = $1, pass = $2 WHERE mail = $3 OR nick = $4',
                 [userName, userPass, userMail, userNick]
             );
             console.log(quer.rows[0]);

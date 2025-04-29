@@ -1,7 +1,5 @@
+import 'package:cine_mate/screens/inici_sessio.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../user_role_provider.dart';
-import 'cartellera.dart';
 import '../requests.dart';
 
 class RegistreScreen extends StatefulWidget {
@@ -13,7 +11,6 @@ class RegistreScreen extends StatefulWidget {
 
 class _RegistreScreenState extends State<RegistreScreen> {
   final _formKey = GlobalKey<FormState>();
-  String _selectedRole = "Usuario Registrado";
   late final TextEditingController nameController = TextEditingController();
   late final TextEditingController mailController = TextEditingController();
   late final TextEditingController nickController = TextEditingController();
@@ -24,8 +21,6 @@ class _RegistreScreenState extends State<RegistreScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userRoleProvider = Provider.of<UserRoleProvider>(context, listen: false);
-
     return Scaffold(
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
@@ -52,30 +47,6 @@ class _RegistreScreenState extends State<RegistreScreen> {
                   _buildTextFormField("Nombre de usuario", nickController, hintText: "Introduce tu nombre de usuario"),
                   _buildTextFormField("Fecha de nacimiento", birthController, hintText: "YYYY/MM/DD"),
                   _buildTextFormField("Contraseña", passController, isPassword: true),
-                  //TODO: Quitar los roles a escoger
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("Rol: "),
-                      DropdownButton<String>(
-                        value: _selectedRole,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            _selectedRole = newValue!;
-                          });
-                        },
-                        items: <String>[
-                          "Usuario Registrado",
-                          "Administrador",
-                        ].map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ),
@@ -92,14 +63,11 @@ class _RegistreScreenState extends State<RegistreScreen> {
               );
 
               if (validation) {
-                userRoleProvider.setUserRole(_selectedRole);
-                userRoleProvider.setUserEmail(mailController.text);
-
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Te has registrado correctamente.')),
                 );
                 Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => const CartelleraScreen()),
+                  context, MaterialPageRoute(builder: (context) => const LoginScreen()),
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(

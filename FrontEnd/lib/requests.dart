@@ -40,7 +40,7 @@ Future<bool> validateRegister(String name, String mail, String nick, String birt
 }
 
 //Funció per a enviar les dades a backend per a validar-les i procedir amb l'inici de sessió o mostrar errors
-Future<bool> validateLogin(String mail, String pass) async {
+Future<Map<String, dynamic>?> validateLogin(String mail, String pass) async {
   final Uri uri = Uri.parse("$baseUrl/user/login");
 
   final Map<String, dynamic> body = {
@@ -59,12 +59,14 @@ Future<bool> validateLogin(String mail, String pass) async {
     );
 
     if (response.statusCode == 200) {
-      print("✅ Registro exitoso.");
-      return true;
+      final Map<String, dynamic> jsonResponse = convert.jsonDecode(response.body);
+      final data = jsonResponse['data'];
+      print("✅ Usuario logueado: $data");
+      return data;
     } else {
       print("❌ Error en el registro. Código: ${response.statusCode}");
       print("Respuesta: ${response.body}");
-      return false;
+      return null;
     }
   } catch (e) {
     print("🚫 Excepción al registrar: $e");

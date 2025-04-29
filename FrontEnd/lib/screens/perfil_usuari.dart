@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../requests.dart';
 import '../user_role_provider.dart';
 import 'cartellera.dart';
+import 'package:intl/intl.dart';
 
 class PerfilUsuari extends StatefulWidget {
   const PerfilUsuari({super.key});
@@ -35,17 +36,22 @@ class _PerfilUsuari extends State<PerfilUsuari> {
   }
 
   Future<void> _loadUserData() async {
-    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
-    final data = await getUser(userEmail!);
+    final userProvider = Provider.of<UserRoleProvider>(context, listen: false);
+    final data = userProvider.getUser;
 
     setState(() {
       user = data;
       nameController.text = data?['name'] ?? '';
-      mailController.text = data?['email'] ?? '';
-      nickController.text = data?['username'] ?? '';
-      birthController.text = data?['date']?.toString() ?? '';
-      passController.text = data?['password'] ?? '';
+      mailController.text = data?['mail'] ?? '';
+      nickController.text = data?['nick'] ?? '';
+      passController.text = data?['pass'] ?? '';
       _selectedImage = data?['profileImage'] ?? 'assets/perfil1.jpg';
+
+      if (data?['birth'] != null) {
+        final date = DateTime.parse(data!['birth'].toString());
+        final formattedDate = DateFormat('yyyy-MM-dd').format(date);
+        birthController.text = formattedDate;
+      }
     });
   }
 
@@ -152,10 +158,23 @@ class _PerfilUsuari extends State<PerfilUsuari> {
       );
 
       if (validation) {
+        final updatedUser = {
+          'name': nameController.text,
+          'mail': mailController.text,
+          'nick': nickController.text,
+          'birth': birthController.text,
+          'pass': passController.text,
+          'profileImage': _selectedImage,
+          // Puedes conservar también otros campos antiguos si no se actualizan, como 'admin', 'created', etc.
+          ...Provider.of<UserRoleProvider>(context, listen: false).getUser ?? {},
+        };
+
+        final userRoleProvider = Provider.of<UserRoleProvider>(context, listen: false);
+        userRoleProvider.setUser(updatedUser);
         userRoleProvider.setUserEmail(mailController.text);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Canvis guardats correctament.')),
+          const SnackBar(content: Text('Canmbios guardados correctamente.')),
         );
         Navigator.push(
           context, MaterialPageRoute(builder: (context) => const CartelleraScreen()),
@@ -169,7 +188,7 @@ class _PerfilUsuari extends State<PerfilUsuari> {
   }
 
   Widget _buildTextFormField(String label, TextEditingController controller, {bool isPassword = false}) {
-    final bool isDateField = label == "Año de nacimiento";
+    final bool nonEditableField = label == "Año de nacimiento" || label == "Email" || label == "Nombre de usuario";
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,7 +198,7 @@ class _PerfilUsuari extends State<PerfilUsuari> {
         TextFormField(
           controller: controller,
           obscureText: isPassword ? _obscurePassword : false,
-          enabled: !isDateField,
+          enabled: !nonEditableField,
           keyboardType: label == "Email"
               ? TextInputType.emailAddress
               : TextInputType.text,
