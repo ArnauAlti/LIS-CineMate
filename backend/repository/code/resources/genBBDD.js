@@ -113,7 +113,6 @@ async function processMediaInfo(content, isMovie) {
             media_info_rating: seasonDetails.vote_average,
             media_info_director: director,
             media_info_cast: cast,
-            media_info_pegi: await getPegi(content.id, isMovie),
             media_info_release: seasonDetails.air_date
           };
         })

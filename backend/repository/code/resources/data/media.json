@@ -1,6 +1,7 @@
 {
+    "update": true,
     "shows_start": 1,
-    "shows_max_pages": 5,
+    "shows_max_pages": 2,
     "jumps": 5,
     "movies_start": 1,
     "movies_max_pages": 5

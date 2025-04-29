@@ -7,6 +7,7 @@ CREATE TABLE users (
     "pass" VARCHAR(1000) NOT NULL,
     "admin" BOOLEAN NOT NULL,
     "birth" DATE NOT NULL,
+    "png" VARCHAR(150),
     "created" DATE DEFAULT CURRENT_DATE NOT NULL
 );
 
@@ -38,7 +39,8 @@ CREATE TABLE media (
     "name" VARCHAR(255) NOT NULL,
     "genres" JSONB NOT NULL,
     "type" VARCHAR(10) NOT NULL,
-    "moviedb" VARCHAR(100) UNIQUE NOT NULL,
+    "movie_db" VARCHAR(100) UNIQUE NOT NULL,
+    "rating" FLOAT NOT NULL,
     "description" TEXT,
     "png" VARCHAR(255)
 );
@@ -63,37 +65,45 @@ EXECUTE FUNCTION media_id_function();
 
 CREATE TABLE info (
     "media_id" VARCHAR(100) NOT NULL,
-    "id" VARCHAR(100) PRIMARY KEY,
+    "movie_db" VARCHAR(100) NOT NULL,
+    "id" VARCHAR(150) PRIMARY KEY,
     "synopsis" TEXT NOT NULL,
+    "plot" TEXT,
     "season" INT,
-    "rating" FLOAT,
+    "episodes" INT NOT NULL,
     "director" VARCHAR(100),
     "cast" TEXT,
-    "pegi" INT,
     "release" DATE,
     FOREIGN KEY(media_id)
         REFERENCES media("id")
+        ON DELETE CASCADE,
+    FOREIGN KEY(movie_db)
+        REFERENCES media("movie_db")
         ON DELETE CASCADE
 );
 CREATE OR REPLACE FUNCTION info_function() RETURNS TRIGGER as $$
 DECLARE
-    patata VARCHAR(10);
-    patata2 VARCHAR(100);
+    var1 VARCHAR(100);
+    var2 VARCHAR(10);
 BEGIN
-    -- IF NEW.media_id IS NOT NULL THEN
-    --     SELECT m.id INTO patata2 FROM media m WHERE m.movieDB = NEW.
-    -- ELSE IF NEW.movieDB IS NOT NULL THEN
-    -- ELSE RAISE EXCEPTION 'No Identification for media'
-    SELECT m.id INTO patata FROM media WHERE m.id = NEW.media_id;
-    
-    SELECT m.type INTO patata FROM media m WHERE m.id = NEW.media_id;
-    RAISE NOTICE 'Value: %', patata;
-    IF (patata = 'Show') THEN
+    RAISE NOTICE 'Value: %', NEW.media_id;
+    RAISE NOTICE 'Value: %', NEW.movie_db;
+    IF NEW.media_id IS NOT NULL THEN
+        SELECT m.id INTO var1 FROM media m WHERE m.id = NEW.media_id; 
+        SELECT m.type INTO var2 FROM media m WHERE m.id = NEW.media_id;
+    ELSEIF NEW.movie_db IS NOT NULL THEN
+        SELECT m.id INTO var1 FROM media m WHERE m.movie_db = NEW.movie_db; 
+        SELECT m.type INTO var2 FROM media m WHERE m.movie_db = NEW.movie_db;
+        NEW.media_id := var1;
+    ELSE 
+        RAISE EXCEPTION 'No Identification for media';
+    END IF;
+    IF (var2 = 'show') THEN
         IF NEW.season IS NULL THEN
             RAISE EXCEPTION 'Season can not be null for a show';
         END IF;
         NEW.id := NEW.media_id ||'-' || NEW.season;
-    ELSEIF (patata = 'Movie') THEN
+    ELSEIF (var2 = 'movie') THEN
         IF NEW.season IS NOT NULL THEN
             RAISE EXCEPTION 'Season has to be null for a movie';
         END IF;
