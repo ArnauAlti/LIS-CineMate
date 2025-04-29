@@ -158,14 +158,14 @@ async function setMedia(req, res) {
       patata['shows_start'] = start;
       patata['shows_max_pages'] = amount + jumps;
       console.log("--------------------");
-      console.log(mediaData.length);
-      console.log(mediaInfoData.length);
+      // console.log(mediaData.length);
+      // console.log(mediaInfoData.length);
       const uniqueMediaData = [...await new Map(mediaData.map(m => [`${m.id}_${m.type}`, m])).values()];
       const uniqueMediaInfo = [...await new Map(mediaInfoData.map(m => [JSON.stringify(m), m])).values()];
       // console.log(uniqueMediaData);
       // console.log(uniqueMediaInfo);
-      console.log(uniqueMediaData.length);
-      console.log(uniqueMediaInfo.length);
+      // console.log(uniqueMediaData.length);
+      // console.log(uniqueMediaInfo.length);
       
       const queryMedia = 'INSERT INTO media("name", "genres", "type", "movie_db", "rating", "description", "png") ' +
          'VALUES ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT (movie_db) DO NOTHING';
@@ -192,6 +192,7 @@ async function setMedia(req, res) {
       //    console.log(element);
       // }
       for (const element of uniqueMediaInfo) {
+         console.log("----____----____----____----____----____----____----____----____---")
          console.log(element['movie_db']);
          console.log(element['synopsis']);
          console.log(element['plot']);
@@ -205,10 +206,10 @@ async function setMedia(req, res) {
             [element['movie_db'], element['synopsis'], element['plot'], element['season'], element['episodes'], element['director'], element['cast'], element['release']]
          );
          if (result.rowCount == 0) {
-            // console.log(element['name'], " / " + element['id'], " -> Failed");
+            console.log(element['movie_db'], " / " + element['season'], " -> Failed");
             failedInfo++;
          } else {
-            // console.log(element['name'], " / " + element['id'], " -> Success");
+            console.log(element['movie_db'], " / " + element['season'], " -> Success");
             addedInfo++;
          }
       }

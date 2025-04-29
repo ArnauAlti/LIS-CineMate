@@ -161,11 +161,6 @@ CREATE TABLE "library" (
         ON DELETE CASCADE
 );
 
-CREATE TABLE "locks" (
-    "name" VARCHAR(50) UNIQUE NOT NULL,
-    "status" BOOLEAN NOT NULL
-)
-
 CREATE VIEW mediaGenres AS SELECT id, name, genres FROM media;
 CREATE VIEW mediaQuery AS SELECT sec, id, name, png, type, rating FROM media;
 
