@@ -83,7 +83,7 @@ async function processMediaInfo(content, isMovie) {
          insert['episodes'] = season.episode_count;
          insert['director'] = director;
          insert['cast'] = cast;
-         insert['release'] = seasonDetails.first_air_date;
+         insert['release'] = season.air_date;
          seasonsData.push(insert);
       }
       // console.log("---------------------------");

@@ -43,21 +43,6 @@ app.use(async (req, res, next) => {
     }
 });
 
-app.get("/download", async (req, res) => {
-    download;
-    res.status(400).json({message: "Executing"});
-});
-
-app.get("/lock", async (req, res) => {
-    lock_key['lock'] = true;
-    res.status(200).json({message: "locked"});
-});
-
-app.get("/unlock", async (req, res) => {
-    lock_key['lock'] = false;
-    res.status(200).json({message: "unlocked"});
-});
-
 app.get("/status", async (req, res) => {
     res.status(200).json({"message": "Status is " + lock_key['lock'], "status": lock_key['lock']})
 })
@@ -66,9 +51,7 @@ app.get("/set-genres", setGenres);
 
 app.get("/set-media", setMedia);
 
-app.get("/get-media", getMedia)
-
-// app.get("/download", download);
+app.get("/get-media/*", getMedia)
 
 app.all("/*", (req, res) => {
     console.log(req.url);

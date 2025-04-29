@@ -119,7 +119,6 @@ BEFORE INSERT ON info
 FOR EACH ROW
 EXECUTE FUNCTION info_function();
 
-CREATE VIEW media_genres AS SELECT id, name, genres FROM media;
 
 CREATE TABLE "characters" (
     "id" SERIAL PRIMARY KEY,
@@ -167,4 +166,10 @@ CREATE TABLE "locks" (
     "status" BOOLEAN NOT NULL
 )
 
+CREATE VIEW mediaGenres AS SELECT id, name, genres FROM media;
+CREATE VIEW mediaQuery AS SELECT sec, id, name, png, type, rating FROM media;
+
+CREATE VIEW mediaINFO AS SELECT m.id media_id, v.id info_id, m.type, v.season, v.episodes, m.name, m.png, m.rating, m.description, v.synopsis, v.plot, v.director, v.cast, v.release 
+FROM media m, info v 
+WHERE m.id = v.media_id;
     
