@@ -431,6 +431,12 @@ Future<List<Map<String, dynamic>>> getChatsByUserMail(String userMail) async {
   ];
 }
 
+//TODO: Funció per eliminar un xat actiu
+//Funció que permet eliminar un xat associat a un usuari amb un personatge
+Future<bool> deleteChat(String name) async {
+  return true;
+}
+
 //Funció per aconseguir els missatges associats al xat amb el personatge
 Future<List<Map<String, dynamic>>> getMessagesByChat(String userMail) async {
   // TODO: Implementar crida real a la base de dades

@@ -3,6 +3,8 @@ import 'package:cine_mate/screens/recomanacions.dart';
 import 'package:cine_mate/screens/usuaris_seguits.dart';
 import 'package:cine_mate/screens/xats_actius.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../user_role_provider.dart';
 import 'biblioteca.dart';
 import 'cerca_personatges.dart';
 import 'cerca_questionaris.dart';
@@ -21,6 +23,8 @@ class AppDrawer extends StatelessWidget {
   //està no està registrat, està registrat o és un administrador
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserRoleProvider>(context, listen: false).getUser;
+
     List<Widget> menuOptions = [];
 
     if (userRole == "Usuario No Registrado") {
@@ -165,31 +169,39 @@ class AppDrawer extends StatelessWidget {
             decoration: const BoxDecoration(color: Colors.black),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 3),
-                  ),
-                  //Botó per anar al perfil de l'usuari en cas d'haver iniciat sessió
-                  child: IconButton(
-                    icon: const Icon(Icons.person, size: 50, color: Colors.white),
-                    onPressed: () {
-                      if (userRole == "Usuario Registrado" || userRole == "Administrador") {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const PerfilUsuari()),
-                        );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Debes estar registrado para acceder al perfil.')),
-                        );
-                      }
-                    },
+                GestureDetector(
+                  onTap: () {
+                    if (userRole == "Usuario Registrado" || userRole == "Administrador") {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const PerfilUsuari()),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Debes estar registrado para acceder al perfil.')),
+                      );
+                    }
+                  },
+                  child: CircleAvatar(
+                    radius: 35, // Imagen más grande
+                    backgroundImage: NetworkImage(user?['profileImage'] ?? 'assets/perfil1.jpg'),
+                    child: user?['profileImage'] == null
+                        ? const Icon(Icons.person, size: 40, color: Colors.white)
+                        : null,
                   ),
                 ),
                 const SizedBox(height: 10),
-                Text("PERFIL",  style: TextStyle(color: Colors.white, fontSize: 18))
+                Text(
+                  user?['nick'] ?? 'Usuario', // Mostrar nombre de usuario si está disponible
+                  style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  "Ver perfil",
+                  style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 14),
+                ),
               ],
             ),
           ),

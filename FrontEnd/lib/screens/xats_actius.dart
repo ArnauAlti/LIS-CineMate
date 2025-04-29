@@ -21,7 +21,6 @@ class _XatsActiusScreen extends State<XatsActiusScreen> {
   void initState() {
     super.initState();
     final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
-    //TODO: Modificar userID
     _chatsFuture = getChatsByUserMail(userEmail!);
   }
 
@@ -29,6 +28,7 @@ class _XatsActiusScreen extends State<XatsActiusScreen> {
   Widget build(BuildContext context) {
     final userRoleProvider = Provider.of<UserRoleProvider>(context);
     final userRole = userRoleProvider.userRole;
+    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
 
     return Scaffold(
       backgroundColor: Colors.blue[50],
@@ -75,9 +75,8 @@ class _XatsActiusScreen extends State<XatsActiusScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            //TODO: Modificar userId
                             builder: (context) =>
-                                XatPersonatge(nomPersonatge: chat['name'], userId: 1),
+                                XatPersonatge(nomPersonatge: chat['name'], userMail: userEmail),
                           ),
                         );
                       },

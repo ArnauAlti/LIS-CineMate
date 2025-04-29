@@ -6,9 +6,9 @@ import '../user_role_provider.dart';
 //TODO: En el futur, actualitzar xat en viu
 class XatPersonatge extends StatefulWidget {
   final String nomPersonatge;
-  final int userId;
+  final String? userMail;
 
-  const XatPersonatge({super.key, required this.nomPersonatge, required this.userId});
+  const XatPersonatge({super.key, required this.nomPersonatge, required this.userMail});
 
   @override
   State<XatPersonatge> createState() => _XatPersonatgeState();
