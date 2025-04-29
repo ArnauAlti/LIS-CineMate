@@ -25,7 +25,6 @@ if (!fs.existsSync(DATA_DIR)) {
 // Función para obtener datos de TMDB con reintentos
 async function fetchTmdbData(endpoint, params = {}) {
   try {
-    console.log(endpoint);
     const response = await tmdb.get(endpoint, { params });
     return response.data;
   } catch (error) {
@@ -70,7 +69,7 @@ async function processMediaItem(content, isMovie) {
     media_id: content.id,
     media_name: isMovie ? content.title : content.name,
     media_genres: details.genres.map(g => g.id).join(','),
-    media_type: isMovie ? 'movie' : 'show',
+    media_type: isMovie ? 'movie' : 'series',
     media_description: (content.overview || '').replace(/\n/g, ' ').replace(/"/g, "'"),
     media_png: content.poster_path ? `https://image.tmdb.org/t/p/w500${content.poster_path}` : null
   };
@@ -113,6 +112,7 @@ async function processMediaInfo(content, isMovie) {
             media_info_rating: seasonDetails.vote_average,
             media_info_director: director,
             media_info_cast: cast,
+            media_info_pegi: await getPegi(content.id, isMovie),
             media_info_release: seasonDetails.air_date
           };
         })

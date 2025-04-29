@@ -1,5 +1,5 @@
 {
-  "name": "model",
+  "name": "repository",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^1.8.3",
     "express": "^4.21.2",
-    "pg": "^8.14.1"
+    "pg": "^8.14.1",
+    "cors": "^2.8.5"
   }
 }

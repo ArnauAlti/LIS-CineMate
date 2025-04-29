@@ -34,6 +34,11 @@ async function signInUser(req, res) {
         if (!userBirth) {
             throw "No birth date provided";
         }
+
+        let userPng = req.body['png'];
+        if (!userPng) {
+            throw "No image provided";
+        }
         
         var dt = new Date();
         let userCreated = dt.getFullYear() + "/" + (dt.getMonth() + 1) + "/" + dt.getDate();
@@ -41,8 +46,8 @@ async function signInUser(req, res) {
         console.log(userCreated);
 
         const quer = await userDB.query(
-            'INSERT INTO users("mail", "nick", "name", "pass", "admin", "birth") VALUES ($1, $2, $3, $4, $5, $6)',
-            [userMail, userNick, userName, userPass, userAdmin, userBirth]
+            'INSERT INTO users("mail", "nick", "name", "pass", "admin", "birth", "png") VALUES ($1, $2, $3, $4, $5, $6, $7)',
+            [userMail, userNick, userName, userPass, userAdmin, userBirth, userPng]
         );
         console.log(quer.rows);
         res.status(200).json({message: "User Created Succesfully", data: quer.rows});
