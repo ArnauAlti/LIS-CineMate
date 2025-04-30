@@ -7,6 +7,9 @@ async function modifyUser(req, res) {
         let userName = req.body['name'];
         let userPass = req.body['pass'];
         let userPng = req.body['png'];
+        if (!userPng) {
+            userPng = '';
+        }
         if (!userMail && !userNick) {
             throw "No User Provided";
         }
