@@ -37,7 +37,8 @@ async function signInUser(req, res) {
 
         let userPng = req.body['png'];
         if (!userPng) {
-            throw "No image provided";
+            console.log("No image Provided");
+            userPng = "";
         }
         
         var dt = new Date();
