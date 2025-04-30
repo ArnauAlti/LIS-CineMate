@@ -40,7 +40,7 @@ async function signInUser(req, res) {
             console.log("No image Provided");
             userPng = "";
         }
-        
+
         var dt = new Date();
         let userCreated = dt.getFullYear() + "/" + (dt.getMonth() + 1) + "/" + dt.getDate();
 

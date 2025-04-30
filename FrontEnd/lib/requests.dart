@@ -111,9 +111,8 @@ Future<bool> modifyUserInfo(String name, String mail, String nick, String birth,
   }
 }
 
-//TODO: Funció per agafar detalls de pel·lícules i sèries
 //Funció per agafar les últimes obres afegides a la cartellera de l'apliació (les primeres 12 que surtin)
-Future<List<Map<String, dynamic>>> getFilmDetails(String mediaId) async {
+Future<List> getFilmDetails(String mediaId) async {
   final Uri uri = Uri.parse("$baseUrl/repository/get-media/details?id=$mediaId");
 
   try {
@@ -128,7 +127,7 @@ Future<List<Map<String, dynamic>>> getFilmDetails(String mediaId) async {
     if (response.statusCode == 200) {
       print("✅ Request exitosa.");
       final decodedBody = convert.jsonDecode(response.body);
-      return List<Map<String, dynamic>>.from(decodedBody['data']);
+      return List.from(decodedBody['data']);
 
     } else {
       print("❌ Error en la request. Código: ${response.statusCode}");
@@ -143,8 +142,6 @@ Future<List<Map<String, dynamic>>> getFilmDetails(String mediaId) async {
 
 //Funció per agafar les últimes obres afegides a la cartellera de l'apliació (les primeres 12 que surtin)
 Future<List<Map<String, dynamic>>> getLatestFilms() async {
-  //TODO: Modificar per agafar películes i sèries de la biblioteca de l'usuari de la BD
-
   final Uri uri = Uri.parse("$baseUrl/repository/get-media/all?p=2");
 
   try {
@@ -187,17 +184,14 @@ Future<List<Map<String, dynamic>>> getFilmsBySearch(String search, String genre,
     'duration': duration,
   };
 
-  final Map<String, String> requestHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-    'auth_item': 'auth_default',
-    'auth_key': '123'
-  };
   try {
     final response = await http.post(
       uri,
       body: convert.jsonEncode(body),
-      headers: requestHeaders,
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
     );
     if (response.statusCode == 200) {
       print("✅ Request exitosa.");

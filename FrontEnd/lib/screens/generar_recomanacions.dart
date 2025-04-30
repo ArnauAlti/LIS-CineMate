@@ -128,7 +128,7 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => DetallsPeliSerieScreen(film: film)),
+          MaterialPageRoute(builder: (context) => DetallsPeliSerieScreen(mediaId: film['id'])),
         );
       },
       child: Container(

@@ -130,8 +130,7 @@ class _CartelleraScreenState extends State<CartelleraScreen> {
       onTap: () {
         Navigator.push(
           context,
-          //TODO: Cambiar y poner id
-          MaterialPageRoute(builder: (context) => DetallsPeliSerieScreen(film: film)),
+          MaterialPageRoute(builder: (context) => DetallsPeliSerieScreen(mediaId: film['id'])),
         );
       },
       child: Container(

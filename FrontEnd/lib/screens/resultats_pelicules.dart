@@ -119,7 +119,7 @@ class _ResultatsPeliculesState extends State<ResultatsPelicules> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => DetallsPeliSerieScreen(film: film)),
+              builder: (context) => DetallsPeliSerieScreen(mediaId: film['id'],)),
         );
       },
       child: Container(
