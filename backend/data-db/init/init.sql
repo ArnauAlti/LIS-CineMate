@@ -1,6 +1,6 @@
 \c cinemate;
 CREATE TABLE users (
-    "id" VARCHAR(100) PRIMARY KEY,
+    "id" INTEGER PRIMARY KEY,
     "mail" VARCHAR(100) UNIQUE NOT NULL,
     "nick" VARCHAR(50) UNIQUE NOT NULL,
     "name" VARCHAR(50) NOT NULL,
