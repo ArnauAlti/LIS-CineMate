@@ -44,6 +44,7 @@ CREATE TABLE media (
     "description" TEXT,
     "png" VARCHAR(255)
 );
+
 CREATE OR REPLACE FUNCTION media_id_function() RETURNS TRIGGER AS $$
 DECLARE
     next_id INTEGER;
