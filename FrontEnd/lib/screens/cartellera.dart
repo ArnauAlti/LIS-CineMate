@@ -130,6 +130,7 @@ class _CartelleraScreenState extends State<CartelleraScreen> {
       onTap: () {
         Navigator.push(
           context,
+          //TODO: Cambiar y poner id
           MaterialPageRoute(builder: (context) => DetallsPeliSerieScreen(film: film)),
         );
       },
@@ -138,9 +139,9 @@ class _CartelleraScreenState extends State<CartelleraScreen> {
         height: 200,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 2),
-          image: film['imagePath'] != null
+          image: film['png'] != null
               ? DecorationImage(
-            image: NetworkImage(film['imagePath']),
+            image: NetworkImage(film['png']),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
               Colors.black.withOpacity(0.3),
@@ -154,7 +155,7 @@ class _CartelleraScreenState extends State<CartelleraScreen> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              film['title'] ?? '',
+              film['name'] ?? '',
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),

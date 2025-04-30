@@ -74,17 +74,6 @@ Future<Map<String, dynamic>?> validateLogin(String mail, String pass) async {
   }
 }
 
-//TODO: Modificar funció
-Future<Map<String, dynamic>?> getUser(String userMail) async {
-  // Exemple de dades que podria retornar (pots substituir-ho amb dades de la BD/API)
-  return {
-    'name': 'John',
-    'username': 'Torrente',
-    'email': 'j@gmail.com',
-    'date': '2000/01/01',
-  };
-}
-
 //Funció per a modificar les dades a backend de l'usuari concret
 Future<bool> modifyUserInfo(String name, String mail, String nick, String birth, String pass, String pathImage) async {
 
@@ -122,42 +111,65 @@ Future<bool> modifyUserInfo(String name, String mail, String nick, String birth,
   }
 }
 
+//TODO: Funció per agafar detalls de pel·lícules i sèries
+//Funció per agafar les últimes obres afegides a la cartellera de l'apliació (les primeres 12 que surtin)
+Future<List<Map<String, dynamic>>> getFilmDetails(String mediaId) async {
+  final Uri uri = Uri.parse("$baseUrl/repository/get-media/details?id=$mediaId");
+
+  try {
+    final response = await http.get(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print("✅ Request exitosa.");
+      final decodedBody = convert.jsonDecode(response.body);
+      return List<Map<String, dynamic>>.from(decodedBody['data']);
+
+    } else {
+      print("❌ Error en la request. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return [];
+    }
+  } catch (e) {
+    print("🚫 Excepción al realizar la request: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
+}
+
 //Funció per agafar les últimes obres afegides a la cartellera de l'apliació (les primeres 12 que surtin)
 Future<List<Map<String, dynamic>>> getLatestFilms() async {
   //TODO: Modificar per agafar películes i sèries de la biblioteca de l'usuari de la BD
-  return [
-    {
-      'title': 'Captain America: Brave New World',
-      'imagePath': 'https://th.bing.com/th/id/OIP.TDVZL0VokIrAyO-t9RFLJQAAAA?rs=1&pid=ImgDetMain',
-      'releaseDate': 2025,
-      'duration': 119,
-      'platforms': 'Disney+',
-      'cast': ['Anthony Mackie', 'Harrison Ford'],
-      'rating': 3.5,
-      'description': 'Tras reunirse con el recién elegido presidente de EE.UU. Thaddeus Ross (Harrison Ford), '
-          'Sam se encuentra en medio de un incidente internacional...',
-    },
-    {
-      'title': 'Deadpool & Wolverine',
-      'imagePath': 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/7229d393-c3b8-4703-a41e-e876546d2612/dgukxa3-35713cc0-ca62-46d1-be6e-bf653f78c58e.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzcyMjlkMzkzLWMzYjgtNDcwMy1hNDFlLWU4NzY1NDZkMjYxMlwvZGd1a3hhMy0zNTcxM2NjMC1jYTYyLTQ2ZDEtYmU2ZS1iZjY1M2Y3OGM1OGUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.6unGo3zIe5tU3wjb7_JU0IX-rMOmpFVZFJrPe7onm44',
-      'releaseDate': 2024,
-      'duration': 130,
-      'platforms': 'Disney+',
-      'cast': ['Ryan Reynolds', 'Hugh Jackman'],
-      'rating': 4.7,
-      'description': 'Wade Wilson se une a Wolverine en una aventura multiversal que redefine la locura.',
-    },
-    {
-      'title': 'Dune: Parte Dos',
-      'imagePath': 'https://th.bing.com/th/id/OIP.iyQy2GNDScQrF5UEiFFoTwHaKz?rs=1&pid=ImgDetMain',
-      'releaseDate': 2024,
-      'duration': 165,
-      'platforms': 'Netflix',
-      'cast': ['Timothée Chalamet', 'Zendaya'],
-      'rating': 4.8,
-      'description': 'Paul Atreides une fuerzas con los Fremen para vengar a su familia y salvar el universo conocido.',
-    },
-  ];
+
+  final Uri uri = Uri.parse("$baseUrl/repository/get-media/all?p=2");
+
+  try {
+    final response = await http.get(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print("✅ Request exitosa.");
+      final decodedBody = convert.jsonDecode(response.body);
+      return List<Map<String, dynamic>>.from(decodedBody['data']);
+
+    } else {
+      print("❌ Error en la request. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return [];
+    }
+  } catch (e) {
+    print("🚫 Excepción al realizar la request: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
 }
 
 //TODO: Funció per retornar obres segons una cerca
@@ -165,18 +177,42 @@ Future<List<Map<String, dynamic>>> getLatestFilms() async {
 //una duració indicada per l'usuari amb els filtres de cerca
 Future<List<Map<String, dynamic>>> getFilmsBySearch(String search, String genre, String director,
     String actor, int duration) async {
-  return [
-    {
-      'title': 'Captain America: Brave New World',
-      'imagePath': 'https://th.bing.com/th/id/OIP.TDVZL0VokIrAyO-t9RFLJQAAAA?rs=1&pid=ImgDetMain',
-      'releaseDate': 2025,
-      'duration': 119,
-      'platforms': 'Disney+',
-      'cast': ['Anthony Mackie', 'Harrison Ford'],
-      'rating': 3.5,
-      'description': 'Tras reunirse con el recién elegido presidente de EE.UU. Thaddeus Ross (Harrison Ford), '
-          'Sam se encuentra en medio de un incidente internacional...',
-    },];
+  final Uri uri = Uri.parse("$baseUrl/user/create");
+
+  final Map<String, dynamic> body = {
+    'search': search,
+    'genere': genre,
+    'director': director,
+    'actor': actor,
+    'duration': duration,
+  };
+
+  final Map<String, String> requestHeaders = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'auth_item': 'auth_default',
+    'auth_key': '123'
+  };
+  try {
+    final response = await http.post(
+      uri,
+      body: convert.jsonEncode(body),
+      headers: requestHeaders,
+    );
+    if (response.statusCode == 200) {
+      print("✅ Request exitosa.");
+      final decodedBody = convert.jsonDecode(response.body);
+      return List<Map<String, dynamic>>.from(decodedBody);
+
+    } else {
+      print("❌ Error en la request. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return [];
+    }
+  } catch (e) {
+    print("🚫 Excepción al realizar la request: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
 }
 
 //TODO: Afegir a la biblioteca de l'usuari la película a la BD

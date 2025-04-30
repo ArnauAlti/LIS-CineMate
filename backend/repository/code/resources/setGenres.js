@@ -44,7 +44,7 @@ async function setGenres(req, res) {
       console.log(uniqueGenres);
       const client = await userDB.connect();
       try {
-         const quer = 'INSERT INTO genres (imdb, name) VALUES ($1, $2) ON CONFLICT (moviedb) DO NOTHING';
+         const quer = 'INSERT INTO genres (moviedb, name) VALUES ($1, $2) ON CONFLICT (moviedb) DO NOTHING';
          let failed = 0;
          for (const element of uniqueGenres) {
             const value1 = element.id;

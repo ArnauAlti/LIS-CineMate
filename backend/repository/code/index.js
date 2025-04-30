@@ -51,7 +51,7 @@ app.get("/set-genres", setGenres);
 
 app.get("/set-media", setMedia);
 
-app.get("/get-media/*", getMedia)
+app.get("/get-media/*", getMedia);
 
 app.all("/*", (req, res) => {
     console.log(req.url);
