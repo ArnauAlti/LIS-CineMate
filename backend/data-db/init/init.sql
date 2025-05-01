@@ -147,7 +147,7 @@ CREATE TABLE "library" (
     "id" SERIAL PRIMARY KEY,
     "user_mail" VARCHAR(100) NOT NULL,
     "media_id" VARCHAR(100) NOT NULL,
-    "info_id" VARCHAR(100) NOT NULL,
+    "info_id" VARCHAR(100) UNIQUE NOT NULL,
     "status" VARCHAR(50),
     "rating" FLOAT,
     "comment" VARCHAR(100),
@@ -156,7 +156,7 @@ CREATE TABLE "library" (
         ON DELETE CASCADE,
     FOREIGN KEY(media_id)
         REFERENCES media(id)
-        ON DELETE CASCADE
+        ON DELETE CASCADE,
     FOREIGN KEY(info_id)
         REFERENCES info(id)
         ON DELETE CASCADE
