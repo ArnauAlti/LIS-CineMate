@@ -9,6 +9,9 @@ const setGenres = require("./resources/setGenres");
 const setMedia = require("./resources/setMedia");
 const getMedia = require('./resources/getMedia');
 const download = require('./resources/genBBDD');
+const createMedia = require('./resources/create-media');
+const deleteMedia = require('./resources/delete-media');
+const modifyMedia = require('./resources/modify-media');
 
 const app = express();
 const port = 3000;
@@ -52,6 +55,12 @@ app.get("/set-genres", setGenres);
 app.get("/set-media", setMedia);
 
 app.get("/get-media/*", getMedia);
+
+app.post("/delete-media", deleteMedia);
+
+app.post("/create-media", createMedia);
+
+app.post("/modify-media", modifyMedia);
 
 app.all("/*", (req, res) => {
     console.log(req.url);

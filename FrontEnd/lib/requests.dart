@@ -174,6 +174,7 @@ Future<List<Map<String, dynamic>>> getLatestFilms() async {
 //una duració indicada per l'usuari amb els filtres de cerca
 Future<List<Map<String, dynamic>>> getFilmsBySearch(String search, String genre, String director,
     String actor, int duration) async {
+
   final Uri uri = Uri.parse("$baseUrl/user/create");
 
   final Map<String, dynamic> body = {
@@ -398,18 +399,124 @@ Future<List<Map<String, dynamic>>> getRecomendationFilms(String userMail) async 
   ];
 }
 
-//TODO: Funció per modificar informació peli/serie de cartellera
-//Funció que permet passar informació modificada o nova d'una pel·lícula o sèrie
+//TODO: Funció per afegir informació peli/serie de cartellera
+//Funció que permet passar informació per insertar una pel·lícula o sèrie
 //per introduir-la a la base de dades
-Future<bool> addOrModifyFilm(String title, List<String> cast, int releaseDate, int duration, List<String> platforms,
+Future<bool> addFilm(String title, List<String> cast, int releaseDate, int duration, String director,
   String imagePath, int pegi, int season, int numChapters) async {
-  return true;
+
+  final Uri uri = Uri.parse("$baseUrl/library/create-media");
+
+  final Map<String, dynamic> body = {
+    'name': title,
+    'cast': cast,
+    'release': releaseDate,
+    'duration': title,
+    'director': director,
+    'png': imagePath,
+    "pegi": pegi,
+    "season": season,
+    "numChapters": numChapters
+  };
+
+  try {
+    final response = await http.post(
+      uri,
+      body: convert.jsonEncode(body),
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
+    );
+    if (response.statusCode == 200) {
+      print("✅ Pelicula insertada correctamente.");
+      return true;
+
+    } else {
+      print("❌ Error en la inserción de la pelicula. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return false;
+    }
+  } catch (e) {
+    print("🚫 Excepción al realizar la inserción: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
 }
 
+//TODO: Funció per modificar informació peli/serie de cartellera
+//Funció que permet passar informació modificada d'una pel·lícula o sèrie
+//per introduir-la a la base de dades
+Future<bool> ModifyFilm(String title, List<String> cast, int releaseDate, int duration, String director,
+    String imagePath, int pegi, int season, int numChapters) async {
+  final Uri uri = Uri.parse("$baseUrl/library/create-media");
+
+  final Map<String, dynamic> body = {
+    'name': title,
+    'cast': cast,
+    'release': releaseDate,
+    'duration': title,
+    'director': director,
+    'png': imagePath,
+    "pegi": pegi,
+    "season": season,
+    "numChapters": numChapters
+  };
+
+  try {
+    final response = await http.post(
+      uri,
+      body: convert.jsonEncode(body),
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
+    );
+    if (response.statusCode == 200) {
+      print("✅ Pelicula modificada correctamente.");
+      return true;
+
+    } else {
+      print("❌ Error en la modificación de la pelicula. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return false;
+    }
+  } catch (e) {
+    print("🚫 Excepción al realizar la modificación: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
+}
 //TODO: Funció per eliminar una peli/serie de cartellera
 //Funció que permet eliminar una pel·lícula o sèrie de la cartellera (BD) a partir del seu títol
-Future<bool> deleteFilm(String title) async {
-  return true;
+Future<bool> deleteFilm(String title, String media_id) async {
+  final Uri uri = Uri.parse("$baseUrl/repository/delete-media");
+
+  final Map<String, dynamic> body = {
+    'name': title,
+    'media_id': media_id
+  };
+
+  try {
+    final response = await http.post(
+      uri,
+      body: convert.jsonEncode(body),
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'KgtblvdX5JWXMG6UQvB96owx1gm3fX73lYxbWctYDFTPRAEaNXHoocTc61blvFPvivV2T1CjpFnLY9OAdPwIpRXBLSvjWjW9'
+      },
+    );
+    if (response.statusCode == 200) {
+      print("✅ Pelicula borrada correctamente.");
+      return true;
+
+    } else {
+      print("❌ Error en la eliminación de la pelicula. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return false;
+    }
+  } catch (e) {
+    print("🚫 Excepción al realizar la eliminación: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
 }
 
 //Funció que permet agafar els questionaris disponibles de la pel·lícula o sèrie cercada de la BD

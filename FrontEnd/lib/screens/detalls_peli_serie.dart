@@ -249,7 +249,7 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
                       ),
                       ElevatedButton(
                         onPressed: () async {
-                          await deleteFilm(title);
+                          await deleteFilm(title, film[0]['media_id']);
 
                           Navigator.push(
                             context, MaterialPageRoute(builder: (context) => const CartelleraScreen(),

@@ -39,7 +39,7 @@ CREATE TABLE media (
     "name" VARCHAR(255) NOT NULL,
     "genres" JSONB NOT NULL,
     "type" VARCHAR(10) NOT NULL,
-    "movie_db" VARCHAR(100) UNIQUE NOT NULL,
+    "movie_db" VARCHAR(100),
     "rating" FLOAT NOT NULL,
     "description" TEXT,
     "png" VARCHAR(255)

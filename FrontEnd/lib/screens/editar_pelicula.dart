@@ -24,7 +24,7 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
   late final TextEditingController descriptionController;
   late final TextEditingController releaseDateController;
   late final TextEditingController durationController;
-  late final TextEditingController platformsController;
+  late final TextEditingController directorController;
   late final TextEditingController imagePathController;
   late final TextEditingController pegiController;
   late final TextEditingController seasonController;
@@ -52,8 +52,8 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
     releaseDateController =
         TextEditingController(text: data?["releaseDate"] ?? "");
     durationController = TextEditingController(text: data?["duration"] ?? "");
-    platformsController =
-        TextEditingController(text: data?["plataforms"] ?? "");
+    directorController =
+        TextEditingController(text: data?["director"] ?? "");
     imagePathController = TextEditingController(text: data?["imagePath"] ?? "");
     pegiController =
         TextEditingController(text: data?["pegi"] ?? "");
@@ -92,7 +92,7 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
               _buildTextField("Reparto (Separados por comas)", castController),
               _buildTextField("Año de estreno", releaseDateController),
               _buildTextField("Duración (minutos)", durationController),
-              _buildTextField("Plataformas (Separadas por comas)", platformsController),
+              _buildTextField("Director", directorController),
               _buildTextField("Descripción", descriptionController),
               _buildTextField("URL de la foto", imagePathController),
               _buildTextField("Edad mínima de visualización", pegiController),
@@ -117,27 +117,40 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
                     try {
                       final castList = castController.text.split(',').map((e) => e.trim())
                           .where((e) => e.isNotEmpty).toList();
-
-                      final platformsList = platformsController.text.split(',').map((e) => e.trim())
-                          .where((e) => e.isNotEmpty).toList();
-
                       final releaseDate = int.tryParse(releaseDateController.text) ?? 0;
                       final duration = int.tryParse(durationController.text) ?? 0;
                       final pegi = int.tryParse(pegiController.text) ?? 0;
                       final season = int.tryParse(seasonController.text) ?? 0;
                       final numChapters = int.tryParse(numChaptersController.text) ?? 0;
 
-                      await addOrModifyFilm(
+
+                      final success = widget.mode == "New"
+                          ? await addFilm(
                         titleController.text,
                         castList,
                         releaseDate,
                         duration,
-                        platformsList,
+                        directorController.text,
+                        imagePathController.text,
+                        pegi,
+                        season,
+                        numChapters,
+                      )
+                          : await ModifyFilm(
+                        titleController.text,
+                        castList,
+                        releaseDate,
+                        duration,
+                        directorController.text,
                         imagePathController.text,
                         pegi,
                         season,
                         numChapters,
                       );
+
+                      if (!success) {
+                        print('❌ La operación no tuvo éxito');
+                      }
                     } catch (e) {
                       // Aquí podrías mostrar un error si algo falla al convertir datos
                       print('Error al modificar la peli: $e');
