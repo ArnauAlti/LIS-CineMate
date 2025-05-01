@@ -145,7 +145,7 @@ CREATE TABLE "questionnaries" (
 
 CREATE TABLE "library" (
     "id" SERIAL PRIMARY KEY,
-    "user_id" VARCHAR(100) NOT NULL,
+    "user_id" INTEGER NOT NULL,
     "media_id" VARCHAR(100) NOT NULL,
     "info_id" VARCHAR(100) NOT NULL,
     "status" VARCHAR(50) NOT NULL,
