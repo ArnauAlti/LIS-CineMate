@@ -188,7 +188,7 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
                     label: const Text("VER COMENTARIOS DE OTROS USUARIOS", style: TextStyle(fontSize: 16)),
                   ),
                 ),
-
+                const SizedBox(height: 30),
                 if (userRole == "Usuario Registrado")
                   Center(
                     child: ElevatedButton.icon(
