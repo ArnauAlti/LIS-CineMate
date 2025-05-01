@@ -209,25 +209,6 @@ Future<List<Map<String, dynamic>>> getFilmsBySearch(String search, String genre,
   }
 }
 
-//TODO: Afegir a la biblioteca de l'usuari la película a la BD
-//Funció per crear una relació a la biblioteca entre un usuari i pel·lícula/sèrie de la id passada
-Future<bool> addToLibrary(String title, String userMail) async {
-  return true;
-}
-
-//TODO: Eliminar de la biblioteca de l'usuari la película a la BD
-//Funció per eliminar una relació a la biblioteca entre un usuari i pel·lícula/sèrie de la id passada
-Future<bool> deleteFromLibrary(String title, String userMail) async {
-  return true;
-}
-
-//TODO: Modificar canvis a la biblioteca de l'usuari a la BD
-//Funció per afegir o modificar el comentari, la valoració o el moment d'una pel·lícula/sèrie concreta dins
-//la biblioteca d'un usuari
-Future<bool> modifyFromLibrary(String title, String comment, int capitol, int minut, double rating, String userMail) async {
-  return true;
-}
-
 //Funció que permet agafar totes les pel·lícules o sèries d'un usuari, depenent de si la secció seleccionada
 //és la de pel·lícules o la de sèries
 Future<List<Map<String, dynamic>>> getLibraryFilms(String userMail, bool film) async {
@@ -261,6 +242,87 @@ Future<List<Map<String, dynamic>>> getLibraryFilms(String userMail, bool film) a
       'type': 1
     },
   ];
+}
+
+//TODO: Afegir a la biblioteca de l'usuari la película a la BD
+//Funció per crear una relació a la biblioteca entre un usuari i pel·lícula/sèrie de la id passada
+Future<bool> addToLibrary(int userId, String mediaId, String mediaInfoId) async {
+  final Uri uri = Uri.parse("$baseUrl/library/add-media");
+
+  final Map<String, dynamic> body = {
+    'user_id': userId,
+    'media_id': mediaId,
+    'media_info_id': mediaInfoId,
+  };
+
+  try {
+    final response = await http.post(
+      uri,
+      body: convert.jsonEncode(body),
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
+    );
+    if (response.statusCode == 200) {
+      print("✅ Request exitosa.");
+      return true;
+
+    } else {
+      print("❌ Error en la request. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return false;
+    }
+  } catch (e) {
+    print("🚫 Excepción al realizar la request: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
+}
+
+//TODO: Eliminar de la biblioteca de l'usuari la película a la BD
+//Funció per eliminar una relació a la biblioteca entre un usuari i pel·lícula/sèrie de la id passada
+Future<bool> deleteFromLibrary(String title, String userMail) async {
+  return true;
+}
+
+//TODO: Modificar canvis a la biblioteca de l'usuari a la BD
+//Funció per afegir o modificar el comentari, la valoració o el moment d'una pel·lícula/sèrie concreta dins
+//la biblioteca d'un usuari
+Future<bool> modifyFromLibrary(int userId, String mediaId, String mediaInfoId, String comment, String status,
+    double rating) async {
+  final Uri uri = Uri.parse("$baseUrl/library/modify-media");
+
+  final Map<String, dynamic> body = {
+    'user_id': userId,
+    'media_id': mediaId,
+    'media_info_id': mediaInfoId,
+    'library_status': status,
+    'library_rating': rating,
+    'library_comment': comment,
+  };
+
+  try {
+    final response = await http.post(
+      uri,
+      body: convert.jsonEncode(body),
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
+    );
+    if (response.statusCode == 200) {
+      print("✅ Request exitosa.");
+      return true;
+
+    } else {
+      print("❌ Error en la request. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return false;
+    }
+  } catch (e) {
+    print("🚫 Excepción al realizar la request: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
 }
 
 //Funció que permet agafar les pel·lícules o sèries recomanades de manera intel·ligent segons els

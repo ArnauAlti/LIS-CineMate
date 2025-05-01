@@ -34,6 +34,8 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
   Widget build(BuildContext context) {
     final film = widget.film;
     final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
+    final user = Provider.of<UserRoleProvider>(context, listen: false).getUser;
+
 
     return Scaffold(
       backgroundColor: Colors.blue[50],
@@ -174,7 +176,7 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
                 final int minut = int.tryParse(minutController.text) ?? 0;
                 final double rating = selectedRating;
 
-                modifyFromLibrary(title, comment, capitol, minut, rating, userEmail!);
+                //modifyFromLibrary(user?['user_id'], comment, capitol, minut, rating, userEmail!);
 
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Se han guardado los cambios.')),

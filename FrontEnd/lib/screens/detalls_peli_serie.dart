@@ -27,9 +27,11 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
+    final user = Provider.of<UserRoleProvider>(context, listen: false).getUser;
     final userRoleProvider = Provider.of<UserRoleProvider>(context);
     final userRole = userRoleProvider.userRole;
+
+    print(user);
 
     return Scaffold(
       backgroundColor: Colors.blue[50],
@@ -53,6 +55,8 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
           if (film == null) {
             return const Center(child: Text('No se encontraron detalles.'));
           }
+
+          print(film[0]);
 
           final String title = film[0]['name'] ?? 'Título desconocido';
           final String urlFoto = film[0]['png'] ?? '';
@@ -193,11 +197,18 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
                 if (userRole == "Usuario Registrado")
                   Center(
                     child: ElevatedButton.icon(
-                      onPressed: () {
-                        addToLibrary(title, userEmail!);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Película añadida a la biblioteca.')),
-                        );
+                      onPressed: () async {
+                        Future<bool> validation = addToLibrary(user?['id'], film[0]['media_id'], film[0]['media_info_id']);
+
+                        if(await validation) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('${film[0]['name']} añadida a la biblioteca.')),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('No se ha podido añadir a la biblioteca.')),
+                          );
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
