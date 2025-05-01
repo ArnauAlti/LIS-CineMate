@@ -1,6 +1,6 @@
 const userDB = require("./db.js");
 
-async function getMedia(params) {
+async function getMedia(req, res) {
     try {
         let userMail = req.body['user_mail'];
         if (!userMail) {
@@ -13,6 +13,7 @@ async function getMedia(params) {
         if (query.rowCount == 0) {
             throw "No Elements Found";
         } else {
+            console.log(query.rows);
             res.status(200).json({message: "Element Modified", data: query.rows});
         }
     } catch (error) {
@@ -20,3 +21,5 @@ async function getMedia(params) {
         res.status(500).json({error: error, message: "Failed to Retrieve Library"});
     }
 }
+
+module.exports = getMedia;

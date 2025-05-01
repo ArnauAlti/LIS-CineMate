@@ -5,8 +5,8 @@ const axios = require('axios');
 const recommend = require("./resources/recommend");
 const addMedia = require("./resources/create-media");
 const modifyMedia = require("./resources/modify-media");
-const deleteMedia = require("./resources/delete-media");
 const getMedia = require("./resources/get-media");
+const deleteMedia = require("./resources/delete-media");
 
 const app = express();
 const port = 3000;

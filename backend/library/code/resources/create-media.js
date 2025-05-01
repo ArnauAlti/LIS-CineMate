@@ -2,7 +2,7 @@ const userDB = require("./db.js");
 
 async function createMedia(req, res) {
     try {
-        let userMail = req.body['mail'];
+        let userMail = req.body['user_mail'];
         if (!userMail) {
             throw "No user Specifcied";
         }
@@ -15,7 +15,7 @@ async function createMedia(req, res) {
             throw "No info Specified"
         }
         console.log("(Adding) Mail: " + userMail + "; Media ID: " + mediaID + "; Info ID: " + infoID);
-        const quer = await userDB.query(
+        const query = await userDB.query(
             'INSERT INTO library("user_mail", "media_id", "info_id") VALUES ($1, $2, $3)',
             [userMail, mediaID, infoID]
         )
