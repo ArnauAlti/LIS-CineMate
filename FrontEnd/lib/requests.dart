@@ -169,7 +169,7 @@ Future<List<Map<String, dynamic>>> getLatestFilms() async {
   }
 }
 
-//TODO: Funció per retornar obres segons una cerca
+//TODO: Comprovar bon funcionament de la cerca
 //Funció exlusiva per fer cerques de sèries o pel·lícules segons paraules, gèneres, el director, un actor/actriu o
 //una duració indicada per l'usuari amb els filtres de cerca
 Future<List<Map<String, dynamic>>> getFilmsBySearch(String search, String genre, String director,
@@ -212,39 +212,46 @@ Future<List<Map<String, dynamic>>> getFilmsBySearch(String search, String genre,
 //Funció que permet agafar totes les pel·lícules o sèries d'un usuari, depenent de si la secció seleccionada
 //és la de pel·lícules o la de sèries
 Future<List<Map<String, dynamic>>> getLibraryFilms(String userMail, bool film) async {
-  //TODO: Modificar per agafar películes i sèries de la biblioteca de l'usuari de la BD
-  return [
-    {
-      'title': 'Captain America: Brave New World',
-      'imagePath': 'https://th.bing.com/th/id/OIP.TDVZL0VokIrAyO-t9RFLJQAAAA?rs=1&pid=ImgDetMain',
-      'episode': 0,
-      'timeLastSeen': 34,
-      'personalRating': 4.1,
-      'comment': "Really good film",
-      'type': 0
-    },
-    {
-      'title': 'Deadpool & Wolverine',
-      'imagePath': 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/7229d393-c3b8-4703-a41e-e876546d2612/dgukxa3-35713cc0-ca62-46d1-be6e-bf653f78c58e.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzcyMjlkMzkzLWMzYjgtNDcwMy1hNDFlLWU4NzY1NDZkMjYxMlwvZGd1a3hhMy0zNTcxM2NjMC1jYTYyLTQ2ZDEtYmU2ZS1iZjY1M2Y3OGM1OGUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.6unGo3zIe5tU3wjb7_JU0IX-rMOmpFVZFJrPe7onm44',
-      'episode': 0,
-      'timeLastSeen': 117,
-      'personalRating': 5,
-      'comment': 'Obra de arte espectacular',
-      'type': 0
-    },
-    {
-      'title': 'Dune: Parte Dos',
-      'imagePath': 'https://th.bing.com/th/id/OIP.iyQy2GNDScQrF5UEiFFoTwHaKz?rs=1&pid=ImgDetMain',
-      'episode': 0,
-      'timeLastSeen': 40,
-      'personalRating': 2,
-      'comment': 'Better the first part.',
-      'type': 1
-    },
-  ];
+  //TODO: Comprovar bon funcionament de la request
+  final Uri uri = Uri.parse("$baseUrl/library/get-media");
+  String type = "movie";
+
+  if(!film) {
+    type = "show";
+  }
+
+  final Map<String, dynamic> body = {
+    'user_mail': userMail,
+    'type': type,
+  };
+
+  try {
+    final response = await http.post(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
+      body: convert.jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      print("✅ Request exitosa.");
+      final decodedBody = convert.jsonDecode(response.body);
+      return List<Map<String, dynamic>>.from(decodedBody['data']);
+
+    } else {
+      print("❌ Error en la request. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return [];
+    }
+  } catch (e) {
+    print("🚫 Excepción al realizar la request: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
 }
 
-//TODO: Afegir a la biblioteca de l'usuari la película a la BD
+//TODO: Comprovar bon funcionament
 //Funció per crear una relació a la biblioteca entre un usuari i pel·lícula/sèrie de la id passada
 Future<bool> addToLibrary(int userId, String mediaId, String mediaInfoId) async {
   final Uri uri = Uri.parse("$baseUrl/library/add-media");
@@ -285,7 +292,7 @@ Future<bool> deleteFromLibrary(String title, String userMail) async {
   return true;
 }
 
-//TODO: Modificar canvis a la biblioteca de l'usuari a la BD
+//TODO: Comprovar bon funcionament
 //Funció per afegir o modificar el comentari, la valoració o el moment d'una pel·lícula/sèrie concreta dins
 //la biblioteca d'un usuari
 Future<bool> modifyFromLibrary(int userId, String mediaId, String mediaInfoId, String comment, String status,
