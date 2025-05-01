@@ -3,10 +3,16 @@ const userDB = require("./db.js");
 async function media(req, res) {
     try {
         let userID = req.body['user_id'];
+        if (!userID) {
+            throw "No user specifcied";
+        }
         let mediaID = req.body['media_id'];
-        let mediaInfoID = req.body['media_info_id'];
-        let libraryStatus = req.body['library_status'];
-        let libraryRating = req.body['library_rating'];
+        
+        let mediaInfoID = req.body['info_id'];
+        let libraryStatus = req.body['status'];
+        let libraryRating = req.body['rating'];
+        let comment = req.body['comment'];
+
         console.log([userID, mediaID, mediaInfoID, libraryStatus, libraryRating]);
         const quer = await userDB.query(
             'INSERT INTO library("user_id", "media_id", "media_info_id", "library_status", "library_rating") VALUES ($1, $2, $3, $4, $5)',

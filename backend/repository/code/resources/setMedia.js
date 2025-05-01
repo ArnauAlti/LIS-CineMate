@@ -142,7 +142,7 @@ async function setMedia(req, res) {
       for (start; start < amount; start++) {
          jumps++;
          const [shows] = await Promise.all([
-            fetchTmdbData("tv/popular", { page: start }),
+            fetchTmdbData("discover/tv", { page: start, sort_by: "popularity.desc", without_genres: "10767, 10763, 10764, 10766" }),
          ]);
          // console.log(shows);
          mediaData.push(...await Promise.all(shows.results.map(s => processMediaItem(s, false))));
