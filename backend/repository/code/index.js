@@ -51,6 +51,7 @@ app.get("/set-genres", setGenres);
 
 app.get("/set-media", setMedia);
 
+app.post("/get-media/filtered", getMedia);
 app.get("/get-media/*", getMedia);
 
 app.all("/*", (req, res) => {
