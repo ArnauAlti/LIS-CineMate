@@ -7,24 +7,6 @@ class StarRatingRecommender(MovieRecommenderBase):
         Recommender that uses 5-star rating system
         """
         super().__init__(data_path)
-        
-    def _convert_id_to_title(self, user_preferences):
-        """
-        Convert movie IDs in user preferences to titles
-
-        Parameters:
-        - user_preferences: list of tuples (movie_id, rating)
-
-        Returns:
-        - user_preferences_filtered: list of tuples (movie_title, rating)
-        """
-        user_preferences_filtered = []
-
-        for movie_id, rating in user_preferences:
-            title = self.movies[self.movies['movieId'] == int(movie_id)]['title'].values[0]
-            user_preferences_filtered.append((title, rating))
-
-        return user_preferences_filtered
 
 
     def _process_user_preferences(self, user_preferences):

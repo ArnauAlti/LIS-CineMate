@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import UploadFile, File
 from ..models import (
     StarRatingRecommender,
     StarRatingGenreFilteredRecommender
@@ -10,27 +11,21 @@ import pandas as pd
 import os
 from typing import List
 from .utils import convert_ratings_to_old_format
-from fastapi import UploadFile, File
 
 
 app = FastAPI()
 
-# # Habilitar CORS para Swagger
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],  # permitir todas las URLs (o puedes poner una lista específica)
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
+recommender_instance = None
+genre_recommender_instance = None
 
 # Initialize recommenders
-DATA_PATH = os.path.join(os.path.dirname(__file__), '../data/movie.csv')
 
 @app.get("/")
 def read_root():
     return {"message": "Movie Recommendation API"}
 
+
+DATA_PATH = os.path.join(os.path.dirname(__file__), '../data/movie.csv')
 
 @app.post("/load-dataset/")
 def load_dataset(file: UploadFile = File(...)):
@@ -58,9 +53,7 @@ def recommend_star_rating(request: RecommendationRequest):
     
     request.ratings = convert_ratings_to_old_format(request.ratings)
     
-    recommender = StarRatingRecommender(DATA_PATH)
-    import ipdb; ipdb.set_trace()
-    recommendations = recommender.get_personalized_recommendations(
+    recommendations =  recommender_instance.get_personalized_recommendations(
         user_preferences=request.ratings,
         top_n=request.top_n,
         genre_diversity=request.genre_diversity
@@ -74,11 +67,7 @@ def recommend_star_rating_genre(request: RecommendationRequest):
     
     request.ratings = convert_ratings_to_old_format(request.ratings)
     
-    recommender = StarRatingGenreFilteredRecommender(
-        data_path=DATA_PATH,
-        genre_filter=request.genre_filter
-    )
-    recommendations = recommender.get_personalized_recommendations(
+    recommendations = genre_recommender_instance.get_personalized_recommendations(
         user_preferences=request.ratings,
         top_n=request.top_n,
         genre_diversity=request.genre_diversity
