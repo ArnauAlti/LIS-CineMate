@@ -193,7 +193,7 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
                   Center(
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        addToLibrary(title, userEmail!);
+                        addToLibrary(film[0]['user_id'], film[0]['media_id'], film[0]['media_info_id'], film[0]['status'], film[0]['rating']);
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Película añadida a la biblioteca.')),
                         );
