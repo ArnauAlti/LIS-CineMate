@@ -143,7 +143,6 @@ CREATE TABLE "questionnaries" (
         ON DELETE CASCADE
 );
 
-DROP TABLE "library";
 
 CREATE TABLE "library" (
     "id" SERIAL PRIMARY KEY,
