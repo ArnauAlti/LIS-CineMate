@@ -236,7 +236,7 @@ Future<List<Map<String, dynamic>>> getLibraryFilms(String userMail, bool film) a
     );
 
     if (response.statusCode == 200) {
-      print("✅ Request exitosa.");
+      print("✅ Request exitosa enseñar libreria.");
       final decodedBody = convert.jsonDecode(response.body);
       return List<Map<String, dynamic>>.from(decodedBody['data']);
 
@@ -253,13 +253,15 @@ Future<List<Map<String, dynamic>>> getLibraryFilms(String userMail, bool film) a
 
 //TODO: Comprovar bon funcionament
 //Funció per crear una relació a la biblioteca entre un usuari i pel·lícula/sèrie de la id passada
-Future<bool> addToLibrary(String userMail, String mediaId, String mediaInfoId) async {
+Future<bool> addToLibrary(String userMail, String mediaId, String mediaInfoId, String urlFoto, String title) async {
   final Uri uri = Uri.parse("$baseUrl/library/add-media");
 
   final Map<String, dynamic> body = {
-    'user_id': userMail,
+    'user_mail': userMail,
     'media_id': mediaId,
-    'media_info_id': mediaInfoId,
+    'info_id': mediaInfoId,
+    'media_name': title,
+    'media_png': urlFoto,
   };
 
   try {
@@ -292,9 +294,9 @@ Future<bool> deleteFromLibrary(String userMail, String mediaId, String mediaInfo
   final Uri uri = Uri.parse("$baseUrl/library/delete-media");
 
   final Map<String, dynamic> body = {
-    'user_id': userMail,
+    'user_mail': userMail,
     'media_id': mediaId,
-    'media_info_id': mediaInfoId,
+    'info_id': mediaInfoId,
   };
 
   try {

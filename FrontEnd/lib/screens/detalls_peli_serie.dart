@@ -28,6 +28,7 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
   @override
   Widget build(BuildContext context) {
     final mail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
+    print(mail);
     final userRoleProvider = Provider.of<UserRoleProvider>(context);
     final userRole = userRoleProvider.userRole;
 
@@ -196,7 +197,7 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
                   Center(
                     child: ElevatedButton.icon(
                       onPressed: () async {
-                        Future<bool> validation = addToLibrary(mail!, film[0]['media_id'], film[0]['media_info_id']);
+                        Future<bool> validation = addToLibrary(mail!, film[0]['media_id'], film[0]['info_id'], urlFoto, title);
 
                         if(await validation) {
                           ScaffoldMessenger.of(context).showSnackBar(

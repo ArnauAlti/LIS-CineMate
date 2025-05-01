@@ -12,7 +12,7 @@ async function all(p, type) {
     console.log("type: ", type);
     console.log(filterType)
     let mult = (10 * (p - 1));
-    let select = ' SELECT * FROM mediaquery ' + filterType + ' ORDER BY sec ASC LIMIT 10 OFFSET $1'
+    let select = ' SELECT * FROM mediaQuery ' + filterType + ' ORDER BY sec ASC LIMIT 10 OFFSET $1'
     const query = await userDB.query(
         select,
         [mult]
