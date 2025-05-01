@@ -211,39 +211,8 @@ Future<List<Map<String, dynamic>>> getFilmsBySearch(String search, String genre,
 
 //TODO: Afegir a la biblioteca de l'usuari la película a la BD
 //Funció per crear una relació a la biblioteca entre un usuari i pel·lícula/sèrie de la id passada
-Future<bool> addToLibrary(int user_id, String media_id, media_info_id, String library_status, String library_rating ) async {
-  final Uri uri = Uri.parse("$baseUrl/user/modify");
-
-  final Map<String, dynamic> body = {
-    'user_id': user_id,
-    'media_id': media_id,
-    'media_info_id': media_info_id,
-    'library_status': library_status,
-    'library_rating': library_rating,
-  };
-
-  try {
-    final response = await http.post(
-      uri,
-      headers: {
-        'Content-Type': 'application/json',
-        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
-      },
-      body: convert.jsonEncode(body),
-    );
-
-    if (response.statusCode == 200) {
-      print("✅ Modificación exitosa.");
-      return true;
-    } else {
-      print("❌ Error en la modificación. Código: ${response.statusCode}");
-      print("Respuesta: ${response.body}");
-      return false;
-    }
-  } catch (e) {
-    print("🚫 Excepción al modificar: $e");
-    throw Exception("No se pudo conectar al servidor.");
-  }
+Future<bool> addToLibrary(String title, String userMail) async {
+  return true;
 }
 
 //TODO: Eliminar de la biblioteca de l'usuari la película a la BD

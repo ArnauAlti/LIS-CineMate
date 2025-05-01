@@ -185,15 +185,16 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    label: const Text("VER COMENTARIOS DE OTROS USUARIOS", style: TextStyle(fontSize: 16)),
+                    label: const Text("Ver Comentarios Y Valoraciones", style: TextStyle(fontSize: 16)),
                   ),
                 ),
+                const SizedBox(height:30),
 
                 if (userRole == "Usuario Registrado")
                   Center(
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        addToLibrary(film[0]['user_id'], film[0]['media_id'], film[0]['media_info_id'], film[0]['status'], film[0]['rating']);
+                        addToLibrary(title, userEmail!);
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Película añadida a la biblioteca.')),
                         );
@@ -234,7 +235,7 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
                             borderRadius: BorderRadius.circular(30),
                           ),
                         ),
-                        child: const Text("EDITAR INFORMACIÓN"),
+                        child: const Text("Editar Información"),
                       ),
                       ElevatedButton(
                         onPressed: () async {
