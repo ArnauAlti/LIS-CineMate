@@ -332,15 +332,121 @@ Future<List<Map<String, dynamic>>> getRecomendationFilms(String userMail) async 
 //TODO: Funció per modificar informació peli/serie de cartellera
 //Funció que permet passar informació modificada o nova d'una pel·lícula o sèrie
 //per introduir-la a la base de dades
-Future<bool> addOrModifyFilm(String title, List<String> cast, int releaseDate, int duration, List<String> platforms,
+Future<bool> ModifyFilm(String title, List<String> cast, int releaseDate, int duration, String director,
   String imagePath, int pegi, int season, int numChapters) async {
-  return true;
+
+  final Uri uri = Uri.parse("$baseUrl/library/modify-media");
+
+  final Map<String, dynamic> body = {
+    'name': title,
+    'cast': cast,
+    'release': releaseDate,
+    'duration': duration,
+    'library_rating': director,
+    'imagePath': imagePath,
+    'pegi': pegi,
+    'season': season,
+    'numChapters': numChapters,
+  };
+
+  try {
+    final response = await http.post(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
+      body: convert.jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      print("✅ Modificación exitosa.");
+      return true;
+    } else {
+      print("❌ Error en la modificación. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return false;
+    }
+  } catch (e) {
+    print("🚫 Excepción al modificar: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
 }
 
+//TODO: Funció per afegir informació peli/serie de cartellera
+//Funció que permet afegir una pel·lícula o sèrie
+//per introduir-la a la base de dades
+Future<bool> addFilm(String title, List<String> cast, int releaseDate, int duration, String director,
+    String imagePath, int pegi, int season, int numChapters) async {
+
+  final Uri uri = Uri.parse("$baseUrl/library/create-media");
+
+  final Map<String, dynamic> body = {
+    'name': title,
+    'cast': cast,
+    'release': releaseDate,
+    'duration': duration,
+    'library_rating': director,
+    'imagePath': imagePath,
+    'pegi': pegi,
+    'season': season,
+    'numChapters': numChapters,
+  };
+
+  try {
+    final response = await http.post(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
+      body: convert.jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      print("✅ Inserción exitosa.");
+      return true;
+    } else {
+      print("❌ Error en la inserción. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return false;
+    }
+  } catch (e) {
+    print("🚫 Excepción al insertar: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
+}
 //TODO: Funció per eliminar una peli/serie de cartellera
 //Funció que permet eliminar una pel·lícula o sèrie de la cartellera (BD) a partir del seu títol
 Future<bool> deleteFilm(String title) async {
-  return true;
+  final Uri uri = Uri.parse("$baseUrl/library/delete-media");
+
+  final Map<String, dynamic> body = {
+    'name': title,
+  };
+
+  try {
+    final response = await http.post(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
+      body: convert.jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      print("✅ Modificación exitosa.");
+      return true;
+    } else {
+      print("❌ Error en la modificación. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return false;
+    }
+  } catch (e) {
+    print("🚫 Excepción al modificar: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
 }
 
 //Funció que permet agafar els questionaris disponibles de la pel·lícula o sèrie cercada de la BD
