@@ -27,11 +27,9 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserRoleProvider>(context, listen: false).getUser;
+    final mail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
     final userRoleProvider = Provider.of<UserRoleProvider>(context);
     final userRole = userRoleProvider.userRole;
-
-    print(user);
 
     return Scaffold(
       backgroundColor: Colors.blue[50],
@@ -198,7 +196,7 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
                   Center(
                     child: ElevatedButton.icon(
                       onPressed: () async {
-                        Future<bool> validation = addToLibrary(user?['id'], film[0]['media_id'], film[0]['media_info_id']);
+                        Future<bool> validation = addToLibrary(mail!, film[0]['media_id'], film[0]['media_info_id']);
 
                         if(await validation) {
                           ScaffoldMessenger.of(context).showSnackBar(

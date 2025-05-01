@@ -15,9 +15,10 @@ class DetallsBibliotecaScreen extends StatefulWidget {
 
 class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
   double selectedRating = 0;
-  final TextEditingController capitolController = TextEditingController();
   final TextEditingController comentariController = TextEditingController();
-  final TextEditingController minutController = TextEditingController();
+  String selectedStatus = 'No empezada';
+
+  final List<String> statusOptions = ['No empezada', 'En progreso', 'Finalizada'];
 
   @override
   void initState() {
@@ -25,17 +26,14 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
 
     final film = widget.film;
     selectedRating = (film['personalRating'] ?? 0.0).toDouble();
-    capitolController.text = film['episodi']?.toString() ?? '';
     comentariController.text = film['comment'] ?? '';
-    minutController.text = widget.film['timeLastSeen']?.toString() ?? '';
+    selectedStatus = film['status'] ?? 'No empezada';
   }
 
   @override
   Widget build(BuildContext context) {
     final film = widget.film;
-    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
-    final user = Provider.of<UserRoleProvider>(context, listen: false).getUser;
-
+    final mail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
 
     return Scaffold(
       backgroundColor: Colors.blue[50],
@@ -51,17 +49,14 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 10),
-            GestureDetector(
-              onTap: () {},
-              child: Text(
-                film["title"] ?? "Sin título",
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: Colors.black,
-                  decoration: TextDecoration.underline,
-                ),
-                textAlign: TextAlign.center,
+            Text(
+              film["title"] ?? "Sin título",
+              style: const TextStyle(
+                fontSize: 18,
+                color: Colors.black,
+                decoration: TextDecoration.underline,
               ),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
             Center(
@@ -80,47 +75,34 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                "Minuto en el que me quedé la última vez",
+                "Estado actual",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
             const SizedBox(height: 8),
-            TextField(
-              controller: minutController,
-              keyboardType: TextInputType.number,
-              cursorColor: Colors.black,
+            DropdownButtonFormField<String>(
+              value: selectedStatus,
+              items: statusOptions.map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedStatus = value!;
+                });
+              },
               decoration: InputDecoration(
-                hintText: "Ej. 45",
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
               ),
             ),
-            const SizedBox(height: 16),
-            if (film['type'] == 0) ...[
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Capítulo en el que me quedé",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                cursorColor: Colors.black,
-                controller: capitolController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  hintText: "Capítulo...",
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                ),
-              ),
-              const SizedBox(height: 24),
-            ],
             const SizedBox(height: 24),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(5, (index) {
                 final starValue = index + 1;
-
                 IconData icon;
                 if (selectedRating >= starValue) {
                   icon = Icons.star;
@@ -170,13 +152,11 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
             const SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
-                final String title = film["title"];
                 final String comment = comentariController.text;
-                final int capitol = int.tryParse(capitolController.text) ?? 0;
-                final int minut = int.tryParse(minutController.text) ?? 0;
                 final double rating = selectedRating;
+                final String status = selectedStatus;
 
-                //modifyFromLibrary(user?['user_id'], comment, capitol, minut, rating, userEmail!);
+                modifyFromLibrary(mail!, film['media_id'], film['media_info_id'], comment, status, rating);
 
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Se han guardado los cambios.')),
@@ -199,7 +179,7 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
           onPressed: () {
-            deleteFromLibrary(film["title"], userEmail!);
+            deleteFromLibrary(mail!, film['media_id'], film['media_info_id']);
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Se ha eliminado de la biblioteca.')),
             );

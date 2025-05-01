@@ -253,11 +253,11 @@ Future<List<Map<String, dynamic>>> getLibraryFilms(String userMail, bool film) a
 
 //TODO: Comprovar bon funcionament
 //Funció per crear una relació a la biblioteca entre un usuari i pel·lícula/sèrie de la id passada
-Future<bool> addToLibrary(int userId, String mediaId, String mediaInfoId) async {
+Future<bool> addToLibrary(String userMail, String mediaId, String mediaInfoId) async {
   final Uri uri = Uri.parse("$baseUrl/library/add-media");
 
   final Map<String, dynamic> body = {
-    'user_id': userId,
+    'user_id': userMail,
     'media_id': mediaId,
     'media_info_id': mediaInfoId,
   };
@@ -286,21 +286,50 @@ Future<bool> addToLibrary(int userId, String mediaId, String mediaInfoId) async 
   }
 }
 
-//TODO: Eliminar de la biblioteca de l'usuari la película a la BD
+//TODO: Comprovar bon funcionament
 //Funció per eliminar una relació a la biblioteca entre un usuari i pel·lícula/sèrie de la id passada
-Future<bool> deleteFromLibrary(String title, String userMail) async {
-  return true;
+Future<bool> deleteFromLibrary(String userMail, String mediaId, String mediaInfoId) async {
+  final Uri uri = Uri.parse("$baseUrl/library/delete-media");
+
+  final Map<String, dynamic> body = {
+    'user_id': userMail,
+    'media_id': mediaId,
+    'media_info_id': mediaInfoId,
+  };
+
+  try {
+    final response = await http.post(
+      uri,
+      body: convert.jsonEncode(body),
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
+    );
+    if (response.statusCode == 200) {
+      print("✅ Request exitosa.");
+      return true;
+
+    } else {
+      print("❌ Error en la request. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return false;
+    }
+  } catch (e) {
+    print("🚫 Excepción al realizar la request: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
 }
 
 //TODO: Comprovar bon funcionament
 //Funció per afegir o modificar el comentari, la valoració o el moment d'una pel·lícula/sèrie concreta dins
 //la biblioteca d'un usuari
-Future<bool> modifyFromLibrary(int userId, String mediaId, String mediaInfoId, String comment, String status,
+Future<bool> modifyFromLibrary(String userMail, String mediaId, String mediaInfoId, String comment, String status,
     double rating) async {
   final Uri uri = Uri.parse("$baseUrl/library/modify-media");
 
   final Map<String, dynamic> body = {
-    'user_id': userId,
+    'user_mail': userMail,
     'media_id': mediaId,
     'media_info_id': mediaInfoId,
     'library_status': status,
