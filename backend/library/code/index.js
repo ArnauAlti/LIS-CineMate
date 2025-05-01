@@ -30,6 +30,7 @@ app.post("/recommend", recommend);
 app.post("/add-media", addMedia);
 app.post("/modify-media", modifyMedia);
 app.post("/get-media", getMedia);
+app.post("/delete-media", deleteMedia);
 
 
 app.listen(port, () => {

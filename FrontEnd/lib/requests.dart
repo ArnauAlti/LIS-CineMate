@@ -309,16 +309,16 @@ Future<bool> deleteFromLibrary(String userMail, String mediaId, String mediaInfo
       },
     );
     if (response.statusCode == 200) {
-      print("✅ Request exitosa.");
+      print("✅ Request exitosa, pelicula eliminada de la biblioteca.");
       return true;
 
     } else {
-      print("❌ Error en la request. Código: ${response.statusCode}");
+      print("❌ Error en la request, pelicula no eliminada de la biblioteca. Código: ${response.statusCode}");
       print("Respuesta: ${response.body}");
       return false;
     }
   } catch (e) {
-    print("🚫 Excepción al realizar la request: $e");
+    print("🚫 Excepción al realizar la request de eliminar pelicula de la biblioteca: $e");
     throw Exception("No se pudo conectar al servidor.");
   }
 }
@@ -333,10 +333,10 @@ Future<bool> modifyFromLibrary(String userMail, String mediaId, String mediaInfo
   final Map<String, dynamic> body = {
     'user_mail': userMail,
     'media_id': mediaId,
-    'media_info_id': mediaInfoId,
-    'library_status': status,
-    'library_rating': rating,
-    'library_comment': comment,
+    'info_id': mediaInfoId,
+    'status': status,
+    'rating': rating,
+    'comment': comment,
   };
 
   try {

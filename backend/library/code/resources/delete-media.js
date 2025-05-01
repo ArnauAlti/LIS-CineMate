@@ -15,8 +15,8 @@ async function deleteMedia(req, res) {
             throw "No Info Specified";
         }
         console.log("(Delete) Mail: " + userMail + "; Media ID: " + mediaID + "; Info ID: " + infoID);
-        const quer = userDB.query(
-            'DELETE FROM library WHERE user_mail = $1 AND media_id = $2, AND info_id = $3',
+        const query = await userDB.query(
+            'DELETE FROM library WHERE user_mail = $1 AND media_id = $2 AND info_id = $3',
             [userMail, mediaID, infoID]
         );
         if (query.rowCount != 1) {

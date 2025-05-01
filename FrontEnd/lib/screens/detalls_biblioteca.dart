@@ -1,4 +1,5 @@
 import 'package:cine_mate/requests.dart';
+import 'package:cine_mate/screens/biblioteca.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -50,7 +51,7 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
           children: [
             const SizedBox(height: 10),
             Text(
-              film["title"] ?? "Sin título",
+              film["media_name"] ?? "Sin título",
               style: const TextStyle(
                 fontSize: 18,
                 color: Colors.black,
@@ -63,7 +64,7 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
                 child: Image.network(
-                  film["imagePath"] ??
+                  film["media_png"] ??
                       'https://th.bing.com/th/id/OIP.TDVZL0VokIrAyO-t9RFLJQAAAA?rs=1&pid=ImgDetMain',
                   width: 180,
                   height: 260,
@@ -151,16 +152,28 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
             ),
             const SizedBox(height: 30),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 final String comment = comentariController.text;
                 final double rating = selectedRating;
                 final String status = selectedStatus;
 
-                modifyFromLibrary(mail!, film['media_id'], film['media_info_id'], comment, status, rating);
+                final success = await modifyFromLibrary(mail!, film['media_id'], film['info_id'], comment, status, rating);
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Se han guardado los cambios.')),
-                );
+                if (success){
+                  setState(() {
+                    widget.film['comment'] = comment;
+                    widget.film['personalRating'] = rating;
+                    widget.film['status'] = status;
+                  });
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Se han guardado los cambios.')),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('No se han guardado los cambios.')),
+                  );
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,
@@ -178,11 +191,20 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
-          onPressed: () {
-            deleteFromLibrary(mail!, film['media_id'], film['media_info_id']);
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Se ha eliminado de la biblioteca.')),
-            );
+          onPressed: () async {
+            final success = await deleteFromLibrary(mail!, film['media_id'], film['info_id']);
+            if (success){
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const BibliotecaScreen(),
+                )
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('No se ha podido eliminar de la biblioteca.')),
+              );
+            }
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.black,
