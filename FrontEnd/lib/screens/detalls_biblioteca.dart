@@ -26,7 +26,7 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
     super.initState();
 
     final film = widget.film;
-    selectedRating = (film['personalRating'] ?? 0.0).toDouble();
+    selectedRating = (film['rating'] ?? 0.0).toDouble();
     comentariController.text = film['comment'] ?? '';
     selectedStatus = film['status'] ?? 'No empezada';
   }
@@ -168,6 +168,12 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Se han guardado los cambios.')),
+                  );
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const BibliotecaScreen(),
+                      )
                   );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(

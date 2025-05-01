@@ -11,7 +11,7 @@ async function getMedia(req, res) {
             [userMail]
         );
         if (query.rowCount == 0) {
-            throw "No Elements Found";
+            res.status(200).json({message: "No Elements Found"});
         } else {
             console.log(query.rows);
             res.status(200).json({message: "Element Modified", data: query.rows});

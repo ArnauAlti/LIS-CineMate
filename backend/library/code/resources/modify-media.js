@@ -26,7 +26,7 @@ async function modifyMedia(req, res) {
         if (!comment) {
             comment = "";
         }
-        console.log("(Modify) Mail: " + userMail + "; Media ID: " + mediaID + "; Info ID: " + infoID);    
+        console.log("(Modify) Mail: " + userMail + "; Media ID: " + mediaID + "; Info ID: " + infoID + " status:" + status+ " rating:" + rating + " comment:" + comment);    
         const query = await userDB.query(
             'UPDATE library SET status = $4, rating = $5, comment = $6 WHERE user_mail = $1 AND media_id = $2 AND info_id = $3',
             [userMail, mediaID, infoID, status, rating, comment]
