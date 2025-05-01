@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from ..models import (
     StarRatingRecommender,
@@ -10,45 +10,37 @@ import pandas as pd
 import os
 from typing import List
 from .utils import convert_ratings_to_old_format
-from fastapi import UploadFile, File
-
 
 app = FastAPI()
 
-# # Habilitar CORS para Swagger
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],  # permitir todas las URLs (o puedes poner una lista específica)
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
-
 # Initialize recommenders
-DATA_PATH = os.path.join(os.path.dirname(__file__), '../data/movie.csv')
+DATA_PATH = os.path.join(os.path.dirname(__file__), '../data/movie2.csv')
 
 @app.get("/")
 def read_root():
     return {"message": "Movie Recommendation API"}
 
-
-@app.post("/load-dataset/")
-def load_dataset(file: UploadFile = File(...)):
-    global recommender_instance
-
-    # Asegurarse de que el directorio existe
-    data_dir = os.path.dirname(DATA_PATH)
-    os.makedirs(data_dir, exist_ok=True)
-
-    # Sobrescribir el archivo CSV
-    with open(DATA_PATH, "wb") as f:
-        f.write(file.file.read())
-
-    # Inicializar el recomendador con el nuevo archivo
-    recommender_instance = StarRatingRecommender(data_path=DATA_PATH)
-
-    return {"message": "Recommender loaded successfully"}
-
+@app.post("/upload-csv/")
+def upload_csv(file: UploadFile = File(...)):
+    try:
+        if not file.filename.endswith('.csv'):
+            raise HTTPException(status_code=400, detail="Only CSV files are allowed")
+        
+        data_dir = os.path.join(os.path.dirname(__file__), '../data')
+        os.makedirs(data_dir, exist_ok=True)
+        file_path = os.path.join(data_dir, 'movie.csv')
+        
+        # Versión sincrónica
+        contents = file.file.read()
+        with open(file_path, 'wb') as f:
+            f.write(contents)
+        
+        return {"message": f"File uploaded successfully and saved as 'movie.csv'"}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error processing file: {str(e)}")
+    finally:
+        file.file.close()
 
 @app.post("/recommend/star-rating", response_model=List[MovieRecommendation])
 def recommend_star_rating(request: RecommendationRequest):
@@ -59,7 +51,6 @@ def recommend_star_rating(request: RecommendationRequest):
     request.ratings = convert_ratings_to_old_format(request.ratings)
     
     recommender = StarRatingRecommender(DATA_PATH)
-    import ipdb; ipdb.set_trace()
     recommendations = recommender.get_personalized_recommendations(
         user_preferences=request.ratings,
         top_n=request.top_n,

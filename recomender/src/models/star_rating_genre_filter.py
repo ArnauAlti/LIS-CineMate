@@ -2,106 +2,86 @@ from .base_recommender import MovieRecommenderBase
 import numpy as np
 
 class StarRatingGenreFilteredRecommender(MovieRecommenderBase):
-    def __init__(self, data_path='data/movie.csv', genre_filter=None):
+    def __init__(self, data_path='data/movies.csv'):
         """
-        Genre-filtered recommender using 5-star rating system
+        Initializes the recommender without genre filter
         """
         super().__init__(data_path)
-        self.genre_filter = genre_filter if genre_filter else []
+        # Create ID to index mapping
+        self.id_to_index = {row['id']: idx for idx, row in self.movies.iterrows()}
     
-    def _filter_by_genres(self, movie_indices):
+    def _filter_by_genres(self, movie_indices, genre_filter):
         """Filter movies by specified genres"""
-        if not self.genre_filter:
+        if not genre_filter:
             return movie_indices
             
         filtered_indices = []
         for idx in movie_indices:
             movie_genres = set(self.movies.iloc[idx]['genres'].split('|'))
-            if any(genre in movie_genres for genre in self.genre_filter):
+            if any(genre in movie_genres for genre in genre_filter):
                 filtered_indices.append(idx)
         return filtered_indices
     
-    def _convert_id_to_title(self, user_preferences):
+    def _process_user_preferences(self, user_ratings):
         """
-        Convert movie IDs in user preferences to titles
-
-        Parameters:
-        - user_preferences: list of tuples (movie_id, rating)
-
-        Returns:
-        - user_preferences_filtered: list of tuples (movie_title, rating)
+        Process user ratings (list of tuples: [(media-X, rating)])
         """
-        user_preferences_filtered = []
-
-        for movie_id, rating in user_preferences:
-            title = self.movies[self.movies['movieId'] == int(movie_id)]['title'].values[0]
-            user_preferences_filtered.append((title, rating))
-
-        return user_preferences_filtered
-    
-    def _process_user_preferences(self, user_preferences):
-        """
-        Process user preferences with 5-star ratings
-        """
-        combined_sim_scores = np.zeros(self.sim_matrix.shape[0])
+        combined_scores = np.zeros(len(self.movies))
         total_weight = 0
         
-        for movie_title, rating in user_preferences:
-            if movie_title in self.title_to_indices:
-                # Convert rating to weight (1-5 stars to -1 to +1 range)
-                influence = (rating - 3) / 2  # 1→-1, 2→-0.5, 3→0, 4→+0.5, 5→+1
-                
-                for idx in self.title_to_indices[movie_title]:
-                    combined_sim_scores += self.sim_matrix[idx] * influence
-                    total_weight += abs(influence)
+        for movie_id, rating in user_ratings.get('ratings', []):
+            if movie_id in self.id_to_index:
+                idx = self.id_to_index[movie_id]
+                # Convert rating 1-5 to weight (-1 to +1)
+                weight = (rating - 3) / 2
+                combined_scores += self.sim_matrix[idx] * weight
+                total_weight += abs(weight)
         
-        # Normalize by total weight if any ratings were processed
         if total_weight > 0:
-            combined_sim_scores /= total_weight
+            combined_scores /= total_weight
             
-        return combined_sim_scores, total_weight
+        return combined_scores
     
-    def get_personalized_recommendations(self, user_preferences, top_n=5, genre_diversity=True):
-        """Get genre-filtered recommendations with star ratings"""
-        user_preferences_filtered = self._convert_id_to_title(user_preferences)
-        combined_sim_scores, _ = self._process_user_preferences(user_preferences_filtered)
+    def get_personalized_recommendations(self, user_ratings, genre_filter=None, top_n=5, genre_diversity=True):
+        """
+        Get recommendations with optional genre filtering
         
-        # Get all rated movie titles to exclude
-        all_rated_movies = set()
-        for movie_title, _ in user_preferences_filtered:
-            if movie_title in self.title_to_indices:
-                all_rated_movies.add(movie_title)
+        Args:
+            user_ratings: List of tuples [(media-X, rating 1-5)]
+            genre_filter: Optional list of genres to filter by
+            top_n: Number of recommendations
+            genre_diversity: Whether to enforce genre diversity
+        """
+        combined_scores = self._process_user_preferences(user_ratings)
+        rated_ids = {movie_id for movie_id, _ in user_ratings}
         
-        # Get and sort similarity scores
-        sim_scores = list(enumerate(combined_sim_scores))
+        # Get sorted indices by score
+        sim_scores = list(enumerate(combined_scores))
         sim_scores.sort(key=lambda x: x[1], reverse=True)
         
-        # Get all potential recommendations first
-        potential_recommendations = [i for i, _ in sim_scores 
-                                   if self.movies.iloc[i]['title'] not in all_rated_movies]
+        # Get potential recommendations (unrated movies)
+        potential_recs = [i for i, _ in sim_scores 
+                         if self.movies.iloc[i]['id'] not in rated_ids]
         
-        # Apply genre filter
-        if self.genre_filter:
-            potential_recommendations = self._filter_by_genres(potential_recommendations)
+        # Apply genre filter if specified
+        if genre_filter:
+            potential_recs = self._filter_by_genres(potential_recs, genre_filter)
         
-        # Apply diversity and top_n filtering
+        # Select final recommendations
         recommendations = []
         selected_genres = set()
-        for i in potential_recommendations:
+        
+        for idx in potential_recs:
             if len(recommendations) >= top_n:
                 break
                 
-            movie_data = self.movies.iloc[i]
-            genres = set(movie_data['genres'].split('|'))
+            genres = set(self.movies.iloc[idx]['genres'].split('|'))
             
             if genre_diversity:
                 if not genres.issubset(selected_genres):
-                    recommendations.append(i)
+                    recommendations.append(idx)
                     selected_genres.update(genres)
             else:
-                recommendations.append(i)
+                recommendations.append(idx)
         
-        # Format output
-        result = self.movies.iloc[recommendations][['movieId', 'title', 'genres', 'year']]
-        result['genres'] = result['genres'].str.replace('|', ', ')
-        return result.reset_index(drop=True)
+        return self.movies.iloc[recommendations][['id', 'genres']]
