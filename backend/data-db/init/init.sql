@@ -145,19 +145,20 @@ CREATE TABLE "questionnaries" (
 
 CREATE TABLE "library" (
     "id" SERIAL PRIMARY KEY,
-    "user_id" INTEGER NOT NULL,
+    "user_mail" VARCHAR(100) NOT NULL,
     "media_id" VARCHAR(100) NOT NULL,
+    "info_id" VARCHAR(100) NOT NULL,
     "status" VARCHAR(50),
     "rating" FLOAT,
     "comment" VARCHAR(100),
-    FOREIGN KEY(user_id)
-        REFERENCES users(id)
-        ON DELETE CASCADE,
-    FOREIGN KEY(info_id)
-        REFERENCES info(id)
+    FOREIGN KEY(user_mail)
+        REFERENCES users(mail)
         ON DELETE CASCADE,
     FOREIGN KEY(media_id)
         REFERENCES media(id)
+        ON DELETE CASCADE
+    FOREIGN KEY(info_id)
+        REFERENCES info(id)
         ON DELETE CASCADE
 );
 
