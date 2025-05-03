@@ -2,11 +2,15 @@ const express = require('express');
 const axios = require('axios');
 const fs = require('fs');
 const lock_key = require('./resources/data/lock.json');
+const authDB = require("./resources/db-auth.js");
 
 // const sendGenres = require("./resources/send_genres");
 // const processGenres = require("./resources/new");
-const setGenres = require("./resources/setGenres");
-const setMedia = require("./resources/setMedia");
+const setGenres = require("./resources/moviedb-download-genres");
+const setMedia = require("./resources/moviedb-download-media");
+const setMovies = require("./resources/moviedb-download-movies");
+const setShows = require("./resources/moviedb-download-shows");
+
 const getMedia = require('./resources/getMedia');
 const download = require('./resources/genBBDD');
 const createMedia = require('./resources/create-media');
@@ -19,9 +23,34 @@ const port = 3000;
 app.use(express.json());
 app.use(express.urlencoded({extended: true }));
 
-// setInterval(function() {
-//     processGenres();
-// }, 10000)
+setInterval(async function() {
+    const response = await authDB.query("SELECT bool FROM data WHERE type = 'lock'");
+    try {
+        if (!response.rows[0]['bool']) {
+            console.log("(Index) Creating Media");
+            await authDB.query("UPDATE data SET bool = true WHERE type = 'lock'");
+            console.log("(Index) Lock is false");
+            let response = await authDB.query("SELECT bool FROM data WHERE type = 'movies_db_active'");
+            if (response.rows[0]['bool']) {
+                console.log("(index) Creating Movies");
+                await setMovies();
+            } else {
+                console.log("(Index) Not Creating Movies");
+            }
+            response = await authDB.query("SELECT bool FROM data WHERE type = 'shows_db_active'");
+            if (response.rows[0]['bool']) {
+                console.log("(index) Creating Shows");
+                await setShows();
+            } else {
+                console.log("(Index) Not Creating Shows");
+            }
+            await authDB.query("UPDATE data SET bool = false WHERE type = 'lock'");
+        }
+    } catch (error) {
+        console.error(error);
+    } finally {
+    }
+}, 3000)
 
 app.use(async (req, res, next) => {
     console.log("\n\n");

@@ -1,4 +1,6 @@
-const userDB = require("./db.js");
+
+const userDB = require("./db-data.js");
+const authDB = require("./db-auth.js");
 
 async function createMedia(req, res) {
     try {

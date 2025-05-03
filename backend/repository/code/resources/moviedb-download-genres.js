@@ -3,7 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const { promisify } = require('util');
 const writeFile = promisify(fs.writeFile);
-const userDB = require("./db.js");
+const userDB = require("./db-data.js");
+const authDB = require("./db-auth.js");
 const { fail } = require('assert');
 const lock_key = require('./data/lock.json');
 

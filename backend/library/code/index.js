@@ -1,12 +1,11 @@
 const express = require('express');
 const axios = require('axios');
 
-// const sendGenres = require("./resources/send_genres");
-const recommend = require("./resources/recommend");
-const addMedia = require("./resources/create-media");
-const modifyMedia = require("./resources/modify-media");
-const getMedia = require("./resources/get-media");
-const deleteMedia = require("./resources/delete-media");
+const addMedia = require("./resources/library-add");
+const modifyMedia = require("./resources/library-modify");
+const deleteMedia = require("./resources/library-delete");
+const recommend = require("./resources/library-recommend");
+const getMedia = require("./resources/library-query");
 
 const app = express();
 const port = 3000;
@@ -26,11 +25,11 @@ app.use(async (req, res, next) => {
     next();
 });
 
-app.post("/recommend", recommend);
 app.post("/add-media", addMedia);
 app.post("/modify-media", modifyMedia);
-app.post("/get-media", getMedia);
 app.post("/delete-media", deleteMedia);
+app.post("/recommend", recommend);
+app.post("/get-media", getMedia);
 
 
 app.listen(port, () => {
