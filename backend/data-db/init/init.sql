@@ -35,12 +35,14 @@ CREATE TABLE genres (
 
 CREATE TABLE media (
     "sec" INTEGER UNIQUE NOT NULL,
-    "id" VARCHAR(100) PRIMARY KEY,
+    "id" VARCHAR(150) PRIMARY KEY,
+    "active" BOOLEAN NOT NULL, 
     "name" VARCHAR(255) NOT NULL,
-    "genres" JSONB NOT NULL,
+    "genres" JSON NOT NULL,
     "type" VARCHAR(10) NOT NULL,
-    "movie_db" VARCHAR(100),
-    "rating" FLOAT NOT NULL,
+    "movie_db" VARCHAR(100) UNIQUE NOT NULL,
+    "movie_db_rating" FLOAT,
+    "movie_db_count" INTEGER,
     "description" TEXT,
     "png" VARCHAR(255)
 );
@@ -68,6 +70,7 @@ CREATE TABLE info (
     "media_id" VARCHAR(100) NOT NULL,
     "movie_db" VARCHAR(100) NOT NULL,
     "id" VARCHAR(150) PRIMARY KEY,
+    "active" BOOLEAN NOT NULL,
     "synopsis" TEXT NOT NULL,
     "plot" TEXT,
     "season" INT,
@@ -75,6 +78,8 @@ CREATE TABLE info (
     "director" VARCHAR(100),
     "cast" TEXT,
     "release" DATE,
+    "vote_rating" FLOAT NOT NULL,
+    "vote_count" INTEGER NOT NULL,
     FOREIGN KEY(media_id)
         REFERENCES media("id")
         ON DELETE CASCADE,
@@ -165,9 +170,39 @@ CREATE TABLE "library" (
         ON DELETE CASCADE
 );
 
-CREATE VIEW mediaGenres AS SELECT id, name, genres FROM media;
-CREATE VIEW mediaQuery AS SELECT sec, id, name, png, type, rating FROM media;
+CREATE TABLE "comments" (
+    "id" INTEGER UNIQUE NOT NULL,
+    "info_id" VARCHAR(100) NOT NULL,
+    "user_mail" VARCHAR(100) NOT NULL,
+    "response" INTEGER,
+    "created" DATE NOT NULL,
+    "message" TEXT NOT NULL,
+    FOREIGN KEY(info_id)
+        REFERENCES info(id)
+        ON DELETE CASCADE,
+    FOREIGN KEY(user_mail)
+        REFERENCES users(mail)
+        ON DELETE CASCADE,
+    FOREIGN KEY(response)
+        REFERENCES comments(id)
+        ON DELETE CASCADE
+);
 
-CREATE VIEW mediaINFO AS SELECT m.id media_id, v.id info_id, m.type, v.season, v.episodes, m.name, m.png, m.rating, m.description, v.synopsis, v.plot, v.director, v.cast, v.release 
+CREATE VIEW mediaGenres2 AS 
+SELECT m.id,  string_agg(g.name, '|' ORDER BY g.name) AS genres
+FROM media m,
+json_array_elements_text(m.genres) AS genre_id
+JOIN genres g ON g.id = genre_id::INTEGER
+GROUP BY m.id;
+
+CREATE VIEW patata AS
+SELECT m.sec, m.id, m.name, m.png, m.type, m.movie_db_rating, i.release 
+FROM media m
+JOIN info i ON i.id = m.id OR i.id = m.id || '-1';
+
+CREATE VIEW mediaGenres AS SELECT id, name, genres FROM media;
+CREATE VIEW mediaQuery AS SELECT sec, id, name, png, type, movie_db_rating FROM media;
+
+CREATE VIEW mediaINFO AS SELECT m.id media_id, v.id info_id, m.type, v.season, v.episodes, m.name, m.png, m.movie_db_rating, m.movie_db_count, v.vote_rating, v.vote_count, m.description, v.synopsis, v.plot, v.director, v.cast, v.release 
 FROM media m, info v 
 WHERE m.id = v.media_id;

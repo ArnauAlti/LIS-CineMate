@@ -4,6 +4,7 @@ const path = require('path');
 const { promisify } = require('util');
 const writeFile = promisify(fs.writeFile);
 const userDB = require("./db.js");
+const authDB = require("./authdb.js");
 const { fail } = require('assert');
 const lock_key = require('./data/lock.json');
 const patata = require('./data/media.json');
@@ -34,18 +35,20 @@ async function fetchTmdbData(endpoint, params = {}) {
 }
 
 async function processMediaItem(content, isMovie) {
+
    const mediaType = isMovie ? 'movie' : 'tv';
    const details = await fetchTmdbData(`${mediaType}/${content.id}`);
    return {
       id: content.id,
-      movie_db: isMovie ? ('movie-' + content.id) : ('tv-' + content.id),
+      movie_db: isMovie ? ('movie/' + content.id) : ('tv/' + content.id),
       name: isMovie ? content.title : content.name,
       genres: "[" + details.genres.map(g => g.id).join(',') + "]",
       type: isMovie ? 'movie' : 'show',
       description: (content.overview || '').replace(/\n/g, ' ').replace(/"/g, "'"),
       png: content.poster_path ? `https://image.tmdb.org/t/p/w500${content.poster_path}` : null,
       release_date: content.release_date,
-      web_rating: content.vote_average
+      movie_db_rating: details.vote_average,
+      movie_db_votes: details.vote_count
    };
 }
 
@@ -60,7 +63,7 @@ async function processMediaInfo(content, isMovie) {
    const cast = credits.cast.slice(0, 5).map(a => a.name).join(', ');
    if (isMovie) {
       return [{
-               movie_db: isMovie ? ('movie-' + content.id) : ('tv-' + content.id),
+               movie_db: isMovie ? ('movie/' + content.id) : ('tv/' + content.id),
                synopsis: (details.overview || '').replace(/\n/g, ' '),
                plot: null,
                name: content.name,
@@ -75,7 +78,7 @@ async function processMediaInfo(content, isMovie) {
       for (const season of details.seasons) {
          const seasonDetails = await fetchTmdbData(`tv/${content.id}/season/${season.season_number}`);
          const insert = {};
-         insert['movie_db'] = isMovie ? ('movie-' + content.id) : ('tv-' + content.id);
+         insert['movie_db'] = isMovie ? ('movie/' + content.id) : ('tv/' + content.id);
          insert['synopsis'] = (seasonDetails.overview || '').replace(/\n/g, ' ');
          insert['plot'] = null;
          insert['name'] = season.name;
@@ -83,11 +86,11 @@ async function processMediaInfo(content, isMovie) {
          insert['episodes'] = season.episode_count;
          insert['director'] = director;
          insert['cast'] = cast;
-         insert['release'] = season.air_date;
+         insert['release'] = isMovie ? details.release_date : season.air_date;
          seasonsData.push(insert);
       }
       // console.log("---------------------------");
-      console.log(checks);
+      // console.log(checks);
       checks++;
       // console.log(seasonsData);
       return seasonsData;
@@ -96,93 +99,98 @@ async function processMediaInfo(content, isMovie) {
 }
 
 async function setMedia(req, res) {
+   console.log("------- Setting Media -------")
    const client = await userDB.connect();
    try {
+      let va1 = await authDB.query("SELECT quantity FROM data WHERE type = 'movies_db_start'");
+      let va2 = await authDB.query("SELECT quantity FROM data WHERE type = 'movies_db_end'");
+      let va3 = await authDB.query("SELECT quantity FROM data WHERE type = 'movies_db_jumps'");
+      let va4 = await authDB.query("SELECT quantity FROM data WHERE type = 'shows_db_start'");
+      let va5 = await authDB.query("SELECT quantity FROM data WHERE type = 'shows_db_end'");
+      let va6 = await authDB.query("SELECT quantity FROM data WHERE type = 'shows_db_jumps'");
+
+      let movies_start = va1.rows[0]['quantity'];
+      let movies_end = va2.rows[0]['quantity'];
+      let movies_jumps = va3.rows[0]['quantity'];
+      let shows_start = va4.rows[0]['quantity'];
+      let shows_end = va5.rows[0]['quantity'];
+      let shows_jumps = va6.rows[0]['quantity'];
+
       lock_key['lock'] = true;
    
       let mediaData = [];
       let mediaInfoData = [];
       
       // Primero Peliculas
-      let start = patata['movies_start'];
-      let amount = patata['movies_max_pages'];
-      let jumps = 0;
-      let check = true;
       console.log("------ Movies ------");
-      console.log("Movies Starting Page: ", start);
-      console.log("Movies Last Page: ", amount);
+      console.log("Movies Starting Page: ", movies_start);
+      console.log("Movies Last Page: ", movies_end);
+      console.log("Movies Jumps: ", movies_jumps);
       console.log("Starting to Fetch Movies Data");
-      for (start; start < amount; start++) {
-         jumps++;
+      let check = true;
+      for (movies_start; movies_start <= movies_end; movies_start++) {
+         console.log("Fetching page: " + movies_start);
          const [movies] = await Promise.all([
-            fetchTmdbData("movie/popular", { page: start }),
+            fetchTmdbData("movie/popular", { page: movies_start }),
          ]);
          mediaData.push(...await Promise.all(movies.results.map(m => processMediaItem(m, true))));
          mediaInfoData.push(...(await Promise.all(movies.results.map(m => processMediaInfo(m, true)))).flat());
          if (check) {
-            amount = movies['total_pages'] < amount ? movies['total_pages'] : amount;
+            movies_end = movies['total_pages'] < movies_end ? movies['total_pages'] : movies_end;
             check = false;
          }
       }
       console.log("Movies Data Fetched");
-      console.log("New Start: " + start);
-      console.log("New Amount: " + (amount + jumps));
-      patata['movies_start'] = start;
-      patata['movies_max_pages'] = amount + jumps;
+      console.log("New Start: " + movies_start);
+      console.log("New Amount: " + (movies_end + movies_jumps));
+      movies_end += movies_jumps;
       console.log("--------------------");
 
-      start = patata['shows_start'];
-      amount = patata['shows_max_pages'];
-      jumps = 0;
-      check = true;
+
       console.log("------ Shows ------");
-      console.log("Shows Starting Page: ", start);
-      console.log("Shows Last Page: ", amount);
+      console.log("Shows Starting Page: ", shows_start);
+      console.log("Shows Last Page: ", shows_end);
+      console.log("Shows Jumps: ", shows_jumps);
       console.log("Starting to Fetch Shows Data");
-      for (start; start < amount; start++) {
-         jumps++;
+      check = true;
+      for (shows_start; shows_start <= shows_end; shows_start++) {
+         console.log("Fetching page: " + shows_start);
          const [shows] = await Promise.all([
-            fetchTmdbData("discover/tv", { page: start, sort_by: "popularity.desc", without_genres: "10767, 10763, 10764, 10766" }),
+            fetchTmdbData("discover/tv", { page: shows_start, sort_by: "popularity.desc", without_genres: "10767, 10763, 10764, 10766" }),
          ]);
          // console.log(shows);
          mediaData.push(...await Promise.all(shows.results.map(s => processMediaItem(s, false))));
          mediaInfoData.push(...(await Promise.all(shows.results.map(s => processMediaInfo(s, false)))).flat());
          if (check) {
-            amount = shows['total_pages'] < amount ? shows['total_pages'] : amount;
+            shows_end = shows['total_pages'] < shows_end ? shows['total_pages'] : shows_end;
             check = false;
          }
       }
       console.log("Shows Data Fetched");
-      console.log("New Start: " + start);
-      console.log("New Amount: " + (amount + jumps));
-      patata['shows_start'] = start;
-      patata['shows_max_pages'] = amount + jumps;
+      console.log("New Start: " + shows_start);
+      console.log("New Amount: " + (shows_end + shows_jumps));
+      shows_end += shows_jumps;
       console.log("--------------------");
-      // console.log(mediaData.length);
-      // console.log(mediaInfoData.length);
+
       const uniqueMediaData = [...await new Map(mediaData.map(m => [`${m.id}_${m.type}`, m])).values()];
       const uniqueMediaInfo = [...await new Map(mediaInfoData.map(m => [JSON.stringify(m), m])).values()];
-      // console.log(uniqueMediaData);
-      // console.log(uniqueMediaInfo);
-      // console.log(uniqueMediaData.length);
-      // console.log(uniqueMediaInfo.length);
       
-      const queryMedia = 'INSERT INTO media("name", "genres", "type", "movie_db", "rating", "description", "png") ' +
-         'VALUES ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT (movie_db) DO NOTHING';
-      const queryInfo = 'INSERT INTO info("movie_db", "synopsis", "plot", "season", "episodes", "director", "cast", "release") ' +
-         'VALUES ($1, $2, $3, $4, $5, $6, $7, $8) ON CONFLICT (id) DO NOTHING';
+      const queryMedia = 'INSERT INTO media("name", "active", "genres", "type", "movie_db", "movie_db_rating", "movie_db_count", "description", "png") ' +
+         'VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) ON CONFLICT (movie_db) DO NOTHING';
+      const queryInfo = 'INSERT INTO info("movie_db", "active", "synopsis", "plot", "season", "episodes", "director", "cast", "release", "vote_rating", "vote_count") ' +
+         'VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) ON CONFLICT (id) DO NOTHING';
       let failedMedia = 0;
       let addedMedia = 0;
       for (const element of uniqueMediaData) {
          const result = await client.query(
             queryMedia,
-            [element['name'], element['genres'], element['type'], element['movie_db'], element['web_rating'], element['description'], element['png']]
+            [element['name'], true, element['genres'], element['type'], element['movie_db'], element['movie_db_rating'], element['movie_db_votes'], element['description'], element['png']]
          );
          if (result.rowCount == 0) {
-            console.log(element['name'], " / " + element['id'], " -> Failed");
+            console.log("Data: " + element['name'], " / " + element['movie_db'] + " / " + element['type'] + " -> Failed");
             failedMedia++;
          } else {
-            console.log(element['name'], " / " + element['id'], " -> Success");
+            console.log("Data: " + element['name'], " / " + element['movie_db'] + " / " + element['type'] + " -> Success");
             addedMedia++;
          }
       }
@@ -192,24 +200,15 @@ async function setMedia(req, res) {
       //    console.log(element);
       // }
       for (const element of uniqueMediaInfo) {
-         console.log("----____----____----____----____----____----____----____----____---")
-         console.log(element['movie_db']);
-         console.log(element['synopsis']);
-         console.log(element['plot']);
-         console.log(element['season']);
-         console.log(element['episodes']);
-         console.log(element['director']);
-         console.log(element['cast']);
-         console.log(element['release']);
          const result = await client.query(
             queryInfo,
-            [element['movie_db'], element['synopsis'], element['plot'], element['season'], element['episodes'], element['director'], element['cast'], element['release']]
+            [element['movie_db'], true, element['synopsis'], element['plot'], element['season'], element['episodes'], element['director'], element['cast'], element['release'], 0, 0]
          );
          if (result.rowCount == 0) {
-            console.log(element['movie_db'], " / " + element['season'], " -> Failed");
+            console.log("Info: " + element['movie_db'], " / " + element['season'], " -> Failed");
             failedInfo++;
          } else {
-            console.log(element['movie_db'], " / " + element['season'], " -> Success");
+            console.log("Info: " + element['movie_db'], " / " + element['season'], " -> Success");
             addedInfo++;
          }
       }
