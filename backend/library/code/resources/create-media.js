@@ -15,11 +15,13 @@ async function createMedia(req, res) {
             throw "No info Specified"
         }
         let mediaName = req.body['media_name'];
-        let mediaPNG = req.body['media_png']
-        console.log("(Adding) Mail: " + userMail + "; Media ID: " + mediaID + "; Info ID: " + infoID + " Name: " + mediaName + " png: " + mediaPNG);
+        let mediaPNG = req.body['media_png'];
+        let mediaType = req.body['media_type'];
+
+        console.log("(Adding) Mail: " + userMail + "; Media ID: " + mediaID + "; Info ID: " + infoID + " Name: " + mediaName + " png: " + mediaPNG + "type: " + mediaType);
         const query = await userDB.query(
-            'INSERT INTO library("user_mail", "media_id", "info_id", "media_name", "media_png") VALUES ($1, $2, $3, $4, $5)',
-            [userMail, mediaID, infoID, mediaName, mediaPNG]
+            'INSERT INTO library("user_mail", "media_id", "info_id", "media_name", "media_png", "media_type") VALUES ($1, $2, $3, $4, $5, $6)',
+            [userMail, mediaID, infoID, mediaName, mediaPNG, mediaType]
         )
         if (query.rowCount != 1) {
             throw "Element couldn't be Added";
