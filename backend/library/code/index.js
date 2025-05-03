@@ -7,6 +7,7 @@ const addMedia = require("./resources/create-media");
 const modifyMedia = require("./resources/modify-media");
 const getMedia = require("./resources/get-media");
 const deleteMedia = require("./resources/delete-media");
+const getComments = require("./resources/library-query-comments");
 
 const app = express();
 const port = 3000;
@@ -31,6 +32,7 @@ app.post("/add-media", addMedia);
 app.post("/modify-media", modifyMedia);
 app.post("/get-media", getMedia);
 app.post("/delete-media", deleteMedia);
+app.post("/get-comments", getComments);
 
 
 app.listen(port, () => {

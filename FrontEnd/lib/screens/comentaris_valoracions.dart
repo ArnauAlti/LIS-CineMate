@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../requests.dart';
+import '../user_role_provider.dart';
 
 class CommentRatingScreen extends StatefulWidget {
-  final String title;
+  final String mediaId;
+  final String infoId;
 
-  const CommentRatingScreen({super.key, required this.title});
+  const CommentRatingScreen({super.key, required this.mediaId, required this.infoId});
 
   @override
   State<CommentRatingScreen> createState() => _CommentRatingScreen();
@@ -15,18 +18,21 @@ class _CommentRatingScreen extends State<CommentRatingScreen> {
 
   @override
   void initState() {
+    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
+
     super.initState();
-    _commentsFuture = getRatingsByFilm(widget.title);
+    _commentsFuture = getRatingsByFilm(userEmail!, widget.mediaId, widget.infoId);
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: Text('Opiniones sobre ${widget.title}'),
+        title: const Text('Opinión de otros usuarios'),
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: _commentsFuture,
