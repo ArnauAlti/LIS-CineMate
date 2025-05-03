@@ -175,7 +175,7 @@ Future<List<Map<String, dynamic>>> getLatestFilms() async {
 Future<List<Map<String, dynamic>>> getFilmsBySearch(String search, String genre, String director,
     String actor, int duration) async {
 
-  final Uri uri = Uri.parse("$baseUrl/user/create");
+  final Uri uri = Uri.parse("$baseUrl/repository/get-media/filtered?p=2");
 
   final Map<String, dynamic> body = {
     'search': search,
@@ -184,6 +184,8 @@ Future<List<Map<String, dynamic>>> getFilmsBySearch(String search, String genre,
     'actor': actor,
     'duration': duration,
   };
+
+  print(body);
 
   try {
     final response = await http.post(
@@ -197,7 +199,13 @@ Future<List<Map<String, dynamic>>> getFilmsBySearch(String search, String genre,
     if (response.statusCode == 200) {
       print("✅ Request exitosa.");
       final decodedBody = convert.jsonDecode(response.body);
-      return List<Map<String, dynamic>>.from(decodedBody);
+      final data = decodedBody['data'];
+
+      if (data is List) {
+        return List<Map<String, dynamic>>.from(data);
+      } else {
+        return [];
+      }
 
     } else {
       print("❌ Error en la request. Código: ${response.statusCode}");

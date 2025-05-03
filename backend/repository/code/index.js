@@ -55,6 +55,7 @@ app.get("/set-genres", setGenres);
 app.get("/set-media", setMedia);
 
 app.get("/get-media/*", getMedia);
+app.post("/get-media/filtered", getMedia);
 
 app.post("/delete-media", deleteMedia);
 

@@ -29,7 +29,7 @@ class _CercaPeliculesState extends State<CercaPelicules> {
       MaterialPageRoute(
         builder: (context) => ResultatsPelicules(
           search: _busqueda,
-          genre: _genereSeleccionat ?? "No especificat",
+          genre: _genereSeleccionat ?? "",
           actor: _actorController.text,
           director: _directorController.text,
           duration: int.tryParse(_duracioController.text) ?? 0,
