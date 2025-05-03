@@ -1,9 +1,9 @@
 const express = require('express');
 // const cors = require("cors");
 
-const signInUser = require("./resources/sign-in");
-const logInUser = require("./resources/log-in");
-const modifyUser = require("./resources/modify");
+const signInUser = require("./resources/user-create");
+const logInUser = require("./resources/user-login");
+const modifyUser = require("./resources/user-update");
 
 const app = express();
 const port = 3000;

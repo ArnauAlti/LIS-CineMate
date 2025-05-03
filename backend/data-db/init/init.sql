@@ -40,9 +40,11 @@ CREATE TABLE media (
     "name" VARCHAR(255) NOT NULL,
     "genres" JSON NOT NULL,
     "type" VARCHAR(10) NOT NULL,
-    "movie_db" VARCHAR(100) UNIQUE NOT NULL,
-    "movie_db_rating" FLOAT,
-    "movie_db_count" INTEGER,
+    "moviedb_code" VARCHAR(100) UNIQUE NOT NULL,
+    "moviedb_use_rating" BOOLEAN NOT NULL,
+    "moviedb_rating" FLOAT,
+    "moviedb_count" INTEGER,
+    "update" BOOLEAN NOT NULL,
     "description" TEXT,
     "png" VARCHAR(255)
 );
@@ -52,7 +54,7 @@ DECLARE
     next_id INTEGER;
     patata text;
 BEGIN 
-    SELECT COALESCE(MAX(sec), 0) + 1 INTO next_id FROM media;
+    SELECT COALESCE(MAX(sec), 0) + 1 INTO next_id FROM media WHERE type = NEW.type;
     SELECT CAST(next_id as text) INTO patata;
     NEW.sec := next_id;
     NEW.id := 'media-' || CAST(next_id as text);
@@ -68,9 +70,8 @@ EXECUTE FUNCTION media_id_function();
 
 CREATE TABLE info (
     "media_id" VARCHAR(100) NOT NULL,
-    "movie_db" VARCHAR(100) NOT NULL,
+    "moviedb_code" VARCHAR(100) NOT NULL,
     "id" VARCHAR(150) PRIMARY KEY,
-    "active" BOOLEAN NOT NULL,
     "synopsis" TEXT NOT NULL,
     "plot" TEXT,
     "season" INT,
@@ -188,20 +189,20 @@ CREATE TABLE "comments" (
         ON DELETE CASCADE
 );
 
-CREATE VIEW recommender_query_media_genres AS 
+CREATE VIEW "recommender_query_media_genres" AS 
 SELECT m.id,  string_agg(g.name, '|' ORDER BY g.name) AS genres
 FROM media m,
 json_array_elements_text(m.genres) AS genre_id
 JOIN genres g ON g.id = genre_id::INTEGER
 GROUP BY m.id;
 
-CREATE VIEW view_billboard AS
+CREATE VIEW "view_billboard" AS
 SELECT m.sec, m.id, m.name, m.png, m.type, m.movie_db_rating, i.release 
 FROM media m
 JOIN info i ON i.id = m.id OR i.id = m.id || '-1'
 WHERE m.active = true;
 
-CREATE VIEW view_billboard_admin AS
+CREATE VIEW "view_billboard_admin" AS
 SELECT m.sec, m.id, m.name, m.png, m.type, m.movie_db_rating, i.release 
 FROM media m
 JOIN info i ON i.id = m.id OR i.id = m.id || '-1';
@@ -221,3 +222,6 @@ m.movie_db_count, v.vote_rating, v.vote_count, m.description,
 v.synopsis, v.plot, v.director, v.cast, v.release 
 FROM media m, info v 
 WHERE m.id = v.media_id AND m.active = true;
+
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE INDEX idx_titles_title_trgm ON media USING gin (name gin_trgm_ops);
