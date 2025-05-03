@@ -150,15 +150,15 @@ CREATE TABLE "questionnaries" (
 
 
 CREATE TABLE "library" (
-    "id" SERIAL PRIMARY KEY,
+    "sec" SERIAL PRIMARY KEY,
     "user_mail" VARCHAR(100) NOT NULL,
     "media_id" VARCHAR(100) NOT NULL,
     "info_id" VARCHAR(100) UNIQUE NOT NULL ,
     "status" VARCHAR(50),
     "rating" FLOAT,
     "comment" VARCHAR(100),
-    "media_name" VARCHAR(255) NOT NULL,
-    "media_png" VARCHAR(255),
+    -- "media_name" VARCHAR(255) NOT NULL,
+    -- "media_png" VARCHAR(255),
     FOREIGN KEY(user_mail)
         REFERENCES users(mail)
         ON DELETE CASCADE,
@@ -188,21 +188,36 @@ CREATE TABLE "comments" (
         ON DELETE CASCADE
 );
 
-CREATE VIEW mediaGenres2 AS 
+CREATE VIEW recommender_query_media_genres AS 
 SELECT m.id,  string_agg(g.name, '|' ORDER BY g.name) AS genres
 FROM media m,
 json_array_elements_text(m.genres) AS genre_id
 JOIN genres g ON g.id = genre_id::INTEGER
 GROUP BY m.id;
 
-CREATE VIEW patata AS
+CREATE VIEW view_billboard AS
+SELECT m.sec, m.id, m.name, m.png, m.type, m.movie_db_rating, i.release 
+FROM media m
+JOIN info i ON i.id = m.id OR i.id = m.id || '-1'
+WHERE m.active = true;
+
+CREATE VIEW view_billboard_admin AS
 SELECT m.sec, m.id, m.name, m.png, m.type, m.movie_db_rating, i.release 
 FROM media m
 JOIN info i ON i.id = m.id OR i.id = m.id || '-1';
 
-CREATE VIEW mediaGenres AS SELECT id, name, genres FROM media;
-CREATE VIEW mediaQuery AS SELECT sec, id, name, png, type, movie_db_rating FROM media;
+CREATE VIEW "view_library" AS 
+SELECT l.sec, l.user_mail, l.media_id, l.info_id, 
+l.status, l.rating, l.comment, m.png, 
+m.name, m.type
+FROM library l
+JOIN media m On m.id = l.media_id
+GROUP BY l.sec, m.png, m.name, m.type;
 
-CREATE VIEW mediaINFO AS SELECT m.id media_id, v.id info_id, m.type, v.season, v.episodes, m.name, m.png, m.movie_db_rating, m.movie_db_count, v.vote_rating, v.vote_count, m.description, v.synopsis, v.plot, v.director, v.cast, v.release 
+CREATE VIEW "view-info" AS 
+SELECT m.id media_id, v.id info_id, m.type, v.season, 
+v.episodes, m.name, m.png, m.movie_db_rating, 
+m.movie_db_count, v.vote_rating, v.vote_count, m.description, 
+v.synopsis, v.plot, v.director, v.cast, v.release 
 FROM media m, info v 
-WHERE m.id = v.media_id;
+WHERE m.id = v.media_id AND m.active = true;
