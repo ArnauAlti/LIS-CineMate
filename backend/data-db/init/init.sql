@@ -197,6 +197,8 @@ json_array_elements_text(m.genres) AS genre_id
 JOIN genres g ON g.id = genre_id::INTEGER
 GROUP BY m.id;
 
+
+
 CREATE VIEW "view_media" AS
 SELECT m.sec, m.id, m.name, m.png, m.type, m.moviedb_rating, i.release 
 FROM media m
@@ -216,7 +218,7 @@ FROM library l
 JOIN media m On m.id = l.media_id
 GROUP BY l.sec, m.png, m.name, m.type;
 
-CREATE VIEW "view-info" AS 
+CREATE VIEW "view_info" AS 
 SELECT m.id media_id, v.id info_id, m.type, v.season, 
 v.episodes, m.name, m.png, m.moviedb_rating, 
 m.moviedb_count, v.vote_rating, v.vote_count, m.description, 
