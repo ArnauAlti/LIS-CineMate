@@ -113,7 +113,7 @@ Future<bool> modifyUserInfo(String name, String mail, String nick, String birth,
 
 //Funció per agafar les últimes obres afegides a la cartellera de l'apliació (les primeres 12 que surtin)
 Future<List> getFilmDetails(String mediaId) async {
-  final Uri uri = Uri.parse("$baseUrl/repository/get-media/details?id=$mediaId");
+  final Uri uri = Uri.parse("$baseUrl/media/get-media/details?id=$mediaId");
 
   try {
     final response = await http.get(
@@ -142,7 +142,7 @@ Future<List> getFilmDetails(String mediaId) async {
 
 //Funció per agafar les últimes obres afegides a la cartellera de l'apliació (les primeres 12 que surtin)
 Future<List<Map<String, dynamic>>> getLatestFilms() async {
-  final Uri uri = Uri.parse("$baseUrl/repository/get-media/all?p=2");
+  final Uri uri = Uri.parse("$baseUrl/media/get-media/all?p=1");
 
   try {
     final response = await http.get(
@@ -174,9 +174,14 @@ Future<List<Map<String, dynamic>>> getLatestFilms() async {
 //una duració indicada per l'usuari amb els filtres de cerca
 Future<List<Map<String, dynamic>>> getFilmsBySearch(String search, String genre, String director,
     String actor, int duration) async {
+  print(search);
+  if (search.isEmpty) {
+    print("patata");
+  }
+  print(search.isEmpty ? "patata" : "patata2");
+  final Uri uri = Uri.parse("$baseUrl/media/get-media/all?p=1" + (search.isEmpty ? "" : "&search=$search"));
 
-  final Uri uri = Uri.parse("$baseUrl/repository/get-media/filtered?p=2");
-
+  /*
   final Map<String, dynamic> body = {
     'search': search,
     'genere': genre,
@@ -184,13 +189,13 @@ Future<List<Map<String, dynamic>>> getFilmsBySearch(String search, String genre,
     'actor': actor,
     'duration': duration,
   };
+  */
 
-  print(body);
+  // print(body);
 
   try {
-    final response = await http.post(
+    final response = await http.get(
       uri,
-      body: convert.jsonEncode(body),
       headers: {
         'Content-Type': 'application/json',
         'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
@@ -495,7 +500,7 @@ Future<bool> ModifyFilm(String title, List<String> cast, int releaseDate, int du
 
 //Funció que permet eliminar una pel·lícula o sèrie de la cartellera (BD) a partir del seu títol
 Future<bool> deleteFilm(String title, String media_id) async {
-  final Uri uri = Uri.parse("$baseUrl/repository/delete-media");
+  final Uri uri = Uri.parse("$baseUrl/media/delete-media");
 
   final Map<String, dynamic> body = {
     'name': title,

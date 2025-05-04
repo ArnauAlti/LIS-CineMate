@@ -70,7 +70,7 @@ app.use('/user', createProxyMiddleware({
 }));
 
 // /repository => 10.5.0.4:3000
-app.use('/repository', createProxyMiddleware({
+app.use('/media', createProxyMiddleware({
     target: 'http://10.5.0.4:3000', 
     changeOrigin: true,
     on: {

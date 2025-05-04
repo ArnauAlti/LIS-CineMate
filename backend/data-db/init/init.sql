@@ -210,6 +210,14 @@ SELECT m.sec, m.id, m.name, m.png, m.type, m.moviedb_rating, i.release
 FROM media m
 JOIN info i ON i.id = m.id OR i.id = m.id || '-1';
 
+CREATE VIEW "view_info" AS 
+SELECT m.id media_id, v.id info_id, m.type, v.season, 
+v.episodes, m.name, m.png, m.moviedb_rating, 
+m.moviedb_count, v.vote_rating, v.vote_count, m.description, 
+v.synopsis, v.plot, v.director, v.cast, v.release 
+FROM media m, info v 
+WHERE m.id = v.media_id AND m.active = true;
+
 CREATE VIEW "view_library" AS 
 SELECT l.sec, l.user_mail, l.media_id, l.info_id, 
 l.status, l.rating, l.comment, m.png, 
@@ -218,13 +226,6 @@ FROM library l
 JOIN media m On m.id = l.media_id
 GROUP BY l.sec, m.png, m.name, m.type;
 
-CREATE VIEW "view_info" AS 
-SELECT m.id media_id, v.id info_id, m.type, v.season, 
-v.episodes, m.name, m.png, m.moviedb_rating, 
-m.moviedb_count, v.vote_rating, v.vote_count, m.description, 
-v.synopsis, v.plot, v.director, v.cast, v.release 
-FROM media m, info v 
-WHERE m.id = v.media_id AND m.active = true;
 
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 CREATE INDEX idx_titles_title_trgm ON media USING gin (name gin_trgm_ops);
