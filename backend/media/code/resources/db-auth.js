@@ -6,6 +6,7 @@ const userDB = new Pool({
     password: 'admin',
     database: 'auth',
     port: 5432,
+    connectionTimeoutMillis: 10000,
 });
 
 module.exports = userDB;

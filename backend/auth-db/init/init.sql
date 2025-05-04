@@ -25,6 +25,8 @@ INSERT INTO data(type, quantity) VALUES ('shows_db_end', 5);
 INSERT INTO data(type, quantity) VALUES ('shows_db_jumps', 5);
 INSERT INTO data(type, bool) VALUES ('shows_db_active', true);
 INSERT INTO data(type, bool) VALUES ('lock', false);
+INSERT INTO data(type, bool) VALUES ('update_media', true);
+
 -- Crear el usuario
 CREATE USER consult WITH PASSWORD 'consult';
 

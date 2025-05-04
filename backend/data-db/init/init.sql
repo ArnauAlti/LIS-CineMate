@@ -84,8 +84,8 @@ CREATE TABLE info (
     FOREIGN KEY(media_id)
         REFERENCES media("id")
         ON DELETE CASCADE,
-    FOREIGN KEY(movie_db)
-        REFERENCES media("movie_db")
+    FOREIGN KEY(moviedb_code)
+        REFERENCES media("moviedb_code")
         ON DELETE CASCADE
 );
 CREATE OR REPLACE FUNCTION info_function() RETURNS TRIGGER as $$
@@ -94,14 +94,14 @@ DECLARE
     var2 VARCHAR(10);
 BEGIN
     RAISE NOTICE 'Value: %', NEW.media_id;
-    RAISE NOTICE 'Value: %', NEW.movie_db;
+    RAISE NOTICE 'Value: %', NEW.moviedb_code;
     IF NEW.media_id IS NOT NULL THEN
         SELECT m.id INTO var1 FROM media m WHERE m.id = NEW.media_id; 
         SELECT m.type INTO var2 FROM media m WHERE m.id = NEW.media_id;
-    ELSEIF NEW.movie_db IS NOT NULL THEN
-        SELECT m.id INTO var1 FROM media m WHERE m.movie_db = NEW.movie_db; 
-        SELECT m.type INTO var2 FROM media m WHERE m.movie_db = NEW.movie_db;
-        NEW.media_id := var1;
+    ELSEIF NEW.moviedb_code IS NOT NULL THEN
+        SELECT m.id INTO var1 FROM media m WHERE m.moviedb_code = NEW.moviedb_code; 
+        SELECT m.type INTO var2 FROM media m WHERE m.moviedb_code = NEW.moviedb_code;
+        NEW.moviedb_code := var1;
     ELSE 
         RAISE EXCEPTION 'No Identification for media';
     END IF;
@@ -197,13 +197,13 @@ JOIN genres g ON g.id = genre_id::INTEGER
 GROUP BY m.id;
 
 CREATE VIEW "view_billboard" AS
-SELECT m.sec, m.id, m.name, m.png, m.type, m.movie_db_rating, i.release 
+SELECT m.sec, m.id, m.name, m.png, m.type, m.moviedb_rating, i.release 
 FROM media m
 JOIN info i ON i.id = m.id OR i.id = m.id || '-1'
 WHERE m.active = true;
 
 CREATE VIEW "view_billboard_admin" AS
-SELECT m.sec, m.id, m.name, m.png, m.type, m.movie_db_rating, i.release 
+SELECT m.sec, m.id, m.name, m.png, m.type, m.moviedb_rating, i.release 
 FROM media m
 JOIN info i ON i.id = m.id OR i.id = m.id || '-1';
 
@@ -217,8 +217,8 @@ GROUP BY l.sec, m.png, m.name, m.type;
 
 CREATE VIEW "view-info" AS 
 SELECT m.id media_id, v.id info_id, m.type, v.season, 
-v.episodes, m.name, m.png, m.movie_db_rating, 
-m.movie_db_count, v.vote_rating, v.vote_count, m.description, 
+v.episodes, m.name, m.png, m.moviedb_rating, 
+m.moviedb_count, v.vote_rating, v.vote_count, m.description, 
 v.synopsis, v.plot, v.director, v.cast, v.release 
 FROM media m, info v 
 WHERE m.id = v.media_id AND m.active = true;

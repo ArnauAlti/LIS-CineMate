@@ -6,10 +6,10 @@ const authDB = require("./resources/db-auth.js");
 
 // const sendGenres = require("./resources/send_genres");
 // const processGenres = require("./resources/new");
-// const setGenres = require("./resources/moviedb-download-genres");
-const setMedia = require("./resources/moviedb-download-media.js");
-// const setMovies = require("./resources/moviedb-download-movies");
-// const setShows = require("./resources/moviedb-download-shows");
+// const setMedia = require("./resources/moviedb-download-media.js");
+const setGenres = require("./resources/moviedb-download-genres");
+const setMovies = require("./resources/moviedb-download-movies");
+const setShows = require("./resources/moviedb-download-shows");
 
 const getMedia = require('./resources/media-get.js');
 const download = require('./resources/genBBDD.js');
@@ -19,38 +19,45 @@ const modifyMedia = require('./resources/media-modify.js');
 
 const app = express();
 const port = 3000;
+setGenres();
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true }));
 
 setInterval(async function() {
     const response = await authDB.query("SELECT bool FROM data WHERE type = 'lock'");
-    try {
-        if (!response.rows[0]['bool']) {
-            console.log("(Index) Creating Media");
-            await authDB.query("UPDATE data SET bool = true WHERE type = 'lock'");
-            console.log("(Index) Lock is false");
-            let response = await authDB.query("SELECT bool FROM data WHERE type = 'movies_db_active'");
-            if (response.rows[0]['bool']) {
-                console.log("(index) Creating Movies");
-                await setMovies();
-            } else {
-                console.log("(Index) Not Creating Movies");
+    const response2 = await authDB.query("SELECT bool FROm data WHERE type = 'update_media'");
+    const do_update = response2.rows[0]['bool'];
+    console.log("(Index) Atempting to create media");
+    if (do_update) {
+        try {
+            if (!response.rows[0]['bool']) {
+                console.log("(Index) Creating Media");
+                await authDB.query("UPDATE data SET bool = true WHERE type = 'lock'");
+                console.log("(Index) Lock is false");
+                let response = await authDB.query("SELECT bool FROM data WHERE type = 'movies_db_active'");
+                if (response.rows[0]['bool']) {
+                    console.log("(index) Creating Movies");
+                    await setMovies();
+                } else {
+                    console.log("(Index) Not Creating Movies");
+                }
+                response = await authDB.query("SELECT bool FROM data WHERE type = 'shows_db_active'");
+                if (response.rows[0]['bool']) {
+                    console.log("(index) Creating Shows");
+                    await setShows();
+                } else {
+                    console.log("(Index) Not Creating Shows");
+                }
+                await authDB.query("UPDATE data SET bool = false WHERE type = 'lock'");
             }
-            response = await authDB.query("SELECT bool FROM data WHERE type = 'shows_db_active'");
-            if (response.rows[0]['bool']) {
-                console.log("(index) Creating Shows");
-                await setShows();
-            } else {
-                console.log("(Index) Not Creating Shows");
-            }
-            await authDB.query("UPDATE data SET bool = false WHERE type = 'lock'");
+        } catch (error) {
+            console.error(error);
+        } finally {
+
         }
-    } catch (error) {
-        console.error(error);
-    } finally {
     }
-}, 86400000)
+}, /* 86400000 */ 10000);
 
 app.use(async (req, res, next) => {
     console.log("\n\n");
@@ -81,7 +88,7 @@ app.get("/status", async (req, res) => {
 
 app.get("/set-genres", setGenres);
 
-app.get("/set-media", setMedia);
+// app.get("/set-media", setMedia);
 
 app.get("/get-media/*", getMedia);
 

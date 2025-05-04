@@ -174,16 +174,16 @@ async function setShows() {
       const uniqueMediaData = [...await new Map(mediaData.map(m => [`${m.id}_${m.type}`, m])).values()];
       const uniqueMediaInfo = [...await new Map(mediaInfoData.map(m => [JSON.stringify(m), m])).values()];
       
-      const queryMedia = 'INSERT INTO media("name", "active", "genres", "type", "movie_db", "movie_db_rating", "movie_db_count", "description", "png") ' +
+      const queryMedia = 'INSERT INTO media("name", "active", "genres", "type", "movie_db", "movie_use_rating", "movie_db_rating", "movie_db_count", "description", "png") ' +
       'VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) ON CONFLICT (movie_db) DO NOTHING';
-      const queryInfo = 'INSERT INTO info("movie_db", "active", "synopsis", "plot", "season", "episodes", "director", "cast", "release", "vote_rating", "vote_count") ' +
-      'VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) ON CONFLICT (id) DO NOTHING';
+      const queryInfo = 'INSERT INTO info("movie_db", "synopsis", "plot", "season", "episodes", "director", "cast", "release", "vote_rating", "vote_count") ' +
+      'VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) ON CONFLICT (id) DO NOTHING';
       let failedMedia = 0;
       let addedMedia = 0;
       for (const element of uniqueMediaData) {
          const result = await client.query(
             queryMedia,
-            [element['name'], true, element['genres'], element['type'], element['movie_db'], element['movie_db_rating'], element['movie_db_votes'], element['description'], element['png']]
+            [element['name'], true, element['genres'], element['type'], element['movie_db'], true, element['movie_db_rating'], element['movie_db_votes'], element['description'], element['png']]
          );
          if (result.rowCount == 0) {
             console.log("Data: " + element['name'], " / " + element['movie_db'] + " / " + element['type'] + " -> Failed");
@@ -195,10 +195,11 @@ async function setShows() {
       }
       let failedInfo = 0;
       let addedInfo = 0;
+
       for (const element of uniqueMediaInfo) {
          const result = await client.query(
             queryInfo,
-            [element['movie_db'], true, element['synopsis'], element['plot'], element['season'], element['episodes'], element['director'], element['cast'], element['release'], 0, 0]
+            [element['movie_db'], element['synopsis'], element['plot'], element['season'], element['episodes'], element['director'], element['cast'], element['release'], 0, 0]
          );
          if (result.rowCount == 0) {
             console.log("Info: " + element['movie_db'], " / " + element['season'], " -> Failed");

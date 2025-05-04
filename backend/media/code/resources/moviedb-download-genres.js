@@ -30,19 +30,19 @@ async function fetchTmdbData(endpoint, params = {}) {
    }
 }
 
-async function setGenres(req, res) {
+async function setGenres() {
    // Recuperamos los datos
    const [movieGenres, tvGenres] = await Promise.all([
       fetchTmdbData("genre/movie/list"),
       fetchTmdbData("genre/tv/list")
    ]);
    if (!movieGenres || !tvGenres) {
-      res.status(500).json({ movie: movieGenres.genres, tv: tvGenres.genres, message: "Request failed due to one or more sets being null"});
+      console.error("Failed To fetch genres");
+      // res.status(500).json({ movie: movieGenres.genres, tv: tvGenres.genres, message: "Request failed due to one or more sets being null"});
    }
    else {
       const allGenres = [...movieGenres.genres, ...tvGenres.genres];
       const uniqueGenres = [...new Map(allGenres.map(g => [g.id, g])).values()];
-      console.log(uniqueGenres);
       const client = await userDB.connect();
       try {
          const quer = 'INSERT INTO genres (moviedb, name) VALUES ($1, $2) ON CONFLICT (moviedb) DO NOTHING';
@@ -56,16 +56,16 @@ async function setGenres(req, res) {
             );
             if (result.rowCount == 0) {
                failed = failed + 1;
-               console.log("Insert for ", value2, " Failed.");
+               console.log("(Genres) Insert for ", value2, " Failed.");
             }
             else {
-               console.log(value2, " Inserted in Database");
+               console.log("(Genres)" + value2, " Inserted in Database");
             }
          }
-         console.log("Total-failed = ", failed);
-         res.status(200).json({"message": "Request Processed Succesfully", "failed-inserts": failed});
+         console.log("(Genres)" + "Total-failed = ", failed);
+         // res.status(200).json({"message": "Request Processed Succesfully", "failed-inserts": failed});
       } catch {
-         res.status(500).json({error: error, message: "Request Failed"});
+         // res.status(500).json({error: error, message: "Request Failed"});
       } finally {
          client.release();
       }
