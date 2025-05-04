@@ -62,7 +62,7 @@ async function setGenres() {
                console.log("(Genres)" + value2, " Inserted in Database");
             }
          }
-         console.log("(Genres)" + "Total-failed = ", failed);
+         console.log("(Genres)" + " Total-failed = ", failed);
          // res.status(200).json({"message": "Request Processed Succesfully", "failed-inserts": failed});
       } catch {
          // res.status(500).json({error: error, message: "Request Failed"});

@@ -175,7 +175,7 @@ Future<List<Map<String, dynamic>>> getLatestFilms() async {
 Future<List<Map<String, dynamic>>> getFilmsBySearch(String search, String genre, String director,
     String actor, int duration) async {
 
-  final Uri uri = Uri.parse("$baseUrl/user/create");
+  final Uri uri = Uri.parse("$baseUrl/repository/get-media/filtered?p=2");
 
   final Map<String, dynamic> body = {
     'search': search,
@@ -184,6 +184,8 @@ Future<List<Map<String, dynamic>>> getFilmsBySearch(String search, String genre,
     'actor': actor,
     'duration': duration,
   };
+
+  print(body);
 
   try {
     final response = await http.post(
@@ -197,7 +199,13 @@ Future<List<Map<String, dynamic>>> getFilmsBySearch(String search, String genre,
     if (response.statusCode == 200) {
       print("✅ Request exitosa.");
       final decodedBody = convert.jsonDecode(response.body);
-      return List<Map<String, dynamic>>.from(decodedBody);
+      final data = decodedBody['data'];
+
+      if (data is List) {
+        return List<Map<String, dynamic>>.from(data);
+      } else {
+        return [];
+      }
 
     } else {
       print("❌ Error en la request. Código: ${response.statusCode}");
@@ -213,13 +221,8 @@ Future<List<Map<String, dynamic>>> getFilmsBySearch(String search, String genre,
 //Funció que permet agafar totes les pel·lícules o sèries d'un usuari, depenent de si la secció seleccionada
 //és la de pel·lícules o la de sèries
 Future<List<Map<String, dynamic>>> getLibraryFilms(String userMail, bool film) async {
-  //TODO: Comprovar bon funcionament de la request
   final Uri uri = Uri.parse("$baseUrl/library/get-media");
-  String type = "movie";
-
-  if(!film) {
-    type = "show";
-  }
+  String type = film ? "movie" : "show";
 
   final Map<String, dynamic> body = {
     'user_mail': userMail,
@@ -239,7 +242,13 @@ Future<List<Map<String, dynamic>>> getLibraryFilms(String userMail, bool film) a
     if (response.statusCode == 200) {
       print("✅ Request exitosa enseñar libreria.");
       final decodedBody = convert.jsonDecode(response.body);
-      return List<Map<String, dynamic>>.from(decodedBody['data']);
+      final data = decodedBody['data'];
+
+      if (data is List) {
+        return List<Map<String, dynamic>>.from(data);
+      } else {
+        return [];
+      }
 
     } else {
       print("❌ Error en la request. Código: ${response.statusCode}");
@@ -252,9 +261,8 @@ Future<List<Map<String, dynamic>>> getLibraryFilms(String userMail, bool film) a
   }
 }
 
-//TODO: Comprovar bon funcionament
 //Funció per crear una relació a la biblioteca entre un usuari i pel·lícula/sèrie de la id passada
-Future<bool> addToLibrary(String userMail, String mediaId, String mediaInfoId, String urlFoto, String title) async {
+Future<bool> addToLibrary(String userMail, String mediaId, String mediaInfoId, String urlFoto, String title, String type) async {
   final Uri uri = Uri.parse("$baseUrl/library/add-media");
 
   final Map<String, dynamic> body = {
@@ -263,6 +271,7 @@ Future<bool> addToLibrary(String userMail, String mediaId, String mediaInfoId, S
     'info_id': mediaInfoId,
     'media_name': title,
     'media_png': urlFoto,
+    'media_type': type,
   };
 
   try {
@@ -289,7 +298,6 @@ Future<bool> addToLibrary(String userMail, String mediaId, String mediaInfoId, S
   }
 }
 
-//TODO: Comprovar bon funcionament
 //Funció per eliminar una relació a la biblioteca entre un usuari i pel·lícula/sèrie de la id passada
 Future<bool> deleteFromLibrary(String userMail, String mediaId, String mediaInfoId) async {
   final Uri uri = Uri.parse("$baseUrl/library/delete-media");
@@ -324,7 +332,6 @@ Future<bool> deleteFromLibrary(String userMail, String mediaId, String mediaInfo
   }
 }
 
-//TODO: Comprovar bon funcionament
 //Funció per afegir o modificar el comentari, la valoració o el moment d'una pel·lícula/sèrie concreta dins
 //la biblioteca d'un usuari
 Future<bool> modifyFromLibrary(String userMail, String mediaId, String mediaInfoId, String comment, String status,
@@ -357,6 +364,48 @@ Future<bool> modifyFromLibrary(String userMail, String mediaId, String mediaInfo
       print("❌ Error en la request. Código: ${response.statusCode}");
       print("Respuesta: ${response.body}");
       return false;
+    }
+  } catch (e) {
+    print("🚫 Excepción al realizar la request: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
+}
+
+//Funció per aconseguir els usuaris a través de la paraula cercada
+Future<List<Map<String, dynamic>>> getRatingsByFilm(String userMail, String mediaId, String infoId) async {
+  final Uri uri = Uri.parse("$baseUrl/library/get-comments");
+
+  final Map<String, dynamic> body = {
+    'user_mail': userMail,
+    'media_id': mediaId,
+    'info_id': infoId,
+  };
+
+  try {
+    final response = await http.post(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
+      body: convert.jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      print("✅ Request exitosa enseñar comentarios.");
+      final decodedBody = convert.jsonDecode(response.body);
+      final data = decodedBody['data'];
+
+      if (data is List) {
+        return List<Map<String, dynamic>>.from(data);
+      } else {
+        return [];
+      }
+
+    } else {
+      print("❌ Error en la request. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return [];
     }
   } catch (e) {
     print("🚫 Excepción al realizar la request: $e");
@@ -399,51 +448,8 @@ Future<List<Map<String, dynamic>>> getRecomendationFilms(String userMail) async 
   ];
 }
 
-//TODO: Funció per afegir informació peli/serie de cartellera
-//Funció que permet passar informació per insertar una pel·lícula o sèrie
-//per introduir-la a la base de dades
-Future<bool> addFilm(String title, List<String> cast, int releaseDate, int duration, String director,
-  String imagePath, int pegi, int season, int numChapters) async {
 
-  final Uri uri = Uri.parse("$baseUrl/library/create-media");
-
-  final Map<String, dynamic> body = {
-    'name': title,
-    'cast': cast,
-    'release': releaseDate,
-    'duration': title,
-    'director': director,
-    'png': imagePath,
-    "pegi": pegi,
-    "season": season,
-    "numChapters": numChapters
-  };
-
-  try {
-    final response = await http.post(
-      uri,
-      body: convert.jsonEncode(body),
-      headers: {
-        'Content-Type': 'application/json',
-        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
-      },
-    );
-    if (response.statusCode == 200) {
-      print("✅ Pelicula insertada correctamente.");
-      return true;
-
-    } else {
-      print("❌ Error en la inserción de la pelicula. Código: ${response.statusCode}");
-      print("Respuesta: ${response.body}");
-      return false;
-    }
-  } catch (e) {
-    print("🚫 Excepción al realizar la inserción: $e");
-    throw Exception("No se pudo conectar al servidor.");
-  }
-}
-
-//TODO: Funció per modificar informació peli/serie de cartellera
+/*
 //Funció que permet passar informació modificada d'una pel·lícula o sèrie
 //per introduir-la a la base de dades
 Future<bool> ModifyFilm(String title, List<String> cast, int releaseDate, int duration, String director,
@@ -485,7 +491,8 @@ Future<bool> ModifyFilm(String title, List<String> cast, int releaseDate, int du
     throw Exception("No se pudo conectar al servidor.");
   }
 }
-//TODO: Funció per eliminar una peli/serie de cartellera
+*/
+
 //Funció que permet eliminar una pel·lícula o sèrie de la cartellera (BD) a partir del seu títol
 Future<bool> deleteFilm(String title, String media_id) async {
   final Uri uri = Uri.parse("$baseUrl/repository/delete-media");
@@ -753,39 +760,6 @@ Future<List<Map<String, dynamic>>> getUsersBySearch(String search) async {
     {
       "nick": "Obi",
       "imagePath": "assets/perfil3.jpg"
-    },
-  ];
-}
-
-//Funció per aconseguir els usuaris a través de la paraula cercada
-Future<List<Map<String, dynamic>>> getRatingsByFilm(String title) async {
-  // TODO: Implementar crida real a la base de dades
-  return [
-    {
-      "nick": "Pikachu Lover",
-      "rating": 4.5,
-      "comment": "Buena película"
-    },
-    {
-      "nick": "Viper",
-      "rating": 1.5,
-      "comment": "No me gusta"
-    },
-    {
-      "nick": "Kayo",
-      "rating": 3,
-      "comment": "Para pasar el rato"
-    },
-    {
-      "nick": "Pikachu Lover",
-      "rating": 2,
-      "comment": "Pfffff no me acaba"
-    },
-    {
-      "nick": "Daredevil",
-      "rating": 5,
-      "comment": "Bestial!! La película me encanta, precede a una posible historia con"
-          "otros personajes perfecta para la evolución del MCU"
     },
   ];
 }

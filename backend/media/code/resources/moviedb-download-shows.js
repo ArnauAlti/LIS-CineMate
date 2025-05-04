@@ -43,7 +43,6 @@ async function processMediaItem(content, isMovie) {
       type: isMovie ? 'movie' : 'show',
       description: (content.overview || '').replace(/\n/g, ' ').replace(/"/g, "'"),
       png: content.poster_path ? `https://image.tmdb.org/t/p/w500${content.poster_path}` : null,
-      release_date: content.release_date,
       movie_db_rating: details.vote_average,
       movie_db_votes: details.vote_count
    };
@@ -66,9 +65,10 @@ async function processMediaInfo(content, isMovie) {
          name: content.name,
          season: null,
          episodes: 1,
+         duration:  details.runtime,
          'director': director,
          'cast': cast,
-         'release': details.release_date,
+         'release': !details.release_date ? null : String(details.release_date).replaceAll("-", "/"),
       }];
    } else {
       let seasonsData = []
@@ -81,9 +81,11 @@ async function processMediaInfo(content, isMovie) {
          insert['name'] = season.name;
          insert['season'] = season.season_number;
          insert['episodes'] = season.episode_count;
+         insert['duration'] = 0;
+         seasonDetails.episodes.map(s => insert['duration'] += s.runtime);
          insert['director'] = director;
          insert['cast'] = cast;
-         insert['release'] = isMovie ? details.release_date : season.air_date;
+         insert['release'] = !season.air_date ? null : String(season.air_date).replaceAll("-", "/");
          seasonsData.push(insert);
       }
       return seasonsData;
@@ -91,7 +93,7 @@ async function processMediaInfo(content, isMovie) {
 }
 
 async function setShows() {
-   console.log("------- Setting Media -------")
+   // console.log("------- Setting Media -------")
    const client = await userDB.connect();
    try {
       //  let va1 = await authDB.query("SELECT quantity FROM data WHERE type = 'movies_db_start'");
@@ -164,32 +166,26 @@ async function setShows() {
          }
       }
       console.log("(Shows) Shows Data Fetched");
-      console.log("(Shows) New Start: " + shows_start);
-      console.log("(Shows) New Amount: " + (shows_end + shows_jumps));
-      shows_end += shows_jumps;
-      const answer1 = await authDB.query("UPDATE data SET quantity = $1 WHERE type = 'shows_db_start'", [shows_start]);
-      const answer2 = await authDB.query("UPDATE data SET quantity = $1 WHERE type = 'shows_db_end'", [shows_end]);
-      console.log("(Movies) " + answer1.rowCount + answer2.rowCount);
       
       const uniqueMediaData = [...await new Map(mediaData.map(m => [`${m.id}_${m.type}`, m])).values()];
       const uniqueMediaInfo = [...await new Map(mediaInfoData.map(m => [JSON.stringify(m), m])).values()];
       
-      const queryMedia = 'INSERT INTO media("name", "active", "genres", "type", "movie_db", "movie_use_rating", "movie_db_rating", "movie_db_count", "description", "png") ' +
-      'VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) ON CONFLICT (movie_db) DO NOTHING';
-      const queryInfo = 'INSERT INTO info("movie_db", "synopsis", "plot", "season", "episodes", "director", "cast", "release", "vote_rating", "vote_count") ' +
-      'VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) ON CONFLICT (id) DO NOTHING';
+      const queryMedia = 'INSERT INTO media("name", "active", "genres", "type", "moviedb_code", "moviedb_use_rating", "moviedb_rating", "moviedb_count", "update", "description", "png") ' +
+      'VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) ON CONFLICT (moviedb_code) DO NOTHING';
+      const queryInfo = 'INSERT INTO info("moviedb_code", "synopsis", "plot", "season", "episodes", "duration", "director", "cast", "release", "vote_rating", "vote_count") ' +
+      'VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) ON CONFLICT (id) DO NOTHING';
       let failedMedia = 0;
       let addedMedia = 0;
       for (const element of uniqueMediaData) {
          const result = await client.query(
             queryMedia,
-            [element['name'], true, element['genres'], element['type'], element['movie_db'], true, element['movie_db_rating'], element['movie_db_votes'], element['description'], element['png']]
+            [element['name'], true, element['genres'], element['type'], element['movie_db'], true, element['movie_db_rating'], element['movie_db_votes'], true, element['description'], element['png']]
          );
          if (result.rowCount == 0) {
             console.log("Data: " + element['name'], " / " + element['movie_db'] + " / " + element['type'] + " -> Failed");
             failedMedia++;
          } else {
-            console.log("Data: " + element['name'], " / " + element['movie_db'] + " / " + element['type'] + " -> Success");
+            // console.log("Data: " + element['name'], " / " + element['movie_db'] + " / " + element['type'] + " -> Success");
             addedMedia++;
          }
       }
@@ -197,18 +193,27 @@ async function setShows() {
       let addedInfo = 0;
 
       for (const element of uniqueMediaInfo) {
+         // console.log(element);
          const result = await client.query(
             queryInfo,
-            [element['movie_db'], element['synopsis'], element['plot'], element['season'], element['episodes'], element['director'], element['cast'], element['release'], 0, 0]
+            [element['movie_db'], element['synopsis'], element['plot'], element['season'], element['episodes'], element['duration'], element['director'], element['cast'], element['release'], 0, 0]
          );
          if (result.rowCount == 0) {
-            console.log("Info: " + element['movie_db'], " / " + element['season'], " -> Failed");
+            console.log("Info Show: " + element['movie_db'], " / " + element['season'], " -> Failed");
             failedInfo++;
          } else {
-            console.log("Info: " + element['movie_db'], " / " + element['season'], " -> Success");
+            // console.log("Info Show: " + element['movie_db'], " / " + element['season'], " -> Success");
             addedInfo++;
          }
       }
+      
+      console.log("(Shows) New Start: " + shows_start);
+      console.log("(Shows) New Amount: " + (shows_end + shows_jumps));
+      shows_end += shows_jumps;
+      const answer1 = await authDB.query("UPDATE data SET quantity = $1 WHERE type = 'shows_db_start'", [shows_start]);
+      const answer2 = await authDB.query("UPDATE data SET quantity = $1 WHERE type = 'shows_db_end'", [shows_end]);
+      console.log("(Shows) " + answer1.rowCount + answer2.rowCount);
+
    } catch (error) {
       console.log("Error trying to fetch Shows Data");
       console.log(error);

@@ -1,5 +1,4 @@
 import 'package:cine_mate/screens/cartellera.dart';
-import 'package:cine_mate/screens/editar_pelicula.dart';
 import 'package:flutter/material.dart';
 import '../user_role_provider.dart';
 import 'package:provider/provider.dart';
@@ -66,6 +65,9 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
               : (film[0]['cast'] ?? 'Desconocido');
           final String description = film[0]['description'] ?? 'Sin descripción.';
           final double rating = (film[0]['rating'] ?? 0).toDouble()/2;
+
+          final String mediaId = film[0]['media_id'] ?? 'Not known';
+          final String infoId = film[0]['info_id'] ?? 'Not known';
 
           final String releaseDateRaw = film[0]['release']?.toString() ?? '';
           String releaseDate = 'Desconocido';
@@ -177,7 +179,7 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
                       Future.delayed(Duration.zero, () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => CommentRatingScreen(title: title)),
+                          MaterialPageRoute(builder: (context) => CommentRatingScreen(mediaId: mediaId, infoId: infoId,)),
                         );
                       });                },
                     style: ElevatedButton.styleFrom(
@@ -197,7 +199,7 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
                   Center(
                     child: ElevatedButton.icon(
                       onPressed: () async {
-                        Future<bool> validation = addToLibrary(mail!, film[0]['media_id'], film[0]['info_id'], urlFoto, title);
+                        Future<bool> validation = addToLibrary(mail!, film[0]['media_id'], film[0]['info_id'], urlFoto, title, film[0]['type']);
 
                         if(await validation) {
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -225,28 +227,6 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => EditarPeliCartelleraScreen(
-                                mode: "Modify",
-                                peliData: film[0],
-                              ),
-                            ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                        ),
-                        child: const Text("Editar Información"),
-                      ),
                       ElevatedButton(
                         onPressed: () async {
                           await deleteFilm(title, film[0]['media_id']);

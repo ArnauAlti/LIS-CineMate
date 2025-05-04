@@ -1,15 +1,14 @@
+/*
 import 'package:cine_mate/screens/cartellera.dart';
 import 'package:flutter/material.dart';
 
 import '../requests.dart';
 
 class EditarPeliCartelleraScreen extends StatefulWidget {
-  final String mode;
   final Map<String, dynamic>? peliData;
 
   const EditarPeliCartelleraScreen({
     super.key,
-    required this.mode,
     this.peliData,
   });
 
@@ -76,7 +75,7 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: Text(widget.mode == "New" ? "Añadir Película" : "Editar Película"),
+        title: Text("Editar Película"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -124,19 +123,7 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
                       final numChapters = int.tryParse(numChaptersController.text) ?? 0;
 
 
-                      final success = widget.mode == "New"
-                          ? await addFilm(
-                        titleController.text,
-                        castList,
-                        releaseDate,
-                        duration,
-                        directorController.text,
-                        imagePathController.text,
-                        pegi,
-                        season,
-                        numChapters,
-                      )
-                          : await ModifyFilm(
+                      final success = await ModifyFilm(
                         titleController.text,
                         castList,
                         releaseDate,
@@ -162,7 +149,7 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
                       ),
                     );
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('${titleController.text} ha sido añadida/modificada en la base de datos.')),
+                      SnackBar(content: Text('${titleController.text} ha sido modificada en la base de datos.')),
                     );
                   },
 
@@ -174,7 +161,7 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
                   ),
-                  child: Text(widget.mode == "New" ? "Añadir" : "Guardar"),
+                  child: Text("Guardar"),
                 ),
               ),
               const SizedBox(height: 16),
@@ -238,3 +225,4 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
     );
   }
 }
+*/

@@ -58,7 +58,6 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: _filmsFuture,
-        //Comprovacions per saber si s'han agafat bé les películes de la BD
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -81,21 +80,20 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
                     _buildSectionButton("Películas", isPeliculasSelected, () {
                       setState(() {
                         isPeliculasSelected = true;
-                        _filmsFuture = getLibraryFilms(userEmail!, true); // Puedes alternar a getSeries()
+                        _filmsFuture = getLibraryFilms(userEmail!, true);
                       });
                     }),
                     const SizedBox(width: 20),
                     _buildSectionButton("Series", !isPeliculasSelected, () {
                       setState(() {
                         isPeliculasSelected = false;
-                        _filmsFuture = getLibraryFilms(userEmail!, false); // Cambia aquí si tienes `getSeries()`
+                        _filmsFuture = getLibraryFilms(userEmail!, false);
                       });
                     }),
                   ],
                 ),
                 const SizedBox(height: 30),
 
-                // Generar las filas dinámicamente
                 for (int i = 0; i < films.length; i += 2)
                   Column(
                     children: [

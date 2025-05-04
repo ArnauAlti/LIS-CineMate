@@ -28,13 +28,13 @@ setInterval(async function() {
     const response = await authDB.query("SELECT bool FROM data WHERE type = 'lock'");
     const response2 = await authDB.query("SELECT bool FROm data WHERE type = 'update_media'");
     const do_update = response2.rows[0]['bool'];
-    console.log("(Index) Atempting to create media");
+    // console.log("(Index) Atempting to create media");
     if (do_update) {
         try {
             if (!response.rows[0]['bool']) {
                 console.log("(Index) Creating Media");
                 await authDB.query("UPDATE data SET bool = true WHERE type = 'lock'");
-                console.log("(Index) Lock is false");
+                // console.log("(Index) Lock is false");
                 let response = await authDB.query("SELECT bool FROM data WHERE type = 'movies_db_active'");
                 if (response.rows[0]['bool']) {
                     console.log("(index) Creating Movies");
@@ -57,7 +57,7 @@ setInterval(async function() {
 
         }
     }
-}, /* 86400000 */ 10000);
+}, /* 86400000 */ 3000);
 
 app.use(async (req, res, next) => {
     console.log("\n\n");

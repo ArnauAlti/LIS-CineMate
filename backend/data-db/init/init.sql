@@ -54,7 +54,7 @@ DECLARE
     next_id INTEGER;
     patata text;
 BEGIN 
-    SELECT COALESCE(MAX(sec), 0) + 1 INTO next_id FROM media WHERE type = NEW.type;
+    SELECT COALESCE(MAX(sec), 0) + 1 INTO next_id FROM media;
     SELECT CAST(next_id as text) INTO patata;
     NEW.sec := next_id;
     NEW.id := 'media-' || CAST(next_id as text);
@@ -76,6 +76,7 @@ CREATE TABLE info (
     "plot" TEXT,
     "season" INT,
     "episodes" INT NOT NULL,
+    "duration" INT,
     "director" VARCHAR(100),
     "cast" TEXT,
     "release" DATE,
@@ -101,7 +102,7 @@ BEGIN
     ELSEIF NEW.moviedb_code IS NOT NULL THEN
         SELECT m.id INTO var1 FROM media m WHERE m.moviedb_code = NEW.moviedb_code; 
         SELECT m.type INTO var2 FROM media m WHERE m.moviedb_code = NEW.moviedb_code;
-        NEW.moviedb_code := var1;
+        NEW.media_id := var1;
     ELSE 
         RAISE EXCEPTION 'No Identification for media';
     END IF;
@@ -196,13 +197,13 @@ json_array_elements_text(m.genres) AS genre_id
 JOIN genres g ON g.id = genre_id::INTEGER
 GROUP BY m.id;
 
-CREATE VIEW "view_billboard" AS
+CREATE VIEW "view_media" AS
 SELECT m.sec, m.id, m.name, m.png, m.type, m.moviedb_rating, i.release 
 FROM media m
 JOIN info i ON i.id = m.id OR i.id = m.id || '-1'
 WHERE m.active = true;
 
-CREATE VIEW "view_billboard_admin" AS
+CREATE VIEW "view_media_admin" AS
 SELECT m.sec, m.id, m.name, m.png, m.type, m.moviedb_rating, i.release 
 FROM media m
 JOIN info i ON i.id = m.id OR i.id = m.id || '-1';

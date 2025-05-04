@@ -1,6 +1,5 @@
 import 'package:cine_mate/screens/cerca_pelicules.dart';
 import 'package:cine_mate/screens/detalls_peli_serie.dart';
-import 'package:cine_mate/screens/editar_pelicula.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
@@ -102,23 +101,6 @@ class _CartelleraScreenState extends State<CartelleraScreen> {
           );
         },
       ),
-      //Opció d'administrador per afegir una nova pel·lícula o sèrie a la cartellera disponible per a tots els
-      //usuaris.
-      floatingActionButton: userRole == "Administrador"
-          ? FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-              const EditarPeliCartelleraScreen(mode: "New"),
-            ),
-          );
-        },
-        backgroundColor: Colors.black,
-        child: const Icon(Icons.add, color: Colors.white),
-      )
-          : null,
     );
   }
 
