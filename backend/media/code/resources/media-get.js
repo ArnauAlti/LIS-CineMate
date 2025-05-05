@@ -2,14 +2,16 @@
 const userDB = require("./db-data.js");
 const authDB = require("./db-auth.js");
 
-async function all(p, type, search, genres, director, cast, order) {
+async function all(p, type, search, genre, director, cast, order) {
+    console.log("search" + search + "director" + director + "cast" + cast);
     if (!p) {
         throw "An argument is missing";
     }
     let filter = false;
     let filterCount = 0;
     let filterConcat = "WHERE ";
-    let filters = []
+    let filters = [];
+    
     order = order == "rating" ? "moviedb_rating" : order == "release" ? "release" : "name";
     if (type) {
         filter = true;
@@ -33,7 +35,7 @@ async function all(p, type, search, genres, director, cast, order) {
     if (cast) {
         filter = true;
         filterCount++;
-        filters.push("director % '" + cast + "' ");
+        filters.push("cast % '" + cast + "' ");
     }
     for (let index = 0; index < filterCount; index++) {
         if (index == 0) {
@@ -51,13 +53,14 @@ async function all(p, type, search, genres, director, cast, order) {
         select,
         [mult]
     );
+    console.log(select);
     console.log("Fetched " + query.rowCount + " values.");
     return query.rows;
 }
 
 async function details(id) {
     const query = await userDB.query(
-        'SELECT * FROM mediainfo WHERE media_id = $1 ORDER BY season ASC',
+        'SELECT * FROM view_info WHERE media_id = $1 ORDER BY season ASC',
         [id]
     );
     console.log("Fetched " + query.rowCount + " values.");
@@ -74,13 +77,15 @@ async function getMedia(req, res) {
         const search = req.query.search;
         const type = req.query.type;
         const order = req.query.order;
-        const genres = req.query.genres;
+        const genres = req.query.genre;
         const director = req.query.director;
+        const cast = req.query.cast;
+
         let nurl = String(req.url).split("?")[0].split("/")[2];
         console.log(nurl);
         let data;
         if (nurl == "all") {
-            data = await all(p, type, search, order);
+            data = await all(p, type, search, genres, director, cast, order);
             res.status(200).json({message: "Good Request", data: data});
         } else if (nurl == "details") {
             data = await details(id);

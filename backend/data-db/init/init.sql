@@ -150,6 +150,7 @@ CREATE TABLE "questions" (
         ON DELETE CASCADE
 );
 
+DROP TABLE "library";
 
 CREATE TABLE "library" (
     "sec" SERIAL PRIMARY KEY,
@@ -159,8 +160,8 @@ CREATE TABLE "library" (
     "status" VARCHAR(50),
     "rating" FLOAT,
     "comment" VARCHAR(100),
-    -- "media_name" VARCHAR(255) NOT NULL,
-    -- "media_png" VARCHAR(255),
+    "media_name" VARCHAR(255) NOT NULL,
+    "media_png" VARCHAR(255),
     FOREIGN KEY(user_mail)
         REFERENCES users(mail)
         ON DELETE CASCADE,

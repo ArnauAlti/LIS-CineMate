@@ -22,6 +22,7 @@ const port = 3000;
 app.use(express.json());
 app.use(express.urlencoded({extended: true }));
 
+setGenres;
 // let  = true;
 // function sleep(ms) {
 //     return new Promise(resolve => setTimeout(resolve, ms));
