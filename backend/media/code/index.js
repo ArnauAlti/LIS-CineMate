@@ -18,44 +18,51 @@ const modifyMedia = require('./old_resources/media-modify.js');
 
 const app = express();
 const port = 3000;
-setGenres();
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true }));
 
-setInterval(async function() {
-    const response = await authDB.query("SELECT bool FROM data WHERE type = 'lock'");
-    const response2 = await authDB.query("SELECT bool FROm data WHERE type = 'update_media'");
-    const do_update = response2.rows[0]['bool'];
-    // console.log("(Index) Atempting to create media");
-    if (do_update == true) {
-        try {
-            if (!response.rows[0]['bool']) {
-                console.log("(Index) Creating Media");
-                await authDB.query("UPDATE data SET bool = true WHERE type = 'lock'");
-                // console.log("(Index) Lock is false");
-                let response = await authDB.query("SELECT bool FROM data WHERE type = 'movies_db_active'");
-                if (response.rows[0]['bool']) {
-                    console.log("(index) Creating Movies");
-                    await setMovies();
-                } else {
-                    console.log("(Index) Not Creating Movies");
-                }
-                response = await authDB.query("SELECT bool FROM data WHERE type = 'shows_db_active'");
-                if (response.rows[0]['bool']) {
-                    console.log("(index) Creating Shows");
-                    await setShows();
-                } else {
-                    console.log("(Index) Not Creating Shows");
-                }
-                await authDB.query("UPDATE data SET bool = false WHERE type = 'lock'");
-            }
-        } catch (error) {
-            console.error(error);
-        } finally {
+// let  = true;
+// function sleep(ms) {
+//     return new Promise(resolve => setTimeout(resolve, ms));
+// }
 
+setInterval(async function() {
+    try {
+        const response = await authDB.query("SELECT bool FROM data WHERE type = 'lock'");
+        const response2 = await authDB.query("SELECT bool FROm data WHERE type = 'update_media'");
+        const do_update = response2.rows[0]['bool'];
+        // console.log("(Index) Atempting to create media");
+        if (do_update == true) {
+            try {
+                if (!response.rows[0]['bool']) {
+                    console.log("(Index) Creating Media");
+                    await authDB.query("UPDATE data SET bool = true WHERE type = 'lock'");
+                    // console.log("(Index) Lock is false");
+                    let response = await authDB.query("SELECT bool FROM data WHERE type = 'movies_db_active'");
+                    if (response.rows[0]['bool']) {
+                        console.log("(index) Creating Movies");
+                        await setMovies();
+                    } else {
+                        console.log("(Index) Not Creating Movies");
+                    }
+                    response = await authDB.query("SELECT bool FROM data WHERE type = 'shows_db_active'");
+                    if (response.rows[0]['bool']) {
+                        console.log("(index) Creating Shows");
+                        await setShows();
+                    } else {
+                        console.log("(Index) Not Creating Shows");
+                    }
+                    await authDB.query("UPDATE data SET bool = false WHERE type = 'lock'");
+                }
+            } finally {
+                console.log("hey");
+            }
         }
+    } catch (error) {
+        console.error(error);
     }
+    
 }, /* 86400000 */ 3000);
 
 app.use(async (req, res, next) => {

@@ -30,6 +30,10 @@ async function fetchTmdbData(endpoint, params = {}) {
    }
 }
 
+function sleep(ms) {
+   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 async function setGenres() {
    // Recuperamos los datos
    const [movieGenres, tvGenres] = await Promise.all([
@@ -43,6 +47,7 @@ async function setGenres() {
    else {
       const allGenres = [...movieGenres.genres, ...tvGenres.genres];
       const uniqueGenres = [...new Map(allGenres.map(g => [g.id, g])).values()];
+      await sleep(1000);
       const client = await userDB.connect();
       try {
          const quer = 'INSERT INTO genres (moviedb, name) VALUES ($1, $2) ON CONFLICT (moviedb) DO NOTHING';

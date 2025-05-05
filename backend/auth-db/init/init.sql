@@ -15,7 +15,7 @@ CREATE TABLE data(
 
 INSERT INTO auth(mode, key) VALUES ('user', 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L');
 -- INSERT INTO auth(mode, key) VALUES ('admin', 'KgtblvdX5JWXMG6UQvB96owx1gm3fX73lYxbWctYDFTPRAEaNXHoocTc61blvFPvivV2T1CjpFnLY9OAdPwIpRXBLSvjWjW9');
-INSERT INTO data(type, bool) VALUES ('update', true);
+-- INSERT INTO data(type, bool) VALUES ('update', true);
 INSERT INTO data(type, quantity) VALUES ('movies_db_start', 1);
 INSERT INTO data(type, quantity) VALUES ('movies_db_end', 1);
 INSERT INTO data(type, quantity) VALUES ('movies_db_jumps', 1);
@@ -25,7 +25,10 @@ INSERT INTO data(type, quantity) VALUES ('shows_db_end', 1);
 INSERT INTO data(type, quantity) VALUES ('shows_db_jumps', 1);
 INSERT INTO data(type, bool) VALUES ('shows_db_active', true);
 INSERT INTO data(type, bool) VALUES ('lock', false);
-INSERT INTO data(type, bool) VALUES ('update_media', true);
+INSERT INTO data(type, bool) VALUES ('update_media', false);
+INSERT INTO data(type, bool) VALUES ('update_genres', false);
+
+
 
 -- Crear el usuario
 CREATE USER consult WITH PASSWORD 'consult';
