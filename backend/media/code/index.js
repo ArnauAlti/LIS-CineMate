@@ -14,7 +14,7 @@ const setShows = require("./resources/moviedb-download-shows");
 const getMedia = require('./resources/media-get.js');
 const disableMedia = require('./resources/media-disable.js');
 const enableMedia = require('./resources/media-enable.js');
-const modifyMedia = require('./resources/media-modify.js');
+const modifyMedia = require('./old_resources/media-modify.js');
 
 const app = express();
 const port = 3000;

@@ -1,6 +1,6 @@
 
-const userDB = require("./db-data.js");
-const authDB = require("./db-auth.js");
+const userDB = require("../resources/db-data.js");
+const authDB = require("../resources/db-auth.js");
 
 async function modifyMedia(req, res) {
     try {
@@ -23,13 +23,13 @@ async function modifyMedia(req, res) {
                 pass: userPass
             };
             await axios.post(url, payload, { headers: header })
-            .then( response => {
-                if (response.data.admin == true) {
-                } else {
-                    throw "User is not admin";
-                }
-            })
-            .catch( error => { throw error; });
+                .then( response => {
+                    if (response.data.admin == true) {
+                    } else {
+                        throw "User is not admin";
+                    }
+                })
+                .catch( error => { throw error; });
         }
         let mediaID = req.body['media_id'];
         if (!mediaID) {
@@ -39,18 +39,7 @@ async function modifyMedia(req, res) {
         if (!infoID) {
             throw "No Info Specified";
         }
-        let status = req.body['status'];
-        if (!status) {
-            throw "No Status Specified";
-        }
-        let rating = req.body['rating'];
-        if (!rating) {
-            rating = 0;
-        }
-        let comment = req.body['comment'];
-        if (!comment) {
-            comment = "";
-        }
+        let synopss
         console.log("(Modify) Mail: " + userMail + "; Media ID: " + mediaID + "; Info ID: " + infoID + " status:" + status+ " rating:" + rating + " comment:" + comment);    
         const query = await userDB.query(
             'UPDATE library SET status = $4, rating = $5, comment = $6 WHERE user_mail = $1 AND media_id = $2 AND info_id = $3',

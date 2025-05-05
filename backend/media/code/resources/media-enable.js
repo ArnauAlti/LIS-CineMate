@@ -22,13 +22,13 @@ async function enableMedia(req, res) {
                 pass: userPass
             };
             await axios.post(url, payload, { headers: header })
-            .then( response => {
-                if (response.data.admin == true) {
-                } else {
-                    throw "User is not admin";
-                }
-            })
-            .catch( error => { throw error; });
+                .then( response => {
+                    if (response.data.admin == true) {
+                    } else {
+                        throw "User is not admin";
+                    }
+                })
+                .catch( error => { throw error; });
         }
         let mediaId = req.body['media_id'];
         if (!mediaId) {
