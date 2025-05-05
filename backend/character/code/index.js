@@ -4,18 +4,14 @@ const axios = require('axios');
 const addCharacter = require("./resources/character-add");
 const modifyCharacter = require("./resources/character-modify");
 const deleteCharacter = require("./resources/character-delete");
-//const recommend = require("./resources/character-recommend");
-//const getMedia = require("./resources/character-query");
+const getCharacters = require("./resources/character-get");
+const chatCharacter = require("./resources/character-chat");
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true }));
-
-// setInterval(function() {
-//     sendGenres();
-// }, 60000)
 
 app.use(async (req, res, next) => {
     console.log("New Request");
@@ -28,9 +24,12 @@ app.use(async (req, res, next) => {
 app.post("/add-character", addCharacter);
 app.post("/modify-character", modifyCharacter);
 app.post("/delete-character", deleteCharacter);
-//app.post("/recommend", recommend);
-//app.post("/get-media", getMedia);
+app.get("/get-characters", getCharacters);
+app.post("/chat-character", chatCharacter);
 
+app.all("/*", (req, res) => {
+    res.status(404).json({message: "Resource Not Found"});
+});
 
 app.listen(port, () => {
     console.log(`API running on http://localhost:${port}`);

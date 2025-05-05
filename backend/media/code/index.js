@@ -28,7 +28,7 @@ setInterval(async function() {
     const response2 = await authDB.query("SELECT bool FROm data WHERE type = 'update_media'");
     const do_update = response2.rows[0]['bool'];
     // console.log("(Index) Atempting to create media");
-    if (do_update) {
+    if (do_update == true) {
         try {
             if (!response.rows[0]['bool']) {
                 console.log("(Index) Creating Media");

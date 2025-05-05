@@ -47,7 +47,7 @@ services:
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: auth
     volumes:
-      # - ./auth-db/data:/var/lib/postgresql/data
+      - ./auth-db/data:/var/lib/postgresql/data
       - ./auth-db/init:/docker-entrypoint-initdb.d
     ports:
       - "8001:5432"

@@ -139,7 +139,7 @@ CREATE TABLE "characters" (
         ON DELETE CASCADE
 );
 
-CREATE TABLE "questionnaries" (
+CREATE TABLE "questions" (
     "id" SERIAL PRIMARY KEY,
     "info_id" VARCHAR(100) NOT NULL,
     "question" TEXT NOT NULL,
@@ -190,11 +190,12 @@ CREATE TABLE "comments" (
         ON DELETE CASCADE
 );
 
+DROP VIEW "recommender_query_media_genres";
 CREATE VIEW "recommender_query_media_genres" AS 
 SELECT m.id,  string_agg(g.name, '|' ORDER BY g.name) AS genres
 FROM media m, 
 json_array_elements_text(m.genres) AS genre_id
-JOIN genres g ON g.id = genre_id::INTEGER
+JOIN genres g ON g.moviedb = genre_id::INTEGER
 GROUP BY m.id;
 
 
