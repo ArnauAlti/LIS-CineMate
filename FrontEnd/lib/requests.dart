@@ -635,8 +635,72 @@ Future<bool> addCharacterToChat(String name) async {
 
 //TODO: Funció per afegir o modificar un personatge a la BD
 //Funció que permet afegir un personatge a la base de dades de personatges disponibles per establir un xat amb ell/a
-Future<bool> addOrModifyCharacter(String name, String imagePath, String description, String filmTitle) async {
-  return true;
+Future<bool> addCharacter(String name, String imagePath, String description, String filmTitle) async {
+  final Uri uri = Uri.parse("$baseUrl/character/add-character"); //Modificar Uri
+
+  final Map<String, dynamic> body = {
+    'name': name,
+    'media_id': imagePath,
+    'description': description,
+    'filmTitle': filmTitle
+  };
+
+  try {
+    final response = await http.post(
+      uri,
+      body: convert.jsonEncode(body),
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'KgtblvdX5JWXMG6UQvB96owx1gm3fX73lYxbWctYDFTPRAEaNXHoocTc61blvFPvivV2T1CjpFnLY9OAdPwIpRXBLSvjWjW9'
+      },
+    );
+    if (response.statusCode == 200) {
+      print("✅ Personaje añadido correctamente.");
+      return true;
+
+    } else {
+      print("❌ Error en la inserción del personaje. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return false;
+    }
+  } catch (e) {
+    print("🚫 Excepción al realizar la inserción del personaje: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
+}
+
+Future<bool> modifyCharacter(String name, String imagePath, String description, String filmTitle) async {
+  final Uri uri = Uri.parse("$baseUrl/character/modify-character"); //Modificar Uri
+
+  final Map<String, dynamic> body = {
+    'name': name,
+    'media_id': imagePath,
+    'description': description,
+    'filmTitle': filmTitle
+  };
+
+  try {
+    final response = await http.post(
+      uri,
+      body: convert.jsonEncode(body),
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'KgtblvdX5JWXMG6UQvB96owx1gm3fX73lYxbWctYDFTPRAEaNXHoocTc61blvFPvivV2T1CjpFnLY9OAdPwIpRXBLSvjWjW9'
+      },
+    );
+    if (response.statusCode == 200) {
+      print("✅ Personaje modificado correctamente.");
+      return true;
+
+    } else {
+      print("❌ Error en la modificación de la información del personaje. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return false;
+    }
+  } catch (e) {
+    print("🚫 Excepción al realizar la modificación: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
 }
 
 //TODO: Funció per eliminar un personatge de la BD
