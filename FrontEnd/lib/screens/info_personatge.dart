@@ -120,7 +120,7 @@ class InfoPersonatge extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    await deleteCharacter(name);
+                    await deleteCharacter(name, charData?['media_id']);
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const XatsActiusScreen()));
                   },
                   style: ButtonStyle(

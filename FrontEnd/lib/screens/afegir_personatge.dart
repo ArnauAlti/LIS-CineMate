@@ -21,7 +21,7 @@ class _AfegirPersonatgeScreen extends State<AfegirPersonatgeScreen> {
   late final TextEditingController nameController;
   late final TextEditingController descriptionController;
   late final TextEditingController imagePathController;
-  late final TextEditingController titleController;
+  late final TextEditingController MediaIdController;
 
   @override
   void initState() {
@@ -32,8 +32,8 @@ class _AfegirPersonatgeScreen extends State<AfegirPersonatgeScreen> {
     descriptionController = TextEditingController(text: data?['context'] ?? "");
     imagePathController =
         TextEditingController(text: data?["imagePath"] ?? "");
-    titleController =
-        TextEditingController(text: data?["filmTitle"] ?? "");
+    MediaIdController =
+        TextEditingController(text: data?["media_id"] ?? "");
   }
 
   @override
@@ -117,7 +117,7 @@ class _AfegirPersonatgeScreen extends State<AfegirPersonatgeScreen> {
               ),
               const SizedBox(height: 8),
               TextField(
-                controller: titleController,
+                controller: MediaIdController,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.grey[100],
@@ -137,14 +137,14 @@ class _AfegirPersonatgeScreen extends State<AfegirPersonatgeScreen> {
                         nameController.text,
                         imagePathController.text,
                         descriptionController.text,
-                        titleController.text,
+                        MediaIdController.text,
                       );
                     } else {
                       await modifyCharacter(
                         nameController.text,
                         imagePathController.text,
                         descriptionController.text,
-                        titleController.text,
+                        MediaIdController.text,
                       );
                     }
 
