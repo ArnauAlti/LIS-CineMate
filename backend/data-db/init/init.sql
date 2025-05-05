@@ -207,7 +207,7 @@ SELECT
     m.png, 
     m.type, 
     m.moviedb_rating as rating, 
-    string_agg(g.name, ',' ORDER BY g.name), 
+    string_agg(g.name, ',' ORDER BY g.name) as genres, 
     i.release, 
     i.director, 
     i.cast
@@ -215,7 +215,7 @@ FROM
     media m
     LEFT JOIN LATERAL json_array_elements_text(m.genres) AS genre_id ON TRUE
     LEFT JOIN info i ON i.id = m.id OR i.id = m.id || '-1'
-    LEFT JOIN genres g ON g.id = genre_id::INTEGER
+    LEFT JOIN genres g ON g.moviedb = genre_id::INTEGER
 WHERE 
     m.active = true
 GROUP BY
