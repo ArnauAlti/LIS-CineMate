@@ -101,6 +101,16 @@ app.use('/library', createProxyMiddleware({
     },
 }));
 
+app.use('/character', createProxyMiddleware({ 
+    target: 'http://10.5.0.7:3000', 
+    changeOrigin: true, 
+    on: {
+        proxyReq: (proxyReq, req, res) => {
+            proxyReq.setHeader('req_admin', admin);
+        },
+    },
+}));
+
 app.listen(port, () => {
     console.log(`API Gateway running on http://localhost:${port}`);
 });
