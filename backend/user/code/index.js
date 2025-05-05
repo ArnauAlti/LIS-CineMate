@@ -3,7 +3,8 @@ const express = require('express');
 
 const signInUser = require("./resources/user-create");
 const logInUser = require("./resources/user-login");
-const modifyUser = require("./resources/user-update");
+const modifyUser = require("./resources/user-modify");
+const isUserAdmin = require("./resources/user-admin");
 
 const app = express();
 const port = 3000;
@@ -25,6 +26,7 @@ app.use(async (req, res, next) => {
 app.post("/create", signInUser);
 app.post("/login", logInUser);
 app.post("/modify", modifyUser);
+app.post("/admin", isUserAdmin);
 
 app.listen(port, () => {
     console.log(`API running on http://localhost:${port}`);

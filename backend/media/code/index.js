@@ -12,9 +12,8 @@ const setMovies = require("./resources/moviedb-download-movies");
 const setShows = require("./resources/moviedb-download-shows");
 
 const getMedia = require('./resources/media-get.js');
-const download = require('./resources/genBBDD.js');
-const createMedia = require('./resources/create-media.js');
-const deleteMedia = require('./resources/media-delete.js');
+const disableMedia = require('./resources/media-disable.js');
+const enableMedia = require('./resources/media-enable.js');
 const modifyMedia = require('./resources/media-modify.js');
 
 const app = express();
@@ -92,11 +91,14 @@ app.get("/set-genres", setGenres);
 
 app.get("/get-media/*", getMedia);
 
-app.post("/delete-media", deleteMedia);
+// app.post("/delete-media", deleteMedia);
 
-app.post("/create-media", createMedia);
+// app.post("/create-media", createMedia);
 
 app.post("/modify-media", modifyMedia);
+
+app.post("/disable", disableMedia);
+app.post("/enable", enableMedia);
 
 app.all("/*", (req, res) => {
     console.log(req.url);

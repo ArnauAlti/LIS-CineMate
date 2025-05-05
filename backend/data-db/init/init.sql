@@ -192,7 +192,7 @@ CREATE TABLE "comments" (
 
 CREATE VIEW "recommender_query_media_genres" AS 
 SELECT m.id,  string_agg(g.name, '|' ORDER BY g.name) AS genres
-FROM media m,
+FROM media m, 
 json_array_elements_text(m.genres) AS genre_id
 JOIN genres g ON g.id = genre_id::INTEGER
 GROUP BY m.id;
@@ -200,10 +200,27 @@ GROUP BY m.id;
 
 
 CREATE VIEW "view_media" AS
-SELECT m.sec, m.id, m.name, m.png, m.type, m.moviedb_rating, i.release 
-FROM media m
-JOIN info i ON i.id = m.id OR i.id = m.id || '-1'
-WHERE m.active = true;
+SELECT 
+    m.sec, 
+    m.id, 
+    m.name, 
+    m.png, 
+    m.type, 
+    m.moviedb_rating as rating, 
+    string_agg(g.name, ',' ORDER BY g.name), 
+    i.release, 
+    i.director, 
+    i.cast
+FROM 
+    media m
+    LEFT JOIN LATERAL json_array_elements_text(m.genres) AS genre_id ON TRUE
+    LEFT JOIN info i ON i.id = m.id OR i.id = m.id || '-1'
+    LEFT JOIN genres g ON g.id = genre_id::INTEGER
+WHERE 
+    m.active = true
+GROUP BY
+    m.sec, m.id, m.name, m.png, m.type, m.moviedb_rating, i.release, i.director, i.cast
+;
 
 CREATE VIEW "view_media_admin" AS
 SELECT m.sec, m.id, m.name, m.png, m.type, m.moviedb_rating, i.release 

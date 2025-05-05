@@ -2,7 +2,7 @@
 const userDB = require("./db-data.js");
 const authDB = require("./db-auth.js");
 
-async function all(p, type, search, order) {
+async function all(p, type, search, genres, director, cast, order) {
     if (!p) {
         throw "An argument is missing";
     }
@@ -10,7 +10,7 @@ async function all(p, type, search, order) {
     let filterCount = 0;
     let filterConcat = "WHERE ";
     let filters = []
-    let order = order == "rating" ? "moviedb_rating" : order == "release" ? "release" : "name";
+    order = order == "rating" ? "moviedb_rating" : order == "release" ? "release" : "name";
     if (type) {
         filter = true;
         filterCount++;
@@ -20,6 +20,20 @@ async function all(p, type, search, order) {
         filter = true;
         filterCount++;
         filters.push("name % '" + search + "' ");
+    }
+    // TODO No se como hacer lo de los generos
+    // if (genres) {
+        
+    // }
+    if (director) {
+        filter = true;
+        filterCount++;
+        filters.push("director % '" + director + "' ");
+    }
+    if (cast) {
+        filter = true;
+        filterCount++;
+        filters.push("director % '" + cast + "' ");
     }
     for (let index = 0; index < filterCount; index++) {
         if (index == 0) {
@@ -60,6 +74,8 @@ async function getMedia(req, res) {
         const search = req.query.search;
         const type = req.query.type;
         const order = req.query.order;
+        const genres = req.query.genres;
+        const director = req.query.director;
         let nurl = String(req.url).split("?")[0].split("/")[2];
         console.log(nurl);
         let data;
