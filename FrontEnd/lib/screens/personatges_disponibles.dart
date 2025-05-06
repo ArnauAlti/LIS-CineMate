@@ -7,8 +7,7 @@ class PersonatgesDisponiblesScreen extends StatefulWidget {
   final String busqueda;
 
   @override
-  State<PersonatgesDisponiblesScreen> createState() =>
-      _PersonatgesDisponiblesScreen();
+  State<PersonatgesDisponiblesScreen> createState() => _PersonatgesDisponiblesScreen();
 }
 
 class _PersonatgesDisponiblesScreen extends State<PersonatgesDisponiblesScreen> {
@@ -41,39 +40,46 @@ class _PersonatgesDisponiblesScreen extends State<PersonatgesDisponiblesScreen> 
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No s\'han trobat personatges.'));
           }
 
-          final characters = snapshot.data!;
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+
+          final characters = snapshot.data ?? [];
 
           return SingleChildScrollView(
             padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                Text(
-                  "Personatges disponibles de: ${widget.busqueda}",
-                  style: const TextStyle(fontSize: 16),
-                ),
-                const SizedBox(height: 20),
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                    childAspectRatio: 0.7,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 15),
+                  const Text("Personajes disponibles!!",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  itemCount: characters.length,
-                  itemBuilder: (context, index) {
-                    final char = characters[index];
-                    return buildCharacterCard(context, char);
-                  },
-                ),
-              ],
+                  const SizedBox(height: 50),
+                  for (int i = 0; i < characters.length; i += 2)
+                    Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            buildCharacterCard(context, characters[i]),
+                            if (i + 1 < characters.length)
+                              buildCharacterCard(context, characters[i + 1]),
+                          ],
+                        ),
+                        const SizedBox(height: 50),
+                      ],
+                    ),
+                ],
+              ),
             ),
           );
         },
@@ -83,32 +89,45 @@ class _PersonatgesDisponiblesScreen extends State<PersonatgesDisponiblesScreen> 
 
   Widget buildCharacterCard(BuildContext context, Map<String, dynamic> char) {
     final name = char['name'] ?? 'Nom no disponible';
-    final imagePath = char['imagePath'] ?? '';
+    final imagePath = char['png'] ?? '';
 
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => InfoPersonatge(
-              charData: char,
-            ),
+            builder: (context) => InfoPersonatge(charData: char),
           ),
         );
       },
       child: Column(
         children: [
-          Expanded(
+          SizedBox(
+            height: 150,
+            width: 100,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.network(
+              child: imagePath.isNotEmpty
+                  ? Image.network(
                 imagePath,
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => Container(
+                  color: Colors.grey[300],
+                  child: const Icon(Icons.broken_image),
+                ),
+              )
+                  : Container(
+                color: Colors.grey[300],
+                child: const Icon(Icons.image_not_supported),
               ),
             ),
           ),
           const SizedBox(height: 8),
-          Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text(
+            name,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );

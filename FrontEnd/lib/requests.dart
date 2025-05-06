@@ -608,29 +608,55 @@ Future<List<Map<String, dynamic>>> getQuestions(String title) async {
   ];
 }
 
-//Funció per aconseguir els personatges de la pel·lícula o sèrie cercada
-Future<List<Map<String, dynamic>>> getCharactersBySearch(String search) async {
-  // TODO: Implementar crida real a la base de dades
-  return [
-    {
-      'name': "Eleven",
-      'imagePath': "https://images.hdqwalls.com/download/stranger-things-eleven-art-nw-1280x2120.jpg",
-      'context': "• Té habilitats psíquiques\n• Desconfia de la gent\n• Parla molt bé dels seus amics",
-      'filmTitle': "Stranger Things",
-    },
-    {
-      'name': "Will",
-      'imagePath': "https://i.pinimg.com/originals/ec/6d/59/ec6d59f48c5e8ba9b5021b68c8c401dd.jpg",
-      'context': "• S'espanta molt sovint. \n• Desconfia de la gent degut a traumes del passat \n• El va raptar una altra dimensió",
-      'filmTitle': "Stranger Things",
-    },
-  ];
-}
+
 
 //TODO: Funció per afegir un personatge com a xat
 //Funció que permet afegir un personatge escollit per establir un xat amb ell/a
 Future<bool> addCharacterToChat(String name) async {
   return true;
+}
+
+//Funció per aconseguir els personatges de la pel·lícula o sèrie cercada
+Future<List<Map<String, dynamic>>> getCharactersBySearch(String search) async {
+  final Uri uri = Uri.parse("$baseUrl/character/get-characters");
+
+  final Map<String, dynamic> body = {
+    'movie_name': search,
+  };
+
+  try {
+    final response = await http.post(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
+      body: convert.jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      print("✅ Request exitosa mostrar personatges.");
+      final decodedBody = convert.jsonDecode(response.body);
+      print(decodedBody);
+      final data = decodedBody['characters'];
+      print(data);
+
+      if (data is List) {
+        return List<Map<String, dynamic>>.from(data);
+      } else {
+        return [];
+      }
+
+    } else {
+      print("❌ Error en la request de mostrar personatges. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return [];
+    }
+  } catch (e) {
+    print("🚫 Excepción al realizar la request de mostrar personatges: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
+
 }
 
 //TODO: Funció per afegir o modificar un personatge a la BD
@@ -669,12 +695,12 @@ Future<bool> addCharacter(String name, String imagePath, String description, Str
   }
 }
 
-Future<bool> modifyCharacter(String name, String imagePath, String description, String mediaId) async {
+Future<bool> modifyCharacter(String name, String imagePath, String description, String movieName) async {
   final Uri uri = Uri.parse("$baseUrl/character/modify-character"); //Modificar Uri
 
   final Map<String, dynamic> body = {
     'name': name,
-    'media_id': mediaId,
+    'movie_name': movieName,
     'context': description,
     'png': imagePath
   };

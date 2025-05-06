@@ -8,13 +8,11 @@ async function addCharacter(req, res) {
             throw "No name Specified";
         }
 
-        // NUEVO: nombre de la película para buscar media_id
         let movieName = req.body['movie_name'];
         if (!movieName) {
             throw "No movie name specified";
         }
 
-        // Consultamos el ID a partir del nombre de película
         const mediaQuery = await userDB.query(
             'SELECT id FROM media WHERE name = $1',
             [movieName]

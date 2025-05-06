@@ -24,7 +24,7 @@ app.use(async (req, res, next) => {
 app.post("/add-character", addCharacter);
 app.post("/modify-character", modifyCharacter);
 app.post("/delete-character", deleteCharacter);
-app.get("/get-characters", getCharacters);
+app.post("/get-characters", getCharacters);
 app.post("/chat-character", chatCharacter);
 
 app.all("/*", (req, res) => {

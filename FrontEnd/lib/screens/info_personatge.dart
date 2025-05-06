@@ -18,7 +18,7 @@ class InfoPersonatge extends StatelessWidget {
     final userRoleProvider = Provider.of<UserRoleProvider>(context);
     final userRole = userRoleProvider.userRole;
     final name = charData?['name'] ?? 'Nombre no disponible';
-    final imagePath = charData?['imagePath'] ?? '';
+    final imagePath = charData?['png'] ?? '';
     final contextInfo = charData?['context'] ?? '';
 
     return Scaffold(
