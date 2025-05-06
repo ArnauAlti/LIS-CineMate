@@ -106,7 +106,7 @@ app.use('/character', createProxyMiddleware({
     changeOrigin: true, 
     on: {
         proxyReq: (proxyReq, req, res) => {
-            proxyReq.setHeader('req_admin', admin);
+            proxyReq.setHeader('mode', mode);
         },
     },
 }));

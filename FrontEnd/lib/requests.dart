@@ -635,12 +635,12 @@ Future<bool> addCharacterToChat(String name) async {
 
 //TODO: Funció per afegir o modificar un personatge a la BD
 //Funció que permet afegir un personatge a la base de dades de personatges disponibles per establir un xat amb ell/a
-Future<bool> addCharacter(String name, String imagePath, String description, String mediaId) async {
+Future<bool> addCharacter(String name, String imagePath, String description, String movieName) async {
   final Uri uri = Uri.parse("$baseUrl/character/add-character"); //Modificar Uri
 
   final Map<String, dynamic> body = {
     'name': name,
-    'media_id': mediaId,
+    'movie_name': movieName,
     'context': description,
     'png': imagePath
   };
@@ -651,7 +651,7 @@ Future<bool> addCharacter(String name, String imagePath, String description, Str
       body: convert.jsonEncode(body),
       headers: {
         'Content-Type': 'application/json',
-        'api-key': 'KgtblvdX5JWXMG6UQvB96owx1gm3fX73lYxbWctYDFTPRAEaNXHoocTc61blvFPvivV2T1CjpFnLY9OAdPwIpRXBLSvjWjW9'
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
       },
     );
     if (response.statusCode == 200) {

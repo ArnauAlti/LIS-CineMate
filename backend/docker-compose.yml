@@ -24,6 +24,11 @@ services:
     networks:
       test:
         ipv4_address: 10.5.0.6
+  ms-character:
+    build: ./character
+    networks:
+      test:
+        ipv4_address: 10.5.0.7
   db-data:
     image: postgres:17
     restart: always

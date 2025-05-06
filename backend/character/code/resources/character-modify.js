@@ -1,4 +1,5 @@
-const userDB = require("./db.js");
+const userDB = require("./db-data.js");
+const authDB = require("./db-auth.js");
 
 async function modifyCharacter(req, res) {
     try {
