@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 
@@ -28,7 +29,6 @@ class MovieRecommenderBase:
         - Remove spaces in genres.
         - Drop rows with empty genres.
         """
-        self.movies['genres'] = self.movies['genres'].str.replace(' ', '')
         self.movies = self.movies[self.movies['genres'] != '']
 
     def _build_similarity_matrix(self):
@@ -45,3 +45,25 @@ class MovieRecommenderBase:
         tfidf_matrix = tfidf.fit_transform(self.movies['genres'])
         sim_matrix = linear_kernel(tfidf_matrix, tfidf_matrix)
         return tfidf_matrix, sim_matrix
+    
+    def _process_user_preferences(self, user_ratings):
+        """Convert user ratings into a weighted similarity score vector.
+        
+        Args:
+            user_ratings (list): List of tuples [(movie_id, rating_1_to_5), ...].
+        
+        Returns:
+            np.ndarray: Combined similarity scores normalized by total weight.
+        """
+        combined_scores = np.zeros(len(self.movies))
+        total_weight = 0
+        
+        for movie_id, rating in user_ratings:
+            if movie_id in self.id_to_index:
+                idx = self.id_to_index[movie_id]
+                # Convert rating (1-5) to weight (-1 to +1)
+                weight = (rating - 3) / 2  
+                combined_scores += self.sim_matrix[idx] * weight
+                total_weight += abs(weight)
+        
+        return combined_scores / total_weight if total_weight > 0 else combined_scores

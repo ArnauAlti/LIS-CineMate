@@ -3,14 +3,15 @@ from pydantic import BaseModel
 
 class MovieRecommendation(BaseModel):
     id: str
-    genres: str
-    year: Optional[int] = None
-    score: Optional[float] = None
 
 class RecommendationResponse(BaseModel):
     ok: bool
-    recommendations: List[MovieRecommendation]
+    recommendations: List[str]
+    top_genres: List[str]
     message: Union[str, None] = None
+
+class RecommendationRequest(BaseModel):
+    ok: bool = True
 
 class RecommendationRequest(BaseModel):
     ratings: List[Tuple[str, int]]  

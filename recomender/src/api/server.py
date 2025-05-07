@@ -94,15 +94,16 @@ def recommend_star_rating(request: RecommendationRequest):
             )
         
         recommender = StarRatingRecommender(DATA_PATH)
-        recommendations = recommender.get_personalized_recommendations(
+        result = recommender.get_personalized_recommendations(
             user_ratings=request.ratings,
             top_n=request.top_n,
             genre_diversity=request.genre_diversity
         )
-        
+
         return {
             "ok": True,
-            "recommendations": recommendations.to_dict('records'),
+            "recommendations": result['recommendations'],
+            "top_genres": result['top_genres'],
             "message": "Recommendations generated successfully"
         }
         
@@ -145,7 +146,7 @@ def recommend_star_rating_genre(request: StarRatingGenreRequest):
             )
 
         recommender = StarRatingGenreFilteredRecommender(DATA_PATH)
-        recommendations = recommender.get_personalized_recommendations(
+        result = recommender.get_personalized_recommendations(
             user_ratings=request.ratings,
             genre_filter=request.genre_filter,
             top_n=request.top_n,
@@ -154,8 +155,9 @@ def recommend_star_rating_genre(request: StarRatingGenreRequest):
 
         return {
             "ok": True,
-            "recommendations": recommendations.to_dict('records'),
-            "message": f"Recommendations filtered by {request.genre_filter} generated successfully"
+            "recommendations": result['recommendations'],
+            "top_genres": result['top_genres'],
+            "message": "Recommendations generated successfully"
         }
         
     except Exception as e:

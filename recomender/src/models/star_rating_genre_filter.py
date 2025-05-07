@@ -24,31 +24,6 @@ class StarRatingGenreFilteredRecommender(MovieRecommenderBase):
                 filtered_indices.append(idx)
         return filtered_indices
     
-    def _process_user_preferences(self, user_ratings):
-        """Convert user ratings into a weighted similarity score vector.
-        
-        Args:
-            user_ratings (list): List of tuples [(movie_id, rating_1_to_5), ...].
-        
-        Returns:
-            np.ndarray: Combined similarity scores normalized by total weight.
-        """
-        combined_scores = np.zeros(len(self.movies))
-        total_weight = 0
-        
-        for movie_id, rating in user_ratings:
-            if movie_id in self.id_to_index:
-                idx = self.id_to_index[movie_id]
-                # Convert rating 1-5 to weight (-1 to +1)
-                weight = (rating - 3) / 2
-                combined_scores += self.sim_matrix[idx] * weight
-                total_weight += abs(weight)
-        
-        if total_weight > 0:
-            combined_scores /= total_weight
-            
-        return combined_scores
-    
     def get_personalized_recommendations(self, user_ratings, genre_filter=None, top_n=5, genre_diversity=False):
         """Generate recommendations, optionally filtered by genres.
         
@@ -79,12 +54,16 @@ class StarRatingGenreFilteredRecommender(MovieRecommenderBase):
         # Select final recommendations
         recommendations = []
         selected_genres = set()
+        genre_counter = {}
         
         for idx in potential_recs:
             if len(recommendations) >= top_n:
                 break
                 
             genres = set(self.movies.iloc[idx]['genres'].split('|'))
+
+            for genre in genres:
+                genre_counter[genre] = genre_counter.get(genre, 0) + 1
             
             if genre_diversity:
                 if not genres.issubset(selected_genres):
@@ -93,4 +72,10 @@ class StarRatingGenreFilteredRecommender(MovieRecommenderBase):
             else:
                 recommendations.append(idx)
         
-        return self.movies.iloc[recommendations][['id', 'genres']]
+        top_genres = sorted(genre_counter.items(), key=lambda x: x[1], reverse=True)[:2]
+        top_genres = [genre for genre, count in top_genres]
+
+        return {
+            'recommendations': self.movies.iloc[recommendations]['id'].tolist(),
+            'top_genres': top_genres
+        }
