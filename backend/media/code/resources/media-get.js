@@ -35,7 +35,8 @@ async function all(p, type, search, genre, director, cast, order) {
     if (cast) {
         filter = true;
         filterCount++;
-        filters.push('"cast" ILIKE \'%' + cast + '%\'');    }
+        filters.push("cast % '" + cast + "' ");
+    }
     for (let index = 0; index < filterCount; index++) {
         if (index == 0) {
             filterConcat = filterConcat + filters[index];
@@ -43,7 +44,6 @@ async function all(p, type, search, genre, director, cast, order) {
             filterConcat = filterConcat + "AND " + filters[index];
         }
     }
-    console.log(filters);
     console.log("p: ", p);
     console.log("type: ", type);
     let mult = (10 * (p - 1));

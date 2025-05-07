@@ -1,5 +1,4 @@
 const userDB = require("./db-data.js");
-const authDB = require("./db-auth.js");
 
 async function addCharacter(req, res) {
     try {

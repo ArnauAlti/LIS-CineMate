@@ -7,25 +7,10 @@ async function modifyCharacter(req, res) {
         if (!characterName) {
             throw "No name Specifcied";
         }
-        const movieName = req.body['movie_name'];
-        console.log("movie_name received:", movieName);
-
-        if (!movieName) {
-            throw "No movie name specified";
+        let characterMediaID = req.body['media_id'];
+        if (!characterMediaID) {
+            throw "No media Specified";
         }
-
-        const mediaQuery = await userDB.query(
-            'SELECT id FROM media WHERE name = $1',
-            [movieName]
-        );
-        console.log("Media query result:", mediaQuery.rows);
-
-        if (mediaQuery.rows.length === 0) {
-            throw "Movie not found in database";
-        }
-
-        const characterMediaID = mediaQuery.rows[0].id;
-
         let characterPng = req.body['png'];
         if (!characterPng) {
             throw "No png Specified"

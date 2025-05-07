@@ -1,4 +1,4 @@
-const userDB = require("./db.js");
+const userDB = require("./db-data.js");
 
 async function modifyMedia(req, res) {
     try {

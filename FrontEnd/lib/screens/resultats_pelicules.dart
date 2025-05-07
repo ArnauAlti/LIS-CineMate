@@ -29,7 +29,7 @@ class _ResultatsPeliculesState extends State<ResultatsPelicules> {
   void initState() {
     super.initState();
     _filmsFuture = getFilmsBySearch(widget.search, widget.genre, widget.director,
-        widget.actor, widget.duration as int);
+        widget.actor, widget.duration);
   }
 
   @override
