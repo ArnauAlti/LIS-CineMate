@@ -2,16 +2,18 @@ from .base_recommender import MovieRecommenderBase
 import numpy as np
 
 class StarRatingGenreFilteredRecommender(MovieRecommenderBase):
-    def __init__(self, data_path='data/movies.csv'):
-        """
-        Initializes the recommender without genre filter
-        """
-        super().__init__(data_path)
-        # Create ID to index mapping
-        self.id_to_index = {row['id']: idx for idx, row in self.movies.iterrows()}
-    
+    """Recommender system with genre filtering: only includes movies from specified genres."""
+
     def _filter_by_genres(self, movie_indices, genre_filter):
-        """Filter movies by specified genres"""
+        """Filter movies to include only those matching at least one genre in the filter.
+        
+        Args:
+            movie_indices (list): Indices of candidate movies.
+            genre_filter (list): Genres to include (e.g., ['Action', 'Adventure']).
+        
+        Returns:
+            list: Indices of movies passing the genre filter.
+        """
         if not genre_filter:
             return movie_indices
             
@@ -23,13 +25,18 @@ class StarRatingGenreFilteredRecommender(MovieRecommenderBase):
         return filtered_indices
     
     def _process_user_preferences(self, user_ratings):
-        """
-        Process user ratings (list of tuples: [(media-X, rating)])
+        """Convert user ratings into a weighted similarity score vector.
+        
+        Args:
+            user_ratings (list): List of tuples [(movie_id, rating_1_to_5), ...].
+        
+        Returns:
+            np.ndarray: Combined similarity scores normalized by total weight.
         """
         combined_scores = np.zeros(len(self.movies))
         total_weight = 0
         
-        for movie_id, rating in user_ratings.get('ratings', []):
+        for movie_id, rating in user_ratings:
             if movie_id in self.id_to_index:
                 idx = self.id_to_index[movie_id]
                 # Convert rating 1-5 to weight (-1 to +1)
@@ -42,15 +49,17 @@ class StarRatingGenreFilteredRecommender(MovieRecommenderBase):
             
         return combined_scores
     
-    def get_personalized_recommendations(self, user_ratings, genre_filter=None, top_n=5, genre_diversity=True):
-        """
-        Get recommendations with optional genre filtering
+    def get_personalized_recommendations(self, user_ratings, genre_filter=None, top_n=5, genre_diversity=False):
+        """Generate recommendations, optionally filtered by genres.
         
         Args:
-            user_ratings: List of tuples [(media-X, rating 1-5)]
-            genre_filter: Optional list of genres to filter by
-            top_n: Number of recommendations
-            genre_diversity: Whether to enforce genre diversity
+            user_ratings (list): List of tuples [(movie_id, rating_1_to_5), ...].
+            genre_filter (list): Only include movies with these genres.
+            top_n (int): Number of recommendations to return.
+            genre_diversity (bool): Enforce genre diversity if True.
+        
+        Returns:
+            pd.DataFrame: Recommended movies with columns ['id', 'genres'].
         """
         combined_scores = self._process_user_preferences(user_ratings)
         rated_ids = {movie_id for movie_id, _ in user_ratings}

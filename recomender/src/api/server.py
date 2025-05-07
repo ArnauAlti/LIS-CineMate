@@ -1,77 +1,169 @@
-from fastapi import FastAPI, HTTPException, UploadFile, File
-from fastapi.middleware.cors import CORSMiddleware
-from ..models import (
-    StarRatingRecommender,
-    StarRatingGenreFilteredRecommender
-)
-from .schemas import MovieRecommendation, RecommendationRequest, Rating
-from typing import List
+from fastapi import FastAPI, HTTPException
+from pathlib import Path
+from io import StringIO
 import pandas as pd
-import os
-from typing import List
-from .utils import convert_ratings_to_old_format
+from ..models import (
+    MovieRecommenderBase,
+    StarRatingRecommender,
+    StarRatingGenreFilteredRecommender,
+)
+from .schemas import (
+    RecommendationResponse,
+    RecommendationRequest,
+    BodyData,
+    StarRatingGenreRequest,
+)
 
-app = FastAPI()
+app = FastAPI(root_path="/api")
+
+# Constants
+DATA_FOLDER = Path("/app/src/data")  # Absolute path inside container
+DATA_FOLDER.mkdir(exist_ok=True, parents=True)
+DATA_PATH = DATA_FOLDER / "movie.csv"  # Consistent filename
 
 # Initialize recommenders
-DATA_PATH = os.path.join(os.path.dirname(__file__), '../data/movie2.csv')
+app.state.basic_recommender = MovieRecommenderBase(DATA_PATH)
+
 
 @app.get("/")
 def read_root():
+    """Health check endpoint.
+    
+    Returns:
+        dict: Simple status message.
+    """
     return {"message": "Movie Recommendation API"}
 
-@app.post("/upload-csv/")
-def upload_csv(file: UploadFile = File(...)):
+
+@app.post("/load-dataset/")
+async def load_dataset(csv_data: BodyData = None):
+    """Load or update the movie dataset from provided CSV data.
+    
+    Args:
+        csv_data (BodyData): CSV content as string in the request body.
+        
+    Returns:
+        dict: Operation status with success message.
+        
+    Raises:
+        HTTPException: 400 for invalid CSV, 500 for processing errors.
+    """
     try:
-        if not file.filename.endswith('.csv'):
-            raise HTTPException(status_code=400, detail="Only CSV files are allowed")
+        # Validate and parse CSV
+        try:
+            df = pd.read_csv(StringIO(csv_data.data))
+        except pd.errors.ParserError as e:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Invalid CSV format: {str(e)}"
+            )
         
-        data_dir = os.path.join(os.path.dirname(__file__), '../data')
-        os.makedirs(data_dir, exist_ok=True)
-        file_path = os.path.join(data_dir, 'movie.csv')
-        
-        # Versión sincrónica
-        contents = file.file.read()
-        with open(file_path, 'wb') as f:
-            f.write(contents)
-        
-        return {"message": f"File uploaded successfully and saved as 'movie.csv'"}
-    
+        # Save dataset and reinitialize recommender
+        df.to_csv(DATA_PATH, index=False)
+        app.state.basic_recommender = MovieRecommenderBase(DATA_PATH)
+
+        return {
+            "message": "Dataset loaded and recommender reinitialized successfully",
+            "ok": True
+        }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error processing file: {str(e)}")
-    finally:
-        file.file.close()
+        raise HTTPException(
+            status_code=500,
+            detail=f"Dataset loading failed: {str(e)}"
+        )
 
-@app.post("/recommend/star-rating", response_model=List[MovieRecommendation])
+
+@app.post("/recommend/star-rating", response_model=RecommendationResponse)
 def recommend_star_rating(request: RecommendationRequest):
+    """Generate recommendations based on user star ratings (1-5 scale).
+    
+    Args:
+        request (RecommendationRequest): Contains ratings, top_n, and diversity flag.
+        
+    Returns:
+        RecommendationResponse: Structured response with recommendations.
+        
+    Raises:
+        HTTPException: 400 for missing ratings, 500 for processing errors.
+    """
+    try:
+        if not request.ratings:
+            raise HTTPException(
+                status_code=400,
+                detail="At least one star rating is required"
+            )
+        
+        recommender = StarRatingRecommender(DATA_PATH)
+        recommendations = recommender.get_personalized_recommendations(
+            user_ratings=request.ratings,
+            top_n=request.top_n,
+            genre_diversity=request.genre_diversity
+        )
+        
+        return {
+            "ok": True,
+            "recommendations": recommendations.to_dict('records'),
+            "message": "Recommendations generated successfully"
+        }
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "ok": False,
+                "message": f"Recommendation failed: {str(e)}",
+                "recommendations": []
+            }
+        )
 
-    if not request.ratings:
-        raise HTTPException(status_code=400, detail="Star ratings required")
-    
-    request.ratings = convert_ratings_to_old_format(request.ratings)
-    
-    recommender = StarRatingRecommender(DATA_PATH)
-    recommendations = recommender.get_personalized_recommendations(
-        user_preferences=request.ratings,
-        top_n=request.top_n,
-        genre_diversity=request.genre_diversity
-    )
-    return recommendations.to_dict('records')
 
-@app.post("/recommend/star-rating-genre", response_model=List[MovieRecommendation])
-def recommend_star_rating_genre(request: RecommendationRequest):
-    if not request.ratings or not request.genre_filter:
-        raise HTTPException(status_code=400, detail="Both ratings and genre filter required")
+@app.post("/recommend/star-rating-genre", response_model=RecommendationResponse)
+def recommend_star_rating_genre(request: StarRatingGenreRequest):
+    """Generate genre-filtered recommendations based on star ratings.
     
-    request.ratings = convert_ratings_to_old_format(request.ratings)
-    
-    recommender = StarRatingGenreFilteredRecommender(
-        data_path=DATA_PATH,
-        genre_filter=request.genre_filter
-    )
-    recommendations = recommender.get_personalized_recommendations(
-        user_preferences=request.ratings,
-        top_n=request.top_n,
-        genre_diversity=request.genre_diversity
-    )
-    return recommendations.to_dict('records')
+    Args:
+        request (StarRatingGenreRequest): Contains ratings, genre filter, 
+                                         top_n, and diversity flag.
+                                         
+    Returns:
+        RecommendationResponse: Structured response with filtered recommendations.
+        
+    Raises:
+        HTTPException: 400 for missing params, 500 for processing errors.
+    """
+    try:
+        # Input validation
+        if not request.ratings:
+            raise HTTPException(
+                status_code=400,
+                detail="At least one star rating is required"
+            )
+        if not request.genre_filter:
+            raise HTTPException(
+                status_code=400,
+                detail="At least one genre filter is required"
+            )
+
+        recommender = StarRatingGenreFilteredRecommender(DATA_PATH)
+        recommendations = recommender.get_personalized_recommendations(
+            user_ratings=request.ratings,
+            genre_filter=request.genre_filter,
+            top_n=request.top_n,
+            genre_diversity=request.genre_diversity
+        )
+
+        return {
+            "ok": True,
+            "recommendations": recommendations.to_dict('records'),
+            "message": f"Recommendations filtered by {request.genre_filter} generated successfully"
+        }
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "ok": False,
+                "message": f"Filtered recommendation failed: {str(e)}",
+                "recommendations": []
+            }
+        )

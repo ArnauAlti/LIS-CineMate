@@ -9,7 +9,7 @@ warnings.filterwarnings('ignore')
 if __name__ == "__main__":
     # Get the absolute path to the data file
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    data_path = os.path.join(current_dir, 'data', 'movie_2.csv')
+    data_path = os.path.join(current_dir, 'data', 'movie.csv')
     
     # 1. Demonstrate Star Rating Recommender
     print("\n=== STAR RATING RECOMMENDER ===")
@@ -17,22 +17,21 @@ if __name__ == "__main__":
 
     user_ratings = {
         'ratings': [
-            ('media-1', 5),  # Máxima preferencia
-            ('media-3', 1),  # Máximo rechazo
+            ('media-1', 5),  
+            ('media-3', 1),
             ('media-9', 4)
         ]
     }
     
-    print("\nTop 5 Recommended Movies (based on star ratings):")
-    star_recommendations = star_rec.get_personalized_recommendations(user_ratings)
-    print(star_recommendations)
+    print("\nTop 3 Recommended Movies (based on star ratings):")
+    print(star_rec.get_personalized_recommendations(user_ratings, top_n=3))
     
     # 2. Demonstrate Star Rating Genre Filtered Recommender
     print("\n=== STAR RATING GENRE FILTERED RECOMMENDER ===")
     star_genre_rec = StarRatingGenreFilteredRecommender(
         data_path=data_path,
     )
-    genre_filter = ['Action']
+    genre_filter = ['Action', 'Adventure']  # Example genre filter
 
     print(f"\nTop 3 Recommended {', '.join(genre_filter)} Movies (star ratings):")
     print(star_genre_rec.get_personalized_recommendations(user_ratings, top_n=3))
