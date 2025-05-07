@@ -1,6 +1,6 @@
-import 'package:cine_mate/screens/afegir_personatge.dart';
-
 import 'xats_actius.dart';
+import 'package:cine_mate/screens/afegir_personatge.dart';
+import 'package:cine_mate/screens/personatges_disponibles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
@@ -121,7 +121,7 @@ class InfoPersonatge extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () async {
                     await deleteCharacter(name, charData?['media_id']);
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const XatsActiusScreen()));
+                    Navigator.pop(context);
                   },
                   style: ButtonStyle(
                     backgroundColor: const WidgetStatePropertyAll<Color>(Colors.red),

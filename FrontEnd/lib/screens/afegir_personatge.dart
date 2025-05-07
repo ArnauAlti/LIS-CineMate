@@ -33,7 +33,7 @@ class _AfegirPersonatgeScreen extends State<AfegirPersonatgeScreen> {
     imagePathController =
         TextEditingController(text: data?["imagePath"] ?? "");
     MediaIdController =
-        TextEditingController(text: data?["media_id"] ?? "");
+        TextEditingController(text: data?["movie_name"] ?? "");
   }
 
   @override

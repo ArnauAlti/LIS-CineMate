@@ -711,7 +711,7 @@ Future<bool> modifyCharacter(String name, String imagePath, String description, 
       body: convert.jsonEncode(body),
       headers: {
         'Content-Type': 'application/json',
-        'api-key': 'KgtblvdX5JWXMG6UQvB96owx1gm3fX73lYxbWctYDFTPRAEaNXHoocTc61blvFPvivV2T1CjpFnLY9OAdPwIpRXBLSvjWjW9'
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
       },
     );
     if (response.statusCode == 200) {
@@ -745,7 +745,7 @@ Future<bool> deleteCharacter(String name, String mediaId) async {
       body: convert.jsonEncode(body),
       headers: {
         'Content-Type': 'application/json',
-        'api-key': 'KgtblvdX5JWXMG6UQvB96owx1gm3fX73lYxbWctYDFTPRAEaNXHoocTc61blvFPvivV2T1CjpFnLY9OAdPwIpRXBLSvjWjW9'
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
       },
     );
     if (response.statusCode == 200) {

@@ -23,14 +23,22 @@ async function getCharacters(req, res) {
         console.log("Media ID:", mediaId);
 
         const characterQuery = await userDB.query(
-            'SELECT name, context, png FROM characters WHERE media_id = $1',
+            'SELECT name, context, png, media_id FROM characters WHERE media_id = $1',
             [mediaId]
         );
         console.log("Character query result:", characterQuery.rows);
 
-        res.status(200).json({ characters: characterQuery.rows });
+        res.status(200).json({
+            movie_name: movieName,
+            characters: characterQuery.rows
+        });
         
-        return characterQuery.rows;
+        // return characterQuery.rows;
+        return {
+            movie_name: movieName,
+            characters: characterQuery.rows
+        };
+          
 
     } catch (error) {
         console.error("Error in getCharacters:", error);
