@@ -1,32 +1,45 @@
 const userDB = require("./db-data.js");
+const axios = require('axios');
 
-async function checkDB() {
+async function sendMedia(req, res) {
     try {
-        console.log('what')
-        const client = await userDB.connect();
-        await client.query('SELECT * FROM media_genres');
-        client.release();
-        return true;
-    } catch (error) {
-        console.log('Problem with database');
-        return false;
-    }
-}
-
-async function sendGenres() {
-    let test_var = await checkDB().valueOf();
-    console.log(test_var)
-    if (test_var) {
-        console.log("Attempting to download genre data from database.");
-        let quer = await userDB.query(
-            'SELECT * FROM media_genres'
+        const query = await userDB.query(
+            'SELECT * FROM recommender_query_media_genres LIMIT 100',
+            []
         );
-        let result = quer.rows;
-        console.log(result);
-        console.log(result.map( item => item.genres));
-        // TODO: Enviar los datos al modelo
-    } else {
+        if (query.rowCount == 0) {
+            console.log("No media fetched");
+        } else {
+            let media = query.rows;
+            let fields = Object.keys(media[0]);
+            let replacer = function(key, value) {
+                return value === null ? '' : value
+            }
+            let csv = media.map(function(row) {
+                return fields.map(function(fieldName) {
+                    return JSON.stringify(row[fieldName], replacer)
+                }).join(',')
+            });
+            csv.unshift(fields.join(','));
+            csv = csv.join('\r\n');
+            // console.log(csv);
+            const url = "http://host.docker.internal:12000/load-dataset/";
+
+            const payload = {
+                data: csv
+            };
+
+            const response = await axios.post(url, payload);
+            if (response.data.ok === true) {
+            res.status(200).json({ data: response.data });
+            } else {
+            throw "The dataset was not loaded";
+            }
+        }
+    } catch (error) {
+        res.status(500).json({ error: error});
     }
+
 }
 
-module.exports = sendGenres;
+module.exports = sendMedia;

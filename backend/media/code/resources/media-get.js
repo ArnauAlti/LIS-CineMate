@@ -2,7 +2,7 @@
 const userDB = require("./db-data.js");
 const authDB = require("./db-auth.js");
 
-async function all(p, type, search, genre, director, cast, order) {
+async function all(p, type, search, genre, director, cast, order, duration) {
     console.log("search" + search + "director" + director + "cast" + cast);
     if (!p) {
         throw "An argument is missing";
@@ -35,7 +35,12 @@ async function all(p, type, search, genre, director, cast, order) {
     if (cast) {
         filter = true;
         filterCount++;
-        filters.push("cast % '" + cast + "' ");
+        filters.push('"cast" ILIKE \'%' + cast + '%\'');
+    }
+    if (duration) {
+        filter = true;
+        filterCount++;
+        filters.push('duration = ' + duration);
     }
     for (let index = 0; index < filterCount; index++) {
         if (index == 0) {
@@ -80,12 +85,13 @@ async function getMedia(req, res) {
         const genres = req.query.genre;
         const director = req.query.director;
         const cast = req.query.cast;
+        const duration = req.query.duration;
 
         let nurl = String(req.url).split("?")[0].split("/")[2];
         console.log(nurl);
         let data;
         if (nurl == "all") {
-            data = await all(p, type, search, genres, director, cast, order);
+            data = await all(p, type, search, genres, director, cast, order, duration);
             res.status(200).json({message: "Good Request", data: data});
         } else if (nurl == "details") {
             data = await details(id);
