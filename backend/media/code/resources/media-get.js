@@ -3,7 +3,7 @@ const userDB = require("./db-data.js");
 const authDB = require("./db-auth.js");
 
 async function all(p, type, search, genre, director, cast, order, duration) {
-    console.log("search" + search + "director" + director + "cast" + cast);
+    console.log("search" + search + "director" + director + "cast" + cast + " duration: " + duration + ' genre: ' + genre);
     if (!p) {
         throw "An argument is missing";
     }
@@ -23,10 +23,11 @@ async function all(p, type, search, genre, director, cast, order, duration) {
         filterCount++;
         filters.push("name % '" + search + "' ");
     }
-    // TODO No se como hacer lo de los generos
-    // if (genres) {
-        
-    // }
+    if (genre) {
+        filter = true;
+        filterCount++;
+        filters.push("genre_ids ILIKE '%" + genre + "%' ");
+    }
     if (director) {
         filter = true;
         filterCount++;
@@ -40,7 +41,7 @@ async function all(p, type, search, genre, director, cast, order, duration) {
     if (duration) {
         filter = true;
         filterCount++;
-        filters.push('duration = ' + duration);
+        filters.push('duration <= ' + Number(duration) + ' ');
     }
     for (let index = 0; index < filterCount; index++) {
         if (index == 0) {
@@ -82,7 +83,7 @@ async function getMedia(req, res) {
         const search = req.query.search;
         const type = req.query.type;
         const order = req.query.order;
-        const genres = req.query.genre;
+        const genres = req.query.genres;
         const director = req.query.director;
         const cast = req.query.cast;
         const duration = req.query.duration;

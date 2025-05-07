@@ -174,24 +174,10 @@ Future<List<Map<String, dynamic>>> getLatestFilms() async {
 //una duració indicada per l'usuari amb els filtres de cerca
 Future<List<Map<String, dynamic>>> getFilmsBySearch(String search, String genre, String director,
     String actor, int duration) async {
-  print(search);
-  if (search.isEmpty) {
-    print("patata");
-  }
-  print(search.isEmpty ? "patata" : "patata2");
-  final Uri uri = Uri.parse("$baseUrl/media/get-media/all?p=1" + (search.isEmpty ? "" : "&search=$search"));
 
-  /*
-  final Map<String, dynamic> body = {
-    'search': search,
-    'genere': genre,
-    'director': director,
-    'actor': actor,
-    'duration': duration,
-  };
-  */
-
-  // print(body);
+  final Uri uri = Uri.parse("$baseUrl/media/get-media/all?p=1" + (search.isEmpty ? "" : "&search=$search")
+      + (genre.isEmpty ? "" : "&genres=$genre") + (director.isEmpty ? "" : "&director=$director")
+      + (actor.isEmpty ? "" : "&cast=$actor") + (duration == 0 ? "" : "&duration=$duration"));
 
   try {
     final response = await http.get(

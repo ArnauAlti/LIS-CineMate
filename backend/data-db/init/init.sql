@@ -210,9 +210,11 @@ SELECT
     m.type, 
     m.moviedb_rating as rating, 
     string_agg(g.name, ',' ORDER BY g.name) as genres, 
+    string_agg(g.id::TEXT, ',' ORDER BY g.id) as genre_ids,
     i.release, 
     i.director, 
-    i.cast
+    i.cast,
+    i.duration
 FROM 
     media m
     LEFT JOIN LATERAL json_array_elements_text(m.genres) AS genre_id ON TRUE
@@ -221,7 +223,7 @@ FROM
 WHERE 
     m.active = true
 GROUP BY
-    m.sec, m.id, m.name, m.png, m.type, m.moviedb_rating, i.release, i.director, i.cast
+    m.sec, m.id, m.name, m.png, m.type, m.moviedb_rating, i.release, i.director, i.cast, i.duration
 ;
 
 CREATE VIEW "view_media_admin" AS

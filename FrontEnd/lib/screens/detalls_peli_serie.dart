@@ -64,7 +64,7 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
               ? (film[0]['cast'] as List).join(', ')
               : (film[0]['cast'] ?? 'Desconocido');
           final String description = film[0]['description'] ?? 'Sin descripción.';
-          final double rating = (film[0]['rating'] ?? 0).toDouble()/2;
+          final double rating = (film[0]['moviedb_rating'] ?? 0).toDouble()/2;
 
           final String mediaId = film[0]['media_id'] ?? 'Not known';
           final String infoId = film[0]['info_id'] ?? 'Not known';
