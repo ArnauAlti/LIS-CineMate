@@ -200,7 +200,6 @@ JOIN genres g ON g.moviedb = genre_id::INTEGER
 GROUP BY m.id;
 
 
-
 CREATE VIEW "view_media" AS
 SELECT 
     m.sec, 
@@ -210,7 +209,7 @@ SELECT
     m.type, 
     m.moviedb_rating as rating, 
     string_agg(g.name, ',' ORDER BY g.name) as genres, 
-    string_agg(g.id::TEXT, ',' ORDER BY g.id) as genre_ids,
+    string_agg(g.moviedb::TEXT, ',' ORDER BY g.id) as genre_ids,
     i.release, 
     i.director, 
     i.cast,
