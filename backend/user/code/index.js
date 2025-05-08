@@ -5,6 +5,7 @@ const signInUser = require("./resources/user-create");
 const logInUser = require("./resources/user-login");
 const modifyUser = require("./resources/user-modify");
 const verifyUser = require("./resources/user-verify");
+const getUsers = require("./resources/user-get-others");
 
 const app = express();
 const port = 3000;
@@ -27,6 +28,7 @@ app.post("/create", signInUser);
 app.post("/login", logInUser);
 app.post("/modify", modifyUser);
 app.post("/verify", verifyUser);
+add.get("/get-users", getUsers);
 
 app.listen(port, () => {
     console.log(`API running on http://localhost:${port}`);
