@@ -6,6 +6,7 @@ const modifyMedia = require("./resources/library-modify");
 const deleteMedia = require("./resources/library-delete");
 const recommend = require("./resources/library-recommend");
 const getMedia = require("./resources/library-query");
+const getComments = require("./resources/library-comments");
 
 const app = express();
 const port = 3000;
@@ -30,6 +31,7 @@ app.post("/modify-media", modifyMedia);
 app.post("/delete-media", deleteMedia);
 app.post("/recommend", recommend);
 app.post("/get-media", getMedia);
+app.post("/get-comments", getComments);
 
 
 app.listen(port, () => {

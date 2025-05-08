@@ -41,7 +41,7 @@ async function all(p, type, search, genre, director, cast, order, duration) {
     if (duration) {
         filter = true;
         filterCount++;
-        filters.push('duration <= ' + Number(duration) + ' ');
+        filters.push('duration <= ' + Number(duration) + ' AND duration != 0 ');
     }
     for (let index = 0; index < filterCount; index++) {
         if (index == 0) {
@@ -53,7 +53,7 @@ async function all(p, type, search, genre, director, cast, order, duration) {
     console.log("p: ", p);
     console.log("type: ", type);
     let mult = (10 * (p - 1));
-    let select = 'SELECT * FROM view_media ' + (filter ? filterConcat : "") + 'ORDER BY sec ASC LIMIT 10 OFFSET $1';
+    let select = 'SELECT * FROM view_media ' + (filter ? filterConcat : "") + 'ORDER BY sec ASC LIMIT 16 OFFSET $1';
     console.log(select);
     const query = await userDB.query(
         select,
