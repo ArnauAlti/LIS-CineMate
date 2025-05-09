@@ -33,36 +33,50 @@ async function recommend(req, res) {
 
         // if genre_filter is provided, use the star-rating-genre endpoint
         if (Array.isArray(genre_filter) && genre_filter.length > 0) {
-            const genrePlaceholders = genre_filter.map((_, i) => `$${i+1}`).join(',');
-            const genresQuery = await userDB.query(
-                `SELECT name FROM genres WHERE id IN (${genrePlaceholders})`,
-                genre_filter
-            );
 
-            if (genresQuery.rowCount === 0)
-                return res.status(400).json({ ok: false, error: "Invalid genre IDs", message: "None of the provided genre IDs exist in the database" });
-            const genre_names = genresQuery.rows.map(row => row.name);
-
-            console.log("Genre names: ", genre_names);
+            console.log("Genre names: ", genre_filter);
             
             url = "http://host.docker.internal:12000/recommend/star-rating-genre";
             payload = {
                 ...base_payload,
-                genre_filter: genre_names
+                genre_filter: genre_filter
             };
             message = `Recommendations filtered by genres: ${genre_filter.join(', ')} generated successfully`;
         }
 
-        console.log("Payload: ", payload);
+        // console.log("Payload: ", payload);
         
         const response = await axios.post(url, payload);
-
-        if (response.data.ok === true) {
-            console.log("Recommendation model response: ", response.data);
-            res.status(200).json({ ok:true, recommendations: response.data, message: message });
-        } else {
+        
+        if(response.data.ok !== true){
             throw new Error(response.data.message || "Error in recommendation model");
         }
+
+        const recommender_ids = response.data.recommendations;
+
+        console.log("Recommendation model response: ", response.data);
+        
+        let list_info = [];
+
+        if(recommender_ids.length > 0 ){
+            const placeholders = recommender_ids.map((_,i)=>`$${i+1}`).join(',');
+
+            const InfoQuery = await userDB.query(
+                `SELECT * FROM media WHERE id IN (${placeholders})`,
+                recommender_ids
+            );
+
+            list_info = InfoQuery.rows;
+        }
+
+
+        res.status(200).json({
+            ok: true,
+            recommendations: list_info,
+            top_genres: response.data.top_genres,
+            message: response.data.message
+        } );
+
     } catch (error) {
         console.log(error);
         res.status(500).json({ ok:false, error: error.message, message: "An error ocurred trying to recommend media"});

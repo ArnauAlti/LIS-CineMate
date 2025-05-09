@@ -28,7 +28,7 @@ app.post("/create", signInUser);
 app.post("/login", logInUser);
 app.post("/modify", modifyUser);
 app.post("/verify", verifyUser);
-add.get("/get-users", getUsers);
+app.post("/get-users", getUsers);
 
 app.listen(port, () => {
     console.log(`API running on http://localhost:${port}`);

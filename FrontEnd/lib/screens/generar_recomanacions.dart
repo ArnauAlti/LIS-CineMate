@@ -20,7 +20,7 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
   void initState() {
     final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
     super.initState();
-    _filmsFuture = getRecomendationFilms(userEmail!);
+    _filmsFuture = getRecomendationFilms(userEmail!, widget.selectedGenres);
   }
 
   @override
@@ -136,9 +136,9 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
         height: 200,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 2),
-          image: film['imagePath'] != null
+          image: film['png'] != null
               ? DecorationImage(
-            image: NetworkImage(film['imagePath']),
+            image: NetworkImage(film['png']),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
               Colors.black.withOpacity(0.3),
@@ -152,7 +152,7 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              film['title'] ?? '',
+              film['name'] ?? '',
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
