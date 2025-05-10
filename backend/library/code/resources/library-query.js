@@ -6,9 +6,13 @@ async function getMedia(req, res) {
         if (!userMail) {
             throw "No User Specifcied";
         }
+        let movieType = req.body['type'];
+        if (!movieType) {
+            throw "No Movie Type Specifcied";
+        }
         const query = await userDB.query(
-            'SELECT * FROM library WHERE user_mail = $1',
-            [userMail]
+            'SELECT * FROM library l, media m WHERE l.user_mail = $1 AND l.media_id = m.id AND m.type = $2',
+            [userMail, movieType]
         );
         if (query.rowCount == 0) {
             res.status(200).json({message: "No Elements Found"});
