@@ -1,20 +1,25 @@
-from typing import List, Optional
+from typing import List, Optional, Tuple, Union
 from pydantic import BaseModel
 
 class MovieRecommendation(BaseModel):
-    movieId: int
-    title: str
-    genres: str
-    year: Optional[int] = None
+    id: str
 
-class Rating(BaseModel):
-    movie_id: str
-    rating: int
+class RecommendationResponse(BaseModel):
+    ok: bool
+    recommendations: List[str]
+    top_genres: List[str]
+    message: Union[str, None] = None
 
 class RecommendationRequest(BaseModel):
-    user_id: int = None
-    ratings: Optional[List[Rating]] = None
+    ok: bool = True
+
+class RecommendationRequest(BaseModel):
+    ratings: List[Tuple[str, int]]  
     top_n: int = 5
-    genre_filter: Optional[List[str]] = None
-    genre_diversity: bool = True
-    
+    genre_diversity: bool = False
+
+class StarRatingGenreRequest(RecommendationRequest):
+    genre_filter: List[str]
+
+class BodyData(BaseModel):
+    data: str

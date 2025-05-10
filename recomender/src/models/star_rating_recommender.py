@@ -2,113 +2,55 @@ from .base_recommender import MovieRecommenderBase
 import numpy as np
 
 class StarRatingRecommender(MovieRecommenderBase):
-    def __init__(self, data_path='data/movie.csv'):
-        """
-        Recommender that uses 5-star rating system
-        """
-        super().__init__(data_path)
+    """Recommender system based on user star ratings (1-5) and genre similarity."""
+
+    def get_personalized_recommendations(self, user_ratings, top_n=5, genre_diversity=False):
+        """Generate movie recommendations based on user preferences.
         
-    def _convert_id_to_title(self, user_preferences):
-        """
-        Convert movie IDs in user preferences to titles
-
-        Parameters:
-        - user_preferences: list of tuples (movie_id, rating)
-
-        Returns:
-        - user_preferences_filtered: list of tuples (movie_title, rating)
-        """
-        user_preferences_filtered = []
-
-        for movie_id, rating in user_preferences:
-            title = self.movies[self.movies['movieId'] == int(movie_id)]['title'].values[0]
-            user_preferences_filtered.append((title, rating))
-
-        return user_preferences_filtered
-
-
-    def _process_user_preferences(self, user_preferences):
-        """
-        Process user preferences with 5-star ratings
-        
-        Parameters:
-        - user_preferences: dict with 'ratings' as a list of tuples (movie_title, rating)
-                            where rating is 1-5 stars
+        Args:
+            user_ratings (list): List of tuples [(movie_id, rating_1_to_5), ...].
+            top_n (int): Number of recommendations to return.
+            genre_diversity (bool): If True, enforce diversity across genres.
         
         Returns:
-        - combined_sim_scores: numpy array of combined similarity scores
-        - total_weight: total weight of all ratings
+            dict: recommendend movies and the common genres.
         """
-        combined_sim_scores = np.zeros(self.sim_matrix.shape[0])
-        total_weight = 0
+        combined_scores = self._process_user_preferences(user_ratings)
+        rated_ids = {movie_id for movie_id, _ in user_ratings}
         
-        for movie_title, rating in user_preferences:
-            if movie_title in self.title_to_indices:
-                # Convert rating to weight (1-5 stars to 0.2-1.0 scale)
-                weight = (rating - 1) / 4  # Normalize to 0-1 range
-                
-                for idx in self.title_to_indices[movie_title]:
-                    # Apply weighted influence (positive for ratings > 3, negative for < 3)
-                    influence = (weight - 0.5) * 2  # Convert to -1 to +1 range
-                    combined_sim_scores += self.sim_matrix[idx] * influence
-                    total_weight += abs(influence)
-        
-        # Normalize by total weight if any ratings were processed
-        if total_weight > 0:
-            combined_sim_scores /= total_weight
-            
-        return combined_sim_scores, total_weight
+        # Sort movies by score (descending)
+        sorted_indices = np.argsort(combined_scores)[::-1]
 
-    def get_personalized_recommendations(self, user_preferences, top_n=5, genre_diversity=True):
-        """
-        Get recommendations based on star ratings
-        
-        Parameters:
-        - user_preferences: dict with 'ratings' list of (movie_title, rating) tuples
-        - top_n: number of recommendations
-        - genre_diversity: whether to ensure genre variety
-        
-        Returns:
-        - DataFrame with recommended movies
-        """
-        user_preferences_filtered = self._convert_id_to_title(user_preferences)
-        combined_sim_scores, _ = self._process_user_preferences(user_preferences_filtered)
-        
-        # Get all rated movie titles to exclude from recommendations
-        all_rated_movies = set()
-        for movie_title, _ in user_preferences_filtered:
-            if movie_title in self.title_to_indices:
-                all_rated_movies.add(movie_title)
-        
-        # Get and sort similarity scores
-        sim_scores = list(enumerate(combined_sim_scores))
-        sim_scores.sort(key=lambda x: x[1], reverse=True)
-        
-        # Generate recommendations
         recommendations = []
         selected_genres = set()
-        
-        for i, score in sim_scores:
+        genre_counter = {}
+
+        for idx in sorted_indices:
             if len(recommendations) >= top_n:
                 break
                 
-            movie_data = self.movies.iloc[i]
-            title = movie_data['title']
-            genres = set(movie_data['genres'].split('|'))
+            movie_id = self.movies.iloc[idx]['id']
+            genres = set(self.movies.iloc[idx]['genres'].split('|'))
             
             # Skip already rated movies
-            if title in all_rated_movies:
+            if movie_id in rated_ids:
                 continue
+
+            for genre in genres:
+                genre_counter[genre] = genre_counter.get(genre, 0) + 1
                 
-            # Apply genre diversity if enabled
+            # Apply genre diversity (add only if genres are new)
             if genre_diversity:
                 if not genres.issubset(selected_genres):
-                    recommendations.append(i)
+                    recommendations.append(idx)
                     selected_genres.update(genres)
             else:
-                recommendations.append(i)
-        
-        # Format output
-        result = self.movies.iloc[recommendations][['movieId', 'title', 'genres', 'year']]
-        result['genres'] = result['genres'].str.replace('|', ', ')
-        return result.reset_index(drop=True)
+                recommendations.append(idx)
+
+        top_genres = sorted(genre_counter.items(), key=lambda x: x[1], reverse=True)[:2]
+        top_genres = [genre for genre, count in top_genres]
+
+        return {
+            'recommendations': self.movies.iloc[recommendations]['id'].tolist(),
+            'top_genres': top_genres
+        }
