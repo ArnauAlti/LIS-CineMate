@@ -41,7 +41,7 @@ async function all(p, type, search, genre, director, cast, order, duration) {
     if (duration) {
         filter = true;
         filterCount++;
-        filters.push('duration <= ' + Number(duration) + ' AND duration != 0 ');
+        filters.push('duration > 0 AND duration <= ' + Number(duration) + ' ');
     }
     for (let index = 0; index < filterCount; index++) {
         if (index == 0) {

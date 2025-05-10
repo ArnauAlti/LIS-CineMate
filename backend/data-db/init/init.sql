@@ -200,7 +200,7 @@ JOIN genres g ON g.moviedb = genre_id::INTEGER
 GROUP BY m.id;
 
 
-CREATE VIEW "view_media" AS
+CREATE OR REPLACE VIEW view_media AS
 SELECT 
     m.sec, 
     m.id, 
@@ -208,22 +208,21 @@ SELECT
     m.png, 
     m.type, 
     m.moviedb_rating as rating, 
-    string_agg(g.name, ',' ORDER BY g.name) as genres, 
-    string_agg(g.moviedb::TEXT, ',' ORDER BY g.id) as genre_ids,
-    i.release, 
-    i.director, 
-    i.cast,
-    i.duration
+    string_agg(DISTINCT g.name, ',' ORDER BY g.name) as genres, 
+    string_agg(DISTINCT g.moviedb::TEXT, ',') as genre_ids,
+    MIN(i.release) as release,
+    STRING_AGG(DISTINCT i.director, ', ') as director,
+    STRING_AGG(DISTINCT i.cast, ', ') as cast,
+    SUM(i.duration) as duration
 FROM 
     media m
     LEFT JOIN LATERAL json_array_elements_text(m.genres) AS genre_id ON TRUE
-    LEFT JOIN info i ON i.id = m.id OR i.id = m.id || '-1'
     LEFT JOIN genres g ON g.moviedb = genre_id::INTEGER
+    LEFT JOIN info i ON i.media_id = m.id
 WHERE 
     m.active = true
 GROUP BY
-    m.sec, m.id, m.name, m.png, m.type, m.moviedb_rating, i.release, i.director, i.cast, i.duration
-;
+    m.sec, m.id, m.name, m.png, m.type, m.moviedb_rating;
 
 CREATE VIEW "view_media_admin" AS
 SELECT m.sec, m.id, m.name, m.png, m.type, m.moviedb_rating, i.release 
