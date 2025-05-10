@@ -72,6 +72,15 @@
       "rootUri": "file:///C:/Users/joanc/AppData/Local/Pub/Cache/hosted/pub.dev/http_parser-4.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+<<<<<<< HEAD
+=======
+    },
+    {
+      "name": "intl",
+      "rootUri": "file:///C:/Users/joanc/AppData/Local/Pub/Cache/hosted/pub.dev/intl-0.18.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+>>>>>>> Consolidación
     },
     {
       "name": "leak_tracker",
@@ -206,7 +215,11 @@
       "languageVersion": "3.5"
     }
   ],
+<<<<<<< HEAD
   "generated": "2025-05-10T16:46:10.835079Z",
+=======
+  "generated": "2025-05-05T17:07:11.891051Z",
+>>>>>>> Consolidación
   "generator": "pub",
   "generatorVersion": "3.5.4",
   "flutterRoot": "file:///C:/Users/joanc/flutter",

@@ -5,7 +5,6 @@ import 'editar_personatge.dart';
 class InfoPersonatgeAdmin extends StatelessWidget {
   const InfoPersonatgeAdmin({super.key});
 
-  //TODO: Modificar per a crear una pantalla conjunta, utilitzar el rol_provides per a afegir botons per admin
   @override
   Widget build(BuildContext context) {
     return Scaffold(

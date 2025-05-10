@@ -1,12 +1,27 @@
-import 'package:cine_mate/screens/biblioteca_altres_usuaris.dart';
 import 'package:cine_mate/screens/cerca_usuaris.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
 import 'app_drawer.dart';
+import '../requests.dart';
+import 'biblioteca_usuaris_seguits.dart';
 
-class UsuarisSeguits extends StatelessWidget {
+class UsuarisSeguits extends StatefulWidget {
   const UsuarisSeguits({super.key});
+
+  @override
+  State<UsuarisSeguits> createState() => _UsuarisSeguits();
+}
+
+class _UsuarisSeguits extends State<UsuarisSeguits> {
+  late Future<List<Map<String, dynamic>>> _usersFuture;
+
+  @override
+  void initState() {
+    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
+    super.initState();
+    _usersFuture = getUsersByUserMail(userEmail!);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,41 +43,63 @@ class UsuarisSeguits extends StatelessWidget {
           userRoleProvider.setUserRole(newRole);
         },
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Center(
-          //TODO: Comunicació amb BackEnd per agafar usuaris que segueix l'actual
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: _usersFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+
+          final users = snapshot.data ?? [];
+
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildUserBox(context, "User 1"),
-                  _buildUserBox(context, "User 2"),
+                  const SizedBox(height: 15),
+                  const Text("Usuarios a los qué sigues",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 50),
+                  for (int i = 0; i < users.length; i += 2)
+                    Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            _buildUserBox(context, users[i]),
+                            if (i + 1 < users.length)
+                              _buildUserBox(context, users[i + 1]),
+                          ],
+                        ),
+                        const SizedBox(height: 50),
+                      ],
+                    ),
                 ],
               ),
-              const SizedBox(height: 50),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildUserBox(context, "User 3"),
-                  _buildUserBox(context, "User 4"),
-                ],
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
           onPressed: () {
-            //TODO: Posar link usuari escollit
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => CercaUsuarisScreen(),
+                builder: (context) => const CercaUsuarisScreen(),
               ),
             );
           },
@@ -81,13 +118,13 @@ class UsuarisSeguits extends StatelessWidget {
     );
   }
 
-  Widget _buildUserBox(BuildContext context, String user) {
+  Widget _buildUserBox(BuildContext context, Map<String, dynamic> user) {
     return InkWell(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => BibliotecaAltresUsuarisScreen(userName: user, followed: true),
+            builder: (context) => BibliotecaSeguitsScreen(userName: user['nick'], follows: true),
           ),
         );
       },
@@ -105,13 +142,13 @@ class UsuarisSeguits extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const CircleAvatar(
-                  radius: 24,
+                CircleAvatar(
+                  radius: 40,
                   backgroundColor: Colors.black87,
-                  child: Icon(Icons.person, color: Colors.white),
+                  backgroundImage: AssetImage(user['imagePath']),
                 ),
                 const SizedBox(height: 8),
-                Text(user),
+                Text(user['nick']),
               ],
             ),
           ),

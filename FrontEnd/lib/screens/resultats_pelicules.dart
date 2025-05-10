@@ -29,7 +29,7 @@ class _ResultatsPeliculesState extends State<ResultatsPelicules> {
   void initState() {
     super.initState();
     _filmsFuture = getFilmsBySearch(widget.search, widget.genre, widget.director,
-        widget.actor, widget.duration as int);
+        widget.actor, widget.duration);
   }
 
   @override
@@ -54,6 +54,8 @@ class _ResultatsPeliculesState extends State<ResultatsPelicules> {
           }
 
           final films = snapshot.data ?? [];
+
+          print(films);
 
           return SingleChildScrollView(
             padding: const EdgeInsets.all(20),
@@ -93,12 +95,12 @@ class _ResultatsPeliculesState extends State<ResultatsPelicules> {
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 12),
-        if (widget.genre != "No especificat") ...[
-          Text('Gènere seleccionat: ${widget.genre}'),
+        if (widget.genre.isNotEmpty) ...[
+          Text('Gènero seleccionado: ${widget.genre}'),
           const SizedBox(height: 8),
         ],
         if (widget.actor.isNotEmpty) ...[
-          Text('Actor/Actriu: ${widget.actor}'),
+          Text('Actor/Actriz: ${widget.actor}'),
           const SizedBox(height: 8),
         ],
         if (widget.director.isNotEmpty) ...[
@@ -106,7 +108,7 @@ class _ResultatsPeliculesState extends State<ResultatsPelicules> {
           const SizedBox(height: 8),
         ],
         if (widget.duration > 0) ...[
-          Text('Duració: ${widget.duration}'),
+          Text('Duración: ${widget.duration}'),
           const SizedBox(height: 8),
         ],
       ],
@@ -119,7 +121,7 @@ class _ResultatsPeliculesState extends State<ResultatsPelicules> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => DetallsPeliSerieScreen(film: film)),
+              builder: (context) => DetallsPeliSerieScreen(mediaId: film['id'],)),
         );
       },
       child: Container(
@@ -127,9 +129,9 @@ class _ResultatsPeliculesState extends State<ResultatsPelicules> {
         height: 200,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 2),
-          image: film['imagePath'] != null
+          image: film['png'] != null
               ? DecorationImage(
-            image: NetworkImage(film['imagePath']),
+            image: NetworkImage(film['png']),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
               Colors.black.withOpacity(0.3),
@@ -143,7 +145,7 @@ class _ResultatsPeliculesState extends State<ResultatsPelicules> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              film['title'] ?? '',
+              film['name'] ?? '',
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),

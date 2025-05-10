@@ -13,7 +13,7 @@ class RecomanacionsScreen extends StatefulWidget {
 
 class _RecomanacionsScreenState extends State<RecomanacionsScreen> {
   final Map<String, bool> _genres = {
-    'Acción': false, 'Aventura': false, 'Animación': false, 'Infantil': false, 'Comedia': false, 'Crimen': false,
+    'Action': false, 'Aventura': false, 'Animación': false, 'Infantil': false, 'Comedia': false, 'Crimen': false,
     'Documental': false, 'Drama': false, 'Fantasía': false, 'Terror': false, 'IMAX': false, 'Musical': false, 'Misterio': false,
     'Cine negro': false, 'Romance': false, 'Ciencia ficción': false, 'Suspense': false, 'Bélico': false, 'Western': false,
   };

@@ -1,6 +1,5 @@
 import 'package:cine_mate/screens/cerca_pelicules.dart';
 import 'package:cine_mate/screens/detalls_peli_serie.dart';
-import 'package:cine_mate/screens/editar_pelicula.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
@@ -102,23 +101,6 @@ class _CartelleraScreenState extends State<CartelleraScreen> {
           );
         },
       ),
-      //Opció d'administrador per afegir una nova pel·lícula o sèrie a la cartellera disponible per a tots els
-      //usuaris.
-      floatingActionButton: userRole == "Administrador"
-          ? FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-              const EditarPeliCartelleraScreen(mode: "New"),
-            ),
-          );
-        },
-        backgroundColor: Colors.black,
-        child: const Icon(Icons.add, color: Colors.white),
-      )
-          : null,
     );
   }
 
@@ -130,7 +112,7 @@ class _CartelleraScreenState extends State<CartelleraScreen> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => DetallsPeliSerieScreen(film: film)),
+          MaterialPageRoute(builder: (context) => DetallsPeliSerieScreen(mediaId: film['id'])),
         );
       },
       child: Container(
@@ -138,9 +120,9 @@ class _CartelleraScreenState extends State<CartelleraScreen> {
         height: 200,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 2),
-          image: film['imagePath'] != null
+          image: film['png'] != null
               ? DecorationImage(
-            image: NetworkImage(film['imagePath']),
+            image: NetworkImage(film['png']),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
               Colors.black.withOpacity(0.3),
@@ -154,7 +136,7 @@ class _CartelleraScreenState extends State<CartelleraScreen> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              film['title'] ?? '',
+              film['name'] ?? '',
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),

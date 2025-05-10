@@ -1,0 +1,59 @@
+
+services:
+  api-gateway:
+    build: ./gateway
+    ports:
+      - "3000:3000"
+    depends_on:
+      - ssh-tunnel
+    networks:
+      test:
+        ipv4_address: 10.5.0.2
+  ms-user:
+    build: ./user
+    depends_on:
+      - ssh-tunnel
+    # ports:
+    #   - "3001:3000"
+    networks:
+      test:
+        ipv4_address: 10.5.0.3
+  ms-media:
+    build: ./media
+    depends_on:
+      - ssh-tunnel
+    networks:
+      test:
+        ipv4_address: 10.5.0.4
+  ms-library:
+    build: ./library
+    depends_on:
+      - ssh-tunnel
+    networks:
+      test:
+        ipv4_address: 10.5.0.6
+  ms-character:
+    build: ./character
+    depends_on:
+      - ssh-tunnel
+    networks:
+      test:
+        ipv4_address: 10.5.0.7
+  ssh-tunnel:
+    image: alpine
+    container_name: ssh-tunnel
+    networks:
+      test:
+        ipv4_address: 10.5.0.10
+    command: >
+      sh -c "apk add --no-cache openssh sshpass &&
+             sshpass -p 'MjuNhy66' ssh -o StrictHostKeyChecking=no -N -L 0.0.0.0:8000:158.109.65.250:8000 -L 0.0.0.0:8001:158.109.65.250:8001 rguichon@158.109.65.250 -p 55022"
+
+
+networks:
+  test:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16
+          gateway: 10.5.0.1

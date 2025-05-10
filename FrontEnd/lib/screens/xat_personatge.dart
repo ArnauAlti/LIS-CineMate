@@ -1,32 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../requests.dart';
+import '../user_role_provider.dart';
 
-class XatPersonatge extends StatelessWidget {
+//TODO: En el futur, actualitzar xat en viu
+class XatPersonatge extends StatefulWidget {
   final String nomPersonatge;
+  final String? userMail;
 
-  const XatPersonatge({super.key, required this.nomPersonatge});
+  const XatPersonatge({super.key, required this.nomPersonatge, required this.userMail});
+
+  @override
+  State<XatPersonatge> createState() => _XatPersonatgeState();
+}
+
+class _XatPersonatgeState extends State<XatPersonatge> {
+  final TextEditingController _controller = TextEditingController();
+  final List<Map<String, String>> _missatges = [];
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Agafar missatges de la BD per afegir-los a la conversa
-    final List<Map<String, String>> missatges = [
-      {"autor": "Jo", "text": "Com vas descobrir l’últim assassí?"},
-      {
-        "autor": "Sherlock",
-        "text": "El vaig descobrir perquè portava un llibre estrany."
-      },
-      {"autor": "Sherlock", "text": "Li vaig treure, i era sobre verins."},
-      {
-        "autor": "Sherlock",
-        "text": "Hi havia sang a la part del verí que va matar a la víctima."
-      },
-    ];
+    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
 
     return Scaffold(
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: Text(nomPersonatge),
+        title: Text(widget.nomPersonatge),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -35,36 +36,104 @@ class XatPersonatge extends StatelessWidget {
           },
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: ListView.builder(
-          itemCount: missatges.length,
-          itemBuilder: (context, index) {
-            final missatge = missatges[index];
-            final esMeu = missatge['autor'] == "Jo";
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: getMessagesByChat(userEmail!),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-            return Align(
-              alignment:
-              esMeu ? Alignment.centerRight : Alignment.centerLeft,
-              child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 6),
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 14, vertical: 10),
-                decoration: BoxDecoration(
-                  color: esMeu ? Colors.black : Colors.grey[300],
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  missatge['text']!,
-                  style: TextStyle(
-                    color: esMeu ? Colors.white : Colors.black,
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+
+          final messages = snapshot.data ?? _missatges; // Utilizamos los mensajes del estado
+          final lastMessageIsMine = messages.isNotEmpty && messages.last['author'] == 'self';
+
+          return Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      children: [
+                        // Mostrar los mensajes
+                        ...messages.map((message) {
+                          final isSelf = message['author'] == 'self';
+                          return Align(
+                            alignment: isSelf ? Alignment.centerRight : Alignment.centerLeft,
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(vertical: 6),
+                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                              decoration: BoxDecoration(
+                                color: isSelf ? Colors.black : Colors.grey[300],
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(
+                                message['message']!,
+                                style: TextStyle(
+                                  color: isSelf ? Colors.white : Colors.black,
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        // Si el último mensaje es mío, mostrar indicador de que el personaje está escribiendo
+                        if (lastMessageIsMine)
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 8),
+                            child: Text(
+                              "El personaje está escribiendo...",
+                              style: TextStyle(fontStyle: FontStyle.italic, color: Colors.grey),
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            );
-          },
-        ),
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _controller,
+                        decoration: const InputDecoration(
+                          hintText: 'Escribe un mensaje...',
+                          border: OutlineInputBorder(),
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.send),
+                      onPressed: () {
+                        if (_controller.text.isNotEmpty) {
+                          _sendMessage(_controller.text);
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
+  }
+
+  // Función para enviar el mensaje
+  void _sendMessage(String messageText) {
+    setState(() {
+      _missatges.add({
+        "author": "self", // Es el mensaje del usuario
+        "message": messageText,
+      });
+      _controller.clear(); // Limpiar el campo de texto después de enviar el mensaje
+    });
   }
 }

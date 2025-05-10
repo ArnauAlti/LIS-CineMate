@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../requests.dart';
+import '../user_role_provider.dart';
+import 'cartellera.dart';
+import 'package:intl/intl.dart';
 
+//TODO: Mirar por qué no cambia el nombre
 class PerfilUsuari extends StatefulWidget {
   const PerfilUsuari({super.key});
 
@@ -9,7 +14,6 @@ class PerfilUsuari extends StatefulWidget {
 }
 
 class _PerfilUsuari extends State<PerfilUsuari> {
-  String userId = "123"; // ID simulat
   Map<String, dynamic>? user;
 
   final _formKey = GlobalKey<FormState>();
@@ -24,6 +28,8 @@ class _PerfilUsuari extends State<PerfilUsuari> {
   final birthController = TextEditingController();
   final passController = TextEditingController();
 
+  get userRoleProvider => null;
+
   @override
   void initState() {
     super.initState();
@@ -31,15 +37,22 @@ class _PerfilUsuari extends State<PerfilUsuari> {
   }
 
   Future<void> _loadUserData() async {
-    final data = await getUser(userId);
+    final userProvider = Provider.of<UserRoleProvider>(context, listen: false);
+    final data = userProvider.getUser;
+
     setState(() {
       user = data;
       nameController.text = data?['name'] ?? '';
-      mailController.text = data?['email'] ?? '';
-      nickController.text = data?['username'] ?? '';
-      birthController.text = data?['birthYear']?.toString() ?? '';
-      passController.text = data?['password'] ?? '';
+      mailController.text = data?['mail'] ?? '';
+      nickController.text = data?['nick'] ?? '';
+      passController.text = data?['pass'] ?? '';
       _selectedImage = data?['profileImage'] ?? 'assets/perfil1.jpg';
+
+      if (data?['birth'] != null) {
+        final date = DateTime.parse(data!['birth'].toString());
+        final formattedDate = DateFormat('yyyy-MM-dd').format(date);
+        birthController.text = formattedDate;
+      }
     });
   }
 
@@ -70,7 +83,6 @@ class _PerfilUsuari extends State<PerfilUsuari> {
               key: _formKey,
               child: Column(
                 children: [
-                  // Imagen de perfil seleccionada
                   CircleAvatar(
                     radius: 60,
                     backgroundImage: AssetImage(_selectedImage),
@@ -138,28 +150,48 @@ class _PerfilUsuari extends State<PerfilUsuari> {
     );
   }
 
-  void _guardarDades() {
+  Future<void> _guardarDades() async {
     if (_formKey.currentState!.validate()) {
       // Aquí pots fer la crida a una funció per actualitzar l’usuari:
-      final updatedUser = {
-        'name': nameController.text,
-        'email': mailController.text,
-        'username': nickController.text,
-        'birthYear': int.tryParse(birthController.text),
-        'password': passController.text,
-        'profileImage': _selectedImage,
-      };
-
-      // TODO: Enviar updatedUser al backend
-      print("Dades actualitzades: $updatedUser");
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Canvis guardats correctament.')),
+      final validation = await modifyUserInfo(nameController.text, mailController.text,
+        nickController.text, birthController.text, passController.text, _selectedImage
       );
+
+      if (validation) {
+        final updatedUser = {
+          'name': nameController.text,
+          'mail': mailController.text,
+          'nick': nickController.text,
+          'birth': birthController.text,
+          'pass': passController.text,
+          'profileImage': _selectedImage,
+          // Puedes conservar también otros campos antiguos si no se actualizan, como 'admin', 'created', etc.
+          ...Provider.of<UserRoleProvider>(context, listen: false).getUser ?? {},
+        };
+
+        print(updatedUser);
+
+        final userRoleProvider = Provider.of<UserRoleProvider>(context, listen: false);
+        userRoleProvider.setUser(updatedUser);
+        userRoleProvider.setUserEmail(mailController.text);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Canmbios guardados correctamente.')),
+        );
+        Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const CartelleraScreen()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Error al modificar tus datos.')),
+        );
+      }
     }
   }
 
   Widget _buildTextFormField(String label, TextEditingController controller, {bool isPassword = false}) {
+    final bool nonEditableField = label == "Año de nacimiento" || label == "Email" || label == "Nombre de usuario";
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -168,10 +200,9 @@ class _PerfilUsuari extends State<PerfilUsuari> {
         TextFormField(
           controller: controller,
           obscureText: isPassword ? _obscurePassword : false,
+          enabled: !nonEditableField,
           keyboardType: label == "Email"
               ? TextInputType.emailAddress
-              : label == "Año de nacimiento"
-              ? TextInputType.number
               : TextInputType.text,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -179,9 +210,6 @@ class _PerfilUsuari extends State<PerfilUsuari> {
             }
             if (label == "Email" && !value.contains('@')) {
               return 'Email inválido';
-            }
-            if (label == "Año de nacimiento" && int.tryParse(value) == null) {
-              return 'Debe ser un número';
             }
             return null;
           },

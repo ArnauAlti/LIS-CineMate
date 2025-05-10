@@ -38,6 +38,13 @@ http_parser
 2.12
 file:///C:/Users/joanc/AppData/Local/Pub/Cache/hosted/pub.dev/http_parser-4.0.2/
 file:///C:/Users/joanc/AppData/Local/Pub/Cache/hosted/pub.dev/http_parser-4.0.2/lib/
+<<<<<<< HEAD
+=======
+intl
+2.12
+file:///C:/Users/joanc/AppData/Local/Pub/Cache/hosted/pub.dev/intl-0.18.1/
+file:///C:/Users/joanc/AppData/Local/Pub/Cache/hosted/pub.dev/intl-0.18.1/lib/
+>>>>>>> Consolidación
 leak_tracker
 3.2
 file:///C:/Users/joanc/AppData/Local/Pub/Cache/hosted/pub.dev/leak_tracker-10.0.5/

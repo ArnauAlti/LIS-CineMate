@@ -1,14 +1,14 @@
+/*
+import 'package:cine_mate/screens/cartellera.dart';
 import 'package:flutter/material.dart';
 
 import '../requests.dart';
 
 class EditarPeliCartelleraScreen extends StatefulWidget {
-  final String mode;
   final Map<String, dynamic>? peliData;
 
   const EditarPeliCartelleraScreen({
     super.key,
-    required this.mode,
     this.peliData,
   });
 
@@ -23,7 +23,7 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
   late final TextEditingController descriptionController;
   late final TextEditingController releaseDateController;
   late final TextEditingController durationController;
-  late final TextEditingController platformsController;
+  late final TextEditingController directorController;
   late final TextEditingController imagePathController;
   late final TextEditingController pegiController;
   late final TextEditingController seasonController;
@@ -34,13 +34,9 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
 
   final List<String> tipusOpcions = ["Pel·lícula", "Sèrie"];
   final List<String> generesOpcions = [
-    "Terror",
-    "Comèdia",
-    "Romàntica",
-    "Acció",
-    "Drama",
-    "Fantasia",
-    "Ciència-ficció"
+    'Acción', 'Aventura', 'Animación', 'Infantil', 'Comedia', 'Crimen', 'Documental', 'Drama',
+    'Fantasía', 'Terror', 'IMAX', 'Musical', 'Misterio','Cine negro', 'Romance', 'Ciencia ficción',
+    'Suspense', 'Bélico', 'Western',
   ];
 
   @override
@@ -48,21 +44,21 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
     super.initState();
     final data = widget.peliData;
 
-    titleController = TextEditingController(text: data?["titol"] ?? "");
-    castController = TextEditingController(text: data?["repart"] ?? "");
+    titleController = TextEditingController(text: data?["title"] ?? "");
+    castController = TextEditingController(text: data?["cast"] ?? "");
     descriptionController =
-        TextEditingController(text: data?["descripcio"] ?? "");
+        TextEditingController(text: data?["description"] ?? "");
     releaseDateController =
-        TextEditingController(text: data?["anyEstreno"] ?? "");
-    durationController = TextEditingController(text: data?["duracio"] ?? "");
-    platformsController =
-        TextEditingController(text: data?["plataformes"] ?? "");
-    imagePathController = TextEditingController(text: data?["urlFoto"] ?? "");
+        TextEditingController(text: data?["releaseDate"] ?? "");
+    durationController = TextEditingController(text: data?["duration"] ?? "");
+    directorController =
+        TextEditingController(text: data?["director"] ?? "");
+    imagePathController = TextEditingController(text: data?["imagePath"] ?? "");
     pegiController =
-        TextEditingController(text: data?["edatMinima"] ?? "");
-    seasonController = TextEditingController(text: data?["temporada"] ?? "");
+        TextEditingController(text: data?["pegi"] ?? "");
+    seasonController = TextEditingController(text: data?["season"] ?? "");
     numChaptersController =
-        TextEditingController(text: data?["numCapitols"] ?? "");
+        TextEditingController(text: data?["numChapters"] ?? "");
 
     // Corregim els valors per assegurar que coincideixen amb les opcions disponibles
     final tipus = data?["tipus"];
@@ -79,7 +75,7 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: Text(widget.mode == "New" ? "Afegir Pel·lícula" : "Editar Pel·lícula"),
+        title: Text("Editar Película"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -95,7 +91,7 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
               _buildTextField("Reparto (Separados por comas)", castController),
               _buildTextField("Año de estreno", releaseDateController),
               _buildTextField("Duración (minutos)", durationController),
-              _buildTextField("Plataformas (Separadas por comas)", platformsController),
+              _buildTextField("Director", directorController),
               _buildTextField("Descripción", descriptionController),
               _buildTextField("URL de la foto", imagePathController),
               _buildTextField("Edad mínima de visualización", pegiController),
@@ -120,31 +116,41 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
                     try {
                       final castList = castController.text.split(',').map((e) => e.trim())
                           .where((e) => e.isNotEmpty).toList();
-
-                      final platformsList = platformsController.text.split(',').map((e) => e.trim())
-                          .where((e) => e.isNotEmpty).toList();
-
                       final releaseDate = int.tryParse(releaseDateController.text) ?? 0;
                       final duration = int.tryParse(durationController.text) ?? 0;
                       final pegi = int.tryParse(pegiController.text) ?? 0;
                       final season = int.tryParse(seasonController.text) ?? 0;
                       final numChapters = int.tryParse(numChaptersController.text) ?? 0;
 
-                      await modifyFilm(
+
+                      final success = await ModifyFilm(
                         titleController.text,
                         castList,
                         releaseDate,
                         duration,
-                        platformsList,
+                        directorController.text,
                         imagePathController.text,
                         pegi,
                         season,
                         numChapters,
                       );
+
+                      if (!success) {
+                        print('❌ La operación no tuvo éxito');
+                      }
                     } catch (e) {
                       // Aquí podrías mostrar un error si algo falla al convertir datos
                       print('Error al modificar la peli: $e');
                     }
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CartelleraScreen(),
+                      ),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('${titleController.text} ha sido modificada en la base de datos.')),
+                    );
                   },
 
                   style: ElevatedButton.styleFrom(
@@ -155,7 +161,7 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
                   ),
-                  child: Text(widget.mode == "New" ? "Afegir" : "Guardar"),
+                  child: Text("Guardar"),
                 ),
               ),
               const SizedBox(height: 16),
@@ -219,3 +225,4 @@ class _EditarPeliCartelleraScreenState extends State<EditarPeliCartelleraScreen>
     );
   }
 }
+*/

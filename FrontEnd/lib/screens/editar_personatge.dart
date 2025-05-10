@@ -46,12 +46,21 @@ class EditarPersonatgeScreen extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            // Imagen actual
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                "https://upload.wikimedia.org/wikipedia/en/f/f7/Eleven_%28Stranger_Things%29.png",
-                width: 160,
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text("URL de la foto del personaje"),
+            ),
+            const SizedBox(height: 8),
+
+            TextField(
+              controller: descripcioController,
+              maxLines: 5,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.grey[100],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
             ),
 
@@ -75,12 +84,31 @@ class EditarPersonatgeScreen extends StatelessWidget {
               ),
             ),
 
+            const SizedBox(height: 24),
+
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text("Película o serie del personaje"),
+            ),
+            const SizedBox(height: 8),
+
+            TextField(
+              controller: descripcioController,
+              maxLines: 5,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.grey[100],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+
             const Spacer(),
 
             ElevatedButton(
               onPressed: () {
-                print("Nom: ${nomController.text}");
-                print("Descripció: ${descripcioController.text}");
+                //TODO: Enviar request per modificar dades
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,

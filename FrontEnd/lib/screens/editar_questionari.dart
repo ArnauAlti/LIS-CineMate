@@ -1,23 +1,35 @@
 import 'package:flutter/material.dart';
+import '../requests.dart';
 
+
+//TODO: Fer request per editar les coses del questionari
 class QuestionariAdminScreen extends StatefulWidget {
-  const QuestionariAdminScreen({super.key});
+  final String title;
+  const QuestionariAdminScreen({super.key, required this.title});
 
   @override
   State<QuestionariAdminScreen> createState() => _QuestionariAdminScreenState();
 }
 
 class _QuestionariAdminScreenState extends State<QuestionariAdminScreen> {
-  final TextEditingController preguntaController = TextEditingController(
-    text: "Quin és el personatge que desapareix al principi de la temporada?",
-  );
+  late Future<List<Map<String, dynamic>>> _questionsFuture;
+  List<Map<String, dynamic>> editableQuestions = [];
 
-  final List<TextEditingController> respostaControllers = [
-    TextEditingController(text: "VECNA"),
-    TextEditingController(text: "ELEVEN"),
-    TextEditingController(text: "WILL"),
-    TextEditingController(text: "DUSTIN"),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _questionsFuture = getQuestions(widget.title);
+    _questionsFuture.then((questions) {
+      setState(() {
+        editableQuestions = questions.map((q) {
+          return {
+            'controller': TextEditingController(text: q['question']),
+            'answers': (q['possibleAnswers'] as List?)?.cast<String>().map((a) => TextEditingController(text: a)).toList() ?? [],
+          };
+        }).toList();
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,103 +41,128 @@ class _QuestionariAdminScreenState extends State<QuestionariAdminScreen> {
         title: const Text("Stranger Things: 1a Temporada"),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          children: [
-            const Text(
-              "Pregunta 1/5",
-              style: TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 24),
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: _questionsFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-            // Pregunta editable
-            Stack(
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+
+          if (editableQuestions.isEmpty) {
+            return const Center(child: Text('No se han encontrado preguntas'));
+          }
+
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ListView.builder(
+              itemCount: editableQuestions.length,
+              itemBuilder: (context, i) => _buildEditableQuestion(i),
+            ),
+          );
+        },
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
+        child: ElevatedButton(
+          onPressed: () async {
+            //TODO: Modificar que es passa a la request, canviar accions de després
+            await editQuestionnaire(widget.title);
+            final updatedQuestions = editableQuestions.map((q) {
+              return {
+                'question': q['controller'].text,
+                'possibleAnswers': (q['answers'] as List<TextEditingController>).map((c) => c.text).toList(),
+              };
+            }).toList();
+
+            // Aquí puedes hacer el request para actualizar las preguntas
+            // updateQuestions(widget.title, updatedQuestions);
+            print(updatedQuestions);
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+          ),
+          child: const Text("GUARDAR CAMBIOS"),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEditableQuestion(int index) {
+    final questionData = editableQuestions[index];
+    final TextEditingController questionController = questionData['controller'];
+    final List<TextEditingController> answerControllers = questionData['answers'];
+
+    return Card(
+      elevation: 3,
+      margin: const EdgeInsets.symmetric(vertical: 12),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
               children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.purple[50],
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Icon(Icons.person, color: Colors.black54),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: TextField(
-                          controller: preguntaController,
-                          maxLines: null,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            isCollapsed: true,
-                          ),
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const Positioned(
-                  right: 8,
-                  top: 8,
-                  child: Icon(Icons.edit, size: 20, color: Colors.black45),
+                Text('Pregunta ${index + 1}', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+                const Spacer(),
+                IconButton(
+                  icon: const Icon(Icons.delete, color: Colors.red),
+                  tooltip: "Eliminar pregunta",
+                  onPressed: () {
+                    setState(() {
+                      editableQuestions.removeAt(index);
+                    });
+                  },
                 ),
               ],
             ),
-
-            const SizedBox(height: 32),
-
-            // Respuestas editables
-            Wrap(
-              spacing: 20,
-              runSpacing: 16,
-              alignment: WrapAlignment.center,
-              children: List.generate(4, (index) {
-                return Stack(
-                  children: [
-                    SizedBox(
-                      width: 140,
-                      child: TextField(
-                        controller: respostaControllers[index],
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.black,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(vertical: 14),
-                        ),
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    const Positioned(
-                      right: 8,
-                      top: 4,
-                      child: Icon(Icons.edit, size: 16, color: Colors.white),
-                    ),
-                  ],
-                );
-              }),
+            const SizedBox(height: 10),
+            TextField(
+              controller: questionController,
+              decoration: const InputDecoration(labelText: "Enunciado de la pregunta"),
             ),
-
-            const Spacer(),
-
-            ElevatedButton(
+            const SizedBox(height: 10),
+            const Text("Respuestas:", style: TextStyle(fontSize: 14)),
+            const SizedBox(height: 10),
+            ...answerControllers.asMap().entries.map((entry) {
+              final i = entry.key;
+              final controller = entry.value;
+              return Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: controller,
+                      decoration: InputDecoration(labelText: "Respuesta ${i + 1}"),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () {
+                      setState(() {
+                        answerControllers.removeAt(i);
+                      });
+                    },
+                  ),
+                ],
+              );
+            }),
+            TextButton.icon(
               onPressed: () {
-                // Acción al pasar a la siguiente pregunta
+                setState(() {
+                  answerControllers.add(TextEditingController());
+                });
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-              ),
-              child: const Text("Siguiente pregunta"),
+              icon: const Icon(Icons.add),
+              label: const Text("Añadir respuesta"),
             ),
           ],
         ),

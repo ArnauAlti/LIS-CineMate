@@ -1,10 +1,25 @@
-import 'package:cine_mate/screens/biblioteca_altres_usuaris.dart';
+import 'package:cine_mate/screens/biblioteca_usuaris_seguits.dart';
 import 'package:flutter/material.dart';
 
-class UsuarisCercats extends StatelessWidget {
+import '../requests.dart';
+
+class UsuarisCercats extends StatefulWidget {
   final String busqueda;
 
   const UsuarisCercats({super.key, required this.busqueda});
+
+  @override
+  State<UsuarisCercats> createState() => _UsuarisCercats();
+}
+
+class _UsuarisCercats extends State<UsuarisCercats> {
+  late Future<List<Map<String, dynamic>>> _usersFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _usersFuture = getUsersBySearch(widget.busqueda);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,58 +31,66 @@ class UsuarisCercats extends StatelessWidget {
         title: const Text("Otros usuarios", textAlign: TextAlign.center),
         centerTitle: true,
       ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Centrar el texto de la búsqueda
-                Text(
-                  'Búsqueda realizada para: "$busqueda"',
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 12),
-                Center(
-                  //TODO: Comunicació amb BackEnd per agafar usuaris amb el resultat de l'String posat
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        body: FutureBuilder<List<Map<String, dynamic>>>(
+          future: _usersFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            }
+
+            final users = snapshot.data ?? [];
+
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 15),
+                    Text("Resultados de la búsqueda: ${widget.busqueda}",
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 50),
+                    for (int i = 0; i < users.length; i += 2)
+                      Column(
                         children: [
-                          _buildUserBox(context, "User 1"),
-                          _buildUserBox(context, "User 2"),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              _buildUserBox(context, users[i]),
+                              if (i + 1 < users.length)
+                                _buildUserBox(context, users[i + 1]),
+                            ],
+                          ),
+                          const SizedBox(height: 50),
                         ],
                       ),
-                      const SizedBox(height: 50),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          _buildUserBox(context, "User 3"),
-                          _buildUserBox(context, "User 4"),
-                        ],
-                      ),
-                    ],
-                  ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-        )
+              ),
+            );
+          },
+        ),
     );
   }
 
   //Funció per construir la caixa tàctil de cada usuari cercat
-  Widget _buildUserBox(BuildContext context, String user) {
+  Widget _buildUserBox(BuildContext context, Map<String, dynamic> user) {
     return InkWell(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => BibliotecaAltresUsuarisScreen(userName: user, followed: false),
+            builder: (context) => BibliotecaSeguitsScreen(userName: user['nick'], follows: false),
           ),
         );
       },
@@ -85,19 +108,18 @@ class UsuarisCercats extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const CircleAvatar(
-                  radius: 24,
+                CircleAvatar(
+                  radius: 40,
                   backgroundColor: Colors.black87,
-                  child: Icon(Icons.person, color: Colors.white),
+                  backgroundImage: AssetImage(user['imagePath']),
                 ),
                 const SizedBox(height: 8),
-                Text(user),
+                Text(user['nick']),
               ],
             ),
           ),
         ),
       ),
-
     );
   }
 }

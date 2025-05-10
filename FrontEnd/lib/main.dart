@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 
 import 'screens/welcome_screen.dart';
 import 'screens/cartellera.dart';
-import 'screens/detalls_peli_serie.dart';
 import 'user_role_provider.dart';
 import 'screens/pregunta_questionari.dart';
 

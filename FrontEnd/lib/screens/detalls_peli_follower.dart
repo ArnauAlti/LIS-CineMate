@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 
 class DetallsPeliFollowerScreen extends StatefulWidget {
-  final String title;
+  final Map<String, dynamic> film;
 
-  const DetallsPeliFollowerScreen({super.key, required this.title});
+  const DetallsPeliFollowerScreen({super.key, required this.film});
 
   @override
   State<DetallsPeliFollowerScreen> createState() => _DetallsPeliFollowerScreen();
 }
 
 class _DetallsPeliFollowerScreen extends State<DetallsPeliFollowerScreen> {
-  double selectedRating = 0;
 
   @override
   Widget build(BuildContext context) {
+    final double selectedRating = (widget.film['personalRating'] ?? 0.0).toDouble();
+    final String title = widget.film['title'] ?? 'Título no disponible';
+    final String comentari = widget.film['comment'] ?? '';
+    final String imagePath = widget.film['imagePath'] ?? '';
+
     return Scaffold(
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
@@ -30,7 +34,7 @@ class _DetallsPeliFollowerScreen extends State<DetallsPeliFollowerScreen> {
             GestureDetector(
               onTap: () {}, // podrías abrir detalles más largos si quieres
               child: Text(
-                widget.title,
+                title,
                 style: const TextStyle(
                   fontSize: 18,
                   color: Colors.black,
@@ -44,8 +48,7 @@ class _DetallsPeliFollowerScreen extends State<DetallsPeliFollowerScreen> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
                 child: Image.network(
-                  //TODO: Establecer repositorio o sitio donde guardar imágenes de películas/series
-                  'https://th.bing.com/th/id/OIP.TDVZL0VokIrAyO-t9RFLJQAAAA?rs=1&pid=ImgDetMain',
+                  imagePath,
                   width: 180,
                   height: 260,
                   fit: BoxFit.cover,
@@ -91,7 +94,7 @@ class _DetallsPeliFollowerScreen extends State<DetallsPeliFollowerScreen> {
               maxLines: 3,
               readOnly: true,
               decoration: InputDecoration(
-                hintText: "BLA BLA BLA",
+                hintText: comentari,
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
               ),
             ),

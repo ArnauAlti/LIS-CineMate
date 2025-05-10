@@ -17,16 +17,19 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
   bool isPeliculasSelected = true;
   late Future<List<Map<String, dynamic>>> _filmsFuture;
 
+
   @override
   void initState() {
+    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
     super.initState();
-    _filmsFuture = getLibraryFilms(1, true);
+    _filmsFuture = getLibraryFilms(userEmail!, true);
   }
-
+  //TODO: Eliminar pelis/series entre cambios de sección
   @override
   Widget build(BuildContext context) {
     final userRoleProvider = Provider.of<UserRoleProvider>(context);
     final userRole = userRoleProvider.userRole;
+    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
 
     return Scaffold(
       backgroundColor: Colors.blue[50],
@@ -55,7 +58,6 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: _filmsFuture,
-        //Comprovacions per saber si s'han agafat bé les películes de la BD
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -78,22 +80,20 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
                     _buildSectionButton("Películas", isPeliculasSelected, () {
                       setState(() {
                         isPeliculasSelected = true;
-                        //TODO: Modificar id que es passa, segons la de l'usuari actual
-                        _filmsFuture = getLibraryFilms(1, true); // Puedes alternar a getSeries()
+                        _filmsFuture = getLibraryFilms(userEmail!, true);
                       });
                     }),
                     const SizedBox(width: 20),
                     _buildSectionButton("Series", !isPeliculasSelected, () {
                       setState(() {
                         isPeliculasSelected = false;
-                        _filmsFuture = getLibraryFilms(1, false); // Cambia aquí si tienes `getSeries()`
+                        _filmsFuture = getLibraryFilms(userEmail!, false);
                       });
                     }),
                   ],
                 ),
                 const SizedBox(height: 30),
 
-                // Generar las filas dinámicamente
                 for (int i = 0; i < films.length; i += 2)
                   Column(
                     children: [
@@ -145,9 +145,9 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 2),
           borderRadius: BorderRadius.circular(8),
-          image: film['imagePath'] != null
+          image: film['media_png'] != null
               ? DecorationImage(
-            image: NetworkImage(film['imagePath']),
+            image: NetworkImage(film['media_png']),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
               Colors.black.withOpacity(0.3),
@@ -161,7 +161,7 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              film['title'] ?? '',
+              film['media_name'] ?? '',
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),

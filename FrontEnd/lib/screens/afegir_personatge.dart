@@ -1,7 +1,40 @@
+import 'package:cine_mate/screens/cerca_personatges.dart';
 import 'package:flutter/material.dart';
+import '../requests.dart';
 
-class AfegirPersonatgeScreen extends StatelessWidget {
-  const AfegirPersonatgeScreen({super.key});
+class AfegirPersonatgeScreen extends StatefulWidget {
+  final String mode;
+  final Map<String, dynamic>? charData;
+
+
+  const AfegirPersonatgeScreen({
+    super.key,
+    required this.mode,
+    this.charData,
+  });
+
+  @override
+  State<AfegirPersonatgeScreen> createState() => _AfegirPersonatgeScreen();
+}
+
+class _AfegirPersonatgeScreen extends State<AfegirPersonatgeScreen> {
+  late final TextEditingController nameController;
+  late final TextEditingController descriptionController;
+  late final TextEditingController imagePathController;
+  late final TextEditingController MediaIdController;
+
+  @override
+  void initState() {
+    super.initState();
+    final data = widget.charData;
+
+    nameController = TextEditingController(text: data?['name'] ?? "");
+    descriptionController = TextEditingController(text: data?['context'] ?? "");
+    imagePathController =
+        TextEditingController(text: data?["imagePath"] ?? "");
+    MediaIdController =
+        TextEditingController(text: data?["movie_name"] ?? "");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +43,7 @@ class AfegirPersonatgeScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Añadir personaje"),
+        title: Text(widget.mode == "New" ? "Añadir personaje" : "Editar Personaje"),
         leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: (){
@@ -19,79 +52,128 @@ class AfegirPersonatgeScreen extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal:  24.0, vertical: 16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(height: 16),
+          padding: const EdgeInsets.symmetric(horizontal:  24.0, vertical: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 16),
 
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text("Nombre personaje"),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              decoration: InputDecoration(
-                filled:  true,
-                fillColor: Colors.grey[100],
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text("Nombre personaje"),
               ),
-            ),
-
-            const SizedBox(height: 32),
-
-            Center(
-              child: Container(
-                width:100,
-                height: 100,
-                decoration: BoxDecoration(
-                  border:  Border.all(color: Colors.black54),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Icon(Icons.image, size: 48, color: Colors.black54),
-              ),
-            ),
-
-            const SizedBox(height: 32),
-
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text("Descripción"),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.grey[100],
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
-
-            const Spacer(),
-
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  //TODO: Passar informació a backend per actualitzar la BD
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+              const SizedBox(height: 8),
+              TextField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  filled:  true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
                 ),
-                child: const Text("Añadir"),
               ),
-            ),
-            const SizedBox(height: 16),
-          ],
-        )
+
+              const SizedBox(height: 32),
+
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text("URL de la imagen"),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: imagePathController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 32),
+
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text("Descripción"),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: descriptionController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 32),
+
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text("Película o serie del personaje"),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: MediaIdController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+
+              const Spacer(),
+
+              Center(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    if (widget.mode == "New") {
+                      await addCharacter(
+                        nameController.text,
+                        imagePathController.text,
+                        descriptionController.text,
+                        MediaIdController.text,
+                      );
+                    } else {
+                      await modifyCharacter(
+                        nameController.text,
+                        imagePathController.text,
+                        descriptionController.text,
+                        MediaIdController.text,
+                      );
+                    }
+
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CercaPersonatgesScreen(),
+                      ),
+                    );
+
+                    final String accion = widget.mode == "New" ? "añadido" : "guardado";
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('${nameController.text} ha sido $accion en la base de datos.')),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+                  ),
+                  child: Text(widget.mode == "New" ? "Añadir" : "Guardar"),
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
+          )
       ),
     );
   }

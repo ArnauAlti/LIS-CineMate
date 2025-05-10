@@ -1,16 +1,26 @@
+import 'package:cine_mate/requests.dart';
 import 'package:flutter/material.dart';
-import 'afegir_personatge_admin.dart';
 import 'info_personatge.dart';
-import 'package:provider/provider.dart';
-import '../user_role_provider.dart';
 
-class PersonatgesDisponiblesScreen extends StatelessWidget {
-  const PersonatgesDisponiblesScreen({super.key});
+class PersonatgesDisponiblesScreen extends StatefulWidget {
+  const PersonatgesDisponiblesScreen({super.key, required this.busqueda});
+  final String busqueda;
+
+  @override
+  State<PersonatgesDisponiblesScreen> createState() => _PersonatgesDisponiblesScreen();
+}
+
+class _PersonatgesDisponiblesScreen extends State<PersonatgesDisponiblesScreen> {
+  late Future<List<Map<String, dynamic>>> _futureCharacters;
+
+  @override
+  void initState() {
+    super.initState();
+    _futureCharacters = getCharactersBySearch(widget.busqueda);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final userRoleProvider = Provider.of<UserRoleProvider>(context);
-    final userRole = userRoleProvider.userRole;
 
     return Scaffold(
       backgroundColor: const Color(0xFFE0F2F1),
@@ -25,79 +35,99 @@ class PersonatgesDisponiblesScreen extends StatelessWidget {
           },
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            //TODO: Modificar per posar els personatges segons la cerca
-            const Text(
-              "Personatges disponibles de: Stranger Things",
-              style: TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 16),
-              GridView.count(
-                crossAxisCount: 2,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-                shrinkWrap: true,
-                //TODO: Personatges segons cerca
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: _futureCharacters,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+
+          final characters = snapshot.data ?? [];
+
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  buildCharacterCard(
-                    context,
-                    name: "Eleven",
-                    imageUrl:
-                    "https://images.hdqwalls.com/download/stranger-things-eleven-art-nw-1280x2120.jpg",
+                  const SizedBox(height: 15),
+                  const Text("Personajes disponibles!!",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  buildCharacterCard(
-                    context,
-                    name: "Will",
-                    imageUrl:
-                    "https://i.pinimg.com/originals/ec/6d/59/ec6d59f48c5e8ba9b5021b68c8c401dd.jpg",
-                  ),
+                  const SizedBox(height: 50),
+                  for (int i = 0; i < characters.length; i += 2)
+                    Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            buildCharacterCard(context, characters[i]),
+                            if (i + 1 < characters.length)
+                              buildCharacterCard(context, characters[i + 1]),
+                          ],
+                        ),
+                        const SizedBox(height: 50),
+                      ],
+                    ),
                 ],
               ),
-          ],
-        ),
-      ),
-      floatingActionButton: userRole == "Administrador"
-          ? FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AfegirPersonatgeScreen()),
+            ),
           );
         },
-        backgroundColor: Colors.black,
-        child: const Icon(Icons.add, color: Colors.white),
-      )
-          : null, // No mostris cap botó si no és administrador
-
-
+      ),
     );
   }
 
-  Widget buildCharacterCard(BuildContext context,
-      {required String name, required String imageUrl}) {
+  Widget buildCharacterCard(BuildContext context, Map<String, dynamic> char) {
+    final name = char['name'] ?? 'Nom no disponible';
+    final imagePath = char['png'] ?? '';
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const InfoPersonatge(),
+            builder: (context) => InfoPersonatge(charData: char),
           ),
         );
       },
       child: Column(
         children: [
-          Expanded(
+          SizedBox(
+            height: 150,
+            width: 100,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.network(imageUrl, fit: BoxFit.cover),
+              child: imagePath.isNotEmpty
+                  ? Image.network(
+                imagePath,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => Container(
+                  color: Colors.grey[300],
+                  child: const Icon(Icons.broken_image),
+                ),
+              )
+                  : Container(
+                color: Colors.grey[300],
+                child: const Icon(Icons.image_not_supported),
+              ),
             ),
           ),
           const SizedBox(height: 8),
-          Text(name),
+          Text(
+            name,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );

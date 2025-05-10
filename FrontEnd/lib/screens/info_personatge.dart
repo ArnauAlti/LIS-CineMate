@@ -1,24 +1,32 @@
+import 'xats_actius.dart';
+import 'package:cine_mate/screens/afegir_personatge.dart';
+import 'package:cine_mate/screens/personatges_disponibles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
 
-import 'editar_personatge.dart';
+import '../requests.dart';
 
 class InfoPersonatge extends StatelessWidget {
-  const InfoPersonatge({super.key});
+  final Map<String, dynamic>? charData;
+
+
+  const InfoPersonatge({super.key, required this.charData});
 
   @override
   Widget build(BuildContext context) {
     final userRoleProvider = Provider.of<UserRoleProvider>(context);
     final userRole = userRoleProvider.userRole;
+    final name = charData?['name'] ?? 'Nombre no disponible';
+    final imagePath = charData?['png'] ?? '';
+    final contextInfo = charData?['context'] ?? '';
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        //TODO: Afegir personatge segons la BD i el personatge clicat anteriorment
-        title: const Text("Eleven: Stranger Things"),
+        title: Text(name),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -35,29 +43,57 @@ class InfoPersonatge extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image.network(
-                  'https://upload.wikimedia.org/wikipedia/en/f/f7/Eleven_%28Stranger_Things%29.png',
+                  imagePath,
                   width: 180,
                 ),
               ),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Eleven',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Text(
+              name,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 50),
 
-            const Center(
+            Center(
               child: Text(
-                '• Té habilitats psíquiques\n• Desconfia de la gent\n• Parla molt bé dels seus amics',
+                contextInfo,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
               ),
             ),
 
             const Spacer(),
 
-            userRole == "Administrador"
+            userRole == "Usuario Registrado"
+                ? Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    addCharacterToChat(name);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const XatsActiusScreen()),
+                    );
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: const WidgetStatePropertyAll<Color>(Colors.black),
+                    foregroundColor: const WidgetStatePropertyAll<Color>(Colors.white),
+                    shape: WidgetStatePropertyAll<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    padding: const WidgetStatePropertyAll<EdgeInsets>(
+                      EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    ),
+                  ),
+                  child: Text("Crear chat con $name"),
+                ),
+              ],
+            )
+            : userRole == "Administrador"
                 ? Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -65,7 +101,7 @@ class InfoPersonatge extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const EditarPersonatgeScreen()),
+                      MaterialPageRoute(builder: (context) => AfegirPersonatgeScreen(mode: "Modify", charData: charData,)),
                     );
                   },
                   style: ButtonStyle(
@@ -83,8 +119,9 @@ class InfoPersonatge extends StatelessWidget {
                   child: const Text("Editar informació"),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    // Acción de eliminar
+                  onPressed: () async {
+                    await deleteCharacter(name, charData?['media_id']);
+                    Navigator.pop(context);
                   },
                   style: ButtonStyle(
                     backgroundColor: const WidgetStatePropertyAll<Color>(Colors.red),

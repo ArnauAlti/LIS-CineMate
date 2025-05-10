@@ -1,6 +1,10 @@
+import 'dart:ffi';
+
 import 'package:cine_mate/screens/detalls_peli_serie.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../requests.dart';
+import '../user_role_provider.dart';
 
 class RecomanacionsGeneradesScreen extends StatefulWidget {
   final List<String>? selectedGenres;
@@ -16,9 +20,10 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
 
   @override
   void initState() {
+    print(widget.selectedGenres);
+    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
     super.initState();
-    //TODO: Canviar id de l'usuari i passar els gèneres seleccionats
-    _filmsFuture = getRecomendationFilms(1);
+    _filmsFuture = getRecomendationFilms(userEmail!, widget.selectedGenres);
   }
 
   @override
@@ -50,6 +55,8 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
             }
 
             final films = snapshot.data ?? [];
+
+            print(films);
 
             return SingleChildScrollView(
               padding: const EdgeInsets.all(20),
@@ -126,7 +133,7 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => DetallsPeliSerieScreen(film: film)),
+          MaterialPageRoute(builder: (context) => DetallsPeliSerieScreen(mediaId: film['id'])),
         );
       },
       child: Container(
@@ -134,9 +141,9 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
         height: 200,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 2),
-          image: film['imagePath'] != null
+          image: film['png'] != null
               ? DecorationImage(
-            image: NetworkImage(film['imagePath']),
+            image: NetworkImage(film['png']),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
               Colors.black.withOpacity(0.3),
@@ -150,7 +157,7 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              film['title'] ?? '',
+              film['name'] ?? '',
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),

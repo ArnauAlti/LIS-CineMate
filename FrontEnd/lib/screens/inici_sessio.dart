@@ -13,7 +13,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  String _selectedRole = "Usuario Registrado";
   late final TextEditingController mailController = TextEditingController();
   late final TextEditingController passController = TextEditingController();
 
@@ -47,29 +46,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   _buildTextFormField("Email", mailController),
                   _buildTextFormField("Contraseña", passController, isPassword: true),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("Rol: "),
-                      DropdownButton<String>(
-                        value: _selectedRole,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            _selectedRole = newValue!;
-                          });
-                        },
-                        items: <String>[
-                          "Usuario Registrado",
-                          "Administrador",
-                        ].map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ),
@@ -81,11 +57,13 @@ class _LoginScreenState extends State<LoginScreen> {
         child: ElevatedButton(
           onPressed: () async {
             if (_formKey.currentState!.validate()) {
-              //TODO: Modificar per assignar usuari registrat o administrador, segons la variable de l'usuari
-              final validation = await validateLogin(mailController.text, passController.text);
+              final user = await validateLogin(mailController.text, passController.text);
 
-              if (validation) {
-                userRoleProvider.setUserRole(_selectedRole);
+              if (user != null) {
+                userRoleProvider.setUserRole(user["admin"] ? "Administrador" : "Usuario Registrado");
+                userRoleProvider.setUserEmail(user["mail"]);
+                userRoleProvider.setUser(user);
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Has iniciado sesión correctamente.')),
                 );

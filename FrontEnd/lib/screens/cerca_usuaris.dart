@@ -17,7 +17,6 @@ class _CercaUsuarisScreenState extends State<CercaUsuarisScreen> {
       _busqueda = _controller.text.trim();
     });
 
-    //TODO: Cercar a la BD usuaris amb les paraules introduides
     Navigator.push(
       context,
       MaterialPageRoute(
