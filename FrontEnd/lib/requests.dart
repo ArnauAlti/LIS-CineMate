@@ -1,7 +1,10 @@
+import 'dart:ffi';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 const String baseUrl = "http://localhost:3000";
 
+//TODO: Si és admin, ficar el token de admin
 //Funció per a enviar les dades a backend per a validar-les i procedir amb el registre o mostrar errors
 Future<bool> validateRegister(String name, String mail, String nick, String birth, String pass) async {
 
@@ -39,6 +42,7 @@ Future<bool> validateRegister(String name, String mail, String nick, String birt
   }
 }
 
+//TODO: Si és admin, ficar el token de admin
 //Funció per a enviar les dades a backend per a validar-les i procedir amb l'inici de sessió o mostrar errors
 Future<Map<String, dynamic>?> validateLogin(String mail, String pass) async {
   final Uri uri = Uri.parse("$baseUrl/user/login");
@@ -169,7 +173,6 @@ Future<List<Map<String, dynamic>>> getLatestFilms() async {
   }
 }
 
-//TODO: Comprovar bon funcionament de la cerca
 //Funció exlusiva per fer cerques de sèries o pel·lícules segons paraules, gèneres, el director, un actor/actriu o
 //una duració indicada per l'usuari amb els filtres de cerca
 Future<List<Map<String, dynamic>>> getFilmsBySearch(String search, String genre, String director,
@@ -362,6 +365,7 @@ Future<bool> modifyFromLibrary(String userMail, String mediaId, String mediaInfo
   }
 }
 
+//TODO: Falta en el backend
 //Funció per aconseguir els usuaris a través de la paraula cercada
 Future<List<Map<String, dynamic>>> getRatingsByFilm(String userMail, String mediaId, String infoId) async {
   final Uri uri = Uri.parse("$baseUrl/library/get-comments");
@@ -407,7 +411,6 @@ Future<List<Map<String, dynamic>>> getRatingsByFilm(String userMail, String medi
 //Funció que permet agafar les pel·lícules o sèries recomanades de manera intel·ligent segons els
 // gustos de l'usuari actual
 Future<List<Map<String, dynamic>>> getRecomendationFilms(String userMail, List<String>? selectedGenres) async {
-  //TODO: Modificar per agafar películes i sèries de la biblioteca de l'usuari de la BD
   final Uri uri = Uri.parse("$baseUrl/library/recommend");
 
   final Map<String, dynamic> body = {
@@ -648,7 +651,6 @@ Future<List<Map<String, dynamic>>> getCharactersBySearch(String search) async {
 
 }
 
-//TODO: Funció per afegir o modificar un personatge a la BD
 //Funció que permet afegir un personatge a la base de dades de personatges disponibles per establir un xat amb ell/a
 Future<bool> addCharacter(String name, String imagePath, String description, String movieName) async {
   final Uri uri = Uri.parse("$baseUrl/character/add-character"); //Modificar Uri
@@ -718,7 +720,6 @@ Future<bool> modifyCharacter(String name, String imagePath, String description, 
   }
 }
 
-//TODO: Funció per eliminar un personatge de la BD
 //Funció que permet modificar la informació del personatge especificat a la base de dades de personatges disponibles
 Future<bool> deleteCharacter(String name, String mediaId) async {
   final Uri uri = Uri.parse("$baseUrl/character/delete-character"); //Modificar Uri

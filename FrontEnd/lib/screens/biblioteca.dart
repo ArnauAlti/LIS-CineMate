@@ -24,7 +24,7 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
     super.initState();
     _filmsFuture = getLibraryFilms(userEmail!, true);
   }
-
+  //TODO: Eliminar pelis/series entre cambios de sección
   @override
   Widget build(BuildContext context) {
     final userRoleProvider = Provider.of<UserRoleProvider>(context);

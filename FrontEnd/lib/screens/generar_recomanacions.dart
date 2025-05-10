@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cine_mate/screens/detalls_peli_serie.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +20,7 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
 
   @override
   void initState() {
+    print(widget.selectedGenres);
     final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
     super.initState();
     _filmsFuture = getRecomendationFilms(userEmail!, widget.selectedGenres);
@@ -52,6 +55,8 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
             }
 
             final films = snapshot.data ?? [];
+
+            print(films);
 
             return SingleChildScrollView(
               padding: const EdgeInsets.all(20),

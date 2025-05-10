@@ -207,7 +207,7 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
                           );
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('No se ha podido añadir a la biblioteca.')),
+                            const SnackBar(content: Text('No se ha podido añadir a la biblioteca. ¿La tendrás ya en tu historial?')),
                           );
                         }
                       },
