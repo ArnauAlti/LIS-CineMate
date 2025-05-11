@@ -3,6 +3,7 @@ const userDB = require("./db-data.js");
 async function follow(req, res) {
     try {
 <<<<<<< HEAD
+<<<<<<< HEAD
         let srcMail = req.body['srcMail'];
         let dstMail = req.body['dstMail'];
         if (!srcMail || !dstMail) {
@@ -14,11 +15,15 @@ async function follow(req, res) {
 =======
         let srcNick = req.body['srcNick'];
         let dstNick = req.body['dstNick'];
+=======
+        let srcNick = req.body['srcMail'];
+        let dstNick = req.body['dstMail'];
+>>>>>>> 9caeb69 (Començar a fer el follow)
         if (!srcNick || !dstNick) {
             throw "Missing Information";
         } else {
             const query = await userDB.query(
-                'INSERT INTO following(src_nick, dst_nick) VALUES ($1, $2)',
+                'INSERT INTO following(src_mail, dst_mail) VALUES ($1, $2)',
                 [srcNick, dstNick]
 >>>>>>> 88bba61 (Query de folling + Implementación de Follow)
             );
