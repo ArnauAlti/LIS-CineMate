@@ -20,8 +20,7 @@ class _UsuarisSeguits extends State<UsuarisSeguits> {
   void initState() {
     final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
     super.initState();
-    //TODO: Quitar barras de comentario
-    //_usersFuture = getUsersByUserMail(userEmail!);
+    _usersFuture = getUsersByUserMail(userEmail!);
   }
 
   @override
@@ -121,7 +120,11 @@ class _UsuarisSeguits extends State<UsuarisSeguits> {
   }
 
   Widget _buildUserBox(BuildContext context, Map<String, dynamic> user) {
+<<<<<<< HEAD
     final String userMail = user['dst_mail']?? "";
+=======
+    final String userMail = user['mail']?? "";
+>>>>>>> 9a94606 (Canvis en biblioteca)
     final String nick = user['nick']?? "";
     final String png = (user['png'] != null && user['png'].toString().trim().isNotEmpty)
         ? user['png']

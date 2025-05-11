@@ -776,6 +776,10 @@ Future<bool> sendMessage(String title) async {
 
 //Funció per aconseguir els usuaris que segueix l'usuari que fa la request
 Future<List<Map<String, dynamic>>> getUsersByUserMail(String userMail) async {
+<<<<<<< HEAD
+=======
+  // TODO: Comprovar funcionament
+>>>>>>> 9a94606 (Canvis en biblioteca)
   final Uri uri = Uri.parse("$baseUrl/user/get-users/follows?user_mail=$userMail");
 
   try {

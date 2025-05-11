@@ -1,9 +1,7 @@
 import 'package:cine_mate/screens/detalls_peli_follower.dart';
 import 'package:cine_mate/screens/usuaris_seguits.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../requests.dart';
-import '../user_role_provider.dart';
 
 class BibliotecaSeguitsScreen extends StatefulWidget {
   final String userMail;
@@ -34,7 +32,11 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
+<<<<<<< HEAD
         title: Text("${widget.userNick}'s library"),
+=======
+        title: Text("Biblioteca de ${widget.userNick}"),
+>>>>>>> 9a94606 (Canvis en biblioteca)
         centerTitle: true,
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
@@ -50,6 +52,8 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
           }
 
           final films = snapshot.data ?? [];
+
+          print(films);
 
           return SingleChildScrollView(
             padding: const EdgeInsets.all(20),
@@ -102,6 +106,7 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
             final scrMail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
 
             if (widget.follows == true) {
+<<<<<<< HEAD
               bool response = await unfollowUser(srcMail: scrMail, dstMail: widget.userMail);
               if(response){
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -115,6 +120,12 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
                   SnackBar(content: Text('You now follow ${widget.userNick}')),
                 );
               }
+=======
+              //TODO: Enviar los dos nicks
+              await unfollowUser(nick: "");//(nick: widget.userName);
+            } else {
+              await followUser(nick: ""); //widget.userName);
+>>>>>>> 9a94606 (Canvis en biblioteca)
             }
 
             Navigator.push(context, MaterialPageRoute(builder: (context) => const UsuarisSeguits()));
@@ -176,7 +187,11 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
+<<<<<<< HEAD
               film['media_name'] ?? 'Unknown title',
+=======
+              film['media_name'] ?? 'Título desconocido',
+>>>>>>> 9a94606 (Canvis en biblioteca)
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
