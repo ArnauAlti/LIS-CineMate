@@ -4,7 +4,11 @@ async function unfollow(req, res) {
     try {
         let srcMail = req.body['srcMail'];
         let dstMail = req.body['dstMail'];
+<<<<<<< HEAD
         if (!srcMail || !dstMail) {
+=======
+        if (!srcNick || !dstNick) {
+>>>>>>> 83c318d (Toyota Corolla - Backend Follow and Unfollow)
             throw "Missing Information";
         } else {
             const query = await userDB.query(
@@ -18,8 +22,12 @@ async function unfollow(req, res) {
             }
         }
     } catch (error) {
+<<<<<<< HEAD
         console.log(error);
         res.status(500).json({ error: error, message: "An error ocurred trying to create a user"});
+=======
+        
+>>>>>>> 83c318d (Toyota Corolla - Backend Follow and Unfollow)
     }
 }
 
