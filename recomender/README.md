@@ -25,12 +25,12 @@ recomender/
 QUICK START:
 1. Build and run (Make sure to be in the recomender directory):
 docker build -f Dockerfile -t movie-recommender .
-docker run -it -p 8000:8000 movie-recommender
+docker run -it -p 12000:12000 movie-recommender
 
 TESTING OPTIONS:
 
 1. Swagger UI (best option):
-Open http://localhost:8000/docs in your browser to try all endpoints interactively
+Open http://localhost:12000/docs in your browser to try all endpoints interactively
 
 2. Python client:
 pip install -r fast_api/requirements.txt
@@ -39,10 +39,10 @@ python fast_api/client.py
 3. Manual curl commands:
 
 Basic check:
-curl http://localhost:8000/
+curl http://localhost:12000/
 
 Star ratings:
-curl -X POST http://localhost:8000/recommend/star-rating -H "Content-Type: application/json" -d 
+curl -X POST http://localhost:12000/recommend/star-rating -H "Content-Type: application/json" -d 
 '{
   "user_id": 123,
   "ratings": [
@@ -57,7 +57,7 @@ curl -X POST http://localhost:8000/recommend/star-rating -H "Content-Type: appli
 }'
 
 Star ratings with genre filter:
-curl -X POST http://localhost:8000/recommend/star-rating-genre -H "Content-Type: application/json" -d 
+curl -X POST http://localhost:12000/recommend/star-rating-genre -H "Content-Type: application/json" -d 
 '{
   "user_id": 123,
   "ratings": [

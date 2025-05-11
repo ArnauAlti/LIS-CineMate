@@ -365,7 +365,6 @@ Future<bool> modifyFromLibrary(String userMail, String mediaId, String mediaInfo
   }
 }
 
-//TODO: Falta en el backend
 //Funció per aconseguir els usuaris a través de la paraula cercada
 Future<List<Map<String, dynamic>>> getRatingsByFilm(String userMail, String mediaId, String infoId) async {
   final Uri uri = Uri.parse("$baseUrl/library/get-comments");
@@ -444,51 +443,6 @@ Future<List<Map<String, dynamic>>> getRecomendationFilms(String userMail, List<S
     throw Exception("No se pudo conectar al servidor.");
   }
 }
-
-
-/*
-//Funció que permet passar informació modificada d'una pel·lícula o sèrie
-//per introduir-la a la base de dades
-Future<bool> ModifyFilm(String title, List<String> cast, int releaseDate, int duration, String director,
-    String imagePath, int pegi, int season, int numChapters) async {
-  final Uri uri = Uri.parse("$baseUrl/library/create-media");
-
-  final Map<String, dynamic> body = {
-    'name': title,
-    'cast': cast,
-    'release': releaseDate,
-    'duration': title,
-    'director': director,
-    'png': imagePath,
-    "pegi": pegi,
-    "season": season,
-    "numChapters": numChapters
-  };
-
-  try {
-    final response = await http.post(
-      uri,
-      body: convert.jsonEncode(body),
-      headers: {
-        'Content-Type': 'application/json',
-        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
-      },
-    );
-    if (response.statusCode == 200) {
-      print("✅ Pelicula modificada correctamente.");
-      return true;
-
-    } else {
-      print("❌ Error en la modificación de la pelicula. Código: ${response.statusCode}");
-      print("Respuesta: ${response.body}");
-      return false;
-    }
-  } catch (e) {
-    print("🚫 Excepción al realizar la modificación: $e");
-    throw Exception("No se pudo conectar al servidor.");
-  }
-}
-*/
 
 //Funció que permet eliminar una pel·lícula o sèrie de la cartellera (BD) a partir del seu títol
 Future<bool> deleteFilm(String title, String media_id) async {
@@ -825,20 +779,15 @@ Future<bool> sendMessage(String title) async {
 //Funció per aconseguir els usuaris que segueix l'usuari que fa la request
 Future<List<Map<String, dynamic>>> getUsersByUserMail(String userMail) async {
   // TODO: Implementar crida real a la base de dades
-  final Uri uri = Uri.parse("$baseUrl/user/get-users");
-
-  final Map<String, dynamic> body = {
-    'user_mail': userMail
-  };
+  final Uri uri = Uri.parse("$baseUrl/user/get-users/follows?user_mail=$userMail");
 
   try {
-    final response = await http.post(
+    final response = await http.get(
       uri,
       headers: {
         'Content-Type': 'application/json',
         'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
       },
-      body: convert.jsonEncode(body),
     );
 
     if (response.statusCode == 200) {
@@ -872,21 +821,29 @@ Future<bool> unfollowUser({required String nick}) async {
 //Funció per aconseguir els usuaris a través de la paraula cercada
 Future<List<Map<String, dynamic>>> getUsersBySearch(String search) async {
   // TODO: Implementar crida real a la base de dades
-  return [
-    {
-      "nick": "Pikachu Lover",
-      "imagePath": "assets/perfil1.jpg"
-    },
-    {
-      "nick": "Doctor Films",
-      "imagePath": "assets/perfil4.jpg"
-    },
-    {
-      "nick": "Star Master",
-      "imagePath": "assets/perfil8.jpg"},
-    {
-      "nick": "Obi",
-      "imagePath": "assets/perfil3.jpg"
-    },
-  ];
+  final Uri uri = Uri.parse("$baseUrl/user/get-users/search? ${search.isEmpty ? "" : "&search=$search"}");
+
+  try {
+    final response = await http.get(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print("✅ Request exitosa.");
+      final decodedBody = convert.jsonDecode(response.body);
+      return List<Map<String, dynamic>>.from(decodedBody['users']);
+
+    } else {
+      print("❌ Error en la request. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return [];
+    }
+  } catch (e) {
+    print("🚫 Excepción al realizar la request: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
 }

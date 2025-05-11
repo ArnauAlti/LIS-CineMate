@@ -16,15 +16,18 @@ class BibliotecaScreen extends StatefulWidget {
 class _BibliotecaScreenState extends State<BibliotecaScreen> {
   bool isPeliculasSelected = true;
   late Future<List<Map<String, dynamic>>> _filmsFuture;
-
+  List<Map<String, dynamic>> _films = [];
 
   @override
   void initState() {
-    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
     super.initState();
-    _filmsFuture = getLibraryFilms(userEmail!, true);
+    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
+    _filmsFuture = getLibraryFilms(userEmail!, true).then((films) {
+      _films = films;
+      return films;
+    });
   }
-  //TODO: Eliminar pelis/series entre cambios de sección
+
   @override
   Widget build(BuildContext context) {
     final userRoleProvider = Provider.of<UserRoleProvider>(context);
@@ -38,17 +41,6 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
         foregroundColor: Colors.white,
         title: const Text("Biblioteca"),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const CercaPelicules()),
-              );
-            },
-          ),
-        ],
       ),
       drawer: AppDrawer(
         userRole: userRole,
@@ -67,8 +59,6 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
 
-          final films = snapshot.data ?? [];
-
           return SingleChildScrollView(
             padding: const EdgeInsets.all(20),
             child: Column(
@@ -80,29 +70,37 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
                     _buildSectionButton("Películas", isPeliculasSelected, () {
                       setState(() {
                         isPeliculasSelected = true;
-                        _filmsFuture = getLibraryFilms(userEmail!, true);
+                        _films = [];
+                        _filmsFuture = getLibraryFilms(userEmail!, true).then((films) {
+                          _films = films;
+                          return films;
+                        });
                       });
                     }),
                     const SizedBox(width: 20),
                     _buildSectionButton("Series", !isPeliculasSelected, () {
                       setState(() {
                         isPeliculasSelected = false;
-                        _filmsFuture = getLibraryFilms(userEmail!, false);
+                        _films = [];
+                        _filmsFuture = getLibraryFilms(userEmail!, false).then((films) {
+                          _films = films;
+                          return films;
+                        });
                       });
                     }),
                   ],
                 ),
                 const SizedBox(height: 30),
 
-                for (int i = 0; i < films.length; i += 2)
+                for (int i = 0; i < _films.length; i += 2)
                   Column(
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          _buildMovieBox(context, films[i]),
-                          if (i + 1 < films.length)
-                            _buildMovieBox(context, films[i + 1]),
+                          _buildMovieBox(context, _films[i]),
+                          if (i + 1 < _films.length)
+                            _buildMovieBox(context, _films[i + 1]),
                         ],
                       ),
                       const SizedBox(height: 50),
