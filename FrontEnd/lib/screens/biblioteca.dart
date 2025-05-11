@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
-import 'cerca_pelicules.dart';
 import 'detalls_biblioteca.dart';
 import 'app_drawer.dart';
 import '../requests.dart';
@@ -39,7 +38,7 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Biblioteca"),
+        title: const Text("Library"),
         centerTitle: true,
       ),
       drawer: AppDrawer(

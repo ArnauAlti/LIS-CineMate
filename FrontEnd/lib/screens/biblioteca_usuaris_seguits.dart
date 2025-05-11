@@ -51,8 +51,6 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
 
           final films = snapshot.data ?? [];
 
-          print(films);
-
           return SingleChildScrollView(
             padding: const EdgeInsets.all(20),
             child: Column(
@@ -105,11 +103,22 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
             final scrMail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
 
             if (widget.follows == true) {
-              await unfollowUser(srcMail: scrMail, dstMail: widget.userMail);
+              bool response = await unfollowUser(srcMail: scrMail, dstMail: widget.userMail);
+              if(response){
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('You unfollowed ${widget.userNick}')),
+                );
+              }
             } else {
-              await followUser(srcMail: scrMail, dstMail: widget.userMail);
+              bool response = await followUser(srcMail: scrMail, dstMail: widget.userMail);
+              if(response){
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('You now follow ${widget.userNick}')),
+                );
+              }
             }
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const UsuarisSeguits()));
+
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const UsuarisSeguits()));
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.black,

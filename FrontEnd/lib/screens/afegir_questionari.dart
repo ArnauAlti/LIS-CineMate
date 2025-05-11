@@ -20,7 +20,7 @@ class _AfegirQuestionariScreen extends State<AfegirQuestionariScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Añadir cuestionario a una película o serie"),
+        title: const Text("Add questionnaire to a film or series"),
         leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: (){
@@ -37,7 +37,7 @@ class _AfegirQuestionariScreen extends State<AfegirQuestionariScreen> {
 
               const Align(
                 alignment: Alignment.centerLeft,
-                child: Text("Nombre de la película o serie"),
+                child: Text("Name of the film or series"),
               ),
               const SizedBox(height: 8),
               TextField(
@@ -55,7 +55,7 @@ class _AfegirQuestionariScreen extends State<AfegirQuestionariScreen> {
 
               const Align(
                 alignment: Alignment.centerLeft,
-                child: Text("URL de la imagen"),
+                child: Text("Image's URL"),
               ),
               const SizedBox(height: 8),
               TextField(
@@ -82,7 +82,7 @@ class _AfegirQuestionariScreen extends State<AfegirQuestionariScreen> {
                       ),
                     );
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('El cuestionario de ${titleController.text} ha sido añadido a la base de datos.')),
+                      SnackBar(content: Text('${titleController.text} questionnaire has been added to the database.')),
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -93,7 +93,7 @@ class _AfegirQuestionariScreen extends State<AfegirQuestionariScreen> {
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
                   ),
-                  child: const Text("Añadir"),
+                  child: const Text("Add"),
                 ),
               ),
               const SizedBox(height: 16),

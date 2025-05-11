@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 const String baseUrl = "http://localhost:3000";
@@ -824,6 +822,7 @@ Future<bool> followUser({required String? srcMail, required String dstMail}) asy
         'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
       },
     );
+
     if (response.statusCode == 200) {
       print("✅ Usuario seguido correctamente.");
       return true;
@@ -842,7 +841,7 @@ Future<bool> followUser({required String? srcMail, required String dstMail}) asy
 //TODO: Comprovar funcionament
 //Funció que permet deixar de seguir a un usuari dins l'aplicació
 Future<bool> unfollowUser({required String? srcMail, required String dstMail}) async {
-  final Uri uri = Uri.parse("$baseUrl/user/unfollow"); //Modificar Uri
+  final Uri uri = Uri.parse("$baseUrl/user/unfollow");
 
   final Map<String, dynamic> body = {
     'srcMail': srcMail,
