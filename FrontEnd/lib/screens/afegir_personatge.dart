@@ -43,7 +43,7 @@ class _AfegirPersonatgeScreen extends State<AfegirPersonatgeScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: Text(widget.mode == "New" ? "Añadir personaje" : "Editar Personaje"),
+        title: Text(widget.mode == "New" ? "Add character" : "Edit Character"),
         leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: (){
@@ -60,7 +60,7 @@ class _AfegirPersonatgeScreen extends State<AfegirPersonatgeScreen> {
 
               const Align(
                 alignment: Alignment.centerLeft,
-                child: Text("Nombre personaje"),
+                child: Text("Character's name"),
               ),
               const SizedBox(height: 8),
               TextField(
@@ -78,7 +78,7 @@ class _AfegirPersonatgeScreen extends State<AfegirPersonatgeScreen> {
 
               const Align(
                 alignment: Alignment.centerLeft,
-                child: Text("URL de la imagen"),
+                child: Text("Image's URL"),
               ),
               const SizedBox(height: 8),
               TextField(
@@ -96,7 +96,7 @@ class _AfegirPersonatgeScreen extends State<AfegirPersonatgeScreen> {
 
               const Align(
                 alignment: Alignment.centerLeft,
-                child: Text("Descripción"),
+                child: Text("Description"),
               ),
               const SizedBox(height: 8),
               TextField(
@@ -113,7 +113,7 @@ class _AfegirPersonatgeScreen extends State<AfegirPersonatgeScreen> {
 
               const Align(
                 alignment: Alignment.centerLeft,
-                child: Text("Película o serie del personaje"),
+                child: Text("Film or Series of the Character"),
               ),
               const SizedBox(height: 8),
               TextField(
@@ -155,9 +155,9 @@ class _AfegirPersonatgeScreen extends State<AfegirPersonatgeScreen> {
                       ),
                     );
 
-                    final String accion = widget.mode == "New" ? "añadido" : "guardado";
+                    final String accion = widget.mode == "New" ? "Added" : "Saved";
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('${nameController.text} ha sido $accion en la base de datos.')),
+                      SnackBar(content: Text('${nameController.text} has been $accion on the database.')),
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -168,7 +168,7 @@ class _AfegirPersonatgeScreen extends State<AfegirPersonatgeScreen> {
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
                   ),
-                  child: Text(widget.mode == "New" ? "Añadir" : "Guardar"),
+                  child: Text(widget.mode == "New" ? "Add" : "Save"),
                 ),
               ),
               const SizedBox(height: 16),

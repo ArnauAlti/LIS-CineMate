@@ -4,7 +4,7 @@ async function follow(req, res) {
     try {
         let srcMail = req.body['srcMail'];
         let dstMail = req.body['dstMail'];
-        if (!srcNick || !dstNick) {
+        if (!srcMail || !dstMail) {
             throw "Missing Information";
         } else {
             const query = await userDB.query(
@@ -18,7 +18,8 @@ async function follow(req, res) {
             }
         }
     } catch (error) {
-        
+        console.log(error);
+        res.status(500).json({ error: error, message: "An error ocurred trying to create a user"});
     }
 }
 
