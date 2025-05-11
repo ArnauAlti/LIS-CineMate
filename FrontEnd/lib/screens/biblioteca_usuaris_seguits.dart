@@ -1,15 +1,14 @@
 import 'package:cine_mate/screens/detalls_peli_follower.dart';
 import 'package:cine_mate/screens/usuaris_seguits.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../requests.dart';
-import '../user_role_provider.dart';
 
 class BibliotecaSeguitsScreen extends StatefulWidget {
-  final String userName;
+  final String userMail;
+  final String userNick;
   final bool follows;
 
-  const BibliotecaSeguitsScreen({super.key, required this.userName, required this.follows});
+  const BibliotecaSeguitsScreen({super.key, required this.userMail, required this.userNick, required this.follows});
 
   @override
   State<BibliotecaSeguitsScreen> createState() => _BibliotecaSeguitsScreenState();
@@ -21,21 +20,19 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
 
   @override
   void initState() {
-    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
+    print(widget.userMail);
     super.initState();
-    _filmsFuture = getLibraryFilms(userEmail!, true);
+    _filmsFuture = getLibraryFilms(widget.userMail, true);
   }
 
   @override
   Widget build(BuildContext context) {
-    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
-
     return Scaffold(
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: Text(widget.userName),
+        title: Text("Biblioteca de ${widget.userNick}"),
         centerTitle: true,
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
@@ -52,6 +49,8 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
 
           final films = snapshot.data ?? [];
 
+          print(films);
+
           return SingleChildScrollView(
             padding: const EdgeInsets.all(20),
             child: Column(
@@ -63,14 +62,14 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
                     _buildSectionButton("Películas", isPeliculasSelected, () {
                       setState(() {
                         isPeliculasSelected = true;
-                        _filmsFuture = getLibraryFilms(userEmail!, true);
+                        _filmsFuture = getLibraryFilms(widget.userMail, true);
                       });
                     }),
                     const SizedBox(width: 20),
                     _buildSectionButton("Series", !isPeliculasSelected, () {
                       setState(() {
                         isPeliculasSelected = false;
-                        _filmsFuture = getLibraryFilms(userEmail!, false);
+                        _filmsFuture = getLibraryFilms(widget.userMail, false);
                       });
                     }),
                   ],
@@ -102,9 +101,10 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
         child: ElevatedButton(
           onPressed: () async {
             if (widget.follows == true) {
-              await unfollowUser(nick: widget.userName);
+              //TODO: Enviar los dos nicks
+              await unfollowUser(nick: "");//(nick: widget.userName);
             } else {
-              await followUser(nick: widget.userName);
+              await followUser(nick: ""); //widget.userName);
             }
               Navigator.push(context, MaterialPageRoute(builder: (context) => const UsuarisSeguits()));
           },
@@ -114,7 +114,7 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             padding: const EdgeInsets.symmetric(vertical: 16),
           ),
-          child: Text(widget.follows == true ? "DEJAR DE SEGUIR A ${widget.userName}" : "SEGUIR A ${widget.userName}"),
+          child: Text(widget.follows == true ? "Unfollow ${widget.userNick}" : "Follow ${widget.userNick}"),
         ),
       ),
     );
@@ -149,9 +149,9 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 2),
           borderRadius: BorderRadius.circular(8),
-          image: film['imagePath'] != null
+          image: film['media_png'] != null
               ? DecorationImage(
-            image: NetworkImage(film['imagePath']),
+            image: NetworkImage(film['media_png']),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
               Colors.black.withOpacity(0.3),
@@ -165,7 +165,7 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              film['title'] ?? '',
+              film['media_name'] ?? 'Título desconocido',
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),

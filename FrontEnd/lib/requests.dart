@@ -778,7 +778,7 @@ Future<bool> sendMessage(String title) async {
 
 //Funció per aconseguir els usuaris que segueix l'usuari que fa la request
 Future<List<Map<String, dynamic>>> getUsersByUserMail(String userMail) async {
-  // TODO: Implementar crida real a la base de dades
+  // TODO: Comprovar funcionament
   final Uri uri = Uri.parse("$baseUrl/user/get-users/follows?user_mail=$userMail");
 
   try {
@@ -793,7 +793,7 @@ Future<List<Map<String, dynamic>>> getUsersByUserMail(String userMail) async {
     if (response.statusCode == 200) {
       print("✅ Request exitosa.");
       final decodedBody = convert.jsonDecode(response.body);
-      return List<Map<String, dynamic>>.from(decodedBody['users']);
+      return List<Map<String, dynamic>>.from(decodedBody['data']);
 
     } else {
       print("❌ Error en la request. Código: ${response.statusCode}");
@@ -835,7 +835,8 @@ Future<List<Map<String, dynamic>>> getUsersBySearch(String search) async {
     if (response.statusCode == 200) {
       print("✅ Request exitosa.");
       final decodedBody = convert.jsonDecode(response.body);
-      return List<Map<String, dynamic>>.from(decodedBody['users']);
+      print(decodedBody);
+      return List<Map<String, dynamic>>.from(decodedBody['data']);
 
     } else {
       print("❌ Error en la request. Código: ${response.statusCode}");
