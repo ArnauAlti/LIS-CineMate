@@ -1,16 +1,24 @@
 const userDB = require("./db-data.js");
 
 async function getFollows(userMail) {
-    if (!userMail) {
-        throw "No user mail specified";
+    try {
+        let srcNick = req.body['srcNick'];
+        if (!srcNick) {
+            throw "No Nick Provided";
+        } else {
+            const query = await userDB.query(
+                "SELECT * FROM following_query WHERE src_nick = ($1)",
+                [srcNick]
+            );
+            if (query.rowCount < 1) {
+                throw "No Data Fetched";
+            } else {
+                res.status(200).json({ message: "Data Fetched", data: query.rows});
+            }
+        }
+    } catch (error) {
+        res.status(500).json({ message: "Bad Request", error: error });
     }
-
-    const UserQuery = await userDB.query(
-        'SELECT nick, png, mail FROM users WHERE admin = false'
-    );
-
-    console.log("Fetched " + UserQuery.rowCount + " values.");
-    return UserQuery.rows;
 }
 
 async function getUserBySearch(search) {
