@@ -13,10 +13,10 @@ class _DetallsPeliFollowerScreen extends State<DetallsPeliFollowerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final double selectedRating = (widget.film['personalRating'] ?? 0.0).toDouble();
-    final String title = widget.film['title'] ?? 'Título no disponible';
+    final double selectedRating = (widget.film['rating'] ?? 0.0).toDouble();
+    final String title = widget.film['media_name'] ?? 'Título no disponible';
     final String comentari = widget.film['comment'] ?? '';
-    final String imagePath = widget.film['imagePath'] ?? '';
+    final String imagePath = widget.film['media_png'] ?? '';
 
     return Scaffold(
       backgroundColor: Colors.blue[50],
