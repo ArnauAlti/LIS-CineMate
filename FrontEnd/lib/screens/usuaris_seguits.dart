@@ -20,8 +20,7 @@ class _UsuarisSeguits extends State<UsuarisSeguits> {
   void initState() {
     final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
     super.initState();
-    //TODO: Quitar barras de comentario
-    //_usersFuture = getUsersByUserMail(userEmail!);
+    _usersFuture = getUsersByUserMail(userEmail!);
   }
 
   @override
@@ -121,12 +120,18 @@ class _UsuarisSeguits extends State<UsuarisSeguits> {
   }
 
   Widget _buildUserBox(BuildContext context, Map<String, dynamic> user) {
+    final String userMail = user['mail']?? "";
+    final String nick = user['nick']?? "";
+    final String png = (user['png'] != null && user['png'].toString().trim().isNotEmpty)
+        ? user['png']
+        : "assets/perfil1.jpg";
+
     return InkWell(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => BibliotecaSeguitsScreen(userName: user['nick'], follows: true),
+            builder: (context) => BibliotecaSeguitsScreen(userMail: userMail, userNick: nick ,follows: true),
           ),
         );
       },
@@ -147,10 +152,10 @@ class _UsuarisSeguits extends State<UsuarisSeguits> {
                 CircleAvatar(
                   radius: 40,
                   backgroundColor: Colors.black87,
-                  backgroundImage: AssetImage(user['imagePath']),
+                  backgroundImage: AssetImage(png),
                 ),
                 const SizedBox(height: 8),
-                Text(user['nick']),
+                Text(nick),
               ],
             ),
           ),

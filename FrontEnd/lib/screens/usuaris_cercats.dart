@@ -44,6 +44,8 @@ class _UsuarisCercats extends State<UsuarisCercats> {
 
             final users = snapshot.data ?? [];
 
+            print(users);
+
             return SingleChildScrollView(
               padding: const EdgeInsets.all(20),
               child: Center(
@@ -85,12 +87,19 @@ class _UsuarisCercats extends State<UsuarisCercats> {
 
   //Funció per construir la caixa tàctil de cada usuari cercat
   Widget _buildUserBox(BuildContext context, Map<String, dynamic> user) {
+    final String userMail = user['mail']?? "";
+    print(userMail);
+    final String nick = user['nick']?? "";
+    final String png = (user['png'] != null && user['png'].toString().trim().isNotEmpty)
+        ? user['png']
+        : "assets/perfil1.jpg";
+
     return InkWell(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => BibliotecaSeguitsScreen(userName: user['nick'], follows: false),
+            builder: (context) => BibliotecaSeguitsScreen(userMail: userMail, userNick: nick, follows: false),
           ),
         );
       },
@@ -111,10 +120,10 @@ class _UsuarisCercats extends State<UsuarisCercats> {
                 CircleAvatar(
                   radius: 40,
                   backgroundColor: Colors.black87,
-                  backgroundImage: AssetImage(user['imagePath']),
+                  backgroundImage: AssetImage(png),
                 ),
                 const SizedBox(height: 8),
-                Text(user['nick']),
+                Text(nick),
               ],
             ),
           ),
