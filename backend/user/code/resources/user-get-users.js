@@ -36,7 +36,7 @@ async function getUserBySearch(search, userMail) {
         }
     }
 
-    const queryText = 'SELECT nick, png FROM users WHERE admin = false AND mail <> ($1) ' + (filter ? filterConcat + ' ' : '') + 'LIMIT 20';
+    const queryText = 'SELECT nick, png, mail FROM users WHERE admin = false AND mail <> ($1) ' + (filter ? filterConcat + ' ' : '') + 'LIMIT 20';
 
     console.log(queryText);
 
