@@ -2,14 +2,14 @@ const userDB = require("./db-data.js");
 
 async function follow(req, res) {
     try {
-        let srcNick = req.body['srcMail'];
-        let dstNick = req.body['dstMail'];
+        let srcMail = req.body['srcMail'];
+        let dstMail = req.body['dstMail'];
         if (!srcNick || !dstNick) {
             throw "Missing Information";
         } else {
             const query = await userDB.query(
                 'INSERT INTO following(src_mail, dst_mail) VALUES ($1, $2)',
-                [srcNick, dstNick]
+                [srcMail, dstMail]
             );
             if (query.rowCount != 1) {
                 throw "Something Unexpected Happened During Insert";
