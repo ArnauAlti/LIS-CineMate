@@ -21,7 +21,7 @@ async function getFollows(userMail) {
     }
 }
 
-async function getUserBySearch(search) {
+async function getUserBySearch(search, userMail) {
     let filter = false;
     let filterCount = 0;
     let filterConcat = "AND ";
@@ -41,11 +41,11 @@ async function getUserBySearch(search) {
         }
     }
 
-    const queryText = 'SELECT nick, png FROM users WHERE admin=false ' + (filter ? filterConcat + ' ' : '') + 'LIMIT 20';
+    const queryText = 'SELECT nick, png FROM users WHERE admin = false AND mail <> ($1) ' + (filter ? filterConcat + ' ' : '') + 'LIMIT 20';
 
     console.log(queryText);
 
-    const query = await userDB.query(queryText);
+    const query = await userDB.query(queryText, [userMail]);
     return query.rows;
 }
 
@@ -60,7 +60,7 @@ async function getUsers(req, res) {
         let data;
 
         if (nurl === "search") {
-            data = await getUserBySearch(search);
+            data = await getUserBySearch(search), userMail;
             res.status(200).json({ message: "Good Request", data: data });
         } else if (nurl === "follows") {
             data = await getFollows(userMail);
