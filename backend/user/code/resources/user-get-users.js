@@ -6,7 +6,7 @@ async function getFollows(userMail) {
     }
 
     const UserQuery = await userDB.query(
-        'SELECT nick, png FROM users WHERE admin = false'
+        'SELECT nick, png, mail FROM users WHERE admin = false'
     );
 
     console.log("Fetched " + UserQuery.rowCount + " values.");
@@ -16,7 +16,7 @@ async function getFollows(userMail) {
 async function getUserBySearch(search) {
     let filter = false;
     let filterCount = 0;
-    let filterConcat = "WHERE ";
+    let filterConcat = "AND ";
     let filters = [];
 
     if (search) {
@@ -33,7 +33,7 @@ async function getUserBySearch(search) {
         }
     }
 
-    const queryText = 'SELECT nick, png FROM users ' + (filter ? filterConcat + ' ' : '') + 'LIMIT 20';
+    const queryText = 'SELECT nick, png FROM users WHERE admin=false ' + (filter ? filterConcat + ' ' : '') + 'LIMIT 20';
 
     console.log(queryText);
 
