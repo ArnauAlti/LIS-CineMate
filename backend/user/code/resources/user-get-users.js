@@ -6,8 +6,10 @@ async function getFollows(userMail) {
     }
 
     const UserQuery = await userDB.query(
-        'SELECT id, username, profile_picture FROM users WHERE admin = false'
+        'SELECT nick, png FROM users WHERE admin = false'
     );
+
+    console.log("Fetched " + UserQuery.rowCount + " values.");
     return UserQuery.rows;
 }
 
@@ -32,6 +34,8 @@ async function getUserBySearch(search) {
     }
 
     const queryText = 'SELECT nick, png FROM users ' + (filter ? filterConcat + ' ' : '') + 'LIMIT 20';
+
+    console.log(queryText);
 
     const query = await userDB.query(queryText);
     return query.rows;
