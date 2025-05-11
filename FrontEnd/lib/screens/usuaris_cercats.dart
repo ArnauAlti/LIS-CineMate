@@ -1,7 +1,9 @@
 import 'package:cine_mate/screens/biblioteca_usuaris_seguits.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../requests.dart';
+import '../user_role_provider.dart';
 
 class UsuarisCercats extends StatefulWidget {
   final String busqueda;
@@ -17,8 +19,9 @@ class _UsuarisCercats extends State<UsuarisCercats> {
 
   @override
   void initState() {
+    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
     super.initState();
-    _usersFuture = getUsersBySearch(widget.busqueda);
+    _usersFuture = getUsersBySearch(widget.busqueda, userEmail!);
   }
 
   @override

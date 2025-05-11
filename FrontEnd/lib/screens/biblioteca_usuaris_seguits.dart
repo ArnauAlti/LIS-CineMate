@@ -1,7 +1,9 @@
 import 'package:cine_mate/screens/detalls_peli_follower.dart';
 import 'package:cine_mate/screens/usuaris_seguits.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../requests.dart';
+import '../user_role_provider.dart';
 
 class BibliotecaSeguitsScreen extends StatefulWidget {
   final String userMail;
@@ -100,11 +102,12 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
           onPressed: () async {
+            final scrMail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
+
             if (widget.follows == true) {
-              //TODO: Enviar los dos nicks
-              await unfollowUser(nick: "");//(nick: widget.userName);
+              await unfollowUser(srcMail: scrMail, dstMail: widget.userMail);
             } else {
-              await followUser(nick: ""); //widget.userName);
+              await followUser(srcMail: scrMail, dstMail: widget.userMail);
             }
               Navigator.push(context, MaterialPageRoute(builder: (context) => const UsuarisSeguits()));
           },
