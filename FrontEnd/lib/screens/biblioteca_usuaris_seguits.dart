@@ -55,8 +55,6 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
 
           final films = snapshot.data ?? [];
 
-          print(films);
-
           return SingleChildScrollView(
             padding: const EdgeInsets.all(20),
             child: Column(
@@ -110,12 +108,16 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
             if (widget.follows == true) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 28f6e20 (Funciona follow y unfollow)
               bool response = await unfollowUser(srcMail: scrMail, dstMail: widget.userMail);
               if(response){
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('You unfollowed ${widget.userNick}')),
                 );
               }
+<<<<<<< HEAD
             } else {
               bool response = await followUser(srcMail: scrMail, dstMail: widget.userMail);
               if(response){
@@ -134,6 +136,15 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
             } else {
               await followUser(srcMail: scrMail, dstMail: widget.userMail);
 >>>>>>> 6d4b392 (Funcions de follow i unfollow a front)
+=======
+            } else {
+              bool response = await followUser(srcMail: scrMail, dstMail: widget.userMail);
+              if(response){
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('You now follow ${widget.userNick}')),
+                );
+              }
+>>>>>>> 28f6e20 (Funciona follow y unfollow)
             }
 
             Navigator.push(context, MaterialPageRoute(builder: (context) => const UsuarisSeguits()));

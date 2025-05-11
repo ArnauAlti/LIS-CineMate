@@ -44,11 +44,16 @@ async function follow(req, res) {
         }
     } catch (error) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         console.log(error);
         res.status(500).json({ error: error, message: "An error ocurred trying to create a user"});
 =======
         
 >>>>>>> 88bba61 (Query de folling + Implementación de Follow)
+=======
+        console.log(error);
+        res.status(500).json({ error: error, message: "An error ocurred trying to create a user"});
+>>>>>>> 28f6e20 (Funciona follow y unfollow)
     }
 }
 

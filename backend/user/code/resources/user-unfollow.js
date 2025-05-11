@@ -5,10 +5,14 @@ async function unfollow(req, res) {
         let srcMail = req.body['srcMail'];
         let dstMail = req.body['dstMail'];
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (!srcMail || !dstMail) {
 =======
         if (!srcNick || !dstNick) {
 >>>>>>> 83c318d (Toyota Corolla - Backend Follow and Unfollow)
+=======
+        if (!srcMail || !dstMail) {
+>>>>>>> 28f6e20 (Funciona follow y unfollow)
             throw "Missing Information";
         } else {
             const query = await userDB.query(
@@ -23,11 +27,16 @@ async function unfollow(req, res) {
         }
     } catch (error) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         console.log(error);
         res.status(500).json({ error: error, message: "An error ocurred trying to create a user"});
 =======
         
 >>>>>>> 83c318d (Toyota Corolla - Backend Follow and Unfollow)
+=======
+        console.log(error);
+        res.status(500).json({ error: error, message: "An error ocurred trying to create a user"});
+>>>>>>> 28f6e20 (Funciona follow y unfollow)
     }
 }
 
