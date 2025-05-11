@@ -1,13 +1,12 @@
 const userDB = require("./db-data.js");
 
 async function getFollows(userMail) {
-    let srcNick = req.body['srcNick'];
-    if (!srcNick) {
-        throw "No Nick Provided";
+    if (!userMail) {
+        throw "No Mail Provided";
     } else {
         const query = await userDB.query(
-            "SELECT * FROM following_query WHERE src_nick = ($1)",
-            [srcNick]
+            "SELECT * FROM following_query WHERE src_mail = ($1)",
+            [userMail]
         );
         if (query.rowCount < 1) {
             throw "No Data Fetched";
