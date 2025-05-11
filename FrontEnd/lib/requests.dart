@@ -778,7 +778,6 @@ Future<bool> sendMessage(String title) async {
 
 //Funció per aconseguir els usuaris que segueix l'usuari que fa la request
 Future<List<Map<String, dynamic>>> getUsersByUserMail(String userMail) async {
-  // TODO: Comprovar funcionament
   final Uri uri = Uri.parse("$baseUrl/user/get-users/follows?user_mail=$userMail");
 
   try {
@@ -806,22 +805,77 @@ Future<List<Map<String, dynamic>>> getUsersByUserMail(String userMail) async {
   }
 }
 
-//TODO: Funció per seguir a un usuari a la BD
+//TODO: Comprovar funcionament
 //Funció que permet seguir a un usuari dins l'aplicació
-Future<bool> followUser({required String nick}) async {
-  return true;
+Future<bool> followUser({required String? srcMail, required String dstMail}) async {
+  final Uri uri = Uri.parse("$baseUrl/user/follow"); //Modificar Uri
+
+  final Map<String, dynamic> body = {
+    'srcMail': srcMail,
+    'dstMail': dstMail,
+  };
+
+  try {
+    final response = await http.post(
+      uri,
+      body: convert.jsonEncode(body),
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
+    );
+    if (response.statusCode == 200) {
+      print("✅ Usuario seguido correctamente.");
+      return true;
+
+    } else {
+      print("❌ Error al intentar seguir al usuario. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return false;
+    }
+  } catch (e) {
+    print("🚫 Excepción al realizar el seguimiento: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
 }
 
-//TODO: Funció per eliminar seguidor a la BD
+//TODO: Comprovar funcionament
 //Funció que permet deixar de seguir a un usuari dins l'aplicació
-Future<bool> unfollowUser({required String nick}) async {
-  return true;
+Future<bool> unfollowUser({required String? srcMail, required String dstMail}) async {
+  final Uri uri = Uri.parse("$baseUrl/user/unfollow"); //Modificar Uri
+
+  final Map<String, dynamic> body = {
+    'srcMail': srcMail,
+    'dstMail': dstMail,
+  };
+
+  try {
+    final response = await http.post(
+      uri,
+      body: convert.jsonEncode(body),
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
+    );
+    if (response.statusCode == 200) {
+      print("✅ Usuario seguido correctamente.");
+      return true;
+
+    } else {
+      print("❌ Error al intentar seguir al usuario. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return false;
+    }
+  } catch (e) {
+    print("🚫 Excepción al realizar el seguimiento: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
 }
 
 //Funció per aconseguir els usuaris a través de la paraula cercada
-Future<List<Map<String, dynamic>>> getUsersBySearch(String search) async {
-  // TODO: Implementar crida real a la base de dades
-  final Uri uri = Uri.parse("$baseUrl/user/get-users/search? ${search.isEmpty ? "" : "&search=$search"}");
+Future<List<Map<String, dynamic>>> getUsersBySearch(String search, String mail) async {
+  final Uri uri = Uri.parse("$baseUrl/user/get-users/search?user_mail=$mail&${search.isEmpty ? "" : "&search=$search"}");
 
   try {
     final response = await http.get(
