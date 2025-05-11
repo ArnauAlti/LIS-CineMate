@@ -60,7 +60,7 @@ async function getUsers(req, res) {
         let data;
 
         if (nurl === "search") {
-            data = await getUserBySearch(search), userMail;
+            data = await getUserBySearch(search, userMail);
             res.status(200).json({ message: "Good Request", data: data });
         } else if (nurl === "follows") {
             data = await getFollows(userMail);
