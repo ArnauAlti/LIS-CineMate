@@ -1,7 +1,9 @@
 import 'package:cine_mate/screens/detalls_peli_follower.dart';
 import 'package:cine_mate/screens/usuaris_seguits.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../requests.dart';
+import '../user_role_provider.dart';
 
 class BibliotecaSeguitsScreen extends StatefulWidget {
   final String userMail;
@@ -107,6 +109,7 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
 
             if (widget.follows == true) {
 <<<<<<< HEAD
+<<<<<<< HEAD
               bool response = await unfollowUser(srcMail: scrMail, dstMail: widget.userMail);
               if(response){
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -126,6 +129,11 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
             } else {
               await followUser(nick: ""); //widget.userName);
 >>>>>>> 9a94606 (Canvis en biblioteca)
+=======
+              await unfollowUser(srcMail: scrMail, dstMail: widget.userMail);
+            } else {
+              await followUser(srcMail: scrMail, dstMail: widget.userMail);
+>>>>>>> 6d4b392 (Funcions de follow i unfollow a front)
             }
 
             Navigator.push(context, MaterialPageRoute(builder: (context) => const UsuarisSeguits()));
