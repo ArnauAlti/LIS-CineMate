@@ -50,9 +50,7 @@ Return only one JSON object like this (do NOT add any other text):
 Context:
 """${summary}"""
 `;
-
-        const response = await axios.post(
-            "https://vc0ksja03tthzq-8000.proxy.runpod.net/generate/",
+        const response = await axios.post("https://vc0ksja03tthzq-8000.proxy.runpod.net/generate/",
             {
                 prompt,
                 max_new_tokens: 500,
@@ -65,17 +63,21 @@ Context:
         );
 
         const rawOutput = response.data?.output || "";
-        console.log("Preguntes generades:", rawOutput);
-        // Extracció segura del JSON amb regex
-        const match = rawOutput.match(/{\s*"questions"\s*:\s*\[.*?\]\s*}/s);
 
-        if (!match) {
+        const matches = [...rawOutput.matchAll(/{\s*"questions"\s*:\s*\[[\s\S]*?\]\s*}/g)];
+
+        if (!matches || matches.length === 0) {
             throw new Error("No s'ha pogut trobar cap bloc JSON vàlid a la resposta del model.\n" + rawOutput);
         }
+        if (matches.length < 2) {
+            throw new Error("No s'ha trobat un segon bloc JSON amb preguntes vàlides.");
+        }
 
+        // El segon bloc es el bo, ja que el primer i ultim son templates de preguntes
+        const bloqueFinal = matches[1][0];
         let questionsData;
         try {
-            questionsData = JSON.parse(match[0]);
+            questionsData = JSON.parse(bloqueFinal);
         } catch (err) {
             throw new Error("Error en parsejar el bloc JSON: " + err.message);
         }
@@ -93,16 +95,6 @@ Context:
             const optionValues = Object.values(options);
             const optionLabels = Object.keys(options);
             const validIndex = optionLabels.indexOf(correct_answer);
-            console.log("Preguntes: ");
-            console.log("optionValues:", optionValues);
-            console.log("optionLabels:", optionLabels);
-            console.log("validIndex:", validIndex);
-            console.log({
-                info_id,
-                question,
-                answers: optionValues,
-                validIndex
-            });
 
             if (validIndex === -1) continue;
             await userDB.query(`
@@ -110,7 +102,6 @@ Context:
                 VALUES ($1, $2, $3, $4)
             `, [info_id, question, JSON.stringify(optionValues), validIndex]);
         }
-        console.log("Preguntes generades:", JSON.stringify(questionsArray, null, 2));
         res.status(200).json({
             ok: true,
             message: "Qüestionari generat correctament",
