@@ -5,6 +5,7 @@ const addQuestion = require("./resources/question-add");
 const getQuestions = require("./resources/question-get");
 const deleteQuestion = require("./resources/question-delete");
 const modifyQuestion = require("./resources/question-modify");
+const generateQuestions = require("./resources/question-generate");
 
 const app = express();
 const port = 3000;
@@ -27,6 +28,7 @@ app.post("/create", addQuestion);
 app.post("/get", getQuestions);
 app.post("/modify", modifyQuestion);
 app.post("/delete", deleteQuestion);
+app.post("/generate", generateQuestions);
 
 app.listen(port, () => {
     console.log(`API running on http://localhost:${port}`);
