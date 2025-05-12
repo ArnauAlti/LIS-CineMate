@@ -35,10 +35,14 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
 <<<<<<< HEAD
+<<<<<<< HEAD
         title: Text("${widget.userNick}'s library"),
 =======
         title: Text("Biblioteca de ${widget.userNick}"),
 >>>>>>> 9a94606 (Canvis en biblioteca)
+=======
+        title: Text("${widget.userNick}'s library"),
+>>>>>>> a1107c0 (Traducció a l'anglès feta)
         centerTitle: true,
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
@@ -207,10 +211,14 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
             padding: const EdgeInsets.all(8.0),
             child: Text(
 <<<<<<< HEAD
+<<<<<<< HEAD
               film['media_name'] ?? 'Unknown title',
 =======
               film['media_name'] ?? 'Título desconocido',
 >>>>>>> 9a94606 (Canvis en biblioteca)
+=======
+              film['media_name'] ?? 'Unknown title',
+>>>>>>> a1107c0 (Traducció a l'anglès feta)
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),

@@ -15,10 +15,14 @@ class _DetallsPeliFollowerScreen extends State<DetallsPeliFollowerScreen> {
   Widget build(BuildContext context) {
     final double selectedRating = (widget.film['rating'] ?? 0.0).toDouble();
 <<<<<<< HEAD
+<<<<<<< HEAD
     final String title = widget.film['media_name'] ?? 'Unknown title';
 =======
     final String title = widget.film['media_name'] ?? 'Título no disponible';
 >>>>>>> 6d4b392 (Funcions de follow i unfollow a front)
+=======
+    final String title = widget.film['media_name'] ?? 'Unknown title';
+>>>>>>> a1107c0 (Traducció a l'anglès feta)
     final String comentari = widget.film['comment'] ?? '';
     final String imagePath = widget.film['media_png'] ?? '';
 
