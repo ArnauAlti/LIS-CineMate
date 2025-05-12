@@ -1,4 +1,3 @@
-
 const userDB = require("./db-data.js");
 const authDB = require("./db-auth.js");
 
