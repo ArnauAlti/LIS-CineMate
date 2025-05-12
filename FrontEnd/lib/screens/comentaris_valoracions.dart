@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../requests.dart';
@@ -26,7 +27,6 @@ class _CommentRatingScreen extends State<CommentRatingScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
@@ -55,42 +55,90 @@ class _CommentRatingScreen extends State<CommentRatingScreen> {
             itemCount: comments.length,
             separatorBuilder: (context, index) => const SizedBox(height: 16),
             itemBuilder: (context, index) {
-              return _buildCommentCard(comments[index]);
+              return _BlurredCommentCard(comment: comments[index]);
             },
           );
         },
       ),
     );
   }
+}
 
-  Widget _buildCommentCard(Map<String, dynamic> comment) {
-    final String nickName = comment['nick'] ?? 'Unknown nickname';
-    final String comentari = comment['comment'] ?? 'No comment';
-    final double rating = (comment['rating'] ?? 0).toDouble();
+class _BlurredCommentCard extends StatefulWidget {
+  final Map<String, dynamic> comment;
 
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      elevation: 4,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              nickName,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
+  const _BlurredCommentCard({required this.comment});
+
+  @override
+  State<_BlurredCommentCard> createState() => _BlurredCommentCardState();
+}
+
+class _BlurredCommentCardState extends State<_BlurredCommentCard> {
+  bool _revealed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final String nickName = widget.comment['nick'] ?? 'Unknown nickname';
+    final String comentari = widget.comment['comment'] ?? 'No comment';
+    final double rating = (widget.comment['rating'] ?? 0).toDouble();
+
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _revealed = true;
+        });
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        elevation: 4,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                nickName,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            _buildRatingStars(rating),
-            const SizedBox(height: 12),
-            Text(
-              comentari,
-              style: const TextStyle(fontSize: 16),
-            ),
-          ],
+              const SizedBox(height: 8),
+
+              _buildRatingStars(rating),
+              const SizedBox(height: 12),
+
+              // Comentario con desenfoque si no revelado
+              Stack(
+                children: [
+                  Text(
+                    comentari,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  if (!_revealed)
+                    Positioned.fill(
+                      child: ClipRect(
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                          child: Container(
+                            color: Colors.transparent,
+                            alignment: Alignment.center,
+                            child: const Text(
+                              "Spoiler Alert! Tap to reveal",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Colors.black54,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
