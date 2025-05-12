@@ -20,7 +20,8 @@ class _UsuarisSeguits extends State<UsuarisSeguits> {
   void initState() {
     final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
     super.initState();
-    _usersFuture = getUsersByUserMail(userEmail!);
+    //TODO: Quitar barras de comentario
+    //_usersFuture = getUsersByUserMail(userEmail!);
   }
 
   @override
@@ -55,6 +56,7 @@ class _UsuarisSeguits extends State<UsuarisSeguits> {
           }
 
           final users = snapshot.data ?? [];
+          print(users);
 
           return SingleChildScrollView(
             padding: const EdgeInsets.all(20),
