@@ -31,7 +31,7 @@ class _UsuarisCercats extends State<UsuarisCercats> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Otros usuarios", textAlign: TextAlign.center),
+        title: const Text("Other users", textAlign: TextAlign.center),
         centerTitle: true,
       ),
         body: FutureBuilder<List<Map<String, dynamic>>>(
@@ -56,7 +56,7 @@ class _UsuarisCercats extends State<UsuarisCercats> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 15),
-                    Text("Resultados de la búsqueda: ${widget.busqueda}",
+                    Text("Results of the search: ${widget.busqueda}",
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -92,7 +92,7 @@ class _UsuarisCercats extends State<UsuarisCercats> {
   Widget _buildUserBox(BuildContext context, Map<String, dynamic> user) {
     final String userMail = user['mail']?? "";
     print(userMail);
-    final String nick = user['nick']?? "";
+    final String nick = user['nick']?? "Unknown nickname";
     final String png = (user['png'] != null && user['png'].toString().trim().isNotEmpty)
         ? user['png']
         : "assets/perfil1.jpg";

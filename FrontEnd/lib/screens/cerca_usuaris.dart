@@ -32,7 +32,7 @@ class _CercaUsuarisScreenState extends State<CercaUsuarisScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Buscar usuario", textAlign: TextAlign.center),
+        title: const Text("Search a user", textAlign: TextAlign.center),
         centerTitle: true,
         leading: IconButton(
             icon: const Icon(Icons.arrow_back),
@@ -52,7 +52,7 @@ class _CercaUsuarisScreenState extends State<CercaUsuarisScreen> {
                     controller: _controller,
                     onSubmitted: (_) => _realitzarBusqueda(),
                     decoration: const InputDecoration(
-                      hintText: "Introduce el nombre de usuario...",
+                      hintText: "Intro a username",
                       prefixIcon: Icon(Icons.search),
                       fillColor: Color(0xFFEAE6f3),
                       filled: true,

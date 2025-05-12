@@ -47,7 +47,7 @@ class _CercaPeliculesState extends State<CercaPelicules> {
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         centerTitle: true,
-        title: const Text("Búsqueda", textAlign: TextAlign.center),
+        title: const Text("Search", textAlign: TextAlign.center),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -64,7 +64,7 @@ class _CercaPeliculesState extends State<CercaPelicules> {
                     controller: _controller,
                     onSubmitted: (_) => _realitzarBusqueda(),
                     decoration: const InputDecoration(
-                      hintText: "Introduce el título de la película o serie.",
+                      hintText: "Intro the title from the film or series",
                       prefixIcon: Icon(Icons.search),
                       fillColor: Color(0xFFEAE6f3),
                       filled: true,
@@ -102,7 +102,7 @@ class _CercaPeliculesState extends State<CercaPelicules> {
                     });
                   },
                   child: const Text(
-                    "Filtrar",
+                    "Filters",
                     style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
@@ -127,29 +127,29 @@ class _CercaPeliculesState extends State<CercaPelicules> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         //Menú desplegable per mostrar tots els gèneres
-                        const Text("Gènere:"),
+                        const Text("Genre:"),
                         DropdownButton<String>(
                           value: _genereSeleccionat,
-                          hint: const Text("Selecciona un gènere"),
+                          hint: const Text("Select a genre"),
                           items: const [
-                            DropdownMenuItem(value: "28", child: Text("Acción")),
-                            DropdownMenuItem(value: "12", child: Text("Aventura")),
-                            DropdownMenuItem(value: "16", child: Text("Animación")),
-                            DropdownMenuItem(value: "10762", child: Text("Infantil")),
-                            DropdownMenuItem(value: "35", child: Text("Comedia")),
-                            DropdownMenuItem(value: "80", child: Text("Crimen")),
-                            DropdownMenuItem(value: "99", child: Text("Documental")),
+                            DropdownMenuItem(value: "28", child: Text("Action")),
+                            DropdownMenuItem(value: "12", child: Text("Adventure")),
+                            DropdownMenuItem(value: "16", child: Text("Animation")),
+                            DropdownMenuItem(value: "10762", child: Text("Kids")),
+                            DropdownMenuItem(value: "35", child: Text("Comedy")),
+                            DropdownMenuItem(value: "80", child: Text("Crime")),
+                            DropdownMenuItem(value: "99", child: Text("Documentary")),
                             DropdownMenuItem(value: "18", child: Text("Drama")),
-                            DropdownMenuItem(value: "14", child: Text("Fantasía")),
-                            DropdownMenuItem(value: "10751", child: Text("Familiar")),
-                            DropdownMenuItem(value: "36", child: Text("Historia")),
-                            DropdownMenuItem(value: "27", child: Text("Terror")),
+                            DropdownMenuItem(value: "14", child: Text("Fantasy")),
+                            DropdownMenuItem(value: "10751", child: Text("Family")),
+                            DropdownMenuItem(value: "36", child: Text("History")),
+                            DropdownMenuItem(value: "27", child: Text("Horror")),
                             DropdownMenuItem(value: "10402", child: Text("Musical")),
-                            DropdownMenuItem(value: "9648", child: Text("Misterio")),
+                            DropdownMenuItem(value: "9648", child: Text("Mistery")),
                             DropdownMenuItem(value: "10749", child: Text("Romance")),
-                            DropdownMenuItem(value: "878", child: Text("Ciencia ficción")),
-                            DropdownMenuItem(value: "53", child: Text("Suspense")),
-                            DropdownMenuItem(value: "10752", child: Text("Bélica")),
+                            DropdownMenuItem(value: "878", child: Text("Science Fiction")),
+                            DropdownMenuItem(value: "53", child: Text("Thriller")),
+                            DropdownMenuItem(value: "10752", child: Text("War")),
                             DropdownMenuItem(value: "37", child: Text("Western")),
                           ],
                           onChanged: (String? value) {
@@ -165,7 +165,7 @@ class _CercaPeliculesState extends State<CercaPelicules> {
                     TextField(
                       controller: _actorController,
                       decoration: const InputDecoration(
-                        labelText: "Actor o Actriz",
+                        labelText: "Actor or actress",
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -173,7 +173,7 @@ class _CercaPeliculesState extends State<CercaPelicules> {
                     TextField(
                       controller: _directorController,
                       decoration: const InputDecoration(
-                        labelText: "Director/a",
+                        labelText: "Director",
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -181,7 +181,7 @@ class _CercaPeliculesState extends State<CercaPelicules> {
                     TextField(
                       controller: _duracioController,
                       decoration: const InputDecoration(
-                        labelText: "Duración máxima (en minuts)",
+                        labelText: "Maximum duration (in minutes)",
                         border: OutlineInputBorder(),
                       ),
                       keyboardType: TextInputType.number,

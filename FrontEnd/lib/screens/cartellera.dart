@@ -32,7 +32,7 @@ class _CartelleraScreenState extends State<CartelleraScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Cartelera", textAlign: TextAlign.center),
+        title: const Text("Billboard", textAlign: TextAlign.center),
         centerTitle: true,
         actions: [
           IconButton(
@@ -72,7 +72,7 @@ class _CartelleraScreenState extends State<CartelleraScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(height: 15),
-                  const Text("Novedades en la aplicación!!",
+                  const Text("New in our app!!",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
