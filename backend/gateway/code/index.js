@@ -104,6 +104,16 @@ app.use('/character', createProxyMiddleware({
     },
 }));
 
+app.use('/questions', createProxyMiddleware({ 
+    target: 'http://10.5.0.8:3000', 
+    changeOrigin: true, 
+    on: {
+        proxyReq: (proxyReq, req, res) => {
+            proxyReq.setHeader('mode', mode);
+        },
+    },
+}));
+
 app.listen(port, () => {
     console.log(`API Gateway running on http://localhost:${port}`);
 });
