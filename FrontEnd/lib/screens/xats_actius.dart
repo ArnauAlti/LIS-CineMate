@@ -35,7 +35,7 @@ class _XatsActiusScreen extends State<XatsActiusScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Chats activos"),
+        title: const Text("Active chats"),
         centerTitle: true,
       ),
       drawer: AppDrawer(
@@ -107,7 +107,7 @@ class _XatsActiusScreen extends State<XatsActiusScreen> {
                           borderRadius: BorderRadius.circular(30),
                         ),
                       ),
-                      child: const Text("Añadir nuevo chat"),
+                      child: const Text("Add new chat"),
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
@@ -128,7 +128,7 @@ class _XatsActiusScreen extends State<XatsActiusScreen> {
                           borderRadius: BorderRadius.circular(30),
                         ),
                       ),
-                      child: const Text("Eliminar chats"),
+                      child: const Text("Delete chats"),
                     ),
                   ],
                 ),

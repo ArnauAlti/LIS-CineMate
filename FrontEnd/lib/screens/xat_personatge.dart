@@ -84,7 +84,7 @@ class _XatPersonatgeState extends State<XatPersonatge> {
                           const Padding(
                             padding: EdgeInsets.symmetric(vertical: 8),
                             child: Text(
-                              "El personaje está escribiendo...",
+                              "The character is writing...",
                               style: TextStyle(fontStyle: FontStyle.italic, color: Colors.grey),
                             ),
                           ),
@@ -101,7 +101,7 @@ class _XatPersonatgeState extends State<XatPersonatge> {
                       child: TextField(
                         controller: _controller,
                         decoration: const InputDecoration(
-                          hintText: 'Escribe un mensaje...',
+                          hintText: 'Write a message...',
                           border: OutlineInputBorder(),
                           filled: true,
                           fillColor: Colors.white,

@@ -12,6 +12,7 @@ class RecomanacionsScreen extends StatefulWidget {
 }
 
 class _RecomanacionsScreenState extends State<RecomanacionsScreen> {
+  //TODO: Select genres from the DB
   final Map<String, bool> _genres = {
     'Action': false, 'Aventura': false, 'Animación': false, 'Infantil': false, 'Comedia': false, 'Crimen': false,
     'Documental': false, 'Drama': false, 'Fantasía': false, 'Terror': false, 'IMAX': false, 'Musical': false, 'Misterio': false,
@@ -36,7 +37,7 @@ class _RecomanacionsScreenState extends State<RecomanacionsScreen> {
         centerTitle: true,
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Recomendaciones"),
+        title: const Text("Recommendations"),
       ),
       drawer: AppDrawer(
         userRole: userRole,
@@ -50,7 +51,7 @@ class _RecomanacionsScreenState extends State<RecomanacionsScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text(
-              "Generar recomendaciones a partir de:",
+              "Generate recommendations from:",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 24),
@@ -73,7 +74,7 @@ class _RecomanacionsScreenState extends State<RecomanacionsScreen> {
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),
-              child: const Text("Gustos personales"),
+              child: const Text("Personal ratings"),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
@@ -95,11 +96,11 @@ class _RecomanacionsScreenState extends State<RecomanacionsScreen> {
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),
-              child: const Text("Usuarios que sigo"),
+              child: const Text("Users I follow"),
             ),
             const SizedBox(height: 50),
             const Text(
-              "Dar más peso a los siguientes géneros:",
+              "Give more weight to the selected genres:",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),

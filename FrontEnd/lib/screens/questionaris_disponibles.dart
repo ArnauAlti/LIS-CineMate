@@ -32,7 +32,7 @@ class _QuestionarisDisponiblesState extends State<QuestionarisDisponibles> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Cuestionarios"),
+        title: const Text("Questionnaires"),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -53,7 +53,7 @@ class _QuestionarisDisponiblesState extends State<QuestionarisDisponibles> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No se han encontrado cuestionarios de ${widget.busqueda}.'));
+            return Center(child: Text('Questionnaires not found about ${widget.busqueda}.'));
           }
 
           final cuestionarios = snapshot.data!;
@@ -64,7 +64,7 @@ class _QuestionarisDisponiblesState extends State<QuestionarisDisponibles> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Qüestionaris sobre:\n${widget.busqueda}',
+                  'Questionnaires about:\n${widget.busqueda}',
                   style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(height: 20),
@@ -122,7 +122,7 @@ class _QuestionarisDisponiblesState extends State<QuestionarisDisponibles> {
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   ),
-                  child: const Text("EDITAR "),
+                  child: const Text("Edit"),
                 ),
                 const SizedBox(height: 10),
                 ElevatedButton(
@@ -130,7 +130,7 @@ class _QuestionarisDisponiblesState extends State<QuestionarisDisponibles> {
                     await deleteQuestionnaire(title);
 
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Qüestionari eliminat.')),
+                      const SnackBar(content: Text('Questionnaire deleted.')),
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -141,7 +141,7 @@ class _QuestionarisDisponiblesState extends State<QuestionarisDisponibles> {
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   ),
-                  child: const Text("ELIMINAR"),
+                  child: const Text("Delete"),
                 ),
               ] else ... [
                 ElevatedButton(
@@ -161,7 +161,7 @@ class _QuestionarisDisponiblesState extends State<QuestionarisDisponibles> {
                     padding:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   ),
-                  child: const Text("COMENZAR"),
+                  child: const Text("Start questionnaire"),
                 ),
               ]
             ],

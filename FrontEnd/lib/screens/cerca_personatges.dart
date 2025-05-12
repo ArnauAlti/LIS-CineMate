@@ -39,7 +39,7 @@ class _CercaPersonatgesScreen extends State<CercaPersonatgesScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Personajes", textAlign: TextAlign.center),
+        title: const Text("Characters", textAlign: TextAlign.center),
       ),
       drawer: userRole == "Administrador"
           ? AppDrawer(
@@ -60,7 +60,7 @@ class _CercaPersonatgesScreen extends State<CercaPersonatgesScreen> {
                     controller: _controller,
                     onSubmitted: (_) => _realitzarBusqueda(),
                     decoration: const InputDecoration(
-                      hintText: "Introduce el título de la película o serie",
+                      hintText: "Intro the title from the film or series",
                       prefixIcon: Icon(Icons.search),
                       fillColor: Color(0xFFEAE6f3),
                       filled: true,

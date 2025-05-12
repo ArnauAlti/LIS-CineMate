@@ -66,7 +66,7 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _buildSectionButton("Películas", isPeliculasSelected, () {
+                    _buildSectionButton("Films", isPeliculasSelected, () {
                       setState(() {
                         isPeliculasSelected = true;
                         _films = [];

@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Inicio de sesión", textAlign: TextAlign.center),
+        title: const Text("Log in", textAlign: TextAlign.center),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -45,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 children: [
                   _buildTextFormField("Email", mailController),
-                  _buildTextFormField("Contraseña", passController, isPassword: true),
+                  _buildTextFormField("Password", passController, isPassword: true),
                 ],
               ),
             ),
@@ -65,14 +65,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 userRoleProvider.setUser(user);
 
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Has iniciado sesión correctamente.')),
+                  const SnackBar(content: Text('You logged in successfully.')),
                 );
                 Navigator.push(
                   context, MaterialPageRoute(builder: (context) => const CartelleraScreen()),
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Error al iniciar sesión.')),
+                  const SnackBar(content: Text('Failed to log in.')),
                 );
               }
             }
@@ -83,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
             foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
           ),
-          child: const Text("Iniciar sesión"),
+          child: const Text("Log in"),
         ),
       ),
     );
@@ -100,15 +100,13 @@ class _LoginScreenState extends State<LoginScreen> {
           obscureText: isPassword ? _obscurePassword : false,
           keyboardType: label == "Email"
               ? TextInputType.emailAddress
-              : label == "Año de nacimiento"
-              ? TextInputType.number
               : TextInputType.text,
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Este campo es obligatorio';
+              return 'This field is compulsory.';
             }
             if (label == "Email" && !value.contains('@')) {
-              return 'Email inválido';
+              return 'Not valid email';
             }
             return null;
           },

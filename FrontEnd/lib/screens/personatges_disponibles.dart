@@ -27,7 +27,7 @@ class _PersonatgesDisponiblesScreen extends State<PersonatgesDisponiblesScreen> 
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Personatges disponibles"),
+        title: const Text("Available characters"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -55,7 +55,7 @@ class _PersonatgesDisponiblesScreen extends State<PersonatgesDisponiblesScreen> 
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(height: 15),
-                  const Text("Personajes disponibles!!",
+                  const Text("Available characters!!",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -88,7 +88,7 @@ class _PersonatgesDisponiblesScreen extends State<PersonatgesDisponiblesScreen> 
   }
 
   Widget buildCharacterCard(BuildContext context, Map<String, dynamic> char) {
-    final name = char['name'] ?? 'Nom no disponible';
+    final name = char['name'] ?? 'Unknown name';
     final imagePath = char['png'] ?? '';
 
     return GestureDetector(

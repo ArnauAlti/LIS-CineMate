@@ -69,7 +69,7 @@ class _PerfilUsuari extends State<PerfilUsuari> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Tu perfil"),
+        title: const Text("Your profile"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -88,7 +88,7 @@ class _PerfilUsuari extends State<PerfilUsuari> {
                     backgroundImage: AssetImage(_selectedImage),
                   ),
                   const SizedBox(height: 12),
-                  const Text("Selecciona tu imagen de perfil:"),
+                  const Text("Select an image for your profile:"),
                   const SizedBox(height: 12),
 
                   // Selector d'imatges, permet seleccionar una de les nou imatges disponibles
@@ -127,11 +127,11 @@ class _PerfilUsuari extends State<PerfilUsuari> {
                   ),
 
                   const SizedBox(height: 24),
-                  _buildTextFormField("Nombre", nameController),
+                  _buildTextFormField("Name", nameController),
                   _buildTextFormField("Email", mailController),
-                  _buildTextFormField("Nombre de usuario", nickController),
-                  _buildTextFormField("Año de nacimiento", birthController),
-                  _buildTextFormField("Contraseña", passController, isPassword: true),
+                  _buildTextFormField("Nickname", nickController),
+                  _buildTextFormField("Birth date", birthController),
+                  _buildTextFormField("Password", passController, isPassword: true),
                   ElevatedButton(
                     onPressed: _guardarDades,
                     style: ElevatedButton.styleFrom(
@@ -139,7 +139,7 @@ class _PerfilUsuari extends State<PerfilUsuari> {
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                     ),
-                    child: const Text("Guardar dades"),
+                    child: const Text("Save data"),
                   ),
                 ],
               ),
@@ -176,21 +176,21 @@ class _PerfilUsuari extends State<PerfilUsuari> {
         userRoleProvider.setUserEmail(mailController.text);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Canmbios guardados correctamente.')),
+          const SnackBar(content: Text('Changes saved successfully.')),
         );
         Navigator.push(
           context, MaterialPageRoute(builder: (context) => const CartelleraScreen()),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Error al modificar tus datos.')),
+          const SnackBar(content: Text('Failed to modify your data.')),
         );
       }
     }
   }
 
   Widget _buildTextFormField(String label, TextEditingController controller, {bool isPassword = false}) {
-    final bool nonEditableField = label == "Año de nacimiento" || label == "Email" || label == "Nombre de usuario";
+    final bool nonEditableField = label == "Birth date" || label == "Email" || label == "Nickname";
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -206,10 +206,10 @@ class _PerfilUsuari extends State<PerfilUsuari> {
               : TextInputType.text,
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Este campo es obligatorio';
+              return 'This field is compulsory';
             }
             if (label == "Email" && !value.contains('@')) {
-              return 'Email inválido';
+              return 'Not valid email';
             }
             return null;
           },

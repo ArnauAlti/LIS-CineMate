@@ -34,7 +34,7 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Resultados"),
+        title: const Text("Results"),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -65,6 +65,7 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 15),
+                    //TODO: Modificar para mostrar mensaje personalizado
                     const Text("Pensamos que estas películas y/o series te pueden gustar",
                       style: TextStyle(
                         fontSize: 16,
@@ -73,14 +74,13 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    // Mostrar el género seleccionado en una línea
                     if (widget.selectedGenres != null && widget.selectedGenres!.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         child: Column(
                           children: [
                             const Text(
-                              "Géneros con mayor peso:",
+                              "Genres selected:",
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,

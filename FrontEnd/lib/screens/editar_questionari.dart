@@ -38,7 +38,7 @@ class _QuestionariAdminScreenState extends State<QuestionariAdminScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Stranger Things: 1a Temporada"),
+        title: Text(widget.title),
         centerTitle: true,
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
@@ -53,7 +53,7 @@ class _QuestionariAdminScreenState extends State<QuestionariAdminScreen> {
           }
 
           if (editableQuestions.isEmpty) {
-            return const Center(child: Text('No se han encontrado preguntas'));
+            return const Center(child: Text('No questions found.'));
           }
 
           return Padding(
@@ -90,7 +90,7 @@ class _QuestionariAdminScreenState extends State<QuestionariAdminScreen> {
             ),
             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
           ),
-          child: const Text("GUARDAR CAMBIOS"),
+          child: const Text("Save changes"),
         ),
       ),
     );
@@ -112,11 +112,11 @@ class _QuestionariAdminScreenState extends State<QuestionariAdminScreen> {
           children: [
             Row(
               children: [
-                Text('Pregunta ${index + 1}', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+                Text('Question ${index + 1}', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
                 const Spacer(),
                 IconButton(
                   icon: const Icon(Icons.delete, color: Colors.red),
-                  tooltip: "Eliminar pregunta",
+                  tooltip: "Delete question",
                   onPressed: () {
                     setState(() {
                       editableQuestions.removeAt(index);
@@ -128,10 +128,10 @@ class _QuestionariAdminScreenState extends State<QuestionariAdminScreen> {
             const SizedBox(height: 10),
             TextField(
               controller: questionController,
-              decoration: const InputDecoration(labelText: "Enunciado de la pregunta"),
+              decoration: const InputDecoration(labelText: "The question is..."),
             ),
             const SizedBox(height: 10),
-            const Text("Respuestas:", style: TextStyle(fontSize: 14)),
+            const Text("Answers:", style: TextStyle(fontSize: 14)),
             const SizedBox(height: 10),
             ...answerControllers.asMap().entries.map((entry) {
               final i = entry.key;
@@ -141,7 +141,7 @@ class _QuestionariAdminScreenState extends State<QuestionariAdminScreen> {
                   Expanded(
                     child: TextField(
                       controller: controller,
-                      decoration: InputDecoration(labelText: "Respuesta ${i + 1}"),
+                      decoration: InputDecoration(labelText: "Answer ${i + 1}"),
                     ),
                   ),
                   IconButton(
@@ -162,7 +162,7 @@ class _QuestionariAdminScreenState extends State<QuestionariAdminScreen> {
                 });
               },
               icon: const Icon(Icons.add),
-              label: const Text("Añadir respuesta"),
+              label: const Text("Add answers"),
             ),
           ],
         ),

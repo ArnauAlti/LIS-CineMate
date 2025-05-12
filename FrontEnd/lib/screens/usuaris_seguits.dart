@@ -34,7 +34,7 @@ class _UsuarisSeguits extends State<UsuarisSeguits> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Usuarios seguidos", textAlign: TextAlign.center),
+        title: const Text("Followed users", textAlign: TextAlign.center),
         centerTitle: true,
       ),
       drawer: AppDrawer(
@@ -64,7 +64,7 @@ class _UsuarisSeguits extends State<UsuarisSeguits> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(height: 15),
-                  const Text("Usuarios a los qué sigues",
+                  const Text("Users you follow",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -113,7 +113,7 @@ class _UsuarisSeguits extends State<UsuarisSeguits> {
             padding:
             const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           ),
-          child: const Text("BUSCAR USUARIOS"),
+          child: const Text("Search users"),
         ),
       ),
     );

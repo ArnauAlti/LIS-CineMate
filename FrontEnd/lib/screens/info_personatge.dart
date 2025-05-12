@@ -17,9 +17,9 @@ class InfoPersonatge extends StatelessWidget {
   Widget build(BuildContext context) {
     final userRoleProvider = Provider.of<UserRoleProvider>(context);
     final userRole = userRoleProvider.userRole;
-    final name = charData?['name'] ?? 'Nombre no disponible';
+    final name = charData?['name'] ?? 'Unknown name';
     final imagePath = charData?['png'] ?? '';
-    final contextInfo = charData?['context'] ?? '';
+    final contextInfo = charData?['context'] ?? 'Unknown context';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -89,7 +89,7 @@ class InfoPersonatge extends StatelessWidget {
                       EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                     ),
                   ),
-                  child: Text("Crear chat con $name"),
+                  child: Text("Create chat with $name"),
                 ),
               ],
             )
@@ -116,7 +116,7 @@ class InfoPersonatge extends StatelessWidget {
                       EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                     ),
                   ),
-                  child: const Text("Editar informació"),
+                  child: const Text("Edit information"),
                 ),
                 ElevatedButton(
                   onPressed: () async {
@@ -135,7 +135,7 @@ class InfoPersonatge extends StatelessWidget {
                       EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                     ),
                   ),
-                  child: const Text("Eliminar"),
+                  child: const Text("Delete"),
                 ),
               ],
             )

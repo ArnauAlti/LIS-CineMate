@@ -17,9 +17,9 @@ class DetallsBibliotecaScreen extends StatefulWidget {
 class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
   double selectedRating = 0;
   final TextEditingController comentariController = TextEditingController();
-  String selectedStatus = 'No empezada';
+  String selectedStatus = 'Not yet started';
 
-  final List<String> statusOptions = ['No empezada', 'En progreso', 'Finalizada'];
+  final List<String> statusOptions = ['Not yet started', 'In progress', 'Seen'];
 
   @override
   void initState() {
@@ -28,7 +28,7 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
     final film = widget.film;
     selectedRating = (film['rating'] ?? 0.0).toDouble();
     comentariController.text = film['comment'] ?? '';
-    selectedStatus = film['status'] ?? 'No empezada';
+    selectedStatus = film['status'] ?? 'Not yet started';
   }
 
   @override
@@ -41,7 +41,7 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Detalles"),
+        title: const Text("Details"),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -51,7 +51,7 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
           children: [
             const SizedBox(height: 10),
             Text(
-              film["media_name"] ?? "Sin título",
+              film["media_name"] ?? "No title",
               style: const TextStyle(
                 fontSize: 18,
                 color: Colors.black,
@@ -76,7 +76,7 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                "Estado actual",
+                "Current state",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
@@ -136,7 +136,7 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                "Comentario",
+                "Comment",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
@@ -146,7 +146,7 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
               cursorColor: Colors.black,
               maxLines: 3,
               decoration: InputDecoration(
-                hintText: "BLA BLA BLA",
+                hintText: "Enter your comment/opinion",
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
               ),
             ),
@@ -167,7 +167,7 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
                   });
 
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Se han guardado los cambios.')),
+                    const SnackBar(content: Text('Changes have been saved.')),
                   );
                   Navigator.pushReplacement(
                       context,
@@ -177,7 +177,7 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
                   );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('No se han guardado los cambios.')),
+                    const SnackBar(content: Text('Failed to save the changes.')),
                   );
                 }
               },
@@ -189,7 +189,7 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),
-              child: const Text("Guardar cambios"),
+              child: const Text("Save changes"),
             ),
           ],
         ),
@@ -208,7 +208,7 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
               );
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('No se ha podido eliminar de la biblioteca.')),
+                const SnackBar(content: Text('Unable to delete from library.')),
               );
             }
           },
@@ -220,7 +220,7 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
               borderRadius: BorderRadius.circular(30),
             ),
           ),
-          child: const Text("Eliminar de biblioteca"),
+          child: const Text("Delete from library"),
         ),
       ),
     );

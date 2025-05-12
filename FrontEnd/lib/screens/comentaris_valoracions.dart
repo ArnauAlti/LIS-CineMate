@@ -32,7 +32,7 @@ class _CommentRatingScreen extends State<CommentRatingScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text('Opinión de otros usuarios'),
+        title: const Text("Other users' ratings"),
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: _commentsFuture,
@@ -47,7 +47,7 @@ class _CommentRatingScreen extends State<CommentRatingScreen> {
           final comments = snapshot.data ?? [];
 
           if (comments.isEmpty) {
-            return const Center(child: Text('Aún no hay opiniones.'));
+            return const Center(child: Text('There are no ratings yet.'));
           }
 
           return ListView.separated(
@@ -64,8 +64,8 @@ class _CommentRatingScreen extends State<CommentRatingScreen> {
   }
 
   Widget _buildCommentCard(Map<String, dynamic> comment) {
-    final String nickName = comment['nick'] ?? 'Nick Desconocido';
-    final String comentari = comment['comment'] ?? 'Sin comentario';
+    final String nickName = comment['nick'] ?? 'Unknown nickname';
+    final String comentari = comment['comment'] ?? 'No comment';
     final double rating = (comment['rating'] ?? 0).toDouble();
 
     return Card(
