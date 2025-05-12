@@ -21,7 +21,7 @@ class _ManualUsScreen extends State<ManualUsScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Manual De Uso", textAlign: TextAlign.center),
+        title: const Text("User's manual", textAlign: TextAlign.center),
         centerTitle: true,
       ),
       drawer: AppDrawer(
@@ -36,57 +36,56 @@ class _ManualUsScreen extends State<ManualUsScreen> {
           children: [
             _buildExpansionTile(
               icon: Icons.library_books,
-              title: "¿Cómo funciona la biblioteca?",
+              title: "How does the library work?",
               content:
-              "La biblioteca es la sección donde podrás guardar todas las series y películas que hayas visto o quieras ver, divididas en las dos secciones correspondientes. "
-                  "Podrás valorar y comentar aquellas obras que tengas guardadas en la biblioteca, pero solo podrás verlo tú. Además, podrás guardar el momento exacto en el que te quedaste, "
-                  "por si la quieres retomar. Con las series podrás indicar también el capítulo.\n\n"
-                  "¿Cómo guardar una película o serie en la biblioteca?\n"
-                  "→ Para ello tendrás que ir a la sección de la cartelera, entrar en la obra que quieras y hacer click en 'Añadir a biblioteca'.\n\n"
-                  "¿Se pueden eliminar las series o películas de la biblioteca?\n"
-                  "→ Sí, solo hace falta entrar a la película/serie en tu biblioteca, y clicar el botón de eliminar.\n\n"
-                  "¿Puedo modificar el comentario o la valoración?\n"
-                  "→ Sí, entra en la serie o película correspondiente, cambia la valoración, el comentario o el instante en el que te quedaste, y haz click en 'Guardar cambios'.",
+              "The library is the section where you can save all the series and movies you have watched or want to watch, divided into two corresponding sections. "
+                  "You can rate and comment on works saved in the library, but only you will be able to see them. You can also save the exact moment you left off, "
+                  "in case you want to resume later. For series, you can also specify the episode.\n\n"
+                  "How to save a movie or series in the library?\n"
+                  "→ Go to the catalog section, open the movie or series you want, and click 'Add to library'.\n\n"
+                  "Can I delete movies or series from the library?\n"
+                  "→ Yes, just open the movie/series in your library and click the delete button.\n\n"
+                  "Can I modify the comment or rating?\n"
+                  "→ Yes, open the relevant movie or series, change the rating, comment, or resume point, and click 'Save changes'.",
             ),
             _buildExpansionTile(
               icon: Icons.recommend,
-              title: "¿Cómo funcionan las recomendaciones?",
+              title: "How do recommendations work?",
               content:
-              "Las recomendaciones inteligentes te mostrarán aquellas películas o series que más se adecuen a tus gustos. "
-                  "También podrás generar recomendaciones a partir de los gustos de otros usuarios a los que sigas.\n\n"
-                  "¿Puedo dar más peso a algún género de película/serie?\n"
-                  "→ Así es, podrás elegir a qué géneros quieres dar más relevancia a la hora de generar las recomendaciones.",
+              "Smart recommendations will show you movies and series that best match your preferences. "
+                  "You can also generate recommendations based on the tastes of other users you follow.\n\n"
+                  "Can I give more weight to a certain genre?\n"
+                  "→ Yes, you can choose which genres to prioritize when generating recommendations.",
             ),
             _buildExpansionTile(
               icon: Icons.quiz,
-              title: "¿Cómo funcionan los cuestionarios?",
-              content:
-              "Con los cuestionarios podrás poner a prueba tus conocimientos sobre la película o serie que desees. "
-                  "Busca la serie o película que quieras y haz click en comenzar. Se generarán 10 preguntas aleatorias, pero aparecerán solo 5.\n\n"
-                  "¿Puedo salir del cuestionario si no quiero seguir respondiendo más preguntas?\n"
-                  "→ Sí, puedes abandonar el cuestionario en cualquier momento usando el botón correspondiente, o salir tras las primeras 5 preguntas.",
+              title: "How do quizzes work?",
+              content: "With quizzes, you can test your knowledge about the movie or series of your choice. "
+            "Search for the movie or series you want and click start. Ten random questions will be generated, but only five will appear.\n\n"
+            "Can I leave the quiz if I no longer want to continue?\n"
+            "→ Yes, you can exit the quiz at any time using the appropriate button or leave after the first five questions.",
             ),
             _buildExpansionTile(
               icon: Icons.chat_bubble,
-              title: "¿Cómo funcionan los chats inteligentes?",
+              title: "How do smart chats work?",
               content:
-              "Los chats te permitirán conversar con personajes de tu película o serie favorita. Aunque son inteligentes, no recuerdan conversaciones pasadas tras varias horas. "
-                  "Generan respuestas basadas en la personalidad del personaje.\n\n"
-                  "¿Cómo añado un nuevo chat?\n"
-                  "→ Clica en 'Añadir nuevo chat', busca el personaje o película/serie, y se añadirá automáticamente a la lista de chats activos.\n\n"
-                  "¿Qué pasa si tengo 3 chats activos y quiero empezar uno nuevo?\n"
-                  "→ Deberás eliminar un chat desde la opción 'Eliminar chats' y seleccionar el que desees quitar.",
+              "Chats allow you to talk with characters from your favorite movies or series. Although they are intelligent, they do not remember past conversations after several hours. "
+                  "They generate responses based on the character's personality.\n\n"
+                  "How do I add a new chat?\n"
+                  "→ Click 'Add new chat', search for the character or movie/series, and it will automatically be added to the active chats list.\n\n"
+                  "What if I have 3 active chats and want to start a new one?\n"
+                  "→ You must delete a chat using the 'Delete chats' option and select the one you want to remove.",
             ),
             _buildExpansionTile(
               icon: Icons.people,
-              title: "¿Cómo funciona la parte social?",
+              title: "How does the social feature work?",
               content:
-              "En la sección de otros usuarios podrás ver a las personas que sigues y sus respectivas bibliotecas, incluyendo comentarios y valoraciones. "
-                  "Estos usuarios también influyen en las recomendaciones personalizadas.\n\n"
-                  "¿Cómo puedo seguir a otros usuarios?\n"
-                  "→ Pulsa en 'Buscar usuarios', introduce su nombre, accede a su perfil y haz click en 'Seguir usuario'.\n\n"
-                  "¿Y cómo dejo de seguir a alguien?\n"
-                  "→ Entra a su perfil y haz click en 'Dejar de seguir'.",
+              "In the 'Other Users' section, you can see the people you follow and their respective libraries, including comments and ratings. "
+                  "These users also influence your personalized recommendations.\n\n"
+                  "How do I follow other users?\n"
+                  "→ Tap 'Search users', enter their name, go to their profile, and click 'Follow user'.\n\n"
+                  "And how do I unfollow someone?\n"
+                  "→ Go to their profile and click 'Unfollow'.",
             ),
           ],
         ),

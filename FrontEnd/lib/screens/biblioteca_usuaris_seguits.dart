@@ -34,7 +34,7 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: Text("Biblioteca de ${widget.userNick}"),
+        title: Text("${widget.userNick}'s library"),
         centerTitle: true,
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
@@ -59,7 +59,7 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _buildSectionButton("Películas", isPeliculasSelected, () {
+                    _buildSectionButton("Films", isPeliculasSelected, () {
                       setState(() {
                         isPeliculasSelected = true;
                         _filmsFuture = getLibraryFilms(widget.userMail, true);
@@ -76,7 +76,6 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
                 ),
                 const SizedBox(height: 30),
 
-                // Generar las filas dinámicamente
                 for (int i = 0; i < films.length; i += 2)
                   Column(
                     children: [
@@ -177,7 +176,7 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              film['media_name'] ?? 'Título desconocido',
+              film['media_name'] ?? 'Unknown title',
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),

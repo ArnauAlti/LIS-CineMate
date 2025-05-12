@@ -191,7 +191,7 @@ class AppDrawer extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  user?['nick'] ?? 'Usuario', // Mostrar nombre de usuario si está disponible
+                  user?['nick'] ?? 'User', // Mostrar nombre de usuario si está disponible
                   style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 5),

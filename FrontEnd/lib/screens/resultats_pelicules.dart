@@ -37,7 +37,7 @@ class _ResultatsPeliculesState extends State<ResultatsPelicules> {
     return Scaffold(
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
-        title: const Text("Resultados de la búsqueda"),
+        title: const Text("Results of the search"),
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         centerTitle: true,
@@ -90,25 +90,25 @@ class _ResultatsPeliculesState extends State<ResultatsPelicules> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          'Búsqueda realizada para: "${widget.search}"',
+          'Search for: "${widget.search}"',
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 12),
         if (widget.genre.isNotEmpty) ...[
-          Text('Gènero seleccionado: ${widget.genre}'),
+          Text('Selected genre: ${widget.genre}'),
           const SizedBox(height: 8),
         ],
         if (widget.actor.isNotEmpty) ...[
-          Text('Actor/Actriz: ${widget.actor}'),
+          Text('Actor/Actress: ${widget.actor}'),
           const SizedBox(height: 8),
         ],
         if (widget.director.isNotEmpty) ...[
-          Text('Director/a: ${widget.director}'),
+          Text('Director: ${widget.director}'),
           const SizedBox(height: 8),
         ],
         if (widget.duration > 0) ...[
-          Text('Duración: ${widget.duration}'),
+          Text('Duration: ${widget.duration}'),
           const SizedBox(height: 8),
         ],
       ],
