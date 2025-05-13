@@ -98,8 +98,8 @@ Context:
 
             if (validIndex === -1) continue;
             await userDB.query(`
-                INSERT INTO questions (info_id, question, answers, valid)
-                VALUES ($1, $2, $3, $4)
+                INSERT INTO questions (info_id, question, answers, valid, checked)
+                VALUES ($1, $2, $3, $4, false)
             `, [info_id, question, JSON.stringify(optionValues), validIndex]);
         }
         res.status(200).json({

@@ -39,7 +39,7 @@ async function modifyQuestion(req, res) {
         if (!infoID || !question || !answers || !valid) {
             throw "Missing Needed Information";
         }
-        const sql = 'UPDATE questions SET question = $1, answers = $2, valid = $3 WHERE id = $4 AND info_id = $5';
+        const sql = 'UPDATE questions SET question = $1, answers = $2, valid = $3, checked = true WHERE id = $4 AND info_id = $5';
         const query = await userDB.query(
             sql,
             [question, answersJson, valid, id, infoID]
