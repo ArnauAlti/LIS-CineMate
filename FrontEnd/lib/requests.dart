@@ -2,7 +2,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 const String baseUrl = "http://localhost:3000";
 
-//TODO: Si és admin, ficar el token de admin
 //Funció per a enviar les dades a backend per a validar-les i procedir amb el registre o mostrar errors
 Future<bool> validateRegister(String name, String mail, String nick, String birth, String pass) async {
 
@@ -40,7 +39,6 @@ Future<bool> validateRegister(String name, String mail, String nick, String birt
   }
 }
 
-//TODO: Si és admin, ficar el token de admin
 //Funció per a enviar les dades a backend per a validar-les i procedir amb l'inici de sessió o mostrar errors
 Future<Map<String, dynamic>?> validateLogin(String mail, String pass) async {
   final Uri uri = Uri.parse("$baseUrl/user/login");
@@ -475,6 +473,7 @@ Future<bool> deleteFilm(String title, String media_id) async {
   }
 }
 
+/*
 //Funció que permet agafar els questionaris disponibles de la pel·lícula o sèrie cercada de la BD
 Future<List<Map<String, dynamic>>> getQuestsByFilm(String search) async {
   //TODO: Modificar per agafar questionaris i sèries de la biblioteca de l'usuari de la BD
@@ -493,63 +492,42 @@ Future<List<Map<String, dynamic>>> getQuestsByFilm(String search) async {
     },
   ];
 }
+*/
 
 //Funció que permet agafar 10 preguntes corresponents al questionari seleccionat anteriorment
 // Simulació de dades que es poden obtenir des del backend
-Future<List<Map<String, dynamic>>> getQuestions(String title) async {
+Future<List<Map<String, dynamic>>> getQuestions(String infoId) async {
   // TODO: Implementar crida real a la base de dades
-  return [
-    {
-      'question': '¿Cuál es el personaje que desaparece en la primera temporada?',
-      'possibleAnswers': ['VECNA', 'ELEVEN', 'DUSTIN', 'WILL'],
-      'correctAnswer': 'WILL',
-    },
-    {
-      'question': '¿Cómo se llama el monstruo con cara de flor?',
-      'possibleAnswers': ['DEMOGORGON', 'VENOM', 'PERRY', 'VECNA'],
-      'correctAnswer': 'DEMOGORGON',
-    },
-    {
-      'question': '¿Qué personaje tiene poderes telequinéticos?',
-      'possibleAnswers': ['WILL', 'HOPPER', 'ELEVEN', 'LUCAS'],
-      'correctAnswer': 'ELEVEN',
-    },
-    {
-      'question': '¿Cómo se llama la ciudad donde ocurre Stranger Things?',
-      'possibleAnswers': ['HAWKINS', 'SPRINGFIELD', 'RIVERDALE', 'GOTHAM'],
-      'correctAnswer': 'HAWKINS',
-    },
-    {
-      'question': '¿Qué criatura vive en el “Upside Down”?',
-      'possibleAnswers': ['DEMOGORGON', 'DRAGON', 'SLIMER', 'VECNA'],
-      'correctAnswer': 'DEMOGORGON',
-    },
-    {
-      'question': '¿Qué personaje trabaja en la policía?',
-      'possibleAnswers': ['MIKE', 'STEVE', 'HOPPER', 'DUSTIN'],
-      'correctAnswer': 'HOPPER',
-    },
-    {
-      'question': '¿Cómo se llama el hermano de Will?',
-      'possibleAnswers': ['MIKE', 'JONATHAN', 'DUSTIN', 'STEVE'],
-      'correctAnswer': 'JONATHAN',
-    },
-    {
-      'question': '¿Qué personaje se afeita la cabeza?',
-      'possibleAnswers': ['ELEVEN', 'WILL', 'MAX', 'JOYCE'],
-      'correctAnswer': 'ELEVEN',
-    },
-    {
-      'question': '¿Quién es el líder del grupo de niños?',
-      'possibleAnswers': ['MIKE', 'WILL', 'LUCAS', 'DUSTIN'],
-      'correctAnswer': 'MIKE',
-    },
-    {
-      'question': '¿Qué actriz interpreta a Joyce?',
-      'possibleAnswers': ['WINONA RYDER', 'MILLIE BOBBY BROWN', 'NATALIA DYER', 'MAYA HAWKE'],
-      'correctAnswer': 'WINONA RYDER',
-    },
-  ];
+  final Uri uri = Uri.parse("$baseUrl/questions/get");
+
+  final Map<String, dynamic> body = {
+    'info_id': infoId,
+  };
+
+  try {
+    final response = await http.post(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
+      body: convert.jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> jsonResponse = convert.jsonDecode(response.body);
+      final data = jsonResponse['data'];
+      print("✅ Preguntas conseguidas de la BD: $data");
+      return data;
+    } else {
+      print("❌ Error al coger las preguntas. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return [];
+    }
+  } catch (e) {
+    print("🚫 Excepción al registrar: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
 }
 
 
@@ -773,7 +751,6 @@ Future<bool> sendMessage(String title) async {
   return true;
 }
 
-
 //Funció per aconseguir els usuaris que segueix l'usuari que fa la request
 Future<List<Map<String, dynamic>>> getUsersByUserMail(String userMail) async {
   final Uri uri = Uri.parse("$baseUrl/user/get-users/follows?user_mail=$userMail");
@@ -803,7 +780,6 @@ Future<List<Map<String, dynamic>>> getUsersByUserMail(String userMail) async {
   }
 }
 
-//TODO: Comprovar funcionament
 //Funció que permet seguir a un usuari dins l'aplicació
 Future<bool> followUser({required String? srcMail, required String dstMail}) async {
   final Uri uri = Uri.parse("$baseUrl/user/follow"); //Modificar Uri
@@ -838,7 +814,6 @@ Future<bool> followUser({required String? srcMail, required String dstMail}) asy
   }
 }
 
-//TODO: Comprovar funcionament
 //Funció que permet deixar de seguir a un usuari dins l'aplicació
 Future<bool> unfollowUser({required String? srcMail, required String dstMail}) async {
   final Uri uri = Uri.parse("$baseUrl/user/unfollow");

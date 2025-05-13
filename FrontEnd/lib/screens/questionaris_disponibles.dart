@@ -1,3 +1,4 @@
+import 'package:cine_mate/screens/pregunta_questionari.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../requests.dart';
@@ -14,12 +15,12 @@ class QuestionarisDisponibles extends StatefulWidget {
 }
 
 class _QuestionarisDisponiblesState extends State<QuestionarisDisponibles> {
-  late Future<List<Map<String, dynamic>>> _futureQuests;
+  late Future<List<Map<String, dynamic>>> _futureFilms;
 
   @override
   void initState() {
     super.initState();
-    _futureQuests = getQuestsByFilm(widget.busqueda);
+    _futureFilms = getFilmsBySearch(widget.busqueda, "", "", "", 0);
   }
 
   @override
@@ -46,7 +47,7 @@ class _QuestionarisDisponiblesState extends State<QuestionarisDisponibles> {
         },
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: _futureQuests,
+        future: _futureFilms,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -56,7 +57,9 @@ class _QuestionarisDisponiblesState extends State<QuestionarisDisponibles> {
             return Center(child: Text('Questionnaires not found about ${widget.busqueda}.'));
           }
 
-          final cuestionarios = snapshot.data!;
+          final films = snapshot.data!;
+
+          print(films);
 
           return SingleChildScrollView(
             padding: const EdgeInsets.all(20),
@@ -68,7 +71,7 @@ class _QuestionarisDisponiblesState extends State<QuestionarisDisponibles> {
                   style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(height: 20),
-                for (final q in cuestionarios) ...[
+                for (final q in films) ...[
                   _buildQuestionariItem(context, userRole, q),
                   const SizedBox(height: 30),
                 ],
@@ -82,8 +85,9 @@ class _QuestionarisDisponiblesState extends State<QuestionarisDisponibles> {
 
   Widget _buildQuestionariItem(BuildContext context, String userRole,
       Map<String, dynamic> quest) {
-    final imageUrl = quest['imagePath']!;
-    final title = quest['title']!;
+    final imageUrl = quest['png']!;
+    final title = quest['name']!;
+    final mediaId = quest['id']!;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,7 +115,7 @@ class _QuestionarisDisponiblesState extends State<QuestionarisDisponibles> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => QuestionariAdminScreen(title: title)),
+                      MaterialPageRoute(builder: (context) => QuestionariAdminScreen(mediaId: mediaId, title: title)),
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -146,10 +150,9 @@ class _QuestionarisDisponiblesState extends State<QuestionarisDisponibles> {
               ] else ... [
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(
+                    Navigator.push(
                       context,
-                      '/pregunta_questionari',
-                      arguments: {'title': title},
+                      MaterialPageRoute(builder: (context) => PreguntaQuestionari(title: title, mediaId: mediaId)),
                     );
                   },
                   style: ElevatedButton.styleFrom(

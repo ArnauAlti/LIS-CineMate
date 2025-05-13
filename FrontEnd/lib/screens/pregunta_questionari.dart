@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import '../requests.dart';
 
 class PreguntaQuestionari extends StatefulWidget {
-  const PreguntaQuestionari({super.key, required this.title});
   final String title;
+  final String mediaId;
+
+  const PreguntaQuestionari({super.key, required this.title, required this.mediaId,});
 
   @override
   State<PreguntaQuestionari> createState() => _PreguntaQuestionari();
@@ -17,8 +19,9 @@ class _PreguntaQuestionari extends State<PreguntaQuestionari> {
 
   @override
   void initState() {
+    print("media id:" + widget.mediaId);
     super.initState();
-    _questionsFuture = getQuestions(widget.title);
+    _questionsFuture = getQuestions(widget.mediaId);
   }
 
   @override
@@ -54,6 +57,7 @@ class _PreguntaQuestionari extends State<PreguntaQuestionari> {
           }
 
           final questions = snapshot.data ?? [];
+          print(questions);
 
           if (questions.isEmpty) {
             return const Center(child: Text('No questions found'));

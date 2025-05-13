@@ -32,10 +32,6 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const WelcomeScreen(),
         '/cartellera': (context) => const CartelleraScreen(),
-        '/pregunta_questionari': (context) {
-          final args = ModalRoute.of(context)!.settings.arguments as Map;
-          return PreguntaQuestionari(title: args['title']);
-        },
       },
     );
   }
