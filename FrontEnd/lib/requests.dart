@@ -405,7 +405,7 @@ Future<List<Map<String, dynamic>>> getRatingsByFilm(String userMail, String medi
 
 //Funció que permet agafar les pel·lícules o sèries recomanades de manera intel·ligent segons els
 // gustos de l'usuari actual
-Future<List<Map<String, dynamic>>> getRecomendationFilms(String userMail, List<String>? selectedGenres) async {
+Future<Map<String, dynamic>> getRecomendationFilms(String userMail, List<String>? selectedGenres) async {
   final Uri uri = Uri.parse("$baseUrl/library/recommend");
 
   final Map<String, dynamic> body = {
@@ -426,13 +426,15 @@ Future<List<Map<String, dynamic>>> getRecomendationFilms(String userMail, List<S
     if (response.statusCode == 200) {
       print("✅ Request exitosa.");
       final decodedBody = convert.jsonDecode(response.body);
-      print(decodedBody);
-      return List<Map<String, dynamic>>.from(decodedBody['recommendations']);
+      return {
+        'recommendations': List<Map<String, dynamic>>.from(decodedBody['recommendations']),
+        'top_genres': List<String>.from(decodedBody['top_genres']),
+      };
 
     } else {
       print("❌ Error en la request. Código: ${response.statusCode}");
       print("Respuesta: ${response.body}");
-      return [];
+      return {};
     }
   } catch (e) {
     print("🚫 Excepción al realizar la request: $e");
