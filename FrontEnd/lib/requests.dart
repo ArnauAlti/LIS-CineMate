@@ -532,6 +532,8 @@ Future<List<Map<String, dynamic>>> getQuestions(String infoId) async {
         final correctAnswer = answers[correctIndex];
 
         formattedQuestions.add({
+          'id': item['id'],
+          'info_id': item['info_id'],
           'question': questionText,
           'possibleAnswers': answers,
           'correctAnswer': correctAnswer,
@@ -717,7 +719,44 @@ Future<bool> deleteQuestionnaire(String title) async {
 
 //TODO: Funció per eliminar un qüestionari
 //Funció que permet editar un qüestionari associat a una pel·lícula o sèrie de la base de dades
-Future<bool> editQuestionnaire(String title) async {
+Future<bool> editQuestionnaire(String mediaId, String mail, String nick, String password, List<Map<String, dynamic>> updatedQuestions) async {
+  var question;
+  for(question in updatedQuestions){
+    final Uri uri = Uri.parse("$baseUrl/questions/modify");
+
+    final Map<String, dynamic> body = {
+      'mail': mail,
+      'nick': nick,
+      'pass': password,
+      'question_id': question['id'],
+      'info_id': mediaId,
+      'question': question['question'],
+      'answers': question['possibleAnswers'],
+      'valid': true,
+    };
+
+    try {
+      final response = await http.post(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+        },
+        body: convert.jsonEncode(body),
+      );
+
+      if (response.statusCode == 200) {
+        print("✅ Modificación de la preguntas exitosa.");
+      } else {
+        print("❌ Error en la modificación de las preguntas exitosa. Código: ${response.statusCode}");
+        print("Respuesta: ${response.body}");
+        return false;
+      }
+    } catch (e) {
+      print("🚫 Excepción al modificar de las preguntas exitosa: $e");
+      throw Exception("No se pudo conectar al servidor.");
+    }
+  }
   return true;
 }
 
