@@ -4,8 +4,10 @@ import '../requests.dart';
 
 //TODO: Fer request per editar les coses del questionari
 class QuestionariAdminScreen extends StatefulWidget {
+  final String mediaId;
   final String title;
-  const QuestionariAdminScreen({super.key, required this.title});
+
+  const QuestionariAdminScreen({super.key, required this.mediaId, required this.title});
 
   @override
   State<QuestionariAdminScreen> createState() => _QuestionariAdminScreenState();
@@ -18,7 +20,7 @@ class _QuestionariAdminScreenState extends State<QuestionariAdminScreen> {
   @override
   void initState() {
     super.initState();
-    _questionsFuture = getQuestions(widget.title);
+    _questionsFuture = getQuestions(widget.mediaId);
     _questionsFuture.then((questions) {
       setState(() {
         editableQuestions = questions.map((q) {

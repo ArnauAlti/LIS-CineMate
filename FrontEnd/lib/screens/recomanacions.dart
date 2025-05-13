@@ -14,9 +14,9 @@ class RecomanacionsScreen extends StatefulWidget {
 class _RecomanacionsScreenState extends State<RecomanacionsScreen> {
   //TODO: Select genres from the DB
   final Map<String, bool> _genres = {
-    'Action': false, 'Aventura': false, 'Animación': false, 'Infantil': false, 'Comedia': false, 'Crimen': false,
-    'Documental': false, 'Drama': false, 'Fantasía': false, 'Terror': false, 'IMAX': false, 'Musical': false, 'Misterio': false,
-    'Cine negro': false, 'Romance': false, 'Ciencia ficción': false, 'Suspense': false, 'Bélico': false, 'Western': false,
+    'Action': false, 'Adventure': false, 'Animation': false, 'Kids': false, 'Comedy': false, 'Crime': false,
+    'Documentary': false, 'Drama': false, 'Fantasy': false, 'Horror': false, 'Musical': false, 'Mistery': false,
+    'Romance': false, 'Science Fiction': false, 'Thriller': false, 'War': false, 'Western': false,
   };
 
   List<String> _getSelectedGenres() {
