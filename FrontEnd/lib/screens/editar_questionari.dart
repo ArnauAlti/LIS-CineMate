@@ -1,4 +1,6 @@
+import 'package:cine_mate/user_role_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../requests.dart';
 
 
@@ -25,6 +27,8 @@ class _QuestionariAdminScreenState extends State<QuestionariAdminScreen> {
       setState(() {
         editableQuestions = questions.map((q) {
           return {
+            'id': q['id'],
+            'info_id': q['info_id'],
             'controller': TextEditingController(text: q['question']),
             'answers': (q['possibleAnswers'] as List?)?.cast<String>().map((a) => TextEditingController(text: a)).toList() ?? [],
           };
@@ -35,6 +39,9 @@ class _QuestionariAdminScreenState extends State<QuestionariAdminScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userRoleProvider = Provider.of<UserRoleProvider>(context);
+    final user = userRoleProvider.getUser;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -72,15 +79,17 @@ class _QuestionariAdminScreenState extends State<QuestionariAdminScreen> {
         child: ElevatedButton(
           onPressed: () async {
             //TODO: Modificar que es passa a la request, canviar accions de després
-            await editQuestionnaire(widget.title);
+
             final updatedQuestions = editableQuestions.map((q) {
               return {
+                'id': q['id'],
+                'info_id': q['info_id'],
                 'question': q['controller'].text,
                 'possibleAnswers': (q['answers'] as List<TextEditingController>).map((c) => c.text).toList(),
               };
             }).toList();
-
             // Aquí puedes hacer el request para actualizar las preguntas
+            await editQuestionnaire(widget.mediaId, user?['mail'], user?['nick'], user?['pass'], updatedQuestions);
             // updateQuestions(widget.title, updatedQuestions);
             print(updatedQuestions);
           },
