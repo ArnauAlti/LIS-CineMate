@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cine_mate/screens/detalls_peli_serie.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +14,7 @@ class RecomanacionsGeneradesScreen extends StatefulWidget {
 }
 
 class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
-  late Future<List<Map<String, dynamic>>> _filmsFuture;
+  late Future<Map<String, dynamic>> _filmsFuture;
 
   @override
   void initState() {
@@ -43,7 +41,7 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
           },
         ),
       ),
-        body: FutureBuilder<List<Map<String, dynamic>>>(
+        body: FutureBuilder<Map<String, dynamic>>(
           future: _filmsFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -54,9 +52,10 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
               return Center(child: Text('Error: ${snapshot.error}'));
             }
 
-            final films = snapshot.data ?? [];
+            final data = snapshot.data as Map<String, dynamic>;
+            final films = data['recommendations'] as List<Map<String, dynamic>>;
+            final topGenres = data['top_genres'] as List<String>;
 
-            print(films);
 
             return SingleChildScrollView(
               padding: const EdgeInsets.all(20),
@@ -65,9 +64,8 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 15),
-                    //TODO: Modificar para mostrar mensaje personalizado
-                    const Text("Pensamos que estas películas y/o series te pueden gustar",
-                      style: TextStyle(
+                    Text("We have selected the next films or series, taking into account the next genres: $topGenres",
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
