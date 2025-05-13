@@ -518,7 +518,25 @@ Future<List<Map<String, dynamic>>> getQuestions(String infoId) async {
       final Map<String, dynamic> jsonResponse = convert.jsonDecode(response.body);
       final data = jsonResponse['data'];
       print("✅ Preguntas conseguidas de la BD: $data");
-      return data;
+
+      // Formatejar la request per mostrar correctament el questionari
+      List<Map<String, dynamic>> formattedQuestions = [];
+      var item;
+
+      for (item in data) {
+        final questionText = item['question'];
+        final answers = item['answers'];
+        final correctIndex = item['valid'];
+        final correctAnswer = answers[correctIndex];
+
+        formattedQuestions.add({
+          'question': questionText,
+          'possibleAnswers': answers,
+          'correctAnswer': correctAnswer,
+        });
+      }
+      return formattedQuestions;
+
     } else {
       print("❌ Error al coger las preguntas. Código: ${response.statusCode}");
       print("Respuesta: ${response.body}");
