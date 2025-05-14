@@ -8,12 +8,10 @@ class RecommendationResponse(BaseModel):
     message: Union[str, None] = None
 
 class RecommendationRequest(BaseModel):
-    ok: bool = True
-
-class RecommendationRequest(BaseModel):
-    ratings: List[Tuple[str, float]]  
+    ratings: List[Tuple[str, float]]
     top_n: int = 5
     genre_diversity: bool = False
+    genre_filter: Optional[List[str]] = None
 
 class StarRatingGenreRequest(RecommendationRequest):
     genre_filter: List[str]

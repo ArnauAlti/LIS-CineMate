@@ -5,13 +5,11 @@ import pandas as pd
 from ..models import (
     MovieRecommenderBase,
     StarRatingRecommender,
-    StarRatingGenreFilteredRecommender,
 )
 from .schemas import (
     RecommendationResponse,
     RecommendationRequest,
     BodyData,
-    StarRatingGenreRequest,
 )
 
 app = FastAPI(root_path="/api")
@@ -78,7 +76,8 @@ def recommend_star_rating(request: RecommendationRequest):
     """Generate recommendations based on user star ratings (1-5 scale).
     
     Args:
-        request (RecommendationRequest): Contains ratings, top_n, and diversity flag.
+        request (RecommendationRequest): Contains ratings, genre filter,
+                                         top_n, and diversity flag.
         
     Returns:
         RecommendationResponse: Structured response with recommendations.
@@ -97,7 +96,8 @@ def recommend_star_rating(request: RecommendationRequest):
         result = recommender.get_personalized_recommendations(
             user_ratings=request.ratings,
             top_n=request.top_n,
-            genre_diversity=request.genre_diversity
+            genre_diversity=request.genre_diversity,
+            genre_filter=request.genre_filter if request.genre_filter else None
         )
 
         return {
@@ -118,54 +118,54 @@ def recommend_star_rating(request: RecommendationRequest):
         )
 
 
-@app.post("/recommend/star-rating-genre", response_model=RecommendationResponse)
-def recommend_star_rating_genre(request: StarRatingGenreRequest):
-    """Generate genre-filtered recommendations based on star ratings.
+# @app.post("/recommend/star-rating-genre", response_model=RecommendationResponse)
+# def recommend_star_rating_genre(request: RecommendationRequest):
+#     """Generate genre-filtered recommendations based on star ratings.
     
-    Args:
-        request (StarRatingGenreRequest): Contains ratings, genre filter, 
-                                         top_n, and diversity flag.
+#     Args:
+#         request (RecommendationRequest): Contains ratings, genre filter, 
+#                                          top_n, and diversity flag.
                                          
-    Returns:
-        RecommendationResponse: Structured response with filtered recommendations.
+#     Returns:
+#         RecommendationResponse: Structured response with filtered recommendations.
         
-    Raises:
-        HTTPException: 400 for missing params, 500 for processing errors.
-    """
-    try:
-        # Input validation
-        if not request.ratings:
-            raise HTTPException(
-                status_code=400,
-                detail="At least one star rating is required"
-            )
-        if not request.genre_filter:
-            raise HTTPException(
-                status_code=400,
-                detail="At least one genre filter is required"
-            )
+#     Raises:
+#         HTTPException: 400 for missing params, 500 for processing errors.
+#     """
+#     try:
+#         # Input validation
+#         if not request.ratings:
+#             raise HTTPException(
+#                 status_code=400,
+#                 detail="At least one star rating is required"
+#             )
+#         if not request.genre_filter:
+#             raise HTTPException(
+#                 status_code=400,
+#                 detail="At least one genre filter is required"
+#             )
 
-        recommender = StarRatingGenreFilteredRecommender(DATA_PATH)
-        result = recommender.get_personalized_recommendations(
-            user_ratings=request.ratings,
-            genre_filter=request.genre_filter,
-            top_n=request.top_n,
-            genre_diversity=request.genre_diversity
-        )
+#         recommender = StarRatingRecommender(DATA_PATH)
+#         result = recommender.get_personalized_recommendations(
+#             user_ratings=request.ratings,
+#             genre_filter=request.genre_filter,
+#             top_n=request.top_n,
+#             genre_diversity=request.genre_diversity
+#         )
 
-        return {
-            "ok": True,
-            "recommendations": result['recommendations'],
-            "top_genres": result['top_genres'],
-            "message": "Recommendations generated successfully"
-        }
+#         return {
+#             "ok": True,
+#             "recommendations": result['recommendations'],
+#             "top_genres": result['top_genres'],
+#             "message": "Recommendations generated successfully"
+#         }
         
-    except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail={
-                "ok": False,
-                "message": f"Filtered recommendation failed: {str(e)}",
-                "recommendations": []
-            }
-        )
+#     except Exception as e:
+#         raise HTTPException(
+#             status_code=500,
+#             detail={
+#                 "ok": False,
+#                 "message": f"Filtered recommendation failed: {str(e)}",
+#                 "recommendations": []
+#             }
+#         )

@@ -36,7 +36,7 @@ async function recommend(req, res) {
 
             console.log("Genre names: ", genre_filter);
             
-            url = "http://host.docker.internal:12000/recommend/star-rating-genre";
+            // url = "http://host.docker.internal:12000/recommend/star-rating-genre";
             payload = {
                 ...base_payload,
                 genre_filter: genre_filter
