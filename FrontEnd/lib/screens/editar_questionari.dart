@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../requests.dart';
 
 
-//TODO: Fer request per editar les coses del questionari
 class QuestionariAdminScreen extends StatefulWidget {
   final String mediaId;
   final String title;
@@ -22,7 +21,7 @@ class _QuestionariAdminScreenState extends State<QuestionariAdminScreen> {
   @override
   void initState() {
     super.initState();
-    _questionsFuture = getQuestions(widget.mediaId);
+    _questionsFuture = getQuestions(widget.mediaId, true);
     _questionsFuture.then((questions) {
       setState(() {
         editableQuestions = questions.map((q) {
@@ -78,8 +77,6 @@ class _QuestionariAdminScreenState extends State<QuestionariAdminScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
         child: ElevatedButton(
           onPressed: () async {
-            //TODO: Modificar que es passa a la request, canviar accions de després
-
             final updatedQuestions = editableQuestions.map((q) {
               return {
                 'id': q['id'],
@@ -88,11 +85,9 @@ class _QuestionariAdminScreenState extends State<QuestionariAdminScreen> {
                 'possibleAnswers': (q['answers'] as List<TextEditingController>).map((c) => c.text).toList(),
               };
             }).toList();
-            // Aquí puedes hacer el request para actualizar las preguntas
+
             await editQuestionnaire(widget.mediaId, user?['mail'], user?['nick'], user?['pass'], updatedQuestions);
-            // updateQuestions(widget.title, updatedQuestions);
-            print(updatedQuestions);
-          },
+            },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.black,
             foregroundColor: Colors.white,
@@ -125,15 +120,6 @@ class _QuestionariAdminScreenState extends State<QuestionariAdminScreen> {
               children: [
                 Text('Question ${index + 1}', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
                 const Spacer(),
-                IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.red),
-                  tooltip: "Delete question",
-                  onPressed: () {
-                    setState(() {
-                      editableQuestions.removeAt(index);
-                    });
-                  },
-                ),
               ],
             ),
             const SizedBox(height: 10),
@@ -155,26 +141,9 @@ class _QuestionariAdminScreenState extends State<QuestionariAdminScreen> {
                       decoration: InputDecoration(labelText: "Answer ${i + 1}"),
                     ),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () {
-                      setState(() {
-                        answerControllers.removeAt(i);
-                      });
-                    },
-                  ),
                 ],
               );
             }),
-            TextButton.icon(
-              onPressed: () {
-                setState(() {
-                  answerControllers.add(TextEditingController());
-                });
-              },
-              icon: const Icon(Icons.add),
-              label: const Text("Add answers"),
-            ),
           ],
         ),
       ),

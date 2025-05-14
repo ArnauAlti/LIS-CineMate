@@ -8,10 +8,10 @@ async function getQuestions(req, res) {
         }
         const admin = req.body['admin'];
         let filter;
-        if (!admin) {
+        if (admin) {
             filter = "";
         } else {
-            filter = " AND checked = false";
+            filter = " AND checked = true";
         }
         const query = await userDB.query(
             'SELECT * FROM questions WHERE info_id = $1' + filter,

@@ -475,35 +475,14 @@ Future<bool> deleteFilm(String title, String media_id) async {
   }
 }
 
-/*
-//Funció que permet agafar els questionaris disponibles de la pel·lícula o sèrie cercada de la BD
-Future<List<Map<String, dynamic>>> getQuestsByFilm(String search) async {
-  //TODO: Modificar per agafar questionaris i sèries de la biblioteca de l'usuari de la BD
-  return [
-    {
-      'imagePath': 'https://1.bp.blogspot.com/-a0Ehz4tIUkA/Xla-XGLxrLI/AAAAAAAAfsM/5jCeN2T3UOMgiFSLb_U6nw0d5gXfceIbgCLcBGAsYHQ/s1600/stranger-things-saison-1.jpg',
-      'title': 'Stranger Things: Season 1',
-    },
-    {
-      'imagePath': 'https://es.web.img3.acsta.net/pictures/17/10/23/14/24/5968627.jpg',
-      'title': 'Stranger Things: Season 2',
-    },
-    {
-      'imagePath': 'https://es.web.img3.acsta.net/pictures/17/10/23/14/24/5968627.jpg',
-      'title': 'Stranger Things: Season 3',
-    },
-  ];
-}
-*/
-
 //Funció que permet agafar 10 preguntes corresponents al questionari seleccionat anteriorment
 // Simulació de dades que es poden obtenir des del backend
-Future<List<Map<String, dynamic>>> getQuestions(String infoId) async {
-  // TODO: Implementar crida real a la base de dades
+Future<List<Map<String, dynamic>>> getQuestions(String infoId, bool admin) async {
   final Uri uri = Uri.parse("$baseUrl/questions/get");
 
   final Map<String, dynamic> body = {
     'info_id': infoId,
+    'admin': admin,
   };
 
   try {
@@ -552,7 +531,48 @@ Future<List<Map<String, dynamic>>> getQuestions(String infoId) async {
   }
 }
 
+//Funció que permet editar un qüestionari associat a una pel·lícula o sèrie de la base de dades
+Future<bool> editQuestionnaire(String mediaId, String mail, String nick, String password, List<Map<String, dynamic>> updatedQuestions) async {
+  var question;
+  for(question in updatedQuestions){
+    final Uri uri = Uri.parse("$baseUrl/questions/modify");
 
+    final Map<String, dynamic> body = {
+      'mail': mail,
+      'nick': nick,
+      'pass': password,
+      'question_id': question['id'],
+      'info_id': mediaId,
+      'question': question['question'],
+      'answers': question['possibleAnswers'],
+      'valid': true,
+      'checked': question['checked'],
+    };
+
+    try {
+      final response = await http.post(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+        },
+        body: convert.jsonEncode(body),
+      );
+
+      if (response.statusCode == 200) {
+        print("✅ Modificación de la preguntas exitosa.");
+      } else {
+        print("❌ Error en la modificación de las preguntas exitosa. Código: ${response.statusCode}");
+        print("Respuesta: ${response.body}");
+        return false;
+      }
+    } catch (e) {
+      print("🚫 Excepción al modificar de las preguntas exitosa: $e");
+      throw Exception("No se pudo conectar al servidor.");
+    }
+  }
+  return true;
+}
 
 //TODO: Funció per afegir un personatge com a xat
 //Funció que permet afegir un personatge escollit per establir un xat amb ell/a
@@ -703,61 +723,6 @@ Future<bool> deleteCharacter(String name, String mediaId) async {
     print("🚫 Excepción al realizar la eliminación: $e");
     throw Exception("No se pudo conectar al servidor.");
   }
-}
-
-//TODO: Funció per afegir un qüestionari
-//Funció que permet afegir un qüestionari a la base de dades de personatges disponibles per poder realitzar-lo
-Future<bool> addQuestionnaire(String title, String imagePath) async {
-  return true;
-}
-
-//TODO: Funció per eliminar un qüestionari, canviar dades que es passen a la funció (crear un Map)
-//Funció que permet eliminar un qüestionari associat a una pel·lícula o sèrie de la base de dades
-Future<bool> deleteQuestionnaire(String title) async {
-  return true;
-}
-
-//TODO: Funció per eliminar un qüestionari
-//Funció que permet editar un qüestionari associat a una pel·lícula o sèrie de la base de dades
-Future<bool> editQuestionnaire(String mediaId, String mail, String nick, String password, List<Map<String, dynamic>> updatedQuestions) async {
-  var question;
-  for(question in updatedQuestions){
-    final Uri uri = Uri.parse("$baseUrl/questions/modify");
-
-    final Map<String, dynamic> body = {
-      'mail': mail,
-      'nick': nick,
-      'pass': password,
-      'question_id': question['id'],
-      'info_id': mediaId,
-      'question': question['question'],
-      'answers': question['possibleAnswers'],
-      'valid': true,
-    };
-
-    try {
-      final response = await http.post(
-        uri,
-        headers: {
-          'Content-Type': 'application/json',
-          'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
-        },
-        body: convert.jsonEncode(body),
-      );
-
-      if (response.statusCode == 200) {
-        print("✅ Modificación de la preguntas exitosa.");
-      } else {
-        print("❌ Error en la modificación de las preguntas exitosa. Código: ${response.statusCode}");
-        print("Respuesta: ${response.body}");
-        return false;
-      }
-    } catch (e) {
-      print("🚫 Excepción al modificar de las preguntas exitosa: $e");
-      throw Exception("No se pudo conectar al servidor.");
-    }
-  }
-  return true;
 }
 
 //Funció per aconseguir els personatges de la pel·lícula o sèrie cercada
