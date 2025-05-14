@@ -128,25 +128,6 @@ class _QuestionarisDisponiblesState extends State<QuestionarisDisponibles> {
                   ),
                   child: const Text("Edit"),
                 ),
-                const SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () async {
-                    await deleteQuestionnaire(title);
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Questionnaire deleted.')),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  ),
-                  child: const Text("Delete"),
-                ),
               ] else ... [
                 ElevatedButton(
                   onPressed: () {
