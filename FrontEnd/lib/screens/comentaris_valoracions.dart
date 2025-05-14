@@ -64,20 +64,8 @@ class _CommentRatingScreen extends State<CommentRatingScreen> {
   }
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 class _BlurredCommentCard extends StatefulWidget {
   final Map<String, dynamic> comment;
-=======
-  Widget _buildCommentCard(Map<String, dynamic> comment) {
-    final String nickName = comment['nick'] ?? 'Unknown nickname';
-    final String comentari = comment['comment'] ?? 'No comment';
-    final double rating = (comment['rating'] ?? 0).toDouble();
->>>>>>> a1107c0 (Traducció a l'anglès feta)
-=======
-class _BlurredCommentCard extends StatefulWidget {
-  final Map<String, dynamic> comment;
->>>>>>> 6eac28a (Censurar missatges amb spoilers fet)
 
   const _BlurredCommentCard({required this.comment});
 

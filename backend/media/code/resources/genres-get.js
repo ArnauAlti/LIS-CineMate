@@ -11,7 +11,7 @@ async function getGenres(req, res) {
         else {
             res.status(200).json({message: "Returned Genres", data: query.rows});
         }
-    } catch {
+    } catch (error) {
         console.log(error);
         res.status(500).jsom({error: error, message: "Failed to Get Genres"});
     }

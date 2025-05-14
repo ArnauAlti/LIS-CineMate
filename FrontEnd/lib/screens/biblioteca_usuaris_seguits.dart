@@ -34,15 +34,7 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-<<<<<<< HEAD
-<<<<<<< HEAD
         title: Text("${widget.userNick}'s library"),
-=======
-        title: Text("Biblioteca de ${widget.userNick}"),
->>>>>>> 9a94606 (Canvis en biblioteca)
-=======
-        title: Text("${widget.userNick}'s library"),
->>>>>>> a1107c0 (Traducció a l'anglès feta)
         centerTitle: true,
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
@@ -110,18 +102,12 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
             final scrMail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
 
             if (widget.follows == true) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 28f6e20 (Funciona follow y unfollow)
               bool response = await unfollowUser(srcMail: scrMail, dstMail: widget.userMail);
               if(response){
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('You unfollowed ${widget.userNick}')),
                 );
               }
-<<<<<<< HEAD
             } else {
               bool response = await followUser(srcMail: scrMail, dstMail: widget.userMail);
               if(response){
@@ -129,26 +115,6 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
                   SnackBar(content: Text('You now follow ${widget.userNick}')),
                 );
               }
-=======
-              //TODO: Enviar los dos nicks
-              await unfollowUser(nick: "");//(nick: widget.userName);
-            } else {
-              await followUser(nick: ""); //widget.userName);
->>>>>>> 9a94606 (Canvis en biblioteca)
-=======
-              await unfollowUser(srcMail: scrMail, dstMail: widget.userMail);
-            } else {
-              await followUser(srcMail: scrMail, dstMail: widget.userMail);
->>>>>>> 6d4b392 (Funcions de follow i unfollow a front)
-=======
-            } else {
-              bool response = await followUser(srcMail: scrMail, dstMail: widget.userMail);
-              if(response){
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('You now follow ${widget.userNick}')),
-                );
-              }
->>>>>>> 28f6e20 (Funciona follow y unfollow)
             }
 
             Navigator.push(context, MaterialPageRoute(builder: (context) => const UsuarisSeguits()));
@@ -210,15 +176,7 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-<<<<<<< HEAD
-<<<<<<< HEAD
               film['media_name'] ?? 'Unknown title',
-=======
-              film['media_name'] ?? 'Título desconocido',
->>>>>>> 9a94606 (Canvis en biblioteca)
-=======
-              film['media_name'] ?? 'Unknown title',
->>>>>>> a1107c0 (Traducció a l'anglès feta)
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),

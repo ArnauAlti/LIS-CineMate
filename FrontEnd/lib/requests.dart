@@ -140,6 +140,35 @@ Future<List> getFilmDetails(String mediaId) async {
   }
 }
 
+//Funció per agafar els gèneres dinàmicament
+Future<List<Map<String, dynamic>>> getGenres() async {
+  final Uri uri = Uri.parse("$baseUrl/media/get-genres");
+
+  try {
+    final response = await http.get(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print("✅ Request exitosa.");
+      final decodedBody = convert.jsonDecode(response.body);
+      return List.from(decodedBody['data']);
+
+    } else {
+      print("❌ Error en la request. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return [];
+    }
+  } catch (e) {
+    print("🚫 Excepción al realizar la request: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
+}
+
 //Funció per agafar les últimes obres afegides a la cartellera de l'apliació (les primeres 12 que surtin)
 Future<List<Map<String, dynamic>>> getLatestFilms() async {
   final Uri uri = Uri.parse("$baseUrl/media/get-media/all?p=1");
@@ -777,13 +806,6 @@ Future<bool> sendMessage(String title) async {
 
 //Funció per aconseguir els usuaris que segueix l'usuari que fa la request
 Future<List<Map<String, dynamic>>> getUsersByUserMail(String userMail) async {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-  // TODO: Comprovar funcionament
->>>>>>> 9a94606 (Canvis en biblioteca)
-=======
->>>>>>> 6d4b392 (Funcions de follow i unfollow a front)
   final Uri uri = Uri.parse("$baseUrl/user/get-users/follows?user_mail=$userMail");
 
   try {
@@ -829,14 +851,7 @@ Future<bool> followUser({required String? srcMail, required String dstMail}) asy
         'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
       },
     );
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
->>>>>>> 6d4b392 (Funcions de follow i unfollow a front)
-=======
-
->>>>>>> 28f6e20 (Funciona follow y unfollow)
     if (response.statusCode == 200) {
       print("✅ Usuario seguido correctamente.");
       return true;
@@ -854,15 +869,7 @@ Future<bool> followUser({required String? srcMail, required String dstMail}) asy
 
 //Funció que permet deixar de seguir a un usuari dins l'aplicació
 Future<bool> unfollowUser({required String? srcMail, required String dstMail}) async {
-<<<<<<< HEAD
-<<<<<<< HEAD
   final Uri uri = Uri.parse("$baseUrl/user/unfollow");
-=======
-  final Uri uri = Uri.parse("$baseUrl/user/unfollow"); //Modificar Uri
->>>>>>> 6d4b392 (Funcions de follow i unfollow a front)
-=======
-  final Uri uri = Uri.parse("$baseUrl/user/unfollow");
->>>>>>> 28f6e20 (Funciona follow y unfollow)
 
   final Map<String, dynamic> body = {
     'srcMail': srcMail,

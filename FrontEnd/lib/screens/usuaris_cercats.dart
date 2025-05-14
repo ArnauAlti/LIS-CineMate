@@ -92,15 +92,7 @@ class _UsuarisCercats extends State<UsuarisCercats> {
   Widget _buildUserBox(BuildContext context, Map<String, dynamic> user) {
     final String userMail = user['mail']?? "";
     print(userMail);
-<<<<<<< HEAD
-<<<<<<< HEAD
     final String nick = user['nick']?? "Unknown nickname";
-=======
-    final String nick = user['nick']?? "";
->>>>>>> 9a94606 (Canvis en biblioteca)
-=======
-    final String nick = user['nick']?? "Unknown nickname";
->>>>>>> a1107c0 (Traducció a l'anglès feta)
     final String png = (user['png'] != null && user['png'].toString().trim().isNotEmpty)
         ? user['png']
         : "assets/perfil1.jpg";

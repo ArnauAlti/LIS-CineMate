@@ -120,15 +120,7 @@ class _UsuarisSeguits extends State<UsuarisSeguits> {
   }
 
   Widget _buildUserBox(BuildContext context, Map<String, dynamic> user) {
-<<<<<<< HEAD
-<<<<<<< HEAD
     final String userMail = user['dst_mail']?? "";
-=======
-    final String userMail = user['mail']?? "";
->>>>>>> 9a94606 (Canvis en biblioteca)
-=======
-    final String userMail = user['dst_mail']?? "";
->>>>>>> 28f6e20 (Funciona follow y unfollow)
     final String nick = user['nick']?? "";
     final String png = (user['png'] != null && user['png'].toString().trim().isNotEmpty)
         ? user['png']

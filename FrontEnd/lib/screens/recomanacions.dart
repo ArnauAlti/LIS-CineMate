@@ -1,3 +1,4 @@
+import '../requests.dart';
 import 'generar_recomanacions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,12 +13,26 @@ class RecomanacionsScreen extends StatefulWidget {
 }
 
 class _RecomanacionsScreenState extends State<RecomanacionsScreen> {
-  //TODO: Select genres from the DB
-  final Map<String, bool> _genres = {
-    'Action': false, 'Adventure': false, 'Animation': false, 'Kids': false, 'Comedy': false, 'Crime': false,
-    'Documentary': false, 'Drama': false, 'Fantasy': false, 'Horror': false, 'Musical': false, 'Mistery': false,
-    'Romance': false, 'Science Fiction': false, 'Thriller': false, 'War': false, 'Western': false,
-  };
+  late Future<List<Map<String, dynamic>>> _genresFuture;
+  Map<String, bool> _genres = {}; // Inicialment buit
+
+  @override
+  void initState() {
+    super.initState();
+    _genresFuture = loadGenres();
+  }
+
+  Future<List<Map<String, dynamic>>> loadGenres() async {
+    final genreList = await getGenres();
+    setState(() {
+      _genres = {
+        for (var genre in genreList)
+          genre['name'] as String: false
+      };
+    });
+    print(genreList);
+    return genreList;
+  }
 
   List<String> _getSelectedGenres() {
     return _genres.entries
@@ -45,84 +60,95 @@ class _RecomanacionsScreenState extends State<RecomanacionsScreen> {
           userRoleProvider.setUserRole(newRole);
         },
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Text(
-              "Generate recommendations from:",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => RecomanacionsGeneradesScreen(
-                      selectedGenres: _getSelectedGenres(),
-                    ),
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: _genresFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('❌ Error carregant gèneres'));
+          } else {
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Generate recommendations from:",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
-              child: const Text("Personal ratings"),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => RecomanacionsGeneradesScreen(
-                      selectedGenres: _getSelectedGenres(),
+                  const SizedBox(height: 24),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RecomanacionsGeneradesScreen(
+                            selectedGenres: _getSelectedGenres(),
+                          ),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
                     ),
+                    child: const Text("Personal ratings"),
                   ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RecomanacionsGeneradesScreen(
+                            selectedGenres: _getSelectedGenres(),
+                          ),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    child: const Text("Users I follow"),
+                  ),
+                  const SizedBox(height: 50),
+                  const Text(
+                    "Give more weight to the selected genres:",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 16),
+                  ListView(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: _genres.keys.map((genre) {
+                      return CheckboxListTile(
+                        title: Text(genre),
+                        value: _genres[genre],
+                        onChanged: (bool? value) {
+                          setState(() {
+                            _genres[genre] = value ?? false;
+                          });
+                        },
+                        controlAffinity: ListTileControlAffinity.leading,
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: 32),
+                ],
               ),
-              child: const Text("Users I follow"),
-            ),
-            const SizedBox(height: 50),
-            const Text(
-              "Give more weight to the selected genres:",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            ListView(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children: _genres.keys.map((genre) {
-                return CheckboxListTile(
-                  title: Text(genre),
-                  value: _genres[genre],
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _genres[genre] = value ?? false;
-                    });
-                  },
-                  controlAffinity: ListTileControlAffinity.leading,
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 32),
-          ],
-        ),
+            );
+          }
+        },
       ),
     );
   }

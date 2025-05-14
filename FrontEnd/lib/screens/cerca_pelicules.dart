@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../requests.dart'; // Asegúrate de que aquí esté la función getGenres
 import 'resultats_pelicules.dart';
 
 class CercaPelicules extends StatefulWidget {
@@ -18,12 +19,19 @@ class _CercaPeliculesState extends State<CercaPelicules> {
   String _busqueda = "";
   String? _genereSeleccionat;
 
+  late Future<List<Map<String, dynamic>>> _genresFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _genresFuture = getGenres();
+  }
+
   void _realitzarBusqueda() {
     setState(() {
       _busqueda = _controller.text.trim();
     });
 
-    // Navegar a la pantalla de resultados
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -38,7 +46,6 @@ class _CercaPeliculesState extends State<CercaPelicules> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +54,7 @@ class _CercaPeliculesState extends State<CercaPelicules> {
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         centerTitle: true,
-        title: const Text("Search", textAlign: TextAlign.center),
+        title: const Text("Search"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -91,7 +98,6 @@ class _CercaPeliculesState extends State<CercaPelicules> {
             ),
             const SizedBox(height: 24.0),
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const Icon(Icons.filter_alt_outlined, size: 20),
                 const SizedBox(width: 6),
@@ -120,42 +126,40 @@ class _CercaPeliculesState extends State<CercaPelicules> {
                   color: const Color(0xFFEAE6F3),
                   borderRadius: BorderRadius.circular(12.0),
                 ),
-                //Lògica per fer sortir els filtres
                 child: Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        //Menú desplegable per mostrar tots els gèneres
                         const Text("Genre:"),
-                        DropdownButton<String>(
-                          value: _genereSeleccionat,
-                          hint: const Text("Select a genre"),
-                          items: const [
-                            DropdownMenuItem(value: "28", child: Text("Action")),
-                            DropdownMenuItem(value: "12", child: Text("Adventure")),
-                            DropdownMenuItem(value: "16", child: Text("Animation")),
-                            DropdownMenuItem(value: "10762", child: Text("Kids")),
-                            DropdownMenuItem(value: "35", child: Text("Comedy")),
-                            DropdownMenuItem(value: "80", child: Text("Crime")),
-                            DropdownMenuItem(value: "99", child: Text("Documentary")),
-                            DropdownMenuItem(value: "18", child: Text("Drama")),
-                            DropdownMenuItem(value: "14", child: Text("Fantasy")),
-                            DropdownMenuItem(value: "10751", child: Text("Family")),
-                            DropdownMenuItem(value: "36", child: Text("History")),
-                            DropdownMenuItem(value: "27", child: Text("Horror")),
-                            DropdownMenuItem(value: "10402", child: Text("Musical")),
-                            DropdownMenuItem(value: "9648", child: Text("Mistery")),
-                            DropdownMenuItem(value: "10749", child: Text("Romance")),
-                            DropdownMenuItem(value: "878", child: Text("Science Fiction")),
-                            DropdownMenuItem(value: "53", child: Text("Thriller")),
-                            DropdownMenuItem(value: "10752", child: Text("War")),
-                            DropdownMenuItem(value: "37", child: Text("Western")),
-                          ],
-                          onChanged: (String? value) {
-                            setState(() {
-                              _genereSeleccionat = value;
-                            });
+                        FutureBuilder<List<Map<String, dynamic>>>(
+                          future: _genresFuture,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            } else if (snapshot.hasError) {
+                              return const Text("Error loading genres");
+                            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                              return const Text("No genres available");
+                            }
+
+                            final genres = snapshot.data!;
+
+                            return DropdownButton<String>(
+                              value: _genereSeleccionat,
+                              hint: const Text("Select a genre"),
+                              items: genres.map((genre) {
+                                return DropdownMenuItem<String>(
+                                  value: genre['moviedb'].toString(),
+                                  child: Text(genre['name']),
+                                );
+                              }).toList(),
+                              onChanged: (String? value) {
+                                setState(() {
+                                  _genereSeleccionat = value;
+                                });
+                              },
+                            );
                           },
                         ),
                       ],
@@ -188,7 +192,7 @@ class _CercaPeliculesState extends State<CercaPelicules> {
                     ),
                   ],
                 ),
-              )
+              ),
           ],
         ),
       ),

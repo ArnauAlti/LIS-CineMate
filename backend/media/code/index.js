@@ -17,6 +17,8 @@ const enableMedia = require('./resources/media-enable.js');
 
 const sendMedia = require("./resources/recommender-send-media.js");
 
+const getGenres = require("./resources/genres-get.js");
+
 const app = express();
 const port = 3000;
 setGenres();
@@ -87,6 +89,7 @@ app.get("/status", async (req, res) => {
 })
 
 app.get("/set-genres", setGenres);
+app.get("/get-genres", getGenres);
 
 // app.get("/set-media", setMedia);
 

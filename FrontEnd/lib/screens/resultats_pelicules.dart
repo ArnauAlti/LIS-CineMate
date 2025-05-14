@@ -55,8 +55,6 @@ class _ResultatsPeliculesState extends State<ResultatsPelicules> {
 
           final films = snapshot.data ?? [];
 
-          print(films);
-
           return SingleChildScrollView(
             padding: const EdgeInsets.all(20),
             child: Column(
