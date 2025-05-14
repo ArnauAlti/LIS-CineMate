@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../requests.dart';
-import '../user_role_provider.dart';
+import '../requests.dart'; // Ha de contenir la funció sendMessage()
 
-//TODO: En el futur, actualitzar xat en viu
 class XatPersonatge extends StatefulWidget {
   final String nomPersonatge;
-  final String? userMail;
 
-  const XatPersonatge({super.key, required this.nomPersonatge, required this.userMail});
+  const XatPersonatge({super.key, required this.nomPersonatge});
 
   @override
   State<XatPersonatge> createState() => _XatPersonatgeState();
@@ -17,11 +13,10 @@ class XatPersonatge extends StatefulWidget {
 class _XatPersonatgeState extends State<XatPersonatge> {
   final TextEditingController _controller = TextEditingController();
   final List<Map<String, String>> _missatges = [];
+  bool _isCharacterTyping = false;
 
   @override
   Widget build(BuildContext context) {
-    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
-
     return Scaffold(
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
@@ -36,104 +31,106 @@ class _XatPersonatgeState extends State<XatPersonatge> {
           },
         ),
       ),
-      body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: getMessagesByChat(userEmail!),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              reverse: true,
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  children: [
+                    ..._missatges.map((message) {
+                      final isSelf = message['author'] == 'self';
+                      final isCharacter = message['author'] == 'character';
 
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
-
-          final messages = snapshot.data ?? _missatges; // Utilizamos los mensajes del estado
-          final lastMessageIsMine = messages.isNotEmpty && messages.last['author'] == 'self';
-
-          return Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      children: [
-                        // Mostrar los mensajes
-                        ...messages.map((message) {
-                          final isSelf = message['author'] == 'self';
-                          return Align(
-                            alignment: isSelf ? Alignment.centerRight : Alignment.centerLeft,
-                            child: Container(
-                              margin: const EdgeInsets.symmetric(vertical: 6),
-                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                              decoration: BoxDecoration(
-                                color: isSelf ? Colors.black : Colors.grey[300],
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Text(
-                                message['message']!,
-                                style: TextStyle(
-                                  color: isSelf ? Colors.white : Colors.black,
-                                ),
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                        // Si el último mensaje es mío, mostrar indicador de que el personaje está escribiendo
-                        if (lastMessageIsMine)
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8),
-                            child: Text(
-                              "The character is writing...",
-                              style: TextStyle(fontStyle: FontStyle.italic, color: Colors.grey),
+                      return Align(
+                        alignment: isSelf? Alignment.centerRight: Alignment.centerLeft,
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(vertical: 6),
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                          decoration: BoxDecoration(
+                            color: isSelf
+                                ? Colors.black
+                                : isCharacter
+                                ? Colors.lightBlue[100]
+                                : Colors.grey[300],
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            message['message']!,
+                            style: TextStyle(
+                              color: isSelf ? Colors.white : Colors.black,
                             ),
                           ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _controller,
-                        decoration: const InputDecoration(
-                          hintText: 'Write a message...',
-                          border: OutlineInputBorder(),
-                          filled: true,
-                          fillColor: Colors.white,
+                        ),
+                      );
+                    }).toList(),
+                    if (_isCharacterTyping)
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8),
+                        child: Text(
+                          "The character is writing...",
+                          style: TextStyle(fontStyle: FontStyle.italic, color: Colors.grey),
                         ),
                       ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.send),
-                      onPressed: () {
-                        if (_controller.text.isNotEmpty) {
-                          _sendMessage(_controller.text);
-                        }
-                      },
-                    ),
                   ],
                 ),
               ),
-            ],
-          );
-        },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    decoration: const InputDecoration(
+                      hintText: 'Write a message...',
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.send),
+                  onPressed: () {
+                    if (_controller.text.isNotEmpty) {
+                      _sendMessage(_controller.text);
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  // Función para enviar el mensaje
   void _sendMessage(String messageText) {
     setState(() {
       _missatges.add({
-        "author": "self", // Es el mensaje del usuario
+        "author": "self",
         "message": messageText,
       });
-      _controller.clear(); // Limpiar el campo de texto después de enviar el mensaje
+      _isCharacterTyping = true;
+      _controller.clear();
+    });
+
+    final message = sendMessage(widget.nomPersonatge, messageText);
+
+    //TODO: Modificar per actualizar en viu amb resposta del xat
+    Future.delayed(const Duration(seconds: 2), () {
+      setState(() {
+        _missatges.add({
+          "author": "character",
+          "message": "Resposta automàtica del personatge.",
+        });
+        _isCharacterTyping = false;
+      });
     });
   }
 }

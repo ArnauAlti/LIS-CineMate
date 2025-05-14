@@ -603,40 +603,6 @@ Future<bool> editQuestionnaire(String mediaId, String mail, String nick, String 
   return true;
 }
 
-//TODO: Comprovar funcionament
-//Funció que permet afegir un personatge escollit per establir un xat amb ell/a
-Future<bool> addCharacterToChat(String name, String mail) async {
-  final Uri uri = Uri.parse("$baseUrl/character/add-chat");
-
-  final Map<String, dynamic> body = {
-    'name': name,
-    'mail': mail,
-  };
-
-  try {
-    final response = await http.post(
-      uri,
-      headers: {
-        'Content-Type': 'application/json',
-        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
-      },
-      body: convert.jsonEncode(body),
-    );
-
-    if (response.statusCode == 200) {
-      print("✅ Request exitosa mostrar personatges.");
-      return true;
-    } else {
-      print("❌ Error en la request de mostrar personatges. Código: ${response.statusCode}");
-      print("Respuesta: ${response.body}");
-      return false;
-    }
-  } catch (e) {
-    print("🚫 Excepción al realizar la request de mostrar personatges: $e");
-    throw Exception("No se pudo conectar al servidor.");
-  }
-}
-
 //Funció per aconseguir els personatges de la pel·lícula o sèrie cercada
 Future<List<Map<String, dynamic>>> getCharactersBySearch(String search) async {
   final Uri uri = Uri.parse("$baseUrl/character/get-characters");
@@ -658,9 +624,7 @@ Future<List<Map<String, dynamic>>> getCharactersBySearch(String search) async {
     if (response.statusCode == 200) {
       print("✅ Request exitosa mostrar personatges.");
       final decodedBody = convert.jsonDecode(response.body);
-      print(decodedBody);
       final data = decodedBody['characters'];
-      print(data);
 
       if (data is List) {
         return List<Map<String, dynamic>>.from(data);
@@ -781,82 +745,39 @@ Future<bool> deleteCharacter(String name, String mediaId) async {
   }
 }
 
-//Funció per aconseguir els personatges de la pel·lícula o sèrie cercada
-Future<List<Map<String, dynamic>>> getChatsByUserMail(String userMail) async {
-  // TODO: Implementar crida real a la base de dades
-  return [
-    {
-      'name': "Sherlock Holmes",
-      'lastMessage': "Lo descubrí porque...",
-      'imagePath': "https://th.bing.com/th/id/OIP.9fKQD-5qa_01wxCsOzHGsgAAAA?w=288&h=288&rs=1&pid=ImgDetMain",
-    },
-    {
-      'name': "Eleven",
-      'lastMessage': "Estaba muy asustada.",
-      'imagePath': "https://images.hdqwalls.com/download/stranger-things-eleven-art-nw-1280x2120.jpg",
-    },
-  ];
-}
-
-//TODO: Comprovar funcionament
-//Funció que permet eliminar un xat associat a un usuari amb un personatge
-Future<bool> deleteChat(String name, String mail) async {
-  final Uri uri = Uri.parse("$baseUrl/character/delete-chat");
+//TODO: Funció per enviar missatges a la BD
+//Funció que permet editar un qüestionari associat a una pel·lícula o sèrie de la base de dades
+Future<List<Map<String, dynamic>>> sendMessage(String character, String message) async {
+  final Uri uri = Uri.parse("$baseUrl/character/chat-character"); //Modificar Uri
 
   final Map<String, dynamic> body = {
-    'name': name,
-    'mail': mail,
+    'character': character,
+    'message': message,
   };
 
   try {
     final response = await http.post(
       uri,
+      body: convert.jsonEncode(body),
       headers: {
         'Content-Type': 'application/json',
         'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
       },
-      body: convert.jsonEncode(body),
     );
-
     if (response.statusCode == 200) {
-      print("✅ Request exitosa mostrar personatges.");
-      return true;
+      print("✅ Personaje eliminado correctamente.");
+      final decodedBody = convert.jsonDecode(response.body);
+      return List<Map<String, dynamic>>.from(decodedBody['data']);
+
     } else {
-      print("❌ Error en la request de mostrar personatges. Código: ${response.statusCode}");
+      print("❌ Error en la eliminación del personaje. Código: ${response.statusCode}");
       print("Respuesta: ${response.body}");
-      return false;
+      return [];
     }
   } catch (e) {
-    print("🚫 Excepción al realizar la request de mostrar personatges: $e");
+    print("🚫 Excepción al realizar la eliminación: $e");
     throw Exception("No se pudo conectar al servidor.");
   }}
-
-//Funció per aconseguir els missatges associats al xat amb el personatge
-Future<List<Map<String, dynamic>>> getMessagesByChat(String userMail) async {
-  // TODO: Implementar crida real a la base de dades
-  return [
-    {
-      "author": "self",
-      "message": "Com vas descobrir l’últim assassí?"},
-    {
-      "autor": "character",
-      "message": "El vaig descobrir perquè portava un llibre estrany."
-    },
-    {
-      "autor": "character",
-      "message": "Li vaig treure, i era sobre verins."},
-    {
-      "autor": "character",
-      "message": "Hi havia sang a la part del verí que va matar a la víctima."
-    },
-  ];
-}
-
-//TODO: Funció per enviar missatges a la BD
-//Funció que permet editar un qüestionari associat a una pel·lícula o sèrie de la base de dades
-Future<bool> sendMessage(String title) async {
-  return true;
-}
 
 //Funció per aconseguir els usuaris que segueix l'usuari que fa la request
 Future<List<Map<String, dynamic>>> getUsersByUserMail(String userMail) async {

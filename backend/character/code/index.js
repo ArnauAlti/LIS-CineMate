@@ -6,8 +6,6 @@ const modifyCharacter = require("./resources/character-modify");
 const deleteCharacter = require("./resources/character-delete");
 const getCharacters = require("./resources/character-get");
 const chatCharacter = require("./resources/character-chat");
-const addChat = require("./resources/character-add-chat");
-const deleteChat = require("./resources/character-delete-chat");
 
 const app = express();
 const port = 3000;
@@ -28,8 +26,6 @@ app.post("/modify-character", modifyCharacter);
 app.post("/delete-character", deleteCharacter);
 app.post("/get-characters", getCharacters);
 app.post("/chat-character", chatCharacter);
-app.post("/add-chat", addChat);
-app.post("/delete-chat", deleteChat);
 
 app.all("/*", (req, res) => {
     res.status(404).json({message: "Resource Not Found"});
