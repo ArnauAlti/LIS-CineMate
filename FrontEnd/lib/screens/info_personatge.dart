@@ -1,6 +1,5 @@
 import 'xats_actius.dart';
 import 'package:cine_mate/screens/afegir_personatge.dart';
-import 'package:cine_mate/screens/personatges_disponibles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
@@ -17,6 +16,8 @@ class InfoPersonatge extends StatelessWidget {
   Widget build(BuildContext context) {
     final userRoleProvider = Provider.of<UserRoleProvider>(context);
     final userRole = userRoleProvider.userRole;
+    final userMail = userRoleProvider.userEmail;
+
     final name = charData?['name'] ?? 'Unknown name';
     final imagePath = charData?['png'] ?? '';
     final contextInfo = charData?['context'] ?? 'Unknown context';
@@ -71,7 +72,7 @@ class InfoPersonatge extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    addCharacterToChat(name);
+                    addCharacterToChat(name, userMail!);
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const XatsActiusScreen()),

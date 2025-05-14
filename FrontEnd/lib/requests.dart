@@ -603,10 +603,38 @@ Future<bool> editQuestionnaire(String mediaId, String mail, String nick, String 
   return true;
 }
 
-//TODO: Funció per afegir un personatge com a xat
+//TODO: Comprovar funcionament
 //Funció que permet afegir un personatge escollit per establir un xat amb ell/a
-Future<bool> addCharacterToChat(String name) async {
-  return true;
+Future<bool> addCharacterToChat(String name, String mail) async {
+  final Uri uri = Uri.parse("$baseUrl/character/add-chat");
+
+  final Map<String, dynamic> body = {
+    'name': name,
+    'mail': mail,
+  };
+
+  try {
+    final response = await http.post(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
+      body: convert.jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      print("✅ Request exitosa mostrar personatges.");
+      return true;
+    } else {
+      print("❌ Error en la request de mostrar personatges. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return false;
+    }
+  } catch (e) {
+    print("🚫 Excepción al realizar la request de mostrar personatges: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
 }
 
 //Funció per aconseguir els personatges de la pel·lícula o sèrie cercada
@@ -649,7 +677,6 @@ Future<List<Map<String, dynamic>>> getCharactersBySearch(String search) async {
     print("🚫 Excepción al realizar la request de mostrar personatges: $e");
     throw Exception("No se pudo conectar al servidor.");
   }
-
 }
 
 //Funció que permet afegir un personatge a la base de dades de personatges disponibles per establir un xat amb ell/a
@@ -771,11 +798,38 @@ Future<List<Map<String, dynamic>>> getChatsByUserMail(String userMail) async {
   ];
 }
 
-//TODO: Funció per eliminar un xat actiu
+//TODO: Comprovar funcionament
 //Funció que permet eliminar un xat associat a un usuari amb un personatge
-Future<bool> deleteChat(String name) async {
-  return true;
-}
+Future<bool> deleteChat(String name, String mail) async {
+  final Uri uri = Uri.parse("$baseUrl/character/delete-chat");
+
+  final Map<String, dynamic> body = {
+    'name': name,
+    'mail': mail,
+  };
+
+  try {
+    final response = await http.post(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
+      body: convert.jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      print("✅ Request exitosa mostrar personatges.");
+      return true;
+    } else {
+      print("❌ Error en la request de mostrar personatges. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return false;
+    }
+  } catch (e) {
+    print("🚫 Excepción al realizar la request de mostrar personatges: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }}
 
 //Funció per aconseguir els missatges associats al xat amb el personatge
 Future<List<Map<String, dynamic>>> getMessagesByChat(String userMail) async {
