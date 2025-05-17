@@ -55,15 +55,6 @@ class _PersonatgesDisponiblesScreen extends State<PersonatgesDisponiblesScreen> 
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(height: 15),
-                  const Text("Available characters!!",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 50),
                   for (int i = 0; i < characters.length; i += 2)
                     Column(
                       children: [

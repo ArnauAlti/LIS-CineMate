@@ -21,6 +21,7 @@ class InfoPersonatge extends StatelessWidget {
     final name = charData?['name'] ?? 'Unknown name';
     final imagePath = charData?['png'] ?? '';
     final contextInfo = charData?['context'] ?? 'Unknown context';
+    final movieName = charData?['movie_name'] ?? 'Unknown Movie';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -74,7 +75,7 @@ class InfoPersonatge extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => XatPersonatge(nomPersonatge: name)),
+                      MaterialPageRoute(builder: (context) => XatPersonatge(nomPersonatge: name, movieName: movieName)),
                     );
                   },
                   style: ButtonStyle(

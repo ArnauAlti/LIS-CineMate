@@ -3,8 +3,9 @@ import '../requests.dart'; // Ha de contenir la funció sendMessage()
 
 class XatPersonatge extends StatefulWidget {
   final String nomPersonatge;
+  final String movieName;
 
-  const XatPersonatge({super.key, required this.nomPersonatge});
+  const XatPersonatge({super.key, required this.nomPersonatge, required this.movieName});
 
   @override
   State<XatPersonatge> createState() => _XatPersonatgeState();

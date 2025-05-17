@@ -748,7 +748,7 @@ Future<bool> deleteCharacter(String name, String mediaId) async {
 //TODO: Funció per enviar missatges a la BD
 //Funció que permet editar un qüestionari associat a una pel·lícula o sèrie de la base de dades
 Future<List<Map<String, dynamic>>> sendMessage(String character, String message) async {
-  final Uri uri = Uri.parse("$baseUrl/character/chat-character"); //Modificar Uri
+  final Uri uri = Uri.parse("$baseUrl/character/chat-character"); //TODO: Modificar Uri
 
   final Map<String, dynamic> body = {
     'character': character,
