@@ -20,7 +20,7 @@ async function createMedia(req, res) {
             'SELECT FROM library WHERE user_mail = $1 AND info_id = $2',
             [userMail, infoID]
         );
-        if (query.rowCount > 0) {
+        if (firstQuery.rowCount > 0) {
             throw "Element already in library";
         }
         console.log("(Adding) Mail: " + userMail + "; Media ID: " + mediaID + "; Info ID: " + infoID + " Name: " + mediaName + " png: " + mediaPNG);
