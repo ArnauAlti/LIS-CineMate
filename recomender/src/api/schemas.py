@@ -13,8 +13,12 @@ class RecommendationRequest(BaseModel):
     genre_diversity: bool = False
     genre_filter: Optional[List[str]] = None
 
-class StarRatingGenreRequest(RecommendationRequest):
-    genre_filter: List[str]
-
 class BodyData(BaseModel):
     data: str
+    
+class HybridRecommendationRequest(BaseModel):
+    ratings: BodyData
+    top_n: int = 5
+    genre_diversity: bool = False
+    genre_filter: Optional[List[str]] = None
+
