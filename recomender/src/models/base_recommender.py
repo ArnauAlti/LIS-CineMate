@@ -13,7 +13,7 @@ class MovieRecommenderBase:
         id_to_index (dict): Mapping of movie IDs to DataFrame indices.
     """
 
-    def __init__(self, data_path='data/movies.csv'):
+    def __init__(self, data_path='data/movies.csv', init_all=True):
         """Initialize the recommender with movie data.
         
         Args:
@@ -21,8 +21,9 @@ class MovieRecommenderBase:
         """
         self.movies = pd.read_csv(data_path)
         self._preprocess_data()
-        self.tfidf_matrix, self.sim_matrix = self._build_similarity_matrix()
-        self.id_to_index = {row['id']: idx for idx, row in self.movies.iterrows()}
+        if init_all:
+            self.tfidf_matrix, self.sim_matrix = self._build_similarity_matrix()
+            self.id_to_index = {row['id']: idx for idx, row in self.movies.iterrows()}
 
     def _preprocess_data(self):
         """Perform basic data cleaning:

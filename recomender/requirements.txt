@@ -5,3 +5,6 @@ pandas
 requests
 scikit-learn
 ipdb
+torch
+tqdm
+KMeans
