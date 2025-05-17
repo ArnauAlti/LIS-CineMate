@@ -20,21 +20,21 @@ async function chatCharacter(req, res) {
         if (!title) {
             throw "No Title Sent";
         } 
-        //Aplicar lógica con el chatbot
-        const response = await axios.post("https://194.26.196.165:20651/api/init", {
+
+        const response = await axios.post("http://194.26.196.165:20651/api/init", {
                 "character_name": characterName,
                 "movie_title": title
             },
             {
                 headers: {
-                    'Content-Type': application/json
+                    'Content-Type': 'application/json'
                 }
             }
         );
         console.log(response);
         if (response.status == 200) {
             const patata = response.data.session_id;
-            const response2 = await axios.post("https://194.26.196.165:20651/api/chat", {
+            const response2 = await axios.post("http://194.26.196.165:20651/api/chat", {
                 "question": message,
                 "session_id": patata,
                 "character_name": characterName,
@@ -42,7 +42,7 @@ async function chatCharacter(req, res) {
             },
             {
                 headers: {
-                    'Content-Type': application/json
+                    'Content-Type': 'application/json'
                 }
             }
         );

@@ -747,12 +747,13 @@ Future<bool> deleteCharacter(String name, String mediaId) async {
 
 //TODO: Funció per enviar missatges a la BD
 //Funció que permet editar un qüestionari associat a una pel·lícula o sèrie de la base de dades
-Future<List<Map<String, dynamic>>> sendMessage(String character, String message) async {
-  final Uri uri = Uri.parse("$baseUrl/character/chat-character"); //TODO: Modificar Uri
+Future<String> sendMessage(String character, String message, String movieName) async {
+  final Uri uri = Uri.parse("$baseUrl/character/chat-character");
 
   final Map<String, dynamic> body = {
     'character': character,
     'message': message,
+    'movie_name': movieName,
   };
 
   try {
@@ -765,17 +766,18 @@ Future<List<Map<String, dynamic>>> sendMessage(String character, String message)
       },
     );
     if (response.statusCode == 200) {
-      print("✅ Personaje eliminado correctamente.");
+      print("✅ Mensaje recibido correctamente.");
       final decodedBody = convert.jsonDecode(response.body);
-      return List<Map<String, dynamic>>.from(decodedBody['data']);
+      final data = decodedBody['data'];
+      return data;
 
     } else {
-      print("❌ Error en la eliminación del personaje. Código: ${response.statusCode}");
+      print("❌ Error al recibir mensaje. Código: ${response.statusCode}");
       print("Respuesta: ${response.body}");
-      return [];
+      return "";
     }
   } catch (e) {
-    print("🚫 Excepción al realizar la eliminación: $e");
+    print("🚫 Excepción al realizar el envio de mensaje: $e");
     throw Exception("No se pudo conectar al servidor.");
   }}
 

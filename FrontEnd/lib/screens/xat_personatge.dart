@@ -111,7 +111,7 @@ class _XatPersonatgeState extends State<XatPersonatge> {
     );
   }
 
-  void _sendMessage(String messageText) {
+  Future<void> _sendMessage(String messageText) async {
     setState(() {
       _missatges.add({
         "author": "self",
@@ -121,14 +121,13 @@ class _XatPersonatgeState extends State<XatPersonatge> {
       _controller.clear();
     });
 
-    final message = sendMessage(widget.nomPersonatge, messageText);
+    final String message = await sendMessage(widget.nomPersonatge, messageText, widget.movieName);
 
-    //TODO: Modificar per actualizar en viu amb resposta del xat
     Future.delayed(const Duration(seconds: 2), () {
       setState(() {
         _missatges.add({
           "author": "character",
-          "message": "Resposta automàtica del personatge.",
+          "message": message,
         });
         _isCharacterTyping = false;
       });
