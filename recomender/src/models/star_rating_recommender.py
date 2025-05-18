@@ -24,14 +24,13 @@ class StarRatingRecommender(MovieRecommenderBase):
                 filtered_indices.append(idx)
         return filtered_indices
     
-    def get_personalized_recommendations(self, user_ratings, genre_filter=None, top_n=5, genre_diversity=False):
+    def get_personalized_recommendations(self, user_ratings, genre_filter=None, top_n=5):
         """Generate recommendations, optionally filtered by genres.
         
         Args:
             user_ratings (list): List of tuples [(movie_id, rating_1_to_5), ...].
             genre_filter (list): Only include movies with these genres.
             top_n (int): Number of recommendations to return.
-            genre_diversity (bool): Enforce genre diversity if True.
         
         Returns:
             pd.DataFrame: Recommended movies with columns ['id', 'genres'].
@@ -65,12 +64,7 @@ class StarRatingRecommender(MovieRecommenderBase):
             for genre in genres:
                 genre_counter[genre] = genre_counter.get(genre, 0) + 1
             
-            if genre_diversity:
-                if not genres.issubset(selected_genres):
-                    recommendations.append(idx)
-                    selected_genres.update(genres)
-            else:
-                recommendations.append(idx)
+            recommendations.append(idx)
         
         top_genres = sorted(genre_counter.items(), key=lambda x: x[1], reverse=True)[:2]
         top_genres = [genre for genre, count in top_genres]

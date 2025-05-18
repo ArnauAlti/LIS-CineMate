@@ -26,7 +26,7 @@ docker run -it -p 12000:12000 movie-recommender
 
 TESTING OPTIONS:
 
-1. Swagger UI (best option):
+1. Swagger UI:
 Open http://localhost:12000/docs in your browser to try all endpoints interactively
 
 2. Python client:

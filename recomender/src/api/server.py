@@ -11,7 +11,6 @@ from .schemas import (
     RecommendationResponse,
     RecommendationRequest,
     BodyData,
-    HybridRecommendationRequest,
 )
 
 app = FastAPI(root_path="/api")
@@ -20,10 +19,16 @@ app = FastAPI(root_path="/api")
 DATA_FOLDER = Path("/app/src/data")  # Absolute path inside container
 DATA_FOLDER.mkdir(exist_ok=True, parents=True)
 DATA_PATH = DATA_FOLDER / "movie.csv"  # Consistent filename
+RATINGS_PATH = DATA_FOLDER / "generated_ratings.csv"  # Consistent filename
 
 # Initialize recommenders
 app.state.basic_recommender = MovieRecommenderBase(DATA_PATH)
-
+recommender_hybrid = HybridRecommender(
+    data_path=DATA_PATH,
+    ratings_path=RATINGS_PATH
+)
+recommender_hybrid.train_model()
+recommender_hybrid.cluster_movies()
 
 @app.get("/")
 def read_root():
@@ -98,7 +103,6 @@ def recommend_star_rating(request: RecommendationRequest):
         result = recommender.get_personalized_recommendations(
             user_ratings=request.ratings,
             top_n=request.top_n,
-            genre_diversity=request.genre_diversity,
             genre_filter=request.genre_filter if request.genre_filter else None
         )
 
@@ -120,9 +124,8 @@ def recommend_star_rating(request: RecommendationRequest):
         )
 
 
-#TODO: Mirar format de com rebre i eniar el body
 @app.post("/recommend/hybrid-recommendation", response_model=RecommendationResponse)
-def recommend_star_rating_genre(request: HybridRecommendationRequest):
+def recommend_star_rating_genre(request: RecommendationRequest):
     """Generate genre-filtered recommendations based on star ratings.
     
     Args:
@@ -136,33 +139,21 @@ def recommend_star_rating_genre(request: HybridRecommendationRequest):
         HTTPException: 400 for missing params, 500 for processing errors.
     """
     try:
-        # Input validation
         if not request.ratings:
-            raise HTTPException(
-                status_code=400,
-                detail="At least one star rating is required"
-            )
-        if not request.genre_filter:
-            raise HTTPException(
-                status_code=400,
-                detail="At least one genre filter is required"
-            )
+            raise HTTPException(400, "At least one star rating is required")
 
-        recommender = HybridRecommender(data_path=DATA_PATH, ratings_path=DATA_FOLDER / "generated_ratings.csv")
-        result = recommender.get_personalized_recommendations(
+        result = recommender_hybrid.get_personalized_recommendations(
             user_ratings=request.ratings,
-            genre_filter=request.genre_filter,
+            genre_filter=request.genre_filter if request.genre_filter else None,
             top_n=request.top_n,
-            genre_diversity=request.genre_diversity
         )
 
         return {
             "ok": True,
             "recommendations": result['recommendations'],
-            "top_genres": result['top_genres'],
-            "message": "Recommendations generated successfully"
+            "top_genres":   result['top_genres'],
+            "message":      "Recommendations generated successfully"
         }
-        
     except Exception as e:
         raise HTTPException(
             status_code=500,

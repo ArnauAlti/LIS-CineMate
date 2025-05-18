@@ -1,12 +1,13 @@
-# from .base_recommender import MovieRecommenderBase
-from base_recommender import MovieRecommenderBase
+from .base_recommender import MovieRecommenderBase
+# from base_recommender import MovieRecommenderBase
 import pandas as pd
 import torch
 import numpy as np
 from torch.utils.data import DataLoader
 from sklearn.cluster import KMeans
-from utils.matrixfactoritzation import MatrixFactorization
-from utils.loader import Loader
+from collections import Counter
+from .utils.matrixfactoritzation import MatrixFactorization
+from .utils.loader import Loader
 
 class HybridRecommender(MovieRecommenderBase):
     """Recommender system based on user star ratings (1-5) and genre similarity + matrix factorization."""
@@ -76,24 +77,71 @@ class HybridRecommender(MovieRecommenderBase):
             if any(genre in movie_genres for genre in genre_filter):
                 filtered_indices.append(idx)
         return filtered_indices
-  
-    def get_personalized_recommendations(self, user_ratings=None, genre_filter=None, top_n=5, genre_diversity=False):
-        """Generate recommendations, optionally filtered by genres.
+
+    def get_personalized_recommendations(self, user_ratings=None, genre_filter=None, top_n=5):
+         # --- 1. Construir vector de usuario a partir de los embeddings de ítem
+        item_embs = self.model.item_factors.weight.data.cpu().numpy()  # (n_items, n_factors)
+        idxs, ratings = [], []
+        for movie_id, rating in user_ratings:
+            if movie_id in self.train_set.movieid2idx:
+                idx = self.train_set.movieid2idx[movie_id]
+                idxs.append(idx)
+                ratings.append(rating)
+        if not idxs:
+            raise ValueError("None of the provided movie_ids exist in training.")
+
+        # vector de usuario = media ponderada de los item vectors
+        user_vector = np.average(item_embs[idxs], axis=0, weights=ratings)
+
+        # --- 2. Puntuar todos los ítems
+        scores = item_embs.dot(user_vector)  # (n_items,)
+
+        # eliminar los ya valorados
+        for idx in idxs:
+            scores[idx] = -np.inf
+
+        # --- 3. Filtrar por géneros
+        all_indices = np.argsort(scores)[::-1]  # de mayor a menor
+        filtered = self._filter_by_genres(all_indices.tolist(), genre_filter)
+
+        # --- 4. Tomar top-n
+        top_idxs = filtered[:top_n]
+
+        # 5) Formatear recommendations como lista de strings
+        recs = [self.train_set.idx2movieid[idx] for idx in top_idxs]
+    
+        # # 6) Calcular top_genres sobre esas recomendaciones
+        # all_rec_genres = []
+        # for movid in recs:
+        #     genres_str = self.movies.loc[self.movies['id']==movid, 'genres'].iloc[0]
+        #     all_rec_genres.extend(genres_str.split('|'))
+
+        # genre_counts = Counter(all_rec_genres)
+        # top_genres = [g for g,_ in genre_counts.most_common(3)]
+
+        # 7) Devolver la estructura deseada
+        return {
+            "recommendations": recs,
+            "top_genres": []
+        }
+
+    
+    # def get_personalized_recommendations(self, user_ratings=None, genre_filter=None, top_n=5):
+    #     """Generate recommendations, optionally filtered by genres.
         
-        Args:
-            user_ratings (list): List of tuples [(movie_id, rating_1_to_5), ...].
-            genre_filter (list): Only include movies with these genres.
-            top_n (int): Number of recommendations to return.
-            genre_diversity (bool): Enforce genre diversity if True.
+    #     Args:
+    #         user_ratings (list): List of tuples [(movie_id, rating_1_to_5), ...].
+    #         genre_filter (list): Only include movies with these genres.
+    #         top_n (int): Number of recommendations to return.
         
-        Returns:
-            pd.DataFrame: Recommended movies with columns ['id', 'genres'].
-        """
-        self.train_model()
-        self.cluster_movies()
-        print(self.movie_clusters)
+    #     Returns:
+    #         pd.DataFrame: Recommended movies with columns ['id', 'genres'].
+    #     """
+    #     self.train_model()
+    #     self.cluster_movies()
+    #     print(self.movie_clusters)
         
-        #TODO: Falta el filtro de generes i formatewjar la sortida per enviar al back
+    #     #TODO: Falta el filtro de generes i formatewjar la sortida per enviar al back
         
-        return self.movie_clusters
+    #     return self.movie_clusters
         

@@ -10,15 +10,7 @@ class RecommendationResponse(BaseModel):
 class RecommendationRequest(BaseModel):
     ratings: List[Tuple[str, float]]
     top_n: int = 5
-    genre_diversity: bool = False
     genre_filter: Optional[List[str]] = None
 
 class BodyData(BaseModel):
     data: str
-    
-class HybridRecommendationRequest(BaseModel):
-    ratings: BodyData
-    top_n: int = 5
-    genre_diversity: bool = False
-    genre_filter: Optional[List[str]] = None
-
