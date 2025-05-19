@@ -434,8 +434,15 @@ Future<List<Map<String, dynamic>>> getRatingsByFilm(String userMail, String medi
 
 //Funció que permet agafar les pel·lícules o sèries recomanades de manera intel·ligent segons els
 // gustos de l'usuari actual
-Future<Map<String, dynamic>> getRecomendationFilms(String userMail, List<String>? selectedGenres) async {
-  final Uri uri = Uri.parse("$baseUrl/library/recommend");
+Future<Map<String, dynamic>> getRecomendationFilms(String userMail, List<String>? selectedGenres, bool type) async {
+
+  late Uri uri;
+
+  if(type) {
+    uri = Uri.parse("$baseUrl/library/recommend");
+  } else {
+    uri = Uri.parse("$baseUrl/library/recommend-hybrid");
+  }
 
   final Map<String, dynamic> body = {
     'user_mail': userMail,
@@ -745,7 +752,6 @@ Future<bool> deleteCharacter(String name, String mediaId) async {
   }
 }
 
-//TODO: Funció per enviar missatges a la BD
 //Funció que permet editar un qüestionari associat a una pel·lícula o sèrie de la base de dades
 Future<String> sendMessage(String character, String message, String movieName) async {
   final Uri uri = Uri.parse("$baseUrl/character/chat-character");

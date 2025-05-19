@@ -85,6 +85,7 @@ class _RecomanacionsScreenState extends State<RecomanacionsScreen> {
                         MaterialPageRoute(
                           builder: (context) => RecomanacionsGeneradesScreen(
                             selectedGenres: _getSelectedGenres(),
+                            type: true,
                           ),
                         ),
                       );
@@ -107,6 +108,7 @@ class _RecomanacionsScreenState extends State<RecomanacionsScreen> {
                         MaterialPageRoute(
                           builder: (context) => RecomanacionsGeneradesScreen(
                             selectedGenres: _getSelectedGenres(),
+                            type: false,
                           ),
                         ),
                       );

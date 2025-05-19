@@ -83,4 +83,4 @@ async function recommendhybrid(req, res) {
     }
 }
 
-module.exports = recommend;
+module.exports = recommendhybrid;

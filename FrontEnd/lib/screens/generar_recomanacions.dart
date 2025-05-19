@@ -6,8 +6,9 @@ import '../user_role_provider.dart';
 
 class RecomanacionsGeneradesScreen extends StatefulWidget {
   final List<String>? selectedGenres;
+  final bool type;
 
-  const RecomanacionsGeneradesScreen({super.key, this.selectedGenres});
+  const RecomanacionsGeneradesScreen({super.key, this.selectedGenres, required this.type});
 
   @override
   State<RecomanacionsGeneradesScreen> createState() => _RecomanacionsGenerades();
@@ -21,7 +22,7 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
     print(widget.selectedGenres);
     final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
     super.initState();
-    _filmsFuture = getRecomendationFilms(userEmail!, widget.selectedGenres);
+    _filmsFuture = getRecomendationFilms(userEmail!, widget.selectedGenres, widget.type);
   }
 
   @override
