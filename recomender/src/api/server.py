@@ -139,7 +139,6 @@ def recommend_star_rating_genre(request: RecommendationRequest):
         HTTPException: 400 for missing params, 500 for processing errors.
     """
     try:
-        import ipdb; ipdb.set_trace()
         if not request.ratings:
             raise HTTPException(400, "At least one star rating is required")
 

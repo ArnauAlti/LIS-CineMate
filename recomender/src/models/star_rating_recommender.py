@@ -38,19 +38,15 @@ class StarRatingRecommender(MovieRecommenderBase):
         combined_scores = self._process_user_preferences(user_ratings)
         rated_ids = {movie_id for movie_id, _ in user_ratings}
         
-        # Get sorted indices by score
         sim_scores = list(enumerate(combined_scores))
         sim_scores.sort(key=lambda x: x[1], reverse=True)
         
-        # Get potential recommendations (unrated movies)
         potential_recs = [i for i, _ in sim_scores 
                          if self.movies.iloc[i]['id'] not in rated_ids]
         
-        # Apply genre filter if specified
         if genre_filter and len(genre_filter) > 0:
             potential_recs = self._filter_by_genres(potential_recs, genre_filter)
         
-        # Select final recommendations
         recommendations = []
         selected_genres = set()
         genre_counter = {}
