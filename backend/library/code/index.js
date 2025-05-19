@@ -5,6 +5,7 @@ const addMedia = require("./resources/library-add");
 const modifyMedia = require("./resources/library-modify");
 const deleteMedia = require("./resources/library-delete");
 const recommend = require("./resources/library-recommend");
+const recommendhybrid = require("./resources/library-recommend-hybrid");
 const getMedia = require("./resources/library-query");
 const getComments = require("./resources/library-comments");
 
@@ -30,6 +31,7 @@ app.post("/add-media", addMedia);
 app.post("/modify-media", modifyMedia);
 app.post("/delete-media", deleteMedia);
 app.post("/recommend", recommend);
+app.post("/recommend-hybrid", recommendhybrid);
 app.post("/get-media", getMedia);
 app.post("/get-comments", getComments);
 
