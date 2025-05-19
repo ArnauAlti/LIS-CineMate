@@ -439,7 +439,7 @@ Future<Map<String, dynamic>> getRecomendationFilms(String userMail, List<String>
   late Uri uri;
 
   if(type) {
-    uri = Uri.parse("$baseUrl/library/recommend");
+    uri = Uri.parse("$baseUrl/library/recommend-basic");
   } else {
     uri = Uri.parse("$baseUrl/library/recommend-hybrid");
   }

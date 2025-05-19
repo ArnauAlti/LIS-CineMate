@@ -121,7 +121,7 @@ class _RecomanacionsScreenState extends State<RecomanacionsScreen> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    child: const Text("Users I follow"),
+                    child: const Text("Other users"),
                   ),
                   const SizedBox(height: 50),
                   const Text(

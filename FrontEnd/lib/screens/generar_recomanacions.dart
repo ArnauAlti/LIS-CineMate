@@ -65,7 +65,8 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 15),
-                    Text("Taking into account your likes on ${topGenres[0]} and ${topGenres[1]}",
+                    Text(widget.type ? "Taking into account your likes on ${topGenres[0]} and ${topGenres[1]}" : "Based "
+                        "on the users you follow",
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
