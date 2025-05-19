@@ -1,7 +1,7 @@
 const userDB = require("./db-data.js");
 const axios = require('axios');
 
-async function recommend_basic(req, res) {
+async function recommend_hybrid(req, res) {
     try {
         // Check if the request body is empty
         if (!req.body)  return res.status(400).json({ error: "Missing request body", message: "Request body must contain user_id" });
@@ -22,7 +22,7 @@ async function recommend_basic(req, res) {
             return res.status(200).json({ ok: true, recommendations: [], message: "No rated media found for this user" });
         }
         
-        let url = "http://host.docker.internal:12000/recommend/star-rating";
+        let url = "http://host.docker.internal:12000/recommend/hybrid-recommendation";
         let message = "Recommendations generated successfully"; // Cambiado de const a let
         const base_payload = {
             ratings: query.rows.map(item => [item.media_id, item.rating]),
@@ -82,4 +82,4 @@ async function recommend_basic(req, res) {
     }
 }
 
-module.exports = recommend_basic;
+module.exports = recommend_hybrid;

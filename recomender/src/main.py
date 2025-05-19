@@ -16,13 +16,12 @@ if __name__ == "__main__":
     # print("\n=== STAR RATING RECOMMENDER ===")
     # star_rec = StarRatingRecommender(data_path=data_path)
 
-    user_ratings = {
-        'ratings': [
+    user_ratings = [
             ('media-1', 5),
             ('media-3', 1),
             ('media-9', 4)
         ]
-    }
+    
     
     print("\nTop 3 Recommended Movies (based on star ratings):")
     # print(star_rec.get_personalized_recommendations(user_ratings, top_n=3))
