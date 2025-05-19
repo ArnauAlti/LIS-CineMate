@@ -73,6 +73,8 @@ class HybridRecommender(MovieRecommenderBase):
             
         filtered_indices = []
         for idx in movie_indices:
+            if idx < 0 or idx >= len(self.movies):
+                continue
             movie_genres = set(self.movies.iloc[idx]['genres'].split('|'))
             if any(genre in movie_genres for genre in genre_filter):
                 filtered_indices.append(idx)
@@ -101,8 +103,9 @@ class HybridRecommender(MovieRecommenderBase):
             scores[idx] = -np.inf
 
         # --- 3. Filtrar por géneros
-        all_indices = np.argsort(scores)[::-1]  # de mayor a menor
-        filtered = self._filter_by_genres(all_indices.tolist(), genre_filter)
+        if genre_filter and len(genre_filter) > 0:
+            all_indices = np.argsort(scores)[::-1]  # de mayor a menor
+            filtered = self._filter_by_genres(all_indices.tolist(), genre_filter)
 
         # --- 4. Tomar top-n
         top_idxs = filtered[:top_n]
@@ -124,24 +127,4 @@ class HybridRecommender(MovieRecommenderBase):
             "recommendations": recs,
             "top_genres": []
         }
-
-    
-    # def get_personalized_recommendations(self, user_ratings=None, genre_filter=None, top_n=5):
-    #     """Generate recommendations, optionally filtered by genres.
-        
-    #     Args:
-    #         user_ratings (list): List of tuples [(movie_id, rating_1_to_5), ...].
-    #         genre_filter (list): Only include movies with these genres.
-    #         top_n (int): Number of recommendations to return.
-        
-    #     Returns:
-    #         pd.DataFrame: Recommended movies with columns ['id', 'genres'].
-    #     """
-    #     self.train_model()
-    #     self.cluster_movies()
-    #     print(self.movie_clusters)
-        
-    #     #TODO: Falta el filtro de generes i formatewjar la sortida per enviar al back
-        
-    #     return self.movie_clusters
         

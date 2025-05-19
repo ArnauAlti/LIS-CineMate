@@ -98,7 +98,7 @@ def recommend_star_rating(request: RecommendationRequest):
                 status_code=400,
                 detail="At least one star rating is required"
             )
-        
+
         recommender = StarRatingRecommender(DATA_PATH)
         result = recommender.get_personalized_recommendations(
             user_ratings=request.ratings,
@@ -139,6 +139,7 @@ def recommend_star_rating_genre(request: RecommendationRequest):
         HTTPException: 400 for missing params, 500 for processing errors.
     """
     try:
+        import ipdb; ipdb.set_trace()
         if not request.ratings:
             raise HTTPException(400, "At least one star rating is required")
 
