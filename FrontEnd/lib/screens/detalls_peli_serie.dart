@@ -54,8 +54,6 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
             return const Center(child: Text('No details found.'));
           }
 
-          print(film[0]);
-
           final String title = film[0]['name'] ?? 'Unknown title';
           final String urlFoto = film[0]['png'] ?? '';
           final String duration = film[0]['duration']?.toString() ?? 'Unknown';
@@ -64,7 +62,7 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
               ? (film[0]['cast'] as List).join(', ')
               : (film[0]['cast'] ?? 'Unknown');
           final String description = film[0]['description'] ?? 'Without description.';
-          final double rating = (film[0]['moviedb_rating'] ?? 0).toDouble()/2;
+          final double rating = (film[0]['vote_rating'] ?? 0).toDouble();
 
           final String mediaId = film[0]['media_id'] ?? 'Not known';
           final String infoId = film[0]['info_id'] ?? 'Not known';

@@ -1,7 +1,6 @@
 import 'package:cine_mate/screens/perfil_usuari.dart';
 import 'package:cine_mate/screens/recomanacions.dart';
 import 'package:cine_mate/screens/usuaris_seguits.dart';
-import 'package:cine_mate/screens/xats_actius.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
@@ -71,7 +70,7 @@ class AppDrawer extends StatelessWidget {
         ListTile(
           title: const Text("Chats with characters"),
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const XatsActiusScreen()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const CercaPersonatgesScreen()));
           },
         ),
         ListTile(

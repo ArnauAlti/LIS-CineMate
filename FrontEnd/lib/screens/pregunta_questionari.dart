@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import '../requests.dart';
 
 class PreguntaQuestionari extends StatefulWidget {
-  const PreguntaQuestionari({super.key, required this.title});
   final String title;
+  final String mediaId;
+
+  const PreguntaQuestionari({super.key, required this.title, required this.mediaId,});
 
   @override
   State<PreguntaQuestionari> createState() => _PreguntaQuestionari();
@@ -18,7 +20,7 @@ class _PreguntaQuestionari extends State<PreguntaQuestionari> {
   @override
   void initState() {
     super.initState();
-    _questionsFuture = getQuestions(widget.title);
+    _questionsFuture = getQuestions(widget.mediaId, false);
   }
 
   @override
@@ -106,7 +108,7 @@ class _PreguntaQuestionari extends State<PreguntaQuestionari> {
                   children: [
                     Text('You selected $correct correct from ${questions.length} questions.'),
                     const SizedBox(height: 10),
-                    Text('Answers:'),
+                    const Text('Answers:'),
                     const SizedBox(height: 10),
                     for (var result in results) Text(result),
                   ],
@@ -153,7 +155,7 @@ class _PreguntaQuestionari extends State<PreguntaQuestionari> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Question ${num + 1}/10', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+            Text('Question ${num + 1}', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
             const SizedBox(height: 10),
             Text(text, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
             const SizedBox(height: 20),

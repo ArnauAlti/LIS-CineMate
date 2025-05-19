@@ -6,8 +6,15 @@ async function getQuestions(req, res) {
         if (!infoID) {
             throw "No Info ID Provided";
         }
+        const admin = req.body['admin'];
+        let filter;
+        if (admin) {
+            filter = "";
+        } else {
+            filter = " AND checked = true";
+        }
         const query = await userDB.query(
-            'SELECT * FROM questions WHERE info_id = $1',
+            'SELECT * FROM questions WHERE info_id = $1' + filter,
             [infoID]
         );
         if (query.rowCount == 0) {

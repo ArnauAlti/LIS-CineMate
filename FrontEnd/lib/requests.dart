@@ -2,7 +2,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 const String baseUrl = "http://localhost:3000";
 
-//TODO: Si és admin, ficar el token de admin
 //Funció per a enviar les dades a backend per a validar-les i procedir amb el registre o mostrar errors
 Future<bool> validateRegister(String name, String mail, String nick, String birth, String pass) async {
 
@@ -40,7 +39,6 @@ Future<bool> validateRegister(String name, String mail, String nick, String birt
   }
 }
 
-//TODO: Si és admin, ficar el token de admin
 //Funció per a enviar les dades a backend per a validar-les i procedir amb l'inici de sessió o mostrar errors
 Future<Map<String, dynamic>?> validateLogin(String mail, String pass) async {
   final Uri uri = Uri.parse("$baseUrl/user/login");
@@ -116,6 +114,35 @@ Future<bool> modifyUserInfo(String name, String mail, String nick, String birth,
 //Funció per agafar les últimes obres afegides a la cartellera de l'apliació (les primeres 12 que surtin)
 Future<List> getFilmDetails(String mediaId) async {
   final Uri uri = Uri.parse("$baseUrl/media/get-media/details?id=$mediaId");
+
+  try {
+    final response = await http.get(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print("✅ Request exitosa.");
+      final decodedBody = convert.jsonDecode(response.body);
+      return List.from(decodedBody['data']);
+
+    } else {
+      print("❌ Error en la request. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return [];
+    }
+  } catch (e) {
+    print("🚫 Excepción al realizar la request: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
+}
+
+//Funció per agafar els gèneres dinàmicament
+Future<List<Map<String, dynamic>>> getGenres() async {
+  final Uri uri = Uri.parse("$baseUrl/media/get-genres");
 
   try {
     final response = await http.get(
@@ -407,8 +434,15 @@ Future<List<Map<String, dynamic>>> getRatingsByFilm(String userMail, String medi
 
 //Funció que permet agafar les pel·lícules o sèries recomanades de manera intel·ligent segons els
 // gustos de l'usuari actual
-Future<List<Map<String, dynamic>>> getRecomendationFilms(String userMail, List<String>? selectedGenres) async {
-  final Uri uri = Uri.parse("$baseUrl/library/recommend");
+Future<Map<String, dynamic>> getRecomendationFilms(String userMail, List<String>? selectedGenres, bool type) async {
+
+  late Uri uri;
+
+  if(type) {
+    uri = Uri.parse("$baseUrl/library/recommend");
+  } else {
+    uri = Uri.parse("$baseUrl/library/recommend-hybrid");
+  }
 
   final Map<String, dynamic> body = {
     'user_mail': userMail,
@@ -428,13 +462,15 @@ Future<List<Map<String, dynamic>>> getRecomendationFilms(String userMail, List<S
     if (response.statusCode == 200) {
       print("✅ Request exitosa.");
       final decodedBody = convert.jsonDecode(response.body);
-      print(decodedBody);
-      return List<Map<String, dynamic>>.from(decodedBody['recommendations']);
+      return {
+        'recommendations': List<Map<String, dynamic>>.from(decodedBody['recommendations']),
+        'top_genres': List<String>.from(decodedBody['top_genres']),
+      };
 
     } else {
       print("❌ Error en la request. Código: ${response.statusCode}");
       print("Respuesta: ${response.body}");
-      return [];
+      return {};
     }
   } catch (e) {
     print("🚫 Excepción al realizar la request: $e");
@@ -475,88 +511,102 @@ Future<bool> deleteFilm(String title, String media_id) async {
   }
 }
 
-//Funció que permet agafar els questionaris disponibles de la pel·lícula o sèrie cercada de la BD
-Future<List<Map<String, dynamic>>> getQuestsByFilm(String search) async {
-  //TODO: Modificar per agafar questionaris i sèries de la biblioteca de l'usuari de la BD
-  return [
-    {
-      'imagePath': 'https://1.bp.blogspot.com/-a0Ehz4tIUkA/Xla-XGLxrLI/AAAAAAAAfsM/5jCeN2T3UOMgiFSLb_U6nw0d5gXfceIbgCLcBGAsYHQ/s1600/stranger-things-saison-1.jpg',
-      'title': 'Stranger Things: Season 1',
-    },
-    {
-      'imagePath': 'https://es.web.img3.acsta.net/pictures/17/10/23/14/24/5968627.jpg',
-      'title': 'Stranger Things: Season 2',
-    },
-    {
-      'imagePath': 'https://es.web.img3.acsta.net/pictures/17/10/23/14/24/5968627.jpg',
-      'title': 'Stranger Things: Season 3',
-    },
-  ];
-}
-
 //Funció que permet agafar 10 preguntes corresponents al questionari seleccionat anteriorment
 // Simulació de dades que es poden obtenir des del backend
-Future<List<Map<String, dynamic>>> getQuestions(String title) async {
-  // TODO: Implementar crida real a la base de dades
-  return [
-    {
-      'question': '¿Cuál es el personaje que desaparece en la primera temporada?',
-      'possibleAnswers': ['VECNA', 'ELEVEN', 'DUSTIN', 'WILL'],
-      'correctAnswer': 'WILL',
-    },
-    {
-      'question': '¿Cómo se llama el monstruo con cara de flor?',
-      'possibleAnswers': ['DEMOGORGON', 'VENOM', 'PERRY', 'VECNA'],
-      'correctAnswer': 'DEMOGORGON',
-    },
-    {
-      'question': '¿Qué personaje tiene poderes telequinéticos?',
-      'possibleAnswers': ['WILL', 'HOPPER', 'ELEVEN', 'LUCAS'],
-      'correctAnswer': 'ELEVEN',
-    },
-    {
-      'question': '¿Cómo se llama la ciudad donde ocurre Stranger Things?',
-      'possibleAnswers': ['HAWKINS', 'SPRINGFIELD', 'RIVERDALE', 'GOTHAM'],
-      'correctAnswer': 'HAWKINS',
-    },
-    {
-      'question': '¿Qué criatura vive en el “Upside Down”?',
-      'possibleAnswers': ['DEMOGORGON', 'DRAGON', 'SLIMER', 'VECNA'],
-      'correctAnswer': 'DEMOGORGON',
-    },
-    {
-      'question': '¿Qué personaje trabaja en la policía?',
-      'possibleAnswers': ['MIKE', 'STEVE', 'HOPPER', 'DUSTIN'],
-      'correctAnswer': 'HOPPER',
-    },
-    {
-      'question': '¿Cómo se llama el hermano de Will?',
-      'possibleAnswers': ['MIKE', 'JONATHAN', 'DUSTIN', 'STEVE'],
-      'correctAnswer': 'JONATHAN',
-    },
-    {
-      'question': '¿Qué personaje se afeita la cabeza?',
-      'possibleAnswers': ['ELEVEN', 'WILL', 'MAX', 'JOYCE'],
-      'correctAnswer': 'ELEVEN',
-    },
-    {
-      'question': '¿Quién es el líder del grupo de niños?',
-      'possibleAnswers': ['MIKE', 'WILL', 'LUCAS', 'DUSTIN'],
-      'correctAnswer': 'MIKE',
-    },
-    {
-      'question': '¿Qué actriz interpreta a Joyce?',
-      'possibleAnswers': ['WINONA RYDER', 'MILLIE BOBBY BROWN', 'NATALIA DYER', 'MAYA HAWKE'],
-      'correctAnswer': 'WINONA RYDER',
-    },
-  ];
+Future<List<Map<String, dynamic>>> getQuestions(String infoId, bool admin) async {
+  final Uri uri = Uri.parse("$baseUrl/questions/get");
+
+  final Map<String, dynamic> body = {
+    'info_id': infoId,
+    'admin': admin,
+  };
+
+  try {
+    final response = await http.post(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
+      body: convert.jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> jsonResponse = convert.jsonDecode(response.body);
+      final data = jsonResponse['data'];
+      print("✅ Preguntas conseguidas de la BD: $data");
+
+      // Formatejar la request per mostrar correctament el questionari
+      List<Map<String, dynamic>> formattedQuestions = [];
+      var item;
+
+      for (item in data) {
+        final questionText = item['question'];
+        final answers = item['answers'];
+        final correctIndex = item['valid'];
+        final correctAnswer = answers[correctIndex];
+
+        formattedQuestions.add({
+          'id': item['id'],
+          'info_id': item['info_id'],
+          'question': questionText,
+          'possibleAnswers': answers,
+          'correctAnswer': correctAnswer,
+        });
+      }
+      return formattedQuestions;
+
+    } else {
+      print("❌ Error al coger las preguntas. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return [];
+    }
+  } catch (e) {
+    print("🚫 Excepción al registrar: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }
 }
 
+//Funció que permet editar un qüestionari associat a una pel·lícula o sèrie de la base de dades
+Future<bool> editQuestionnaire(String mediaId, String mail, String nick, String password, List<Map<String, dynamic>> updatedQuestions) async {
+  var question;
+  for(question in updatedQuestions){
+    final Uri uri = Uri.parse("$baseUrl/questions/modify");
 
+    final Map<String, dynamic> body = {
+      'mail': mail,
+      'nick': nick,
+      'pass': password,
+      'question_id': question['id'],
+      'info_id': mediaId,
+      'question': question['question'],
+      'answers': question['possibleAnswers'],
+      'valid': true,
+      'checked': question['checked'],
+    };
 
-//TODO: Funció per afegir un personatge com a xat
-//Funció que permet afegir un personatge escollit per establir un xat amb ell/a
-Future<bool> addCharacterToChat(String name) async {
+    try {
+      final response = await http.post(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+        },
+        body: convert.jsonEncode(body),
+      );
+
+      if (response.statusCode == 200) {
+        print("✅ Modificación de la preguntas exitosa.");
+      } else {
+        print("❌ Error en la modificación de las preguntas exitosa. Código: ${response.statusCode}");
+        print("Respuesta: ${response.body}");
+        return false;
+      }
+    } catch (e) {
+      print("🚫 Excepción al modificar de las preguntas exitosa: $e");
+      throw Exception("No se pudo conectar al servidor.");
+    }
+  }
   return true;
 }
 
@@ -581,9 +631,7 @@ Future<List<Map<String, dynamic>>> getCharactersBySearch(String search) async {
     if (response.statusCode == 200) {
       print("✅ Request exitosa mostrar personatges.");
       final decodedBody = convert.jsonDecode(response.body);
-      print(decodedBody);
       final data = decodedBody['characters'];
-      print(data);
 
       if (data is List) {
         return List<Map<String, dynamic>>.from(data);
@@ -600,7 +648,6 @@ Future<List<Map<String, dynamic>>> getCharactersBySearch(String search) async {
     print("🚫 Excepción al realizar la request de mostrar personatges: $e");
     throw Exception("No se pudo conectar al servidor.");
   }
-
 }
 
 //Funció que permet afegir un personatge a la base de dades de personatges disponibles per establir un xat amb ell/a
@@ -705,74 +752,40 @@ Future<bool> deleteCharacter(String name, String mediaId) async {
   }
 }
 
-//TODO: Funció per afegir un qüestionari
-//Funció que permet afegir un qüestionari a la base de dades de personatges disponibles per poder realitzar-lo
-Future<bool> addQuestionnaire(String title, String imagePath) async {
-  return true;
-}
-
-//TODO: Funció per eliminar un qüestionari, canviar dades que es passen a la funció (crear un Map)
-//Funció que permet eliminar un qüestionari associat a una pel·lícula o sèrie de la base de dades
-Future<bool> deleteQuestionnaire(String title) async {
-  return true;
-}
-
-//TODO: Funció per eliminar un qüestionari
 //Funció que permet editar un qüestionari associat a una pel·lícula o sèrie de la base de dades
-Future<bool> editQuestionnaire(String title) async {
-  return true;
-}
+Future<String> sendMessage(String character, String message, String movieName) async {
+  final Uri uri = Uri.parse("$baseUrl/character/chat-character");
 
-//Funció per aconseguir els personatges de la pel·lícula o sèrie cercada
-Future<List<Map<String, dynamic>>> getChatsByUserMail(String userMail) async {
-  // TODO: Implementar crida real a la base de dades
-  return [
-    {
-      'name': "Sherlock Holmes",
-      'lastMessage': "Lo descubrí porque...",
-      'imagePath': "https://th.bing.com/th/id/OIP.9fKQD-5qa_01wxCsOzHGsgAAAA?w=288&h=288&rs=1&pid=ImgDetMain",
-    },
-    {
-      'name': "Eleven",
-      'lastMessage': "Estaba muy asustada.",
-      'imagePath': "https://images.hdqwalls.com/download/stranger-things-eleven-art-nw-1280x2120.jpg",
-    },
-  ];
-}
+  final Map<String, dynamic> body = {
+    'character': character,
+    'message': message,
+    'movie_name': movieName,
+  };
 
-//TODO: Funció per eliminar un xat actiu
-//Funció que permet eliminar un xat associat a un usuari amb un personatge
-Future<bool> deleteChat(String name) async {
-  return true;
-}
+  try {
+    final response = await http.post(
+      uri,
+      body: convert.jsonEncode(body),
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': 'v5v8rk2iWfqHqFv9Kd2eOnAPlGKa5t7mALOBgaKDwmAcSs1h8Zgj0fVHEuzR5vZPfHON0y0RU3RIvJInXJuEk4GLG0zcEl3L'
+      },
+    );
+    if (response.statusCode == 200) {
+      print("✅ Mensaje recibido correctamente.");
+      final decodedBody = convert.jsonDecode(response.body);
+      final data = decodedBody['data'];
+      return data;
 
-//Funció per aconseguir els missatges associats al xat amb el personatge
-Future<List<Map<String, dynamic>>> getMessagesByChat(String userMail) async {
-  // TODO: Implementar crida real a la base de dades
-  return [
-    {
-      "author": "self",
-      "message": "Com vas descobrir l’últim assassí?"},
-    {
-      "autor": "character",
-      "message": "El vaig descobrir perquè portava un llibre estrany."
-    },
-    {
-      "autor": "character",
-      "message": "Li vaig treure, i era sobre verins."},
-    {
-      "autor": "character",
-      "message": "Hi havia sang a la part del verí que va matar a la víctima."
-    },
-  ];
-}
-
-//TODO: Funció per enviar missatges a la BD
-//Funció que permet editar un qüestionari associat a una pel·lícula o sèrie de la base de dades
-Future<bool> sendMessage(String title) async {
-  return true;
-}
-
+    } else {
+      print("❌ Error al recibir mensaje. Código: ${response.statusCode}");
+      print("Respuesta: ${response.body}");
+      return "";
+    }
+  } catch (e) {
+    print("🚫 Excepción al realizar el envio de mensaje: $e");
+    throw Exception("No se pudo conectar al servidor.");
+  }}
 
 //Funció per aconseguir els usuaris que segueix l'usuari que fa la request
 Future<List<Map<String, dynamic>>> getUsersByUserMail(String userMail) async {
@@ -803,7 +816,6 @@ Future<List<Map<String, dynamic>>> getUsersByUserMail(String userMail) async {
   }
 }
 
-//TODO: Comprovar funcionament
 //Funció que permet seguir a un usuari dins l'aplicació
 Future<bool> followUser({required String? srcMail, required String dstMail}) async {
   final Uri uri = Uri.parse("$baseUrl/user/follow"); //Modificar Uri
@@ -838,7 +850,6 @@ Future<bool> followUser({required String? srcMail, required String dstMail}) asy
   }
 }
 
-//TODO: Comprovar funcionament
 //Funció que permet deixar de seguir a un usuari dins l'aplicació
 Future<bool> unfollowUser({required String? srcMail, required String dstMail}) async {
   final Uri uri = Uri.parse("$baseUrl/user/unfollow");

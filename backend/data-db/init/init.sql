@@ -208,21 +208,21 @@ SELECT
     m.png, 
     m.type, 
     m.moviedb_rating as rating, 
-    string_agg(g.name, ',' ORDER BY g.name) as genres, 
-    string_agg(g.moviedb::TEXT, ',' ORDER BY g.id) as genre_ids,
-    i.release, 
-    i.director, 
-    i.cast,
-    i.duration
+    string_agg(DISTINCT g.name, ',' ORDER BY g.name) as genres, 
+    string_agg(DISTINCT g.moviedb::TEXT, ',') as genre_ids,
+    MIN(i.release) as release,
+    STRING_AGG(DISTINCT i.director, ', ') as director,
+    STRING_AGG(DISTINCT i.cast, ', ') as cast,
+    SUM(i.duration) as duration
 FROM 
     media m
     LEFT JOIN LATERAL json_array_elements_text(m.genres) AS genre_id ON TRUE
-    LEFT JOIN info i ON i.id = m.id OR i.id = m.id || '-1'
     LEFT JOIN genres g ON g.moviedb = genre_id::INTEGER
+    LEFT JOIN info i ON i.media_id = m.id
 WHERE 
     m.active = true
 GROUP BY
-    m.sec, m.id, m.name, m.png, m.type, m.moviedb_rating, i.release, i.director, i.cast, i.duration
+    m.sec, m.id, m.name, m.png, m.type, m.moviedb_rating
 ;
 
 CREATE VIEW "view_media_admin" AS
@@ -249,3 +249,34 @@ GROUP BY l.sec, m.png, m.name, m.type;
 
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 CREATE INDEX idx_titles_title_trgm ON media USING gin (name gin_trgm_ops);
+
+CREATE OR REPLACE FUNCTION update_rating_on_update() RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.rating IS DISTINCT FROM OLD.rating THEN
+
+        UPDATE info
+        SET 
+            vote_rating = (
+                SELECT ROUND(AVG(rating)::numeric, 2)
+                FROM library
+                WHERE info_id = NEW.info_id AND rating IS NOT NULL
+            ),
+            vote_count = (
+                SELECT COUNT(*)
+                FROM library
+                WHERE info_id = NEW.info_id AND rating IS NOT NULL
+            )
+        WHERE id = NEW.info_id;
+
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_update_rating_update ON library;
+
+CREATE TRIGGER trg_update_rating_update
+AFTER UPDATE OF rating ON library
+FOR EACH ROW
+EXECUTE FUNCTION update_rating_on_update();

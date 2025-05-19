@@ -6,7 +6,15 @@ async function getCharacters(req, res) {
         console.log("movie_name received:", movieName);
 
         if (!movieName) {
-            throw "No movie name specified";
+            const characterQuery = await userDB.query(
+                'SELECT c.name, c.context, c.png, m.name AS movie_name FROM characters c, media m WHERE m.id = c.media_id',
+            );
+
+            console.log("Character query result:", characterQuery.rows);
+
+            res.status(200).json({ characters: characterQuery.rows });
+            
+            return characterQuery.rows;
         }
 
         const mediaQuery = await userDB.query(
@@ -23,7 +31,7 @@ async function getCharacters(req, res) {
         console.log("Media ID:", mediaId);
 
         const characterQuery = await userDB.query(
-            'SELECT name, context, png FROM characters WHERE media_id = $1',
+            'SELECT c.name, c.context, c.png, m.name AS movie_name FROM characters c, media m WHERE media_id = $1 AND m.id = c.media_id',
             [mediaId]
         );
         console.log("Character query result:", characterQuery.rows);

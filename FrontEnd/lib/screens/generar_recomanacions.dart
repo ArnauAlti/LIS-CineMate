@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cine_mate/screens/detalls_peli_serie.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,22 +6,23 @@ import '../user_role_provider.dart';
 
 class RecomanacionsGeneradesScreen extends StatefulWidget {
   final List<String>? selectedGenres;
+  final bool type;
 
-  const RecomanacionsGeneradesScreen({super.key, this.selectedGenres});
+  const RecomanacionsGeneradesScreen({super.key, this.selectedGenres, required this.type});
 
   @override
   State<RecomanacionsGeneradesScreen> createState() => _RecomanacionsGenerades();
 }
 
 class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
-  late Future<List<Map<String, dynamic>>> _filmsFuture;
+  late Future<Map<String, dynamic>> _filmsFuture;
 
   @override
   void initState() {
     print(widget.selectedGenres);
     final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
     super.initState();
-    _filmsFuture = getRecomendationFilms(userEmail!, widget.selectedGenres);
+    _filmsFuture = getRecomendationFilms(userEmail!, widget.selectedGenres, widget.type);
   }
 
   @override
@@ -43,7 +42,7 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
           },
         ),
       ),
-        body: FutureBuilder<List<Map<String, dynamic>>>(
+        body: FutureBuilder<Map<String, dynamic>>(
           future: _filmsFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -54,9 +53,10 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
               return Center(child: Text('Error: ${snapshot.error}'));
             }
 
-            final films = snapshot.data ?? [];
+            final data = snapshot.data as Map<String, dynamic>;
+            final films = data['recommendations'] as List<Map<String, dynamic>>;
+            final topGenres = data['top_genres'] as List<String>;
 
-            print(films);
 
             return SingleChildScrollView(
               padding: const EdgeInsets.all(20),
@@ -65,9 +65,8 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 15),
-                    //TODO: Modificar para mostrar mensaje personalizado
-                    const Text("Pensamos que estas películas y/o series te pueden gustar",
-                      style: TextStyle(
+                    Text("Taking into account your likes on ${topGenres[0]} and ${topGenres[1]}",
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,

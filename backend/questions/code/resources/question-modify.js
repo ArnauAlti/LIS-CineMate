@@ -34,14 +34,15 @@ async function modifyQuestion(req, res) {
         const infoID = req.body['info_id'];
         const question = req.body['question'];
         const answers = req.body['answers'];
-        const valid = req.body['valid'];
+        const answersJson = JSON.stringify(answers);
+        const valid = req.body['valid'] ? 1 : 0;
         if (!infoID || !question || !answers || !valid) {
             throw "Missing Needed Information";
         }
-        const sql = 'UPDATE questions SET question = $1, answers = $2, valid = $3 WHERE id = $4 AND info_id = $5';
+        const sql = 'UPDATE questions SET question = $1, answers = $2, valid = $3, checked = true WHERE id = $4 AND info_id = $5';
         const query = await userDB.query(
             sql,
-            [question, answers, valid, id, infoID]
+            [question, answersJson, valid, id, infoID]
         );
         if (query.rowCount == 1) {
             res.status(200).json({message: "Element Modified"});

@@ -39,6 +39,15 @@ services:
     networks:
       test:
         ipv4_address: 10.5.0.7
+
+  ms-questions:
+    build: ./questions
+    depends_on:
+      - ssh-tunnel
+    networks:
+      test:
+        ipv4_address: 10.5.0.8
+
   ssh-tunnel:
     image: alpine
     container_name: ssh-tunnel

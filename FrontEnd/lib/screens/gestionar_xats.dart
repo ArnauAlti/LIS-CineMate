@@ -106,7 +106,10 @@ class _GestioXats extends State<GestioXats> {
           const SizedBox(width: 8),
           ElevatedButton(
             onPressed: () async {
-              final validation = await deleteChat(name);
+              final userRoleProvider = Provider.of<UserRoleProvider>(context);
+              final userMail = userRoleProvider.userEmail;
+
+              final validation = await deleteChat(name, userMail!);
 
               if(validation) {
                 ScaffoldMessenger.of(context).showSnackBar(
