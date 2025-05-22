@@ -50,7 +50,7 @@ Return only one JSON object like this (do NOT add any other text):
 Context:
 """${summary}"""
 `;
-        const response = await axios.post("https://vc0ksja03tthzq-8000.proxy.runpod.net/generate/",
+        const response = await axios.post("https://fpnpvgnlv7rrtw-8000.proxy.runpod.net/generate/",
             {
                 prompt,
                 max_new_tokens: 500,

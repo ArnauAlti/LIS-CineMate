@@ -53,7 +53,7 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
           if (film == null) {
             return const Center(child: Text('No details found.'));
           }
-
+          print(film[0]);
           final String title = film[0]['name'] ?? 'Unknown title';
           final String urlFoto = film[0]['png'] ?? '';
           final String duration = film[0]['duration']?.toString() ?? 'Unknown';

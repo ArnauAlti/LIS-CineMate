@@ -57,6 +57,8 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
             final films = data['recommendations'] as List<Map<String, dynamic>>;
             final topGenres = data['top_genres'] as List<String>;
 
+            print(data);
+
 
             return SingleChildScrollView(
               padding: const EdgeInsets.all(20),

@@ -145,18 +145,17 @@ CREATE TABLE "questions" (
     "question" TEXT NOT NULL,
     "answers" JSONB NOT NULL,
     "valid" INT NOT NULL,
+    "checked" BOOLEAN NOT NULL,
     FOREIGN KEY(info_id)
         REFERENCES info(id)
         ON DELETE CASCADE
 );
 
-DROP TABLE "library";
-
 CREATE TABLE "library" (
     "sec" SERIAL PRIMARY KEY,
     "user_mail" VARCHAR(100) NOT NULL,
     "media_id" VARCHAR(100) NOT NULL,
-    "info_id" VARCHAR(100) UNIQUE NOT NULL ,
+    "info_id" VARCHAR(100) NOT NULL ,
     "status" VARCHAR(50),
     "rating" FLOAT,
     "comment" VARCHAR(100),
@@ -191,7 +190,17 @@ CREATE TABLE "comments" (
         ON DELETE CASCADE
 );
 
-DROP VIEW "recommender_query_media_genres";
+CREATE TABLE following(
+    src_mail VARCHAR(100) NOT NULL,
+    dst_mail VARCHAR(100) NOT NULL,
+    FOREIGN KEY (src_mail)
+        REFERENCES users(mail)
+        ON DELETE CASCADE,
+    FOREIGN KEY (dst_mail)
+        REFERENCES users(mail)
+        ON DELETE CASCADE
+);
+
 CREATE VIEW "recommender_query_media_genres" AS 
 SELECT m.id,  string_agg(g.name, '|' ORDER BY g.name) AS genres
 FROM media m, 
@@ -199,6 +208,10 @@ json_array_elements_text(m.genres) AS genre_id
 JOIN genres g ON g.moviedb = genre_id::INTEGER
 GROUP BY m.id;
 
+CREATE VIEW "following_query" AS
+SELECT f.src_mail, f.dst_mail, u.name
+FROM following f
+JOIN users u ON u.mail = f.dst_mail;
 
 CREATE VIEW "view_media" AS
 SELECT 
@@ -230,10 +243,11 @@ SELECT m.sec, m.id, m.name, m.png, m.type, m.moviedb_rating, i.release
 FROM media m
 JOIN info i ON i.id = m.id OR i.id = m.id || '-1';
 
+
 CREATE VIEW "view_info" AS 
 SELECT m.id media_id, v.id info_id, m.type, v.season, 
 v.episodes, m.name, m.png, m.moviedb_rating, 
-m.moviedb_count, v.vote_rating, v.vote_count, m.description, 
+m.moviedb_count, v.vote_rating, v.duration, v.vote_count, m.description, 
 v.synopsis, v.plot, v.director, v.cast, v.release 
 FROM media m, info v 
 WHERE m.id = v.media_id AND m.active = true;
@@ -274,7 +288,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS trg_update_rating_update ON library;
+
 
 CREATE TRIGGER trg_update_rating_update
 AFTER UPDATE OF rating ON library

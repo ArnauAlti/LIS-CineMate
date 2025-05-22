@@ -64,7 +64,6 @@ class _CartelleraScreenState extends State<CartelleraScreen> {
           }
 
           final films = snapshot.data ?? [];
-
           return SingleChildScrollView(
             padding: const EdgeInsets.all(20),
             child: Center(
