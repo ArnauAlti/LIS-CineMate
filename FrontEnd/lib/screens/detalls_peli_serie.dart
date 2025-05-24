@@ -191,8 +191,12 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
                     label: const Text("See other comments and ratings", style: TextStyle(fontSize: 16)),
                   ),
                 ),
+<<<<<<< HEAD
                 const SizedBox(height:30),
 
+=======
+                const SizedBox(height: 30),
+>>>>>>> origin/admin
                 if (userRole == "Usuario Registrado")
                   Center(
                     child: ElevatedButton.icon(
