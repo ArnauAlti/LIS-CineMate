@@ -1,11 +1,14 @@
+import 'package:cine_mate/user_role_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../requests.dart';
 
 
-//TODO: Fer request per editar les coses del questionari
 class QuestionariAdminScreen extends StatefulWidget {
+  final String mediaId;
   final String title;
-  const QuestionariAdminScreen({super.key, required this.title});
+
+  const QuestionariAdminScreen({super.key, required this.mediaId, required this.title});
 
   @override
   State<QuestionariAdminScreen> createState() => _QuestionariAdminScreenState();
@@ -18,11 +21,13 @@ class _QuestionariAdminScreenState extends State<QuestionariAdminScreen> {
   @override
   void initState() {
     super.initState();
-    _questionsFuture = getQuestions(widget.title);
+    _questionsFuture = getQuestions(widget.mediaId, true);
     _questionsFuture.then((questions) {
       setState(() {
         editableQuestions = questions.map((q) {
           return {
+            'id': q['id'],
+            'info_id': q['info_id'],
             'controller': TextEditingController(text: q['question']),
             'answers': (q['possibleAnswers'] as List?)?.cast<String>().map((a) => TextEditingController(text: a)).toList() ?? [],
           };
@@ -33,12 +38,15 @@ class _QuestionariAdminScreenState extends State<QuestionariAdminScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userRoleProvider = Provider.of<UserRoleProvider>(context);
+    final user = userRoleProvider.getUser;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Stranger Things: 1a Temporada"),
+        title: Text(widget.title),
         centerTitle: true,
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
@@ -53,7 +61,7 @@ class _QuestionariAdminScreenState extends State<QuestionariAdminScreen> {
           }
 
           if (editableQuestions.isEmpty) {
-            return const Center(child: Text('No se han encontrado preguntas'));
+            return const Center(child: Text('No questions found.'));
           }
 
           return Padding(
@@ -69,19 +77,17 @@ class _QuestionariAdminScreenState extends State<QuestionariAdminScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
         child: ElevatedButton(
           onPressed: () async {
-            //TODO: Modificar que es passa a la request, canviar accions de després
-            await editQuestionnaire(widget.title);
             final updatedQuestions = editableQuestions.map((q) {
               return {
+                'id': q['id'],
+                'info_id': q['info_id'],
                 'question': q['controller'].text,
                 'possibleAnswers': (q['answers'] as List<TextEditingController>).map((c) => c.text).toList(),
               };
             }).toList();
 
-            // Aquí puedes hacer el request para actualizar las preguntas
-            // updateQuestions(widget.title, updatedQuestions);
-            print(updatedQuestions);
-          },
+            await editQuestionnaire(widget.mediaId, user?['mail'], user?['nick'], user?['pass'], updatedQuestions);
+            },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.black,
             foregroundColor: Colors.white,
@@ -90,7 +96,7 @@ class _QuestionariAdminScreenState extends State<QuestionariAdminScreen> {
             ),
             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
           ),
-          child: const Text("GUARDAR CAMBIOS"),
+          child: const Text("Save changes"),
         ),
       ),
     );
@@ -112,26 +118,17 @@ class _QuestionariAdminScreenState extends State<QuestionariAdminScreen> {
           children: [
             Row(
               children: [
-                Text('Pregunta ${index + 1}', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+                Text('Question ${index + 1}', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
                 const Spacer(),
-                IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.red),
-                  tooltip: "Eliminar pregunta",
-                  onPressed: () {
-                    setState(() {
-                      editableQuestions.removeAt(index);
-                    });
-                  },
-                ),
               ],
             ),
             const SizedBox(height: 10),
             TextField(
               controller: questionController,
-              decoration: const InputDecoration(labelText: "Enunciado de la pregunta"),
+              decoration: const InputDecoration(labelText: "The question is..."),
             ),
             const SizedBox(height: 10),
-            const Text("Respuestas:", style: TextStyle(fontSize: 14)),
+            const Text("Answers:", style: TextStyle(fontSize: 14)),
             const SizedBox(height: 10),
             ...answerControllers.asMap().entries.map((entry) {
               final i = entry.key;
@@ -141,29 +138,12 @@ class _QuestionariAdminScreenState extends State<QuestionariAdminScreen> {
                   Expanded(
                     child: TextField(
                       controller: controller,
-                      decoration: InputDecoration(labelText: "Respuesta ${i + 1}"),
+                      decoration: InputDecoration(labelText: "Answer ${i + 1}"),
                     ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () {
-                      setState(() {
-                        answerControllers.removeAt(i);
-                      });
-                    },
                   ),
                 ],
               );
             }),
-            TextButton.icon(
-              onPressed: () {
-                setState(() {
-                  answerControllers.add(TextEditingController());
-                });
-              },
-              icon: const Icon(Icons.add),
-              label: const Text("Añadir respuesta"),
-            ),
           ],
         ),
       ),

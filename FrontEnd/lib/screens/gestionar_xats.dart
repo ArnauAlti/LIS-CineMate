@@ -28,7 +28,7 @@ class _GestioXats extends State<GestioXats> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Eliminar chats"),
+        title: const Text("Delete chats"),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -106,11 +106,14 @@ class _GestioXats extends State<GestioXats> {
           const SizedBox(width: 8),
           ElevatedButton(
             onPressed: () async {
-              final validation = await deleteChat(name);
+              final userRoleProvider = Provider.of<UserRoleProvider>(context);
+              final userMail = userRoleProvider.userEmail;
+
+              final validation = await deleteChat(name, userMail!);
 
               if(validation) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Chat con $name eliminado.')),
+                  SnackBar(content: Text('Chat with $name deleted.')),
                 );
                 Navigator.push(
                   context,
@@ -129,7 +132,7 @@ class _GestioXats extends State<GestioXats> {
                 borderRadius: BorderRadius.circular(30),
               ),
             ),
-            child: const Text("ELIMINAR CHAT"),
+            child: const Text("Delete chat"),
           ),
         ],
       ),

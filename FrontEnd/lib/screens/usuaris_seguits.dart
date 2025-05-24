@@ -34,7 +34,7 @@ class _UsuarisSeguits extends State<UsuarisSeguits> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Usuarios seguidos", textAlign: TextAlign.center),
+        title: const Text("Followed users", textAlign: TextAlign.center),
         centerTitle: true,
       ),
       drawer: AppDrawer(
@@ -55,6 +55,7 @@ class _UsuarisSeguits extends State<UsuarisSeguits> {
           }
 
           final users = snapshot.data ?? [];
+          print(users);
 
           return SingleChildScrollView(
             padding: const EdgeInsets.all(20),
@@ -63,7 +64,7 @@ class _UsuarisSeguits extends State<UsuarisSeguits> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(height: 15),
-                  const Text("Usuarios a los qué sigues",
+                  const Text("Users you follow",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -112,19 +113,25 @@ class _UsuarisSeguits extends State<UsuarisSeguits> {
             padding:
             const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           ),
-          child: const Text("BUSCAR USUARIOS"),
+          child: const Text("Search users"),
         ),
       ),
     );
   }
 
   Widget _buildUserBox(BuildContext context, Map<String, dynamic> user) {
+    final String userMail = user['dst_mail']?? "";
+    final String nick = user['nick']?? "";
+    final String png = (user['png'] != null && user['png'].toString().trim().isNotEmpty)
+        ? user['png']
+        : "assets/perfil1.jpg";
+
     return InkWell(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => BibliotecaSeguitsScreen(userName: user['nick'], follows: true),
+            builder: (context) => BibliotecaSeguitsScreen(userMail: userMail, userNick: nick ,follows: true),
           ),
         );
       },
@@ -145,10 +152,10 @@ class _UsuarisSeguits extends State<UsuarisSeguits> {
                 CircleAvatar(
                   radius: 40,
                   backgroundColor: Colors.black87,
-                  backgroundImage: AssetImage(user['imagePath']),
+                  backgroundImage: AssetImage(png),
                 ),
                 const SizedBox(height: 8),
-                Text(user['nick']),
+                Text(nick),
               ],
             ),
           ),

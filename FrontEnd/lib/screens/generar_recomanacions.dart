@@ -6,21 +6,23 @@ import '../user_role_provider.dart';
 
 class RecomanacionsGeneradesScreen extends StatefulWidget {
   final List<String>? selectedGenres;
+  final bool type;
 
-  const RecomanacionsGeneradesScreen({super.key, this.selectedGenres});
+  const RecomanacionsGeneradesScreen({super.key, this.selectedGenres, required this.type});
 
   @override
   State<RecomanacionsGeneradesScreen> createState() => _RecomanacionsGenerades();
 }
 
 class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
-  late Future<List<Map<String, dynamic>>> _filmsFuture;
+  late Future<Map<String, dynamic>> _filmsFuture;
 
   @override
   void initState() {
+    print(widget.selectedGenres);
     final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
     super.initState();
-    _filmsFuture = getRecomendationFilms(userEmail!);
+    _filmsFuture = getRecomendationFilms(userEmail!, widget.selectedGenres, widget.type);
   }
 
   @override
@@ -31,7 +33,7 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Resultados"),
+        title: const Text("Results"),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -40,7 +42,7 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
           },
         ),
       ),
-        body: FutureBuilder<List<Map<String, dynamic>>>(
+        body: FutureBuilder<Map<String, dynamic>>(
           future: _filmsFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -51,7 +53,10 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
               return Center(child: Text('Error: ${snapshot.error}'));
             }
 
-            final films = snapshot.data ?? [];
+            final data = snapshot.data as Map<String, dynamic>;
+            final films = data['recommendations'] as List<Map<String, dynamic>>;
+            final topGenres = data['top_genres'] as List<String>;
+
 
             return SingleChildScrollView(
               padding: const EdgeInsets.all(20),
@@ -60,22 +65,22 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 15),
-                    const Text("Pensamos que estas películas y/o series te pueden gustar",
-                      style: TextStyle(
+                    Text(widget.type ? "Taking into account your likes on ${topGenres[0]} and ${topGenres[1]}" : "Based "
+                        "on the users you follow",
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    // Mostrar el género seleccionado en una línea
                     if (widget.selectedGenres != null && widget.selectedGenres!.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         child: Column(
                           children: [
                             const Text(
-                              "Géneros con mayor peso:",
+                              "Genres selected:",
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -136,9 +141,9 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
         height: 200,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 2),
-          image: film['imagePath'] != null
+          image: film['png'] != null
               ? DecorationImage(
-            image: NetworkImage(film['imagePath']),
+            image: NetworkImage(film['png']),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
               Colors.black.withOpacity(0.3),
@@ -152,7 +157,7 @@ class _RecomanacionsGenerades extends State<RecomanacionsGeneradesScreen> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              film['title'] ?? '',
+              film['name'] ?? '',
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),

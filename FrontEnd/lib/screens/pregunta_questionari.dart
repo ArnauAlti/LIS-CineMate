@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import '../requests.dart';
 
 class PreguntaQuestionari extends StatefulWidget {
-  const PreguntaQuestionari({super.key, required this.title});
   final String title;
+  final String mediaId;
+
+  const PreguntaQuestionari({super.key, required this.title, required this.mediaId,});
 
   @override
   State<PreguntaQuestionari> createState() => _PreguntaQuestionari();
@@ -18,7 +20,7 @@ class _PreguntaQuestionari extends State<PreguntaQuestionari> {
   @override
   void initState() {
     super.initState();
-    _questionsFuture = getQuestions(widget.title);
+    _questionsFuture = getQuestions(widget.mediaId, false);
   }
 
   @override
@@ -56,7 +58,7 @@ class _PreguntaQuestionari extends State<PreguntaQuestionari> {
           final questions = snapshot.data ?? [];
 
           if (questions.isEmpty) {
-            return const Center(child: Text('No se han encontrado preguntas'));
+            return const Center(child: Text('No questions found'));
           }
 
           if (selectedAnswers.length != questions.length) {
@@ -87,26 +89,26 @@ class _PreguntaQuestionari extends State<PreguntaQuestionari> {
               if (selectedAnswer != null) {
                 if (selectedAnswer == correctAnswer) {
                   correct++;
-                  results.add('Pregunta ${i + 1}: Correcta');
+                  results.add('Question ${i + 1}: Correct');
                 } else {
-                  results.add('Pregunta ${i + 1}: Incorrecta (Correcta: $correctAnswer)');
+                  results.add('Question ${i + 1}: Incorrect (Correct: $correctAnswer)');
                 }
               } else {
-                results.add('Pregunta ${i + 1}: No respondida');
+                results.add('Question ${i + 1}: Not answered');
               }
             }
 
             showDialog(
               context: context,
               builder: (context) => AlertDialog(
-                title: const Text('Resultados del cuestionario'),
+                title: const Text('Results from the questionnaire'),
                 content: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('Has acertado $correct de ${questions.length} preguntas.'),
+                    Text('You selected $correct correct from ${questions.length} questions.'),
                     const SizedBox(height: 10),
-                    Text('Respuestas:'),
+                    const Text('Answers:'),
                     const SizedBox(height: 10),
                     for (var result in results) Text(result),
                   ],
@@ -134,14 +136,14 @@ class _PreguntaQuestionari extends State<PreguntaQuestionari> {
             ),
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           ),
-          child: const Text("FINALIZAR CUESTIONARIO"),
+          child: const Text("End questionnaire"),
         ),
       ),
     );
   }
 
   Widget _buildQuestion(BuildContext context, Map<String, dynamic> question, int num) {
-    final String text = question['question']?.toString() ?? 'Pregunta no disponible';
+    final String text = question['question']?.toString() ?? 'Unknown question';
     final List<String> options = (question['possibleAnswers'] as List?)?.cast<String>() ?? [];
 
     return Card(
@@ -153,7 +155,7 @@ class _PreguntaQuestionari extends State<PreguntaQuestionari> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Pregunta ${num + 1}/10', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+            Text('Question ${num + 1}', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
             const SizedBox(height: 10),
             Text(text, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
             const SizedBox(height: 20),

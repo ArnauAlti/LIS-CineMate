@@ -26,7 +26,7 @@ class _RegistreScreenState extends State<RegistreScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Registro", textAlign: TextAlign.center),
+        title: const Text("Register", textAlign: TextAlign.center),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -42,11 +42,11 @@ class _RegistreScreenState extends State<RegistreScreen> {
               key: _formKey,
               child: Column(
                 children: [
-                  _buildTextFormField("Nombre", nameController, hintText: "Introduce tu nombre"),
-                  _buildTextFormField("Email", mailController, hintText: "Introduce tu mail"),
-                  _buildTextFormField("Nombre de usuario", nickController, hintText: "Introduce tu nombre de usuario"),
-                  _buildTextFormField("Fecha de nacimiento", birthController, hintText: "YYYY/MM/DD"),
-                  _buildTextFormField("Contraseña", passController, isPassword: true),
+                  _buildTextFormField("Name", nameController, hintText: "Introduce your name"),
+                  _buildTextFormField("Email", mailController, hintText: "Introduce your email"),
+                  _buildTextFormField("Nickname", nickController, hintText: "Introduce your nickname"),
+                  _buildTextFormField("Birth date", birthController, hintText: "YYYY/MM/DD"),
+                  _buildTextFormField("Password", passController, isPassword: true),
                 ],
               ),
             ),
@@ -64,14 +64,14 @@ class _RegistreScreenState extends State<RegistreScreen> {
 
               if (validation) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Te has registrado correctamente.')),
+                  const SnackBar(content: Text('You registered successfully.')),
                 );
                 Navigator.push(
                   context, MaterialPageRoute(builder: (context) => const LoginScreen()),
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Error al registrar.')),
+                  const SnackBar(content: Text('Failed to register.')),
                 );
               }
             }
@@ -82,7 +82,7 @@ class _RegistreScreenState extends State<RegistreScreen> {
             foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
           ),
-          child: const Text("Registrarse"),
+          child: const Text("Register"),
         ),
       ),
     );
@@ -106,10 +106,10 @@ class _RegistreScreenState extends State<RegistreScreen> {
               : TextInputType.text,
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Este campo es obligatorio';
+              return 'This field is compulsory';
             }
             if (label == "Email" && !value.contains('@')) {
-              return 'Email inválido';
+              return 'Email not valid';
             }
             return null;
           },

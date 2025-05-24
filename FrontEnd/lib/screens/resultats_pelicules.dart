@@ -29,7 +29,7 @@ class _ResultatsPeliculesState extends State<ResultatsPelicules> {
   void initState() {
     super.initState();
     _filmsFuture = getFilmsBySearch(widget.search, widget.genre, widget.director,
-        widget.actor, widget.duration as int);
+        widget.actor, widget.duration);
   }
 
   @override
@@ -37,7 +37,7 @@ class _ResultatsPeliculesState extends State<ResultatsPelicules> {
     return Scaffold(
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
-        title: const Text("Resultados de la búsqueda"),
+        title: const Text("Results of the search"),
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         centerTitle: true,
@@ -88,25 +88,25 @@ class _ResultatsPeliculesState extends State<ResultatsPelicules> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          'Búsqueda realizada para: "${widget.search}"',
+          'Search for: "${widget.search}"',
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 12),
-        if (widget.genre != "No especificat") ...[
-          Text('Gènere seleccionat: ${widget.genre}'),
+        if (widget.genre.isNotEmpty) ...[
+          Text('Selected genre: ${widget.genre}'),
           const SizedBox(height: 8),
         ],
         if (widget.actor.isNotEmpty) ...[
-          Text('Actor/Actriu: ${widget.actor}'),
+          Text('Actor/Actress: ${widget.actor}'),
           const SizedBox(height: 8),
         ],
         if (widget.director.isNotEmpty) ...[
-          Text('Director/a: ${widget.director}'),
+          Text('Director: ${widget.director}'),
           const SizedBox(height: 8),
         ],
         if (widget.duration > 0) ...[
-          Text('Duració: ${widget.duration}'),
+          Text('Duration: ${widget.duration}'),
           const SizedBox(height: 8),
         ],
       ],
@@ -127,9 +127,9 @@ class _ResultatsPeliculesState extends State<ResultatsPelicules> {
         height: 200,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 2),
-          image: film['imagePath'] != null
+          image: film['png'] != null
               ? DecorationImage(
-            image: NetworkImage(film['imagePath']),
+            image: NetworkImage(film['png']),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
               Colors.black.withOpacity(0.3),
@@ -143,7 +143,7 @@ class _ResultatsPeliculesState extends State<ResultatsPelicules> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              film['title'] ?? '',
+              film['name'] ?? '',
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),

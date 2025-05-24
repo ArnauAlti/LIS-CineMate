@@ -1,7 +1,9 @@
 import 'package:cine_mate/screens/biblioteca_usuaris_seguits.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../requests.dart';
+import '../user_role_provider.dart';
 
 class UsuarisCercats extends StatefulWidget {
   final String busqueda;
@@ -17,8 +19,9 @@ class _UsuarisCercats extends State<UsuarisCercats> {
 
   @override
   void initState() {
+    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
     super.initState();
-    _usersFuture = getUsersBySearch(widget.busqueda);
+    _usersFuture = getUsersBySearch(widget.busqueda, userEmail!);
   }
 
   @override
@@ -28,7 +31,7 @@ class _UsuarisCercats extends State<UsuarisCercats> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Otros usuarios", textAlign: TextAlign.center),
+        title: const Text("Other users", textAlign: TextAlign.center),
         centerTitle: true,
       ),
         body: FutureBuilder<List<Map<String, dynamic>>>(
@@ -44,6 +47,8 @@ class _UsuarisCercats extends State<UsuarisCercats> {
 
             final users = snapshot.data ?? [];
 
+            print(users);
+
             return SingleChildScrollView(
               padding: const EdgeInsets.all(20),
               child: Center(
@@ -51,7 +56,7 @@ class _UsuarisCercats extends State<UsuarisCercats> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 15),
-                    Text("Resultados de la búsqueda: ${widget.busqueda}",
+                    Text("Results of the search: ${widget.busqueda}",
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -85,12 +90,19 @@ class _UsuarisCercats extends State<UsuarisCercats> {
 
   //Funció per construir la caixa tàctil de cada usuari cercat
   Widget _buildUserBox(BuildContext context, Map<String, dynamic> user) {
+    final String userMail = user['mail']?? "";
+    print(userMail);
+    final String nick = user['nick']?? "Unknown nickname";
+    final String png = (user['png'] != null && user['png'].toString().trim().isNotEmpty)
+        ? user['png']
+        : "assets/perfil1.jpg";
+
     return InkWell(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => BibliotecaSeguitsScreen(userName: user['nick'], follows: false),
+            builder: (context) => BibliotecaSeguitsScreen(userMail: userMail, userNick: nick, follows: false),
           ),
         );
       },
@@ -111,10 +123,10 @@ class _UsuarisCercats extends State<UsuarisCercats> {
                 CircleAvatar(
                   radius: 40,
                   backgroundColor: Colors.black87,
-                  backgroundImage: AssetImage(user['imagePath']),
+                  backgroundImage: AssetImage(png),
                 ),
                 const SizedBox(height: 8),
-                Text(user['nick']),
+                Text(nick),
               ],
             ),
           ),

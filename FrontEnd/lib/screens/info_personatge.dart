@@ -1,6 +1,6 @@
-import 'package:cine_mate/screens/afegir_personatge.dart';
+import 'package:cine_mate/screens/xat_personatge.dart';
 
-import 'xats_actius.dart';
+import 'package:cine_mate/screens/afegir_personatge.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
@@ -17,9 +17,11 @@ class InfoPersonatge extends StatelessWidget {
   Widget build(BuildContext context) {
     final userRoleProvider = Provider.of<UserRoleProvider>(context);
     final userRole = userRoleProvider.userRole;
-    final name = charData?['name'] ?? 'Nombre no disponible';
-    final imagePath = charData?['imagePath'] ?? '';
-    final contextInfo = charData?['context'] ?? '';
+
+    final name = charData?['name'] ?? 'Unknown name';
+    final imagePath = charData?['png'] ?? '';
+    final contextInfo = charData?['context'] ?? 'Unknown context';
+    final movieName = charData?['movie_name'] ?? 'Unknown Movie';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -71,10 +73,9 @@ class InfoPersonatge extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    addCharacterToChat(name);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const XatsActiusScreen()),
+                      MaterialPageRoute(builder: (context) => XatPersonatge(nomPersonatge: name, movieName: movieName)),
                     );
                   },
                   style: ButtonStyle(
@@ -89,7 +90,7 @@ class InfoPersonatge extends StatelessWidget {
                       EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                     ),
                   ),
-                  child: Text("Crear chat con $name"),
+                  child: Text("Create chat with $name"),
                 ),
               ],
             )
@@ -116,12 +117,12 @@ class InfoPersonatge extends StatelessWidget {
                       EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                     ),
                   ),
-                  child: const Text("Editar informació"),
+                  child: const Text("Edit information"),
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    await deleteCharacter(name);
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const XatsActiusScreen()));
+                    await deleteCharacter(name, charData?['media_id']);
+                    Navigator.pop(context);
                   },
                   style: ButtonStyle(
                     backgroundColor: const WidgetStatePropertyAll<Color>(Colors.red),
@@ -135,7 +136,7 @@ class InfoPersonatge extends StatelessWidget {
                       EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                     ),
                   ),
-                  child: const Text("Eliminar"),
+                  child: const Text("Delete"),
                 ),
               ],
             )

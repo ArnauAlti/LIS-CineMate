@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
-import 'afegir_questionari.dart';
 import 'app_drawer.dart';
 import 'questionaris_disponibles.dart';
 
@@ -39,7 +38,7 @@ class _CercaQuestionarisScreenState extends State<CercaQuestionarisScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Cuestionarios", textAlign: TextAlign.center),
+        title: const Text("Questionnaires", textAlign: TextAlign.center),
       ),
       drawer: AppDrawer(
         userRole: userRole,
@@ -58,7 +57,7 @@ class _CercaQuestionarisScreenState extends State<CercaQuestionarisScreen> {
                     controller: _controller,
                     onSubmitted: (_) => _realitzarBusqueda(),
                     decoration: const InputDecoration(
-                      hintText: "Introduce el título de la película o serie.",
+                      hintText: "Intro the title from the film or series.",
                       prefixIcon: Icon(Icons.search),
                       fillColor: Color(0xFFEAE6f3),
                       filled: true,
@@ -86,20 +85,6 @@ class _CercaQuestionarisScreenState extends State<CercaQuestionarisScreen> {
           ],
         ),
       ),
-      floatingActionButton: userRole == "Administrador"
-          ? FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AfegirQuestionariScreen(),
-            ),
-          );
-        },
-        backgroundColor: Colors.black,
-        child: const Icon(Icons.add, color: Colors.white),
-      )
-          : null,
     );
   }
 }

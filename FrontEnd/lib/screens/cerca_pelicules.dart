@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../requests.dart'; // Asegúrate de que aquí esté la función getGenres
 import 'resultats_pelicules.dart';
 
 class CercaPelicules extends StatefulWidget {
@@ -18,18 +19,25 @@ class _CercaPeliculesState extends State<CercaPelicules> {
   String _busqueda = "";
   String? _genereSeleccionat;
 
+  late Future<List<Map<String, dynamic>>> _genresFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _genresFuture = getGenres();
+  }
+
   void _realitzarBusqueda() {
     setState(() {
       _busqueda = _controller.text.trim();
     });
 
-    // Navegar a la pantalla de resultados
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ResultatsPelicules(
           search: _busqueda,
-          genre: _genereSeleccionat ?? "No especificat",
+          genre: _genereSeleccionat ?? "",
           actor: _actorController.text,
           director: _directorController.text,
           duration: int.tryParse(_duracioController.text) ?? 0,
@@ -37,7 +45,6 @@ class _CercaPeliculesState extends State<CercaPelicules> {
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +54,7 @@ class _CercaPeliculesState extends State<CercaPelicules> {
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         centerTitle: true,
-        title: const Text("Búsqueda", textAlign: TextAlign.center),
+        title: const Text("Search"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -64,7 +71,7 @@ class _CercaPeliculesState extends State<CercaPelicules> {
                     controller: _controller,
                     onSubmitted: (_) => _realitzarBusqueda(),
                     decoration: const InputDecoration(
-                      hintText: "Introduce el título de la película o serie.",
+                      hintText: "Intro the title from the film or series",
                       prefixIcon: Icon(Icons.search),
                       fillColor: Color(0xFFEAE6f3),
                       filled: true,
@@ -91,7 +98,6 @@ class _CercaPeliculesState extends State<CercaPelicules> {
             ),
             const SizedBox(height: 24.0),
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const Icon(Icons.filter_alt_outlined, size: 20),
                 const SizedBox(width: 6),
@@ -102,7 +108,7 @@ class _CercaPeliculesState extends State<CercaPelicules> {
                     });
                   },
                   child: const Text(
-                    "Filtrar",
+                    "Filters",
                     style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
@@ -120,42 +126,40 @@ class _CercaPeliculesState extends State<CercaPelicules> {
                   color: const Color(0xFFEAE6F3),
                   borderRadius: BorderRadius.circular(12.0),
                 ),
-                //Lògica per fer sortir els filtres
                 child: Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        //Menú desplegable per mostrar tots els gèneres
-                        const Text("Gènere:"),
-                        DropdownButton<String>(
-                          value: _genereSeleccionat,
-                          hint: const Text("Selecciona un gènere"),
-                          items: const [
-                            DropdownMenuItem(value: "0", child: Text("Acción")),
-                            DropdownMenuItem(value: "1", child: Text("Aventura")),
-                            DropdownMenuItem(value: "2", child: Text("Animación")),
-                            DropdownMenuItem(value: "3", child: Text("Infantil")),
-                            DropdownMenuItem(value: "4", child: Text("Comedia")),
-                            DropdownMenuItem(value: "5", child: Text("Crimen")),
-                            DropdownMenuItem(value: "6", child: Text("Documental")),
-                            DropdownMenuItem(value: "7", child: Text("Drama")),
-                            DropdownMenuItem(value: "8", child: Text("Fantasía")),
-                            DropdownMenuItem(value: "9", child: Text("Terror")),
-                            DropdownMenuItem(value: "10", child: Text("Imax")),
-                            DropdownMenuItem(value: "11", child: Text("Musical")),
-                            DropdownMenuItem(value: "12", child: Text("Misterio")),
-                            DropdownMenuItem(value: "13", child: Text("Cine negro")),
-                            DropdownMenuItem(value: "14", child: Text("Romance")),
-                            DropdownMenuItem(value: "15", child: Text("Ciencia ficción")),
-                            DropdownMenuItem(value: "16", child: Text("Suspense")),
-                            DropdownMenuItem(value: "17", child: Text("Bélica")),
-                            DropdownMenuItem(value: "18", child: Text("Western")),
-                          ],
-                          onChanged: (String? value) {
-                            setState(() {
-                              _genereSeleccionat = value;
-                            });
+                        const Text("Genre:"),
+                        FutureBuilder<List<Map<String, dynamic>>>(
+                          future: _genresFuture,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            } else if (snapshot.hasError) {
+                              return const Text("Error loading genres");
+                            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                              return const Text("No genres available");
+                            }
+
+                            final genres = snapshot.data!;
+
+                            return DropdownButton<String>(
+                              value: _genereSeleccionat,
+                              hint: const Text("Select a genre"),
+                              items: genres.map((genre) {
+                                return DropdownMenuItem<String>(
+                                  value: genre['moviedb'].toString(),
+                                  child: Text(genre['name']),
+                                );
+                              }).toList(),
+                              onChanged: (String? value) {
+                                setState(() {
+                                  _genereSeleccionat = value;
+                                });
+                              },
+                            );
                           },
                         ),
                       ],
@@ -165,7 +169,7 @@ class _CercaPeliculesState extends State<CercaPelicules> {
                     TextField(
                       controller: _actorController,
                       decoration: const InputDecoration(
-                        labelText: "Actor o Actriu",
+                        labelText: "Actor or actress",
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -173,7 +177,7 @@ class _CercaPeliculesState extends State<CercaPelicules> {
                     TextField(
                       controller: _directorController,
                       decoration: const InputDecoration(
-                        labelText: "Director/a",
+                        labelText: "Director",
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -181,14 +185,14 @@ class _CercaPeliculesState extends State<CercaPelicules> {
                     TextField(
                       controller: _duracioController,
                       decoration: const InputDecoration(
-                        labelText: "Duració (en minuts)",
+                        labelText: "Maximum duration (in minutes)",
                         border: OutlineInputBorder(),
                       ),
                       keyboardType: TextInputType.number,
                     ),
                   ],
                 ),
-              )
+              ),
           ],
         ),
       ),

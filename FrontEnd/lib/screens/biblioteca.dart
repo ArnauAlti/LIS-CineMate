@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
-import 'cerca_pelicules.dart';
 import 'detalls_biblioteca.dart';
 import 'app_drawer.dart';
 import '../requests.dart';
@@ -16,13 +15,16 @@ class BibliotecaScreen extends StatefulWidget {
 class _BibliotecaScreenState extends State<BibliotecaScreen> {
   bool isPeliculasSelected = true;
   late Future<List<Map<String, dynamic>>> _filmsFuture;
-
+  List<Map<String, dynamic>> _films = [];
 
   @override
   void initState() {
-    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
     super.initState();
-    _filmsFuture = getLibraryFilms(userEmail!, true);
+    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
+    _filmsFuture = getLibraryFilms(userEmail!, true).then((films) {
+      _films = films;
+      return films;
+    });
   }
 
   @override
@@ -36,19 +38,8 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Biblioteca"),
+        title: const Text("Library"),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const CercaPelicules()),
-              );
-            },
-          ),
-        ],
       ),
       drawer: AppDrawer(
         userRole: userRole,
@@ -58,7 +49,6 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: _filmsFuture,
-        //Comprovacions per saber si s'han agafat bé les películes de la BD
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -68,8 +58,6 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
 
-          final films = snapshot.data ?? [];
-
           return SingleChildScrollView(
             padding: const EdgeInsets.all(20),
             child: Column(
@@ -78,33 +66,40 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _buildSectionButton("Películas", isPeliculasSelected, () {
+                    _buildSectionButton("Films", isPeliculasSelected, () {
                       setState(() {
                         isPeliculasSelected = true;
-                        _filmsFuture = getLibraryFilms(userEmail!, true); // Puedes alternar a getSeries()
+                        _films = [];
+                        _filmsFuture = getLibraryFilms(userEmail!, true).then((films) {
+                          _films = films;
+                          return films;
+                        });
                       });
                     }),
                     const SizedBox(width: 20),
                     _buildSectionButton("Series", !isPeliculasSelected, () {
                       setState(() {
                         isPeliculasSelected = false;
-                        _filmsFuture = getLibraryFilms(userEmail!, false); // Cambia aquí si tienes `getSeries()`
+                        _films = [];
+                        _filmsFuture = getLibraryFilms(userEmail!, false).then((films) {
+                          _films = films;
+                          return films;
+                        });
                       });
                     }),
                   ],
                 ),
                 const SizedBox(height: 30),
 
-                // Generar las filas dinámicamente
-                for (int i = 0; i < films.length; i += 2)
+                for (int i = 0; i < _films.length; i += 2)
                   Column(
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          _buildMovieBox(context, films[i]),
-                          if (i + 1 < films.length)
-                            _buildMovieBox(context, films[i + 1]),
+                          _buildMovieBox(context, _films[i]),
+                          if (i + 1 < _films.length)
+                            _buildMovieBox(context, _films[i + 1]),
                         ],
                       ),
                       const SizedBox(height: 50),
@@ -147,9 +142,9 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 2),
           borderRadius: BorderRadius.circular(8),
-          image: film['imagePath'] != null
+          image: film['media_png'] != null
               ? DecorationImage(
-            image: NetworkImage(film['imagePath']),
+            image: NetworkImage(film['media_png']),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
               Colors.black.withOpacity(0.3),
@@ -163,7 +158,7 @@ class _BibliotecaScreenState extends State<BibliotecaScreen> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              film['title'] ?? '',
+              film['media_name'] ?? '',
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),

@@ -1,7 +1,6 @@
 import 'package:cine_mate/screens/perfil_usuari.dart';
 import 'package:cine_mate/screens/recomanacions.dart';
 import 'package:cine_mate/screens/usuaris_seguits.dart';
-import 'package:cine_mate/screens/xats_actius.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../user_role_provider.dart';
@@ -30,13 +29,13 @@ class AppDrawer extends StatelessWidget {
     if (userRole == "Usuario No Registrado") {
       menuOptions.addAll([
         ListTile(
-          title: const Text("Registro"),
+          title: const Text("Register"),
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => const RegistreScreen()));
           },
         ),
         ListTile(
-          title: const Text("Inicio de sesión"),
+          title: const Text("Login"),
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
           },
@@ -45,37 +44,37 @@ class AppDrawer extends StatelessWidget {
     } else if (userRole == "Usuario Registrado") {
       menuOptions.addAll([
         ListTile(
-          title: const Text("Cartelera"),
+          title: const Text("Billboard"),
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => const CartelleraScreen()));
           },
         ),
         ListTile(
-          title: const Text("Biblioteca"),
+          title: const Text("Library"),
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => const BibliotecaScreen()));
           },
         ),
         ListTile(
-          title: const Text("Recomendaciones"),
+          title: const Text("Recommendations"),
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => const RecomanacionsScreen()));
           },
         ),
         ListTile(
-          title: const Text("Cuestionarios"),
+          title: const Text("Questionnaires"),
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => const CercaQuestionarisScreen()));
           },
         ),
         ListTile(
-          title: const Text("Chats con personajes"),
+          title: const Text("Chats with characters"),
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const XatsActiusScreen()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const CercaPersonatgesScreen()));
           },
         ),
         ListTile(
-          title: const Text("Otros usuarios"),
+          title: const Text("Other users"),
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => const UsuarisSeguits()));
           },
@@ -89,18 +88,18 @@ class AppDrawer extends StatelessWidget {
           onTap: () {},
         ),
         ListTile(
-          title: const Text("Manual de Uso"),
+          title: const Text("User's manual"),
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => const ManualUsScreen()));
           },
         ),
         ListTile(
-          title: const Text("Cerrar sesión"),
+          title: const Text("Logout"),
           onTap: () {
             onRoleChange("Usuario No Registrado"); // Actualiza el estado en la pantalla
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const CartelleraScreen()));
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Se ha cerrado sesión correctamente.')),
+              const SnackBar(content: Text('Logged out successfully.')),
             );
           },
         ),
@@ -108,19 +107,19 @@ class AppDrawer extends StatelessWidget {
     } else if (userRole == "Administrador") {
       menuOptions.addAll([
         ListTile(
-          title: const Text("Gestionar Películas y Series"),
+          title: const Text("Manage Films And Series"),
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => const CartelleraScreen()));
           },
         ),
         ListTile(
-          title: const Text("Gestionar Cuestionarios"),
+          title: const Text("Manage Questionnaires"),
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => const CercaQuestionarisScreen()));
           },
         ),
         ListTile(
-          title: const Text("Gestionar Personajes de Chats"),
+          title: const Text("Manage Characters From Chats"),
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => const CercaPersonatgesScreen()));
           },
@@ -150,12 +149,12 @@ class AppDrawer extends StatelessWidget {
           onTap: () {},
         ),
         ListTile(
-          title: const Text("Cerrar sesión"),
+          title: const Text("Logout"),
           onTap: () {
             onRoleChange("Usuario No Registrado");
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const CartelleraScreen()));
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Se ha cerrado sesión correctamente.')),
+              const SnackBar(content: Text('Logged out successfully.')),
             );
           },
         ),
@@ -180,7 +179,7 @@ class AppDrawer extends StatelessWidget {
                       );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Debes estar registrado para acceder al perfil.')),
+                        const SnackBar(content: Text('You have to be registered to access your profile.')),
                       );
                     }
                   },
@@ -191,12 +190,12 @@ class AppDrawer extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  user?['nick'] ?? 'Usuario', // Mostrar nombre de usuario si está disponible
+                  user?['nick'] ?? 'User', // Mostrar nombre de usuario si está disponible
                   style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 5),
                 Text(
-                  "Ver perfil",
+                  "Go to profile",
                   style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 14),
                 ),
               ],

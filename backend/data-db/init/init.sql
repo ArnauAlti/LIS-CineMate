@@ -35,12 +35,16 @@ CREATE TABLE genres (
 
 CREATE TABLE media (
     "sec" INTEGER UNIQUE NOT NULL,
-    "id" VARCHAR(100) PRIMARY KEY,
+    "id" VARCHAR(150) PRIMARY KEY,
+    "active" BOOLEAN NOT NULL, 
     "name" VARCHAR(255) NOT NULL,
-    "genres" JSONB NOT NULL,
+    "genres" JSON NOT NULL,
     "type" VARCHAR(10) NOT NULL,
-    "movie_db" VARCHAR(100) UNIQUE NOT NULL,
-    "rating" FLOAT NOT NULL,
+    "moviedb_code" VARCHAR(100) UNIQUE NOT NULL,
+    "moviedb_use_rating" BOOLEAN NOT NULL,
+    "moviedb_rating" FLOAT,
+    "moviedb_count" INTEGER,
+    "update" BOOLEAN NOT NULL,
     "description" TEXT,
     "png" VARCHAR(255)
 );
@@ -66,20 +70,23 @@ EXECUTE FUNCTION media_id_function();
 
 CREATE TABLE info (
     "media_id" VARCHAR(100) NOT NULL,
-    "movie_db" VARCHAR(100) NOT NULL,
+    "moviedb_code" VARCHAR(100) NOT NULL,
     "id" VARCHAR(150) PRIMARY KEY,
     "synopsis" TEXT NOT NULL,
     "plot" TEXT,
     "season" INT,
     "episodes" INT NOT NULL,
+    "duration" INT,
     "director" VARCHAR(100),
     "cast" TEXT,
     "release" DATE,
+    "vote_rating" FLOAT NOT NULL,
+    "vote_count" INTEGER NOT NULL,
     FOREIGN KEY(media_id)
         REFERENCES media("id")
         ON DELETE CASCADE,
-    FOREIGN KEY(movie_db)
-        REFERENCES media("movie_db")
+    FOREIGN KEY(moviedb_code)
+        REFERENCES media("moviedb_code")
         ON DELETE CASCADE
 );
 CREATE OR REPLACE FUNCTION info_function() RETURNS TRIGGER as $$
@@ -88,13 +95,13 @@ DECLARE
     var2 VARCHAR(10);
 BEGIN
     RAISE NOTICE 'Value: %', NEW.media_id;
-    RAISE NOTICE 'Value: %', NEW.movie_db;
+    RAISE NOTICE 'Value: %', NEW.moviedb_code;
     IF NEW.media_id IS NOT NULL THEN
         SELECT m.id INTO var1 FROM media m WHERE m.id = NEW.media_id; 
         SELECT m.type INTO var2 FROM media m WHERE m.id = NEW.media_id;
-    ELSEIF NEW.movie_db IS NOT NULL THEN
-        SELECT m.id INTO var1 FROM media m WHERE m.movie_db = NEW.movie_db; 
-        SELECT m.type INTO var2 FROM media m WHERE m.movie_db = NEW.movie_db;
+    ELSEIF NEW.moviedb_code IS NOT NULL THEN
+        SELECT m.id INTO var1 FROM media m WHERE m.moviedb_code = NEW.moviedb_code; 
+        SELECT m.type INTO var2 FROM media m WHERE m.moviedb_code = NEW.moviedb_code;
         NEW.media_id := var1;
     ELSE 
         RAISE EXCEPTION 'No Identification for media';
@@ -132,7 +139,7 @@ CREATE TABLE "characters" (
         ON DELETE CASCADE
 );
 
-CREATE TABLE "questionnaries" (
+CREATE TABLE "questions" (
     "id" SERIAL PRIMARY KEY,
     "info_id" VARCHAR(100) NOT NULL,
     "question" TEXT NOT NULL,
@@ -143,29 +150,133 @@ CREATE TABLE "questionnaries" (
         ON DELETE CASCADE
 );
 
+DROP TABLE "library";
+
 CREATE TABLE "library" (
-    "id" SERIAL PRIMARY KEY,
-    "user_id" INTEGER NOT NULL,
+    "sec" SERIAL PRIMARY KEY,
+    "user_mail" VARCHAR(100) NOT NULL,
     "media_id" VARCHAR(100) NOT NULL,
-    "info_id" VARCHAR(100) NOT NULL,
-    "status" VARCHAR(50) NOT NULL,
+    "info_id" VARCHAR(100) UNIQUE NOT NULL ,
+    "status" VARCHAR(50),
     "rating" FLOAT,
     "comment" VARCHAR(100),
-    FOREIGN KEY(user_id)
-        REFERENCES users(id)
-        ON DELETE CASCADE,
-    FOREIGN KEY(info_id)
-        REFERENCES info(id)
+    "media_name" VARCHAR(255) NOT NULL,
+    "media_png" VARCHAR(255),
+    FOREIGN KEY(user_mail)
+        REFERENCES users(mail)
         ON DELETE CASCADE,
     FOREIGN KEY(media_id)
         REFERENCES media(id)
+        ON DELETE CASCADE,
+    FOREIGN KEY(info_id)
+        REFERENCES info(id)
         ON DELETE CASCADE
 );
 
-CREATE VIEW mediaGenres AS SELECT id, name, genres FROM media;
-CREATE VIEW mediaQuery AS SELECT sec, id, name, png, type, rating FROM media;
+CREATE TABLE "comments" (
+    "id" INTEGER UNIQUE NOT NULL,
+    "info_id" VARCHAR(100) NOT NULL,
+    "user_mail" VARCHAR(100) NOT NULL,
+    "response" INTEGER,
+    "created" DATE NOT NULL,
+    "message" TEXT NOT NULL,
+    FOREIGN KEY(info_id)
+        REFERENCES info(id)
+        ON DELETE CASCADE,
+    FOREIGN KEY(user_mail)
+        REFERENCES users(mail)
+        ON DELETE CASCADE,
+    FOREIGN KEY(response)
+        REFERENCES comments(id)
+        ON DELETE CASCADE
+);
 
-CREATE VIEW mediaINFO AS SELECT m.id media_id, v.id info_id, m.type, v.season, v.episodes, m.name, m.png, m.rating, m.description, v.synopsis, v.plot, v.director, v.cast, v.release 
+DROP VIEW "recommender_query_media_genres";
+CREATE VIEW "recommender_query_media_genres" AS 
+SELECT m.id,  string_agg(g.name, '|' ORDER BY g.name) AS genres
+FROM media m, 
+json_array_elements_text(m.genres) AS genre_id
+JOIN genres g ON g.moviedb = genre_id::INTEGER
+GROUP BY m.id;
+
+
+CREATE VIEW "view_media" AS
+SELECT 
+    m.sec, 
+    m.id, 
+    m.name, 
+    m.png, 
+    m.type, 
+    m.moviedb_rating as rating, 
+    string_agg(DISTINCT g.name, ',' ORDER BY g.name) as genres, 
+    string_agg(DISTINCT g.moviedb::TEXT, ',') as genre_ids,
+    MIN(i.release) as release,
+    STRING_AGG(DISTINCT i.director, ', ') as director,
+    STRING_AGG(DISTINCT i.cast, ', ') as cast,
+    SUM(i.duration) as duration
+FROM 
+    media m
+    LEFT JOIN LATERAL json_array_elements_text(m.genres) AS genre_id ON TRUE
+    LEFT JOIN genres g ON g.moviedb = genre_id::INTEGER
+    LEFT JOIN info i ON i.media_id = m.id
+WHERE 
+    m.active = true
+GROUP BY
+    m.sec, m.id, m.name, m.png, m.type, m.moviedb_rating
+;
+
+CREATE VIEW "view_media_admin" AS
+SELECT m.sec, m.id, m.name, m.png, m.type, m.moviedb_rating, i.release 
+FROM media m
+JOIN info i ON i.id = m.id OR i.id = m.id || '-1';
+
+CREATE VIEW "view_info" AS 
+SELECT m.id media_id, v.id info_id, m.type, v.season, 
+v.episodes, m.name, m.png, m.moviedb_rating, 
+m.moviedb_count, v.vote_rating, v.vote_count, m.description, 
+v.synopsis, v.plot, v.director, v.cast, v.release 
 FROM media m, info v 
-WHERE m.id = v.media_id;
-    
+WHERE m.id = v.media_id AND m.active = true;
+
+CREATE VIEW "view_library" AS 
+SELECT l.sec, l.user_mail, l.media_id, l.info_id, 
+l.status, l.rating, l.comment, m.png, 
+m.name, m.type
+FROM library l
+JOIN media m On m.id = l.media_id
+GROUP BY l.sec, m.png, m.name, m.type;
+
+
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE INDEX idx_titles_title_trgm ON media USING gin (name gin_trgm_ops);
+
+CREATE OR REPLACE FUNCTION update_rating_on_update() RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.rating IS DISTINCT FROM OLD.rating THEN
+
+        UPDATE info
+        SET 
+            vote_rating = (
+                SELECT ROUND(AVG(rating)::numeric, 2)
+                FROM library
+                WHERE info_id = NEW.info_id AND rating IS NOT NULL
+            ),
+            vote_count = (
+                SELECT COUNT(*)
+                FROM library
+                WHERE info_id = NEW.info_id AND rating IS NOT NULL
+            )
+        WHERE id = NEW.info_id;
+
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_update_rating_update ON library;
+
+CREATE TRIGGER trg_update_rating_update
+AFTER UPDATE OF rating ON library
+FOR EACH ROW
+EXECUTE FUNCTION update_rating_on_update();

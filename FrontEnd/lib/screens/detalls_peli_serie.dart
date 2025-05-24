@@ -1,5 +1,4 @@
 import 'package:cine_mate/screens/cartellera.dart';
-import 'package:cine_mate/screens/editar_pelicula.dart';
 import 'package:flutter/material.dart';
 import '../user_role_provider.dart';
 import 'package:provider/provider.dart';
@@ -27,16 +26,15 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserRoleProvider>(context, listen: false).getUser;
+    final mail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
+    print(mail);
     final userRoleProvider = Provider.of<UserRoleProvider>(context);
     final userRole = userRoleProvider.userRole;
-
-    print(user);
 
     return Scaffold(
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
-        title: const Text("Detalles"),
+        title: const Text("Details"),
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
       ),
@@ -53,29 +51,30 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
 
           final film = snapshot.data;
           if (film == null) {
-            return const Center(child: Text('No se encontraron detalles.'));
+            return const Center(child: Text('No details found.'));
           }
 
-          print(film[0]);
-
-          final String title = film[0]['name'] ?? 'Título desconocido';
+          final String title = film[0]['name'] ?? 'Unknown title';
           final String urlFoto = film[0]['png'] ?? '';
-          final String duration = film[0]['duration']?.toString() ?? 'Desconocida';
-          final String director = film[0]['director'] ?? 'Desconocido';
+          final String duration = film[0]['duration']?.toString() ?? 'Unknown';
+          final String director = film[0]['director'] ?? 'Unknown';
           final String cast = (film[0]['cast'] is List)
               ? (film[0]['cast'] as List).join(', ')
-              : (film[0]['cast'] ?? 'Desconocido');
-          final String description = film[0]['description'] ?? 'Sin descripción.';
-          final double rating = (film[0]['rating'] ?? 0).toDouble()/2;
+              : (film[0]['cast'] ?? 'Unknown');
+          final String description = film[0]['description'] ?? 'Without description.';
+          final double rating = (film[0]['vote_rating'] ?? 0).toDouble();
+
+          final String mediaId = film[0]['media_id'] ?? 'Not known';
+          final String infoId = film[0]['info_id'] ?? 'Not known';
 
           final String releaseDateRaw = film[0]['release']?.toString() ?? '';
-          String releaseDate = 'Desconocido';
+          String releaseDate = 'Unknown';
           if (releaseDateRaw.isNotEmpty) {
             try {
               final parsedDate = DateTime.parse(releaseDateRaw);
               releaseDate = DateFormat('dd/MM/yyyy').format(parsedDate);  // o 'd \'de\' MMMM \'de\' y' para español
             } catch (e) {
-              releaseDate = 'Fecha inválida';
+              releaseDate = 'Date not valid';
             }
           }
 
@@ -121,13 +120,13 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("📅 Fecha de estreno: $releaseDate", style: const TextStyle(fontSize: 16)),
+                          Text("📅 Release date: $releaseDate", style: const TextStyle(fontSize: 16)),
                           const SizedBox(height: 8),
-                          Text("⏱ Duración: $duration minutos", style: const TextStyle(fontSize: 16)),
+                          Text("⏱ Duration: $duration minutes", style: const TextStyle(fontSize: 16)),
                           const SizedBox(height: 8),
                           Text("📺 Director: $director", style: const TextStyle(fontSize: 16)),
                           const SizedBox(height: 8),
-                          Text("🎭 Reparto: $cast", style: const TextStyle(fontSize: 16)),
+                          Text("🎭 Cast: $cast", style: const TextStyle(fontSize: 16)),
                         ],
                       ),
                     ),
@@ -135,7 +134,7 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
                 ),
                 const SizedBox(height: 30),
                 const Text(
-                  "⭐ Valoración",
+                  "⭐ Rating",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
                 const SizedBox(height: 10),
@@ -162,7 +161,7 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
                 ),
                 const SizedBox(height: 30),
                 const Text(
-                  "Sinópsis",
+                  "Description",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
                 const SizedBox(height: 10),
@@ -178,7 +177,7 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
                       Future.delayed(Duration.zero, () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => CommentRatingScreen(title: title)),
+                          MaterialPageRoute(builder: (context) => CommentRatingScreen(mediaId: mediaId, infoId: infoId,)),
                         );
                       });                },
                     style: ElevatedButton.styleFrom(
@@ -189,7 +188,7 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    label: const Text("Ver Comentarios Y Valoraciones", style: TextStyle(fontSize: 16)),
+                    label: const Text("See other comments and ratings", style: TextStyle(fontSize: 16)),
                   ),
                 ),
 <<<<<<< HEAD
@@ -202,15 +201,15 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
                   Center(
                     child: ElevatedButton.icon(
                       onPressed: () async {
-                        Future<bool> validation = addToLibrary(user?['id'], film[0]['media_id'], film[0]['media_info_id']);
+                        Future<bool> validation = addToLibrary(mail!, film[0]['media_id'], film[0]['info_id'], urlFoto, title, film[0]['type']);
 
                         if(await validation) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('${film[0]['name']} añadida a la biblioteca.')),
+                            SnackBar(content: Text('${film[0]['name']} added to library.')),
                           );
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('No se ha podido añadir a la biblioteca.')),
+                            const SnackBar(content: Text('Failed to add to library. Already in your library?')),
                           );
                         }
                       },
@@ -223,7 +222,7 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
                         ),
                       ),
                       icon: const Icon(Icons.add),
-                      label: const Text("AÑADIR A BIBLIOTECA", style: TextStyle(fontSize: 16)),
+                      label: const Text("Add to Library", style: TextStyle(fontSize: 16)),
                     ),
                   )
                 else if (userRole == "Administrador")
@@ -231,30 +230,8 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => EditarPeliCartelleraScreen(
-                                mode: "Modify",
-                                peliData: film[0],
-                              ),
-                            ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                        ),
-                        child: const Text("Editar Información"),
-                      ),
-                      ElevatedButton(
                         onPressed: () async {
-                          await deleteFilm(title);
+                          await deleteFilm(title, film[0]['media_id']);
 
                           Navigator.push(
                             context, MaterialPageRoute(builder: (context) => const CartelleraScreen(),
@@ -262,7 +239,7 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
                           );
 
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Obra eliminada de la cartelera.')),
+                            const SnackBar(content: Text('Deleted from billboard.')),
                           );
                         },
                         style: ElevatedButton.styleFrom(
@@ -273,7 +250,7 @@ class _DetallsPeliSerieScreen extends State<DetallsPeliSerieScreen> {
                             borderRadius: BorderRadius.circular(30),
                           ),
                         ),
-                        child: const Text("ELIMINAR"),
+                        child: const Text("Delete"),
                       ),
                     ],
                   )

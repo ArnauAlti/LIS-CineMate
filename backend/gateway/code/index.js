@@ -1,7 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const { createProxyMiddleware } = require('http-proxy-middleware');
-const { Pool } = require('pg');
+const authDB = require('./resources/db-auth');
 const cors = require("cors");
 
 const app = express();
@@ -16,13 +16,6 @@ app.use(cors({
 // app.use(express.json());
 app.use(express.urlencoded({extended: true }));
 
-const authDB = new Pool({
-    host: '10.5.0.15',
-    user: 'consult',
-    password: 'consult',
-    database: 'auth',
-    port: 5432,
-});
 
 app.use(async (req, res, next) => {
     try {
@@ -70,7 +63,7 @@ app.use('/user', createProxyMiddleware({
 }));
 
 // /repository => 10.5.0.4:3000
-app.use('/repository', createProxyMiddleware({
+app.use('/media', createProxyMiddleware({
     target: 'http://10.5.0.4:3000', 
     changeOrigin: true,
     on: {
@@ -96,7 +89,27 @@ app.use('/library', createProxyMiddleware({
     changeOrigin: true, 
     on: {
         proxyReq: (proxyReq, req, res) => {
-            proxyReq.setHeader('req_admin', admin);
+            proxyReq.setHeader('mode', mode);
+        },
+    },
+}));
+
+app.use('/character', createProxyMiddleware({ 
+    target: 'http://10.5.0.7:3000', 
+    changeOrigin: true, 
+    on: {
+        proxyReq: (proxyReq, req, res) => {
+            proxyReq.setHeader('mode', mode);
+        },
+    },
+}));
+
+app.use('/questions', createProxyMiddleware({ 
+    target: 'http://10.5.0.8:3000', 
+    changeOrigin: true, 
+    on: {
+        proxyReq: (proxyReq, req, res) => {
+            proxyReq.setHeader('mode', mode);
         },
     },
 }));

@@ -6,10 +6,11 @@ import '../requests.dart';
 import '../user_role_provider.dart';
 
 class BibliotecaSeguitsScreen extends StatefulWidget {
-  final String userName;
+  final String userMail;
+  final String userNick;
   final bool follows;
 
-  const BibliotecaSeguitsScreen({super.key, required this.userName, required this.follows});
+  const BibliotecaSeguitsScreen({super.key, required this.userMail, required this.userNick, required this.follows});
 
   @override
   State<BibliotecaSeguitsScreen> createState() => _BibliotecaSeguitsScreenState();
@@ -21,21 +22,19 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
 
   @override
   void initState() {
-    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
+    print(widget.userMail);
     super.initState();
-    _filmsFuture = getLibraryFilms(userEmail!, true);
+    _filmsFuture = getLibraryFilms(widget.userMail, true);
   }
 
   @override
   Widget build(BuildContext context) {
-    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
-
     return Scaffold(
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: Text(widget.userName),
+        title: Text("${widget.userNick}'s library"),
         centerTitle: true,
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
@@ -60,24 +59,23 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _buildSectionButton("Películas", isPeliculasSelected, () {
+                    _buildSectionButton("Films", isPeliculasSelected, () {
                       setState(() {
                         isPeliculasSelected = true;
-                        _filmsFuture = getLibraryFilms(userEmail!, true);
+                        _filmsFuture = getLibraryFilms(widget.userMail, true);
                       });
                     }),
                     const SizedBox(width: 20),
                     _buildSectionButton("Series", !isPeliculasSelected, () {
                       setState(() {
                         isPeliculasSelected = false;
-                        _filmsFuture = getLibraryFilms(userEmail!, false);
+                        _filmsFuture = getLibraryFilms(widget.userMail, false);
                       });
                     }),
                   ],
                 ),
                 const SizedBox(height: 30),
 
-                // Generar las filas dinámicamente
                 for (int i = 0; i < films.length; i += 2)
                   Column(
                     children: [
@@ -101,12 +99,25 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
           onPressed: () async {
+            final scrMail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
+
             if (widget.follows == true) {
-              await unfollowUser(nick: widget.userName);
+              bool response = await unfollowUser(srcMail: scrMail, dstMail: widget.userMail);
+              if(response){
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('You unfollowed ${widget.userNick}')),
+                );
+              }
             } else {
-              await followUser(nick: widget.userName);
+              bool response = await followUser(srcMail: scrMail, dstMail: widget.userMail);
+              if(response){
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('You now follow ${widget.userNick}')),
+                );
+              }
             }
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const UsuarisSeguits()));
+
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const UsuarisSeguits()));
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.black,
@@ -114,7 +125,7 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             padding: const EdgeInsets.symmetric(vertical: 16),
           ),
-          child: Text(widget.follows == true ? "DEJAR DE SEGUIR A ${widget.userName}" : "SEGUIR A ${widget.userName}"),
+          child: Text(widget.follows == true ? "Unfollow ${widget.userNick}" : "Follow ${widget.userNick}"),
         ),
       ),
     );
@@ -149,9 +160,9 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 2),
           borderRadius: BorderRadius.circular(8),
-          image: film['imagePath'] != null
+          image: film['media_png'] != null
               ? DecorationImage(
-            image: NetworkImage(film['imagePath']),
+            image: NetworkImage(film['media_png']),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
               Colors.black.withOpacity(0.3),
@@ -165,7 +176,7 @@ class _BibliotecaSeguitsScreenState extends State<BibliotecaSeguitsScreen> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              film['title'] ?? '',
+              film['media_name'] ?? 'Unknown title',
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),

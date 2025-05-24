@@ -1,4 +1,5 @@
 import 'package:cine_mate/requests.dart';
+import 'package:cine_mate/screens/biblioteca.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,34 +16,32 @@ class DetallsBibliotecaScreen extends StatefulWidget {
 
 class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
   double selectedRating = 0;
-  final TextEditingController capitolController = TextEditingController();
   final TextEditingController comentariController = TextEditingController();
-  final TextEditingController minutController = TextEditingController();
+  String selectedStatus = 'Not yet started';
+
+  final List<String> statusOptions = ['Not yet started', 'In progress', 'Seen'];
 
   @override
   void initState() {
     super.initState();
 
     final film = widget.film;
-    selectedRating = (film['personalRating'] ?? 0.0).toDouble();
-    capitolController.text = film['episodi']?.toString() ?? '';
+    selectedRating = (film['rating'] ?? 0.0).toDouble();
     comentariController.text = film['comment'] ?? '';
-    minutController.text = widget.film['timeLastSeen']?.toString() ?? '';
+    selectedStatus = film['status'] ?? 'Not yet started';
   }
 
   @override
   Widget build(BuildContext context) {
     final film = widget.film;
-    final userEmail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
-    final user = Provider.of<UserRoleProvider>(context, listen: false).getUser;
-
+    final mail = Provider.of<UserRoleProvider>(context, listen: false).userEmail;
 
     return Scaffold(
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Detalles"),
+        title: const Text("Details"),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -51,24 +50,21 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 10),
-            GestureDetector(
-              onTap: () {},
-              child: Text(
-                film["title"] ?? "Sin título",
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: Colors.black,
-                  decoration: TextDecoration.underline,
-                ),
-                textAlign: TextAlign.center,
+            Text(
+              film["media_name"] ?? "No title",
+              style: const TextStyle(
+                fontSize: 18,
+                color: Colors.black,
+                decoration: TextDecoration.underline,
               ),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
             Center(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
                 child: Image.network(
-                  film["imagePath"] ??
+                  film["media_png"] ??
                       'https://th.bing.com/th/id/OIP.TDVZL0VokIrAyO-t9RFLJQAAAA?rs=1&pid=ImgDetMain',
                   width: 180,
                   height: 260,
@@ -80,47 +76,34 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                "Minuto en el que me quedé la última vez",
+                "Current state",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
             const SizedBox(height: 8),
-            TextField(
-              controller: minutController,
-              keyboardType: TextInputType.number,
-              cursorColor: Colors.black,
+            DropdownButtonFormField<String>(
+              value: selectedStatus,
+              items: statusOptions.map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedStatus = value!;
+                });
+              },
               decoration: InputDecoration(
-                hintText: "Ej. 45",
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
               ),
             ),
-            const SizedBox(height: 16),
-            if (film['type'] == 0) ...[
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Capítulo en el que me quedé",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                cursorColor: Colors.black,
-                controller: capitolController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  hintText: "Capítulo...",
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                ),
-              ),
-              const SizedBox(height: 24),
-            ],
             const SizedBox(height: 24),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(5, (index) {
                 final starValue = index + 1;
-
                 IconData icon;
                 if (selectedRating >= starValue) {
                   icon = Icons.star;
@@ -153,7 +136,7 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                "Comentario",
+                "Comment",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
@@ -163,24 +146,40 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
               cursorColor: Colors.black,
               maxLines: 3,
               decoration: InputDecoration(
-                hintText: "BLA BLA BLA",
+                hintText: "Enter your comment/opinion",
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
               ),
             ),
             const SizedBox(height: 30),
             ElevatedButton(
-              onPressed: () {
-                final String title = film["title"];
+              onPressed: () async {
                 final String comment = comentariController.text;
-                final int capitol = int.tryParse(capitolController.text) ?? 0;
-                final int minut = int.tryParse(minutController.text) ?? 0;
                 final double rating = selectedRating;
+                final String status = selectedStatus;
 
-                //modifyFromLibrary(user?['user_id'], comment, capitol, minut, rating, userEmail!);
+                final success = await modifyFromLibrary(mail!, film['media_id'], film['info_id'], comment, status, rating);
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Se han guardado los cambios.')),
-                );
+                if (success){
+                  setState(() {
+                    widget.film['comment'] = comment;
+                    widget.film['personalRating'] = rating;
+                    widget.film['status'] = status;
+                  });
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Changes have been saved.')),
+                  );
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const BibliotecaScreen(),
+                      )
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Failed to save the changes.')),
+                  );
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,
@@ -190,7 +189,7 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),
-              child: const Text("Guardar cambios"),
+              child: const Text("Save changes"),
             ),
           ],
         ),
@@ -198,11 +197,20 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
-          onPressed: () {
-            deleteFromLibrary(film["title"], userEmail!);
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Se ha eliminado de la biblioteca.')),
-            );
+          onPressed: () async {
+            final success = await deleteFromLibrary(mail!, film['media_id'], film['info_id']);
+            if (success){
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const BibliotecaScreen(),
+                )
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Unable to delete from library.')),
+              );
+            }
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.black,
@@ -212,7 +220,7 @@ class _DetallsBibliotecaScreenState extends State<DetallsBibliotecaScreen> {
               borderRadius: BorderRadius.circular(30),
             ),
           ),
-          child: const Text("Eliminar de biblioteca"),
+          child: const Text("Delete from library"),
         ),
       ),
     );

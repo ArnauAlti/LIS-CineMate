@@ -13,17 +13,17 @@ class _DetallsPeliFollowerScreen extends State<DetallsPeliFollowerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final double selectedRating = (widget.film['personalRating'] ?? 0.0).toDouble();
-    final String title = widget.film['title'] ?? 'Título no disponible';
+    final double selectedRating = (widget.film['rating'] ?? 0.0).toDouble();
+    final String title = widget.film['media_name'] ?? 'Unknown title';
     final String comentari = widget.film['comment'] ?? '';
-    final String imagePath = widget.film['imagePath'] ?? '';
+    final String imagePath = widget.film['media_png'] ?? '';
 
     return Scaffold(
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text("Opinión"),
+        title: const Text("Opinion"),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -32,7 +32,7 @@ class _DetallsPeliFollowerScreen extends State<DetallsPeliFollowerScreen> {
           children: [
             const SizedBox(height: 10),
             GestureDetector(
-              onTap: () {}, // podrías abrir detalles más largos si quieres
+              onTap: () {},
               child: Text(
                 title,
                 style: const TextStyle(
@@ -84,7 +84,7 @@ class _DetallsPeliFollowerScreen extends State<DetallsPeliFollowerScreen> {
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                "Comentario",
+                "Comment",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
