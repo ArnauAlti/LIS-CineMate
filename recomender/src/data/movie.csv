@@ -1,0 +1,501 @@
+id,genres
+media-1,Action|Thriller
+media-10,Action|War
+media-100,Animation|Comedy|Sci-Fi & Fantasy
+media-101,Crime
+media-103,Animation|Comedy
+media-104,Animation
+media-105,Comedy|Drama|Family
+media-106,Drama|Family
+media-108,Comedy|Crime
+media-109,Animation
+media-11,Action|Science Fiction|Thriller
+media-110,Documentary
+media-111,Drama
+media-112,Crime|Drama
+media-113,Crime|Drama|Mystery
+media-114,Animation|Comedy
+media-115,Drama
+media-116,Comedy
+media-117,Drama
+media-118,Action|Adventure|Drama|Family
+media-119,Action|Adventure|Comedy
+media-12,Action|Adventure|Fantasy
+media-120,Action|Adventure|Animation|Comedy|Family|Music|Science Fiction|TV Movie
+media-121,Action|War
+media-122,Horror|Thriller
+media-123,Action|Comedy|Science Fiction
+media-124,Drama
+media-125,Adventure|Comedy|Science Fiction
+media-126,Action|Adventure|Thriller
+media-127,Horror|Thriller
+media-128,Comedy
+media-129,Comedy|Horror|Thriller
+media-13,Action|Western
+media-130,Animation|Comedy|Family|Science Fiction
+media-131,Comedy|Drama|Thriller
+media-132,Horror|Mystery
+media-133,Action|Adventure|Thriller
+media-134,Action|Drama|Thriller
+media-135,Horror|Science Fiction|Thriller
+media-136,Animation|Comedy|Drama
+media-137,Action|Thriller
+media-138,Comedy|Drama|Family
+media-139,Action & Adventure
+media-14,Horror
+media-140,Comedy|Drama|Family
+media-141,Action & Adventure|Animation|Comedy|Sci-Fi & Fantasy
+media-142,Comedy|Drama|Family
+media-143,Comedy|Drama
+media-144,Comedy|Drama|Mystery
+media-145,Action & Adventure|Crime|Drama
+media-146,Action & Adventure|Animation|Comedy|Sci-Fi & Fantasy
+media-147,Comedy|Family
+media-148,Crime|Drama|Mystery
+media-149,Crime|Drama|Mystery
+media-15,Action|Adventure|Science Fiction
+media-150,Documentary
+media-151,Drama
+media-152,Animation|Comedy|Family|Sci-Fi & Fantasy
+media-153,Documentary
+media-154,Crime|Drama
+media-155,Comedy|Family
+media-156,Drama|Sci-Fi & Fantasy
+media-157,Action & Adventure|Animation|Comedy|Family|Kids
+media-158,Drama|History|War
+media-159,Drama|History
+media-16,Action|Adventure|Fantasy
+media-160,Action|Fantasy|Science Fiction|Thriller
+media-161,Drama|Western
+media-162,Action|Adventure|Fantasy
+media-163,Drama|Thriller
+media-164,Action|Drama
+media-165,Adventure|Science Fiction
+media-166,Animation|Family|Science Fiction
+media-167,Crime|Drama
+media-168,Action & Adventure|Animation|Comedy|Sci-Fi & Fantasy
+media-169,Comedy|Drama
+media-17,Action|Adventure|Science Fiction
+media-170,Animation|Comedy
+media-171,Drama
+media-172,Animation|Kids
+media-173,Action & Adventure|Crime|Drama
+media-174,Comedy|Drama
+media-175,Action & Adventure|Drama|Sci-Fi & Fantasy
+media-176,Comedy
+media-177,Comedy
+media-178,Family|Kids
+media-179,Crime|Drama|Mystery
+media-18,Documentary
+media-180,Action & Adventure|Crime|Drama|Mystery
+media-182,Crime|Drama
+media-183,Drama
+media-184,Comedy
+media-185,Crime|Mystery|Sci-Fi & Fantasy
+media-186,Drama|Family
+media-187,Action & Adventure|Animation|Kids|Sci-Fi & Fantasy
+media-188,Comedy|Drama|Romance
+media-189,Horror
+media-19,Comedy|Crime|Thriller
+media-190,Action|Fantasy|Horror|Mystery|Thriller
+media-191,Drama|Fantasy|Science Fiction
+media-192,Drama
+media-193,Action|Thriller
+media-194,Adventure|Animation|Comedy|Family|Fantasy
+media-195,Action|Crime|Fantasy|Thriller
+media-196,Comedy|Crime|Thriller
+media-197,Drama|Romance
+media-198,Action|Crime|Drama|History|Thriller|War
+media-199,Animation|Drama|Romance
+media-2,Action|Adventure|Science Fiction
+media-20,Action|Horror|Thriller
+media-200,Horror|Science Fiction|Thriller
+media-201,Action|Animation
+media-202,Action|Crime
+media-203,Action|Drama|Romance|War
+media-204,Science Fiction|Thriller
+media-205,Horror
+media-206,Comedy|Drama
+media-208,Comedy
+media-209,Comedy
+media-21,Comedy|Crime|Drama
+media-210,Drama|Family
+media-211,Action & Adventure|Animation|Comedy|Documentary
+media-212,Action & Adventure|Animation|Comedy|Family|Sci-Fi & Fantasy
+media-213,Animation|Comedy
+media-214,Comedy
+media-215,Action & Adventure|Mystery|Sci-Fi & Fantasy
+media-216,Drama|Family
+media-217,Animation|Comedy|Documentary|Family
+media-218,Comedy
+media-219,Comedy
+media-22,Crime|Drama|Mystery
+media-221,Crime|Drama
+media-222,Action & Adventure|Kids
+media-223,Animation|Comedy
+media-224,Action & Adventure|Drama|Sci-Fi & Fantasy
+media-225,Comedy|Drama
+media-226,Drama
+media-227,Adventure|Animation|Comedy|Family
+media-228,Action|Crime|Mystery|Thriller
+media-229,Drama|Horror|Thriller
+media-23,Drama
+media-230,Action|Comedy
+media-231,Mystery|Thriller
+media-232,Adventure|Drama|Science Fiction
+media-233,Crime|Drama|Thriller
+media-234,Horror|Science Fiction
+media-235,Comedy|Drama|Romance
+media-236,Comedy|Fantasy|Horror
+media-237,Action|Adventure|Science Fiction
+media-238,Action|Adventure|Crime|Thriller
+media-239,Comedy
+media-24,Drama|Family
+media-240,Horror|Mystery|Thriller
+media-241,Drama|History|Music
+media-242,Action|Adventure|Science Fiction
+media-243,Action|Adventure|Animation|Fantasy
+media-244,Drama|Romance
+media-245,Comedy
+media-246,Animation|Comedy|Kids|Sci-Fi & Fantasy
+media-247,Drama|Western
+media-248,Action & Adventure|Drama|Mystery|Sci-Fi & Fantasy
+media-249,Action & Adventure|Comedy|Drama|Family
+media-25,Action & Adventure|Drama|Sci-Fi & Fantasy
+media-250,Action & Adventure|Animation|Sci-Fi & Fantasy
+media-251,Action & Adventure|Drama|Sci-Fi & Fantasy
+media-252,Comedy
+media-253,Drama|Family
+media-254,Documentary
+media-255,Drama
+media-256,Action & Adventure|Drama|Sci-Fi & Fantasy
+media-257,Crime|Drama|Mystery
+media-258,Drama|Family
+media-259,Animation|Comedy
+media-260,Animation|Comedy
+media-261,Drama
+media-262,Drama
+media-263,Documentary|Family|Kids
+media-264,Comedy|Drama
+media-265,Horror
+media-266,Action|Crime|Fantasy
+media-267,Drama|War
+media-268,Family|Fantasy
+media-269,Action|Crime|Thriller
+media-27,Comedy|Drama
+media-270,Comedy|Drama|Music
+media-271,Action|Horror|Science Fiction
+media-272,Drama|Romance
+media-273,Drama|Romance
+media-274,Animation|Comedy|Family|Science Fiction
+media-275,Action|Comedy|Drama|Thriller
+media-276,Action|Adventure|Crime|Mystery|Thriller
+media-277,Drama|Music
+media-278,Action|Comedy|Fantasy
+media-279,Romance
+media-28,Comedy
+media-280,Comedy|Drama|History
+media-281,Action|Adventure
+media-282,Action|Adventure|Animation|Comedy|Family|Fantasy
+media-283,Action|Science Fiction
+media-284,Drama
+media-285,Action|Comedy
+media-286,Comedy|Drama|Western
+media-287,Action|Crime
+media-288,Crime|Drama
+media-289,Action|Adventure|Science Fiction
+media-29,Drama
+media-290,Action|Adventure|Science Fiction
+media-291,Action|Drama
+media-292,Drama|Romance
+media-293,Horror|Mystery
+media-294,Drama|Horror|Science Fiction
+media-295,Comedy|Drama
+media-296,Drama|Romance
+media-297,Animation|Comedy|Family|Science Fiction
+media-298,Animation|Family|Fantasy
+media-299,Drama
+media-3,Action|Crime|Thriller
+media-30,Comedy|Drama
+media-300,Adventure|Fantasy
+media-301,Comedy|Drama
+media-302,Comedy
+media-303,Drama
+media-304,Action & Adventure|Comedy|Drama
+media-305,Action & Adventure|Drama|War & Politics
+media-306,Action & Adventure|Drama|Sci-Fi & Fantasy
+media-308,Drama
+media-309,Action|Adventure|Animation|Fantasy
+media-31,Drama|Family
+media-310,Adventure|Animation|Comedy|Family
+media-311,Comedy|Romance
+media-312,Action|Adventure|Thriller
+media-313,Drama|Mystery|Thriller
+media-314,Action|Adventure
+media-315,Drama|Science Fiction|Thriller
+media-316,Action|Adventure|Comedy
+media-317,Action|Adventure|Comedy
+media-318,Action|Adventure|Family|Fantasy
+media-319,Action|Drama|Science Fiction
+media-32,Drama|Sci-Fi & Fantasy
+media-320,Adventure|Animation|Fantasy
+media-321,Drama|Romance
+media-322,Action|Adventure
+media-323,Action|Adventure|Science Fiction|Thriller
+media-324,Action|Drama
+media-325,Action|Crime|Thriller
+media-326,Drama
+media-327,Drama|Family
+media-328,Drama
+media-329,Drama
+media-33,Comedy|Drama|Family
+media-330,Comedy|Drama
+media-331,Comedy|Family
+media-333,Drama
+media-335,Drama
+media-336,Comedy
+media-337,Comedy
+media-338,Crime|Drama
+media-339,Action|Horror
+media-340,Action|Mystery|Science Fiction|Thriller
+media-341,Horror|Mystery
+media-342,Action|Adventure|Science Fiction
+media-343,Comedy|Crime|Drama
+media-344,Action|Adventure|Science Fiction
+media-345,Action|Adventure|Science Fiction
+media-346,Comedy|Fantasy
+media-347,Drama
+media-348,Action|Adventure|Science Fiction
+media-349,Drama
+media-35,Comedy|Crime|Drama
+media-350,Adventure|Fantasy
+media-351,Action|Adventure|Science Fiction
+media-352,Horror
+media-353,Horror|Thriller
+media-354,Adventure|Science Fiction
+media-355,Action|Adventure|Fantasy
+media-356,Action|Adventure|Fantasy|Science Fiction
+media-357,Drama
+media-358,Drama|Mystery|Science Fiction
+media-359,Action|Science Fiction|Thriller
+media-36,Comedy|Crime|Drama
+media-360,Romance
+media-361,Horror|Thriller
+media-362,Animation|Comedy|Family|Fantasy
+media-363,Horror|Mystery|Thriller
+media-364,Action|Fantasy|Thriller
+media-365,Adventure|Thriller
+media-366,Drama
+media-367,Action|Crime|Thriller
+media-368,Crime|Drama
+media-369,Comedy|Family
+media-37,Action & Adventure|Drama
+media-370,Drama
+media-371,Drama
+media-372,Drama|Mystery|Sci-Fi & Fantasy
+media-373,Crime|Drama
+media-374,Action & Adventure|Crime|Drama
+media-375,Drama
+media-376,Action & Adventure|Drama|Sci-Fi & Fantasy
+media-378,Animation|Comedy|Family|Kids|Mystery
+media-379,Animation|Comedy|Family|Kids
+media-38,Comedy|Drama
+media-380,Documentary
+media-382,Mystery|Sci-Fi & Fantasy
+media-383,Animation|Comedy
+media-384,Comedy
+media-385,Comedy|Family
+media-386,Comedy
+media-387,Comedy|Drama|War & Politics
+media-388,Drama
+media-389,Action & Adventure|Animation|Family
+media-39,Action & Adventure|Animation|Comedy|Family|Kids|Sci-Fi & Fantasy
+media-390,Comedy|Drama|Family
+media-391,Animation|Comedy|Family|Kids
+media-392,Comedy|Family
+media-393,Action & Adventure|Animation|Sci-Fi & Fantasy
+media-394,Drama|Mystery|Sci-Fi & Fantasy
+media-395,Drama
+media-396,Crime|Drama|Mystery
+media-397,Drama
+media-398,Comedy|Family
+media-399,Drama|Sci-Fi & Fantasy
+media-4,Action|Crime|Thriller
+media-40,Animation|Comedy
+media-400,Drama
+media-401,Comedy
+media-402,Action & Adventure|Drama|Sci-Fi & Fantasy
+media-403,Action & Adventure|Drama|Mystery
+media-404,Animation|Family|Fantasy
+media-405,Comedy
+media-406,Drama|Mystery|Thriller
+media-407,Action|Adventure|Fantasy
+media-408,Action|Comedy|Family|Science Fiction
+media-409,Comedy|Romance
+media-41,Drama|Science Fiction
+media-410,Adventure|Animation|Comedy|Family|Fantasy
+media-411,Horror
+media-412,Action|Adventure|Thriller
+media-413,Drama|Romance
+media-414,Adventure|Comedy|Drama
+media-415,Action|Adventure|Comedy|Science Fiction
+media-416,Action|Horror|Thriller
+media-417,Horror|Thriller
+media-418,Action|Adventure|Fantasy
+media-419,Drama
+media-42,Comedy|Horror
+media-420,Action|Comedy
+media-421,Action & Adventure|Comedy|Drama|Mystery
+media-422,Comedy|Crime|Documentary|Drama|Family
+media-423,Action & Adventure|Animation|Comedy|Family|Kids|Sci-Fi & Fantasy
+media-424,Comedy|Drama|Mystery|Sci-Fi & Fantasy
+media-425,Comedy|Family
+media-426,Drama|Family
+media-427,Documentary
+media-428,Action & Adventure|Drama|War & Politics
+media-429,Action & Adventure|Comedy|Drama|Sci-Fi & Fantasy
+media-43,Action|Crime|Mystery|Thriller
+media-430,Drama
+media-431,Drama
+media-433,Crime|Documentary
+media-436,Drama|Family|War & Politics
+media-437,Drama
+media-439,Drama
+media-44,Crime|Drama|Thriller
+media-440,Crime|Drama|Thriller
+media-441,Action|Adventure|Science Fiction
+media-442,Action|Adventure|Science Fiction
+media-443,Action|Crime|Thriller
+media-444,Action|Crime|Thriller
+media-445,Drama
+media-446,Drama|Romance|Thriller
+media-447,Action|Adventure|Horror|Thriller
+media-448,Adventure|Animation|Comedy|Family
+media-449,Comedy
+media-45,Mystery|Thriller
+media-450,Comedy
+media-451,Crime|Sci-Fi & Fantasy
+media-452,Kids|Sci-Fi & Fantasy
+media-453,Drama|Family|Mystery
+media-454,Action & Adventure|Drama|Sci-Fi & Fantasy
+media-455,Crime
+media-456,Comedy|Drama|Family
+media-458,Comedy|Drama|Sci-Fi & Fantasy
+media-459,Drama
+media-46,Action|Crime|Drama|Thriller
+media-460,Comedy|Family
+media-461,Action & Adventure|Crime|Drama|Mystery
+media-462,Animation|Comedy|Kids|Sci-Fi & Fantasy
+media-463,Animation|Comedy|Family
+media-464,Drama|Family
+media-465,Action & Adventure|Drama
+media-466,Drama
+media-467,Comedy|Drama|Family
+media-468,Drama|Romance
+media-469,Action|Adventure|Comedy|Family
+media-47,Action|Thriller
+media-470,Action|Adventure|Science Fiction|Thriller
+media-471,Drama|Mystery|Thriller
+media-472,Horror|Thriller
+media-473,Action|Drama|War
+media-474,Crime|Drama
+media-475,Action|Crime|Mystery|Science Fiction|Thriller
+media-476,Drama
+media-477,Drama|Fantasy|Romance
+media-478,Action|Crime|Drama|Thriller
+media-479,Adventure|Animation|Family|Music
+media-48,Horror
+media-480,Action|Crime|Drama
+media-481,Adventure|Animation|Comedy|Drama|Family
+media-482,Crime|Drama|Thriller
+media-483,Drama|History
+media-484,Crime|Mystery|Thriller
+media-485,Action|Crime|Thriller
+media-486,Drama
+media-487,Action & Adventure|Crime|Drama
+media-488,Comedy
+media-489,Crime|Drama|Mystery
+media-49,Adventure|Animation|Comedy|Family
+media-490,Comedy|Drama
+media-491,Comedy|Drama|Family
+media-492,Comedy
+media-493,Crime|Documentary|Drama
+media-494,Comedy|Kids
+media-495,Comedy|Drama|Family
+media-496,Comedy|Crime
+media-497,Documentary
+media-498,Comedy|Drama|Family
+media-499,Animation
+media-5,Adventure|Comedy|Family|Fantasy
+media-50,Comedy|Romance
+media-500,Comedy|Drama
+media-501,Drama
+media-502,Comedy
+media-503,Drama
+media-504,Drama
+media-505,Comedy
+media-506,Comedy|Drama
+media-507,Comedy|Horror|Romance
+media-508,Action|Horror|Thriller
+media-509,Adventure|Animation|Family|Fantasy
+media-51,Action|Comedy|Thriller
+media-510,Action|Thriller
+media-511,Action|Adventure|Family|Fantasy
+media-512,Action|Adventure|Animation|Fantasy
+media-513,Comedy|Horror|Mystery
+media-514,Drama|Romance|Thriller
+media-515,Drama|History
+media-516,Adventure|Animation|Comedy|Family
+media-517,Crime|Drama|Thriller
+media-518,Action|Drama
+media-519,Adventure|Fantasy
+media-52,Action|Drama|Mystery
+media-53,Adventure|Animation|Family
+media-54,Drama|Mystery|Thriller
+media-55,Comedy
+media-56,Action|Crime|Thriller
+media-57,Action|Comedy|Family|Science Fiction
+media-58,Action|Drama|War
+media-59,Horror|Science Fiction
+media-6,Adventure|Animation|Drama|Family
+media-60,Horror
+media-61,Family|Kids
+media-63,War & Politics
+media-64,Action & Adventure|Drama|Sci-Fi & Fantasy
+media-65,Drama
+media-66,Comedy|Drama
+media-68,Comedy|Drama
+media-69,Comedy|Drama
+media-7,Western
+media-70,Comedy
+media-71,Drama|Mystery|Sci-Fi & Fantasy
+media-72,Family
+media-73,Animation|Comedy|Family
+media-74,Documentary
+media-75,Action & Adventure|Crime|Drama
+media-76,Action & Adventure|Animation|Kids
+media-77,Action & Adventure|Animation|Comedy|Family|Kids
+media-78,Comedy|Family
+media-79,Drama
+media-8,Adventure|Comedy|Fantasy|Horror
+media-80,Comedy|Family
+media-81,Drama|Mystery|Thriller
+media-82,Crime|Drama
+media-83,Action|Western
+media-84,Romance|Science Fiction|Thriller
+media-85,Horror|Mystery
+media-86,Action|Thriller
+media-87,Horror|Science Fiction|Thriller
+media-88,Drama
+media-89,Animation|Family
+media-9,Action|Thriller
+media-90,Drama|Romance
+media-91,Drama|Romance
+media-92,Action|Thriller
+media-93,Action|Adventure|Science Fiction
+media-94,Horror|Science Fiction
+media-95,Action|Animation
+media-96,Drama|Horror|Science Fiction
+media-97,Horror|Mystery|Science Fiction
+media-98,Comedy
+media-99,Action & Adventure|Drama|Sci-Fi & Fantasy
