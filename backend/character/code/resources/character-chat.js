@@ -21,7 +21,7 @@ async function chatCharacter(req, res) {
             throw "No Title Sent";
         } 
 
-        const response = await axios.post("http://194.26.196.165:20651/api/init", {
+        const response = await axios.post("http://213.173.110.232:24324/api/init", {
                 "character_name": characterName,
                 "movie_title": title
             },
@@ -34,7 +34,7 @@ async function chatCharacter(req, res) {
         console.log(response);
         if (response.status == 200) {
             const patata = response.data.session_id;
-            const response2 = await axios.post("http://194.26.196.165:20651/api/chat", {
+            const response2 = await axios.post("http://213.173.110.232:24324/api/chat", {
                 "question": message,
                 "session_id": patata,
                 "character_name": characterName,

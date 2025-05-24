@@ -803,6 +803,7 @@ Future<List<Map<String, dynamic>>> getUsersByUserMail(String userMail) async {
     if (response.statusCode == 200) {
       print("✅ Request exitosa.");
       final decodedBody = convert.jsonDecode(response.body);
+      print(decodedBody['data']);
       return List<Map<String, dynamic>>.from(decodedBody['data']);
 
     } else {

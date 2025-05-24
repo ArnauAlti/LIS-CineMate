@@ -121,7 +121,7 @@ class _UsuarisSeguits extends State<UsuarisSeguits> {
 
   Widget _buildUserBox(BuildContext context, Map<String, dynamic> user) {
     final String userMail = user['dst_mail']?? "";
-    final String nick = user['nick']?? "";
+    final String nick = user['name']?? "";
     final String png = (user['png'] != null && user['png'].toString().trim().isNotEmpty)
         ? user['png']
         : "assets/perfil1.jpg";
